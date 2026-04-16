@@ -1,16 +1,48 @@
-# React + Vite
+# No One Is an Island
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive force-directed map of geography travel stories.
+Click an island to read fragments. Filter by tag to find connections across archipelagos.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Open http://localhost:5173/no-one-is-an-island/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Add a Fragment
 
-## Expanding the ESLint configuration
+Create a `.md` file in `src/content/fragments/`. Minimum required fields:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```yaml
+---
+title: Your Title Here
+places: [place-id]
+tags: [tag1, tag2, tag3]
+---
+
+Your writing here.
+```
+
+## Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Then in your GitHub repo: Settings → Pages → Source: `gh-pages` branch.
+
+## Place IDs (Fall 2025 Trip)
+
+| Setouchi | Okinawa | Matsu | Hong Kong | Fujian |
+|---|---|---|---|---|
+| naoshima | okinawa | nangan | lantau-muiwo | meizhou |
+| shodoshima | | beigan | cheung-chau | gulangyu |
+| honjima | | dongju | sai-kung | |
+| | | xiju | yim-tin-tsai | |
+| | | | lamma | |
+| | | | ap-lei-chau | |
+| | | | aberdeen | |
+| | | | ma-wan | |
