@@ -3,13 +3,21 @@ import {
   forceSimulation, forceLink, forceManyBody,
   forceCenter, forceCollide, forceX, forceY
 } from 'd3-force';
+import { REGIONS, regionForPlace } from '../lib/content';
 
-const RADIUS_BASE  = 10;
+// Lighten a hex color toward white by amount t (0..1) for gradient highlights.
+function lighten(hex, t) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const mix = (c) => Math.round(c + (255 - c) * t);
+  return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
+}
+
+const RADIUS_BASE  = 11;
 const RADIUS_SCALE = 5;
-const ISLAND_COLOR = '#c4956a';
-const LINK_COLOR   = 'rgba(255,255,255,0.07)';
-const LINK_ACTIVE  = 'rgba(196,149,106,0.35)';
-const GLOW_COLOR   = 'rgba(196,149,106,0.25)';
+const LINK_COLOR   = 'rgba(120,180,180,0.16)';
+const LINK_ACTIVE  = 'rgba(95,188,214,0.6)';
+const GLOW_COLOR   = 'rgba(232,196,154,0.35)';
 
 function nodeRadius(n) {
   return RADIUS_BASE + n.weight * RADIUS_SCALE;
@@ -71,6 +79,9 @@ export default function IslandMap({ graph, activeTag, selectedNode, onSelectNode
   }, [selectedNode, graph.links]);
 
   return (
+    <div className="map-stage">
+      <p className="map-hint">Each circle is an island · larger means more stories · tap to read</p>
+
     <svg
       ref={svgRef}
       width={dims.w}
@@ -90,6 +101,12 @@ export default function IslandMap({ graph, activeTag, selectedNode, onSelectNode
           <stop offset="0%"   stopColor="#e8c49a" />
           <stop offset="100%" stopColor="#a06030" />
         </radialGradient>
+        {REGIONS.map((r) => (
+          <radialGradient key={r.id} id={`isl-${r.id}`} cx="40%" cy="35%" r="68%">
+            <stop offset="0%"   stopColor={lighten(r.color, 0.35)} />
+            <stop offset="100%" stopColor={r.color} />
+          </radialGradient>
+        ))}
       </defs>
 
       {/* Connection lines */}
@@ -124,6 +141,8 @@ export default function IslandMap({ graph, activeTag, selectedNode, onSelectNode
         const selected = selectedNode?.id === node.id;
         const linked   = isConnected(node.id);
         const hov      = hovered === node.id;
+        const region   = regionForPlace(node.id);
+        const fill     = region ? `url(#isl-${region})` : 'url(#island-grad)';
 
         return (
           <g
@@ -145,20 +164,23 @@ export default function IslandMap({ graph, activeTag, selectedNode, onSelectNode
             {/* island body */}
             <circle
               r={r}
-              fill="url(#island-grad)"
-              stroke={selected ? '#e8c49a' : linked ? '#c4956a' : 'rgba(255,255,255,0.15)'}
-              strokeWidth={selected ? 2 : 1}
+              fill={fill}
+              stroke={selected ? '#ffffff' : linked ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.25)'}
+              strokeWidth={selected ? 2.5 : 1.25}
               filter={selected ? 'url(#glow-strong)' : hov ? 'url(#glow)' : undefined}
             />
             {/* label */}
             <text
-              y={r + 14}
+              y={r + 16}
               textAnchor="middle"
-              fontSize={11}
-              fill={selected || hov ? '#e8c49a' : 'rgba(255,255,255,0.55)'}
+              fontSize={selected || hov ? 13 : 12}
+              fontWeight={selected || hov ? 600 : 400}
+              fill={selected || hov ? '#f4e6cf' : 'rgba(245,236,222,0.72)'}
               fontFamily="'Cormorant Garamond', Georgia, serif"
-              letterSpacing="0.06em"
-              style={{ userSelect: 'none', pointerEvents: 'none' }}
+              letterSpacing="0.05em"
+              style={{ userSelect: 'none', pointerEvents: 'none', paintOrder: 'stroke' }}
+              stroke="rgba(8,10,16,0.85)"
+              strokeWidth="3"
             >
               {node.label}
             </text>
@@ -166,5 +188,15 @@ export default function IslandMap({ graph, activeTag, selectedNode, onSelectNode
         );
       })}
     </svg>
+
+      <div className="map-legend">
+        {REGIONS.map((r) => (
+          <span key={r.id} className="legend-item">
+            <span className="region-dot" style={{ background: r.color }} />
+            {r.label}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
