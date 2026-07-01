@@ -3,31 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>沒有人是一座孤島 · No One Is an Island — Sophia Chen</title>
-    <meta name="description" content="A talk by Sophia Chen for AAVS Greece. 沒有人是一座孤島 / No One Is an Island." />
+    <title>· · · · ·</title>
+    <meta name="description" content="An archipelago of words." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --paper: #f6f2ea;
-        --paper-2: #efe9dd;
-        --ink: #26262a;
-        --ink-soft: #55535a;
-        --ink-faint: #8b8880;
+        --paper: #f4efe6;
+        --paper-2: #ece5d7;
+        --ink: #2a2a2c;
+        --ink-soft: #57555b;
+        --ink-faint: #9a968c;
+        --sea: #b9c6c2;
+        --isle: #e4dccb;
+        --isle-edge: #c9beA6;
         --accent: #35625f;
         --accent-soft: #7ba39d;
-        --rule: #d9d2c4;
-        --col: 40rem;
       }
 
       * { box-sizing: border-box; }
-
       html { scroll-behavior: smooth; }
-
       body {
         margin: 0;
         background: var(--paper);
@@ -40,430 +39,603 @@
         text-rendering: optimizeLegibility;
       }
 
-      /* ---------- Header ---------- */
-      header.masthead {
-        max-width: var(--col);
-        margin: 0 auto;
-        padding: clamp(3.5rem, 9vw, 6rem) 1.5rem 1.5rem;
-        text-align: center;
+      /* faint drifting sea texture */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(circle at 20% 30%, rgba(185,198,194,0.18), transparent 45%),
+          radial-gradient(circle at 80% 70%, rgba(185,198,194,0.14), transparent 40%);
+        pointer-events: none;
+        z-index: 0;
       }
 
-      .overline {
-        font-family: "Cormorant Garamond", serif;
-        text-transform: uppercase;
-        letter-spacing: 0.42em;
-        font-size: 0.72rem;
-        color: var(--accent);
-        margin: 0 0 1.4rem;
-        padding-left: 0.42em;
-      }
-
-      h1.title {
-        font-weight: 500;
-        font-size: clamp(2.1rem, 6.5vw, 3.1rem);
-        line-height: 1.3;
-        margin: 0 0 0.5rem;
-        letter-spacing: 0.06em;
-      }
-
-      .title-en {
-        display: block;
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
-        font-weight: 400;
-        font-size: clamp(1.1rem, 3.2vw, 1.5rem);
-        letter-spacing: 0.08em;
-        color: var(--ink-soft);
-        margin-top: 0.4rem;
-      }
-
-      .byline {
-        margin: 1.6rem 0 0;
-        font-family: "Cormorant Garamond", serif;
-        font-size: 1.05rem;
-        letter-spacing: 0.05em;
-        color: var(--ink-soft);
-      }
-      .byline .name { color: var(--ink); letter-spacing: 0.08em; }
-      .byline .sep { color: var(--accent-soft); margin: 0 0.6em; }
-
-      /* ---------- Language tabs ---------- */
-      nav.tabs {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: color-mix(in srgb, var(--paper) 88%, transparent);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border-top: 1px solid var(--rule);
-        border-bottom: 1px solid var(--rule);
-        margin-top: 2rem;
-      }
-      .tabs-inner {
-        max-width: var(--col);
-        margin: 0 auto;
+      /* ---------- language switch ---------- */
+      .langs {
+        position: fixed;
+        top: 1.1rem;
+        right: 1.4rem;
+        z-index: 20;
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: clamp(0.4rem, 3vw, 1.6rem);
-        padding: 0.5rem 1rem;
+        gap: 0.85rem;
+        font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+        font-size: 0.82rem;
+        letter-spacing: 0.14em;
       }
-      .tab {
+      .langs button {
         appearance: none;
         background: none;
         border: none;
         cursor: pointer;
-        font-family: "Cormorant Garamond", "Noto Serif TC", serif;
-        font-size: 1rem;
-        letter-spacing: 0.06em;
         color: var(--ink-faint);
-        padding: 0.65rem 0.3rem;
-        position: relative;
+        padding: 0.2rem 0;
         transition: color 0.25s ease;
       }
-      .tab:hover { color: var(--ink-soft); }
-      .tab[aria-selected="true"] { color: var(--accent); }
-      .tab[aria-selected="true"]::after {
+      .langs button:hover { color: var(--ink-soft); }
+      .langs button[aria-pressed="true"] { color: var(--accent); }
+
+      /* ---------- stage ---------- */
+      .stage {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: 1rem;
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+
+      /* ---------- archipelago ---------- */
+      .sea {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        min-height: 560px;
+      }
+      .archipelago {
+        position: absolute;
+        inset: 0;
+      }
+
+      .isle {
+        appearance: none;
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        transform: rotate(var(--r));
+        transition: transform 0.5s cubic-bezier(.2,.7,.2,1), opacity 0.5s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        outline: none;
+      }
+      .isle:hover { transform: rotate(var(--r)) translateY(-5px); }
+      .isle:focus-visible .isle-label { color: var(--accent); }
+
+      .isle-svg { display: block; width: 100%; height: auto; overflow: visible; }
+      .isle-fill {
+        fill: var(--isle);
+        stroke: var(--isle-edge);
+        stroke-width: 1;
+        transition: fill 0.4s ease;
+      }
+      .isle-line {
+        fill: none;
+        stroke: var(--isle-edge);
+        stroke-width: 1;
+        opacity: 0.5;
+      }
+      .isle:hover .isle-fill { fill: #ece4d3; }
+
+      .isle-label {
+        margin-top: 0.6rem;
+        font-size: 0.9rem;
+        letter-spacing: 0.34em;
+        padding-left: 0.34em;
+        color: var(--ink-soft);
+        white-space: nowrap;
+        transition: color 0.3s ease, letter-spacing 0.4s ease;
+      }
+
+      /* ripple rings that emanate on selection */
+      .ripple {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--w) * 0.40);
+        width: calc(var(--w) * 0.9);
+        height: calc(var(--w) * 0.9);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        opacity: 0;
+      }
+      .ripple::before,
+      .ripple::after {
         content: "";
         position: absolute;
-        left: 0.3rem; right: 0.3rem; bottom: 0.35rem;
-        height: 1px;
-        background: var(--accent);
+        inset: 0;
+        border: 1px solid var(--accent-soft);
+        border-radius: 50%;
+        transform: scale(0.25);
+        opacity: 0;
       }
 
-      /* ---------- Content ---------- */
-      main {
-        max-width: var(--col);
-        margin: 0 auto;
-        padding: clamp(2.5rem, 7vw, 4.5rem) 1.5rem 2rem;
+      /* focus / dim siblings when a selection is active */
+      .archipelago.has-active .isle:not(.is-active) { opacity: 0.38; }
+      .archipelago.has-active .isle:not(.is-active):hover { opacity: 0.7; }
+
+      /* selected island: flicker, then a soft breathing glow */
+      .isle.is-active .isle-label {
+        color: var(--accent);
+        letter-spacing: 0.42em;
+      }
+      .isle.is-active .isle-fill {
+        fill: #dce4df;
+        stroke: var(--accent-soft);
+        animation: flicker 0.9s steps(1, end) 1, breathe 3.2s ease-in-out 0.9s infinite;
+      }
+      .isle.is-active .isle-line { stroke: var(--accent-soft); opacity: 0.85; }
+      .isle.is-active .ripple { opacity: 1; }
+      .isle.is-active .ripple::before { animation: ring 2.6s ease-out infinite; }
+      .isle.is-active .ripple::after { animation: ring 2.6s ease-out 1.3s infinite; }
+
+      @keyframes flicker {
+        0%, 100% { opacity: 1; }
+        12% { opacity: 0.3; }
+        24% { opacity: 0.85; }
+        38% { opacity: 0.4; }
+        52% { opacity: 1; }
+        66% { opacity: 0.55; }
+        80% { opacity: 0.92; }
+      }
+      @keyframes breathe {
+        0%, 100% { filter: drop-shadow(0 0 0 rgba(53,98,95,0)); }
+        50% { filter: drop-shadow(0 3px 14px rgba(53,98,95,0.35)); }
+      }
+      @keyframes ring {
+        0% { transform: scale(0.25); opacity: 0.6; }
+        90% { opacity: 0; }
+        100% { transform: scale(1.5); opacity: 0; }
       }
 
-      .panel { display: none; animation: fade 0.5s ease both; }
-      .panel.is-active { display: block; }
-      @keyframes fade {
-        from { opacity: 0; transform: translateY(6px); }
+      /* ---------- reading ---------- */
+      .reading {
+        min-height: 100vh;
+        padding: clamp(3rem, 9vh, 7rem) clamp(1.4rem, 4vw, 3rem) 6rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .hint {
+        color: var(--ink-faint);
+        font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+        font-style: italic;
+        letter-spacing: 0.12em;
+        font-size: 1rem;
+        text-align: center;
+        transition: opacity 0.5s ease;
+      }
+
+      .doc { animation: docIn 0.7s ease both; }
+      @keyframes docIn {
+        from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: none; }
       }
-
-      section.movement { margin: 0 0 clamp(3rem, 8vw, 4.5rem); }
-
-      .movement-head {
-        text-align: center;
-        margin: 0 0 2.2rem;
-      }
-      .movement-head .zh {
-        font-size: 1.7rem;
-        font-weight: 500;
-        letter-spacing: 0.3em;
-        padding-left: 0.3em;
-      }
-      .movement-head .en {
-        display: block;
+      .doc-eyebrow {
         font-family: "Cormorant Garamond", serif;
         font-style: italic;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.2em;
         color: var(--accent);
-        font-size: 0.95rem;
-        margin-top: 0.5rem;
-      }
-      .movement-head::after {
-        content: "❧";
-        display: block;
-        color: var(--accent-soft);
         font-size: 0.9rem;
-        margin-top: 1rem;
+        margin: 0 0 0.4rem;
       }
-
-      p { margin: 0 0 1.5rem; }
-      p:first-of-type { margin-top: 0; }
-
-      .lede { color: var(--ink); }
-
-      /* Poem / verse blocks */
+      .doc-title {
+        font-weight: 500;
+        font-size: clamp(1.9rem, 5vw, 2.6rem);
+        letter-spacing: 0.24em;
+        padding-left: 0.24em;
+        margin: 0 0 2rem;
+      }
+      .doc p { margin: 0 0 1.4rem; }
+      .doc .lede { color: var(--ink); }
+      .foreign { font-style: italic; color: var(--ink-soft); }
       .verse {
-        margin: 2.2rem auto;
-        padding: 1.2rem 0;
+        margin: 2rem 0;
+        padding: 1.1rem 0;
         text-align: center;
-        font-size: 1.12rem;
-        line-height: 2.05;
         color: var(--accent);
-        border-top: 1px solid var(--rule);
-        border-bottom: 1px solid var(--rule);
+        line-height: 2.05;
+        border-top: 1px solid var(--paper-2);
+        border-bottom: 1px solid var(--paper-2);
       }
       .verse span { display: block; }
-
-      /* Cadenced lists (symbolic systems, questions, etc.) */
       .cadence {
         list-style: none;
-        margin: 1.6rem 0;
-        padding: 0 0 0 1.2rem;
-        border-left: 2px solid var(--rule);
+        margin: 1.5rem 0;
+        padding: 0 0 0 1.1rem;
+        border-left: 2px solid var(--paper-2);
       }
-      .cadence li { margin: 0.35rem 0; color: var(--ink-soft); }
-
-      .foreign { font-style: italic; color: var(--ink-soft); }
-
-      .closing { text-align: center; letter-spacing: 0.12em; color: var(--accent); }
-
-      /* Placeholder panels for pending translations */
-      .pending {
-        text-align: center;
-        padding: clamp(3rem, 12vw, 6rem) 1rem;
+      .cadence li { margin: 0.3rem 0; color: var(--ink-soft); }
+      .doc-close {
+        margin-top: 2.4rem;
+        align-self: flex-start;
+        appearance: none;
+        background: none;
+        border: none;
+        cursor: pointer;
         color: var(--ink-faint);
-      }
-      .pending .zh { font-size: 1.6rem; letter-spacing: 0.28em; color: var(--ink-soft); }
-      .pending .en {
-        display: block;
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
-        font-size: 1.15rem;
-        letter-spacing: 0.06em;
-        margin-top: 1.2rem;
-      }
-
-      footer {
-        max-width: var(--col);
-        margin: 0 auto;
-        padding: 2rem 1.5rem 4rem;
-        text-align: center;
-        color: var(--ink-faint);
-        font-family: "Cormorant Garamond", serif;
-        letter-spacing: 0.14em;
+        font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+        letter-spacing: 0.2em;
         font-size: 0.82rem;
+        transition: color 0.25s ease;
+      }
+      .doc-close:hover { color: var(--accent); }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 820px) {
+        .stage { grid-template-columns: 1fr; }
+        .sea { position: relative; height: 64vh; min-height: 420px; }
+        .reading { min-height: auto; justify-content: flex-start; padding-top: 1rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .isle.is-active .isle-fill { animation: none; }
+        .isle.is-active .ripple::before,
+        .isle.is-active .ripple::after { animation: none; }
+        .doc { animation: none; }
       }
     </style>
   </head>
   <body>
-    <header class="masthead">
-      <p class="overline">AAVS · Greece</p>
-      <h1 class="title">
-        沒有人是一座孤島
-        <span class="title-en">No One Is an Island</span>
-      </h1>
-      <p class="byline">
-        <span class="name">Sophia Chen</span>
-        <span class="sep">·</span> 邊界 → 島嶼 → 意義 → 身體 → 在場
-      </p>
-    </header>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="zh" aria-pressed="true">繁中</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+      <button data-lang="fr" aria-pressed="false">FR</button>
+      <button data-lang="el" aria-pressed="false">EL</button>
+    </div>
 
-    <nav class="tabs" aria-label="Language">
-      <div class="tabs-inner" role="tablist">
-        <button class="tab" role="tab" id="tab-zh" aria-controls="panel-zh" aria-selected="true">繁體中文</button>
-        <button class="tab" role="tab" id="tab-en" aria-controls="panel-en" aria-selected="false">English</button>
-        <button class="tab" role="tab" id="tab-fr" aria-controls="panel-fr" aria-selected="false">Français</button>
-        <button class="tab" role="tab" id="tab-el" aria-controls="panel-el" aria-selected="false">Ελληνικά</button>
+    <div class="stage">
+      <div class="sea">
+        <div class="archipelago" id="archipelago">
+          <button class="isle" data-sec="border" style="--x:6%;  --y:7%;  --w:168px; --r:-7deg"
+            data-zh="邊界" data-en="Boundaries" data-fr="Frontières" data-el="Σύνορα">
+            <svg class="isle-svg" viewBox="0 0 120 100" aria-hidden="true">
+              <path class="isle-fill" d="M20,56 C13,34 34,17 56,19 C78,21 101,25 106,46 C111,67 91,87 66,89 C42,91 27,78 20,56 Z"/>
+              <path class="isle-line" d="M33,55 C30,42 44,32 60,33 C78,34 92,41 92,54 C92,68 76,76 60,75 C44,74 36,68 33,55 Z"/>
+            </svg>
+            <span class="isle-label">邊界</span>
+            <span class="ripple"></span>
+          </button>
+
+          <button class="isle" data-sec="islands" style="--x:60%; --y:2%;  --w:132px; --r:9deg"
+            data-zh="島嶼" data-en="Islands" data-fr="Îles" data-el="Νησιά">
+            <svg class="isle-svg" viewBox="0 0 120 100" aria-hidden="true">
+              <path class="isle-fill" d="M18,50 C22,29 46,21 63,25 C84,30 99,38 101,55 C103,73 82,83 59,81 C36,79 13,71 18,50 Z"/>
+              <path class="isle-line" d="M34,50 C37,38 52,33 65,36 C80,39 88,45 88,55 C88,66 72,71 58,69 C44,67 31,63 34,50 Z"/>
+            </svg>
+            <span class="isle-label">島嶼</span>
+            <span class="ripple"></span>
+          </button>
+
+          <button class="isle" data-sec="meaning" style="--x:33%; --y:34%; --w:150px; --r:-3deg"
+            data-zh="意義" data-en="Meaning" data-fr="Sens" data-el="Νόημα">
+            <svg class="isle-svg" viewBox="0 0 120 100" aria-hidden="true">
+              <path class="isle-fill" d="M25,60 C17,41 31,24 53,21 C76,18 98,29 100,48 C102,68 89,85 62,85 C39,85 33,79 25,60 Z"/>
+              <path class="isle-line" d="M40,58 C35,45 48,36 62,36 C78,36 88,44 87,56 C86,69 74,74 60,73 C47,72 44,68 40,58 Z"/>
+            </svg>
+            <span class="isle-label">意義</span>
+            <span class="ripple"></span>
+          </button>
+
+          <button class="isle" data-sec="body" style="--x:4%;  --y:60%; --w:150px; --r:6deg"
+            data-zh="身體" data-en="Body" data-fr="Corps" data-el="Σώμα">
+            <svg class="isle-svg" viewBox="0 0 120 100" aria-hidden="true">
+              <path class="isle-fill" d="M15,52 C20,37 41,29 61,31 C90,34 105,42 101,57 C97,71 74,77 51,75 C33,73 9,67 15,52 Z"/>
+              <path class="isle-line" d="M32,52 C36,42 52,37 66,39 C84,41 92,47 90,56 C88,66 70,69 54,67 C40,65 28,62 32,52 Z"/>
+            </svg>
+            <span class="isle-label">身體</span>
+            <span class="ripple"></span>
+          </button>
+
+          <button class="isle" data-sec="presence" style="--x:58%; --y:56%; --w:158px; --r:-9deg"
+            data-zh="在場" data-en="Presence" data-fr="Présence" data-el="Παρουσία">
+            <svg class="isle-svg" viewBox="0 0 120 100" aria-hidden="true">
+              <path class="isle-fill" d="M22,48 C24,31 43,23 61,25 C82,27 97,34 100,51 C103,70 84,81 60,81 C39,81 20,67 22,48 Z"/>
+              <path class="isle-line" d="M37,49 C39,38 53,33 66,35 C81,37 88,44 87,54 C86,66 71,70 57,68 C44,66 35,60 37,49 Z"/>
+            </svg>
+            <span class="isle-label">在場</span>
+            <span class="ripple"></span>
+          </button>
+        </div>
       </div>
-    </nav>
 
-    <main>
-      <!-- ===================== 繁體中文 ===================== -->
-      <article class="panel is-active" id="panel-zh" role="tabpanel" aria-labelledby="tab-zh">
-        <!-- 邊界 -->
-        <section class="movement">
-          <div class="movement-head"><span class="zh">邊界</span><span class="en">Boundaries</span></div>
-          <p class="lede">大家好，我是 Sophia Chen。</p>
-          <p>我在福州出生，家裡有人來自馬祖。小時候，我的父母先移民到非洲的多哥共和國，後來又到了加拿大魁北克。我曾經在瑞士讀建築、工作，也回到那裡交換學建築。除此之外，我也在台北、加拿大北極地區、中美洲、巴貝多，以及其他地方生活和工作過。</p>
-          <p>所以如果要很簡單地介紹我自己，我會說：我是一個一直在邊界之間長大、移動和思考的人。</p>
-          <p>我的母語是閩東話，父語是法文。我從小就體會到，語言不只是溝通工具，語言本身也是一種邊界。你能說什麼語言，常常會影響你能不能被理解、被聽見、被承認，甚至能不能在某個地方找到自己的位置。</p>
-          <p>我也成長在很多不同的信仰與文化環境裡：佛教、道教、儒家思想、天主教、基督教、伊斯蘭教，也包括東正教。七年前，我曾經去保加利亞一個禮拜，研究和學習東正教文化。所以這次來到希臘，我也很自然地會注意到宗教如何影響空間、城市、島嶼和人的日常生活。</p>
-          <p>但對我來說，這些經驗不只是「我去過很多地方」。它們讓我很早就意識到：世界不是由乾淨、固定、絕對的分類組成的。</p>
-          <p>大陸與台灣，法語的魁北克與英語為主的加拿大，原住民與非原住民，少數民族與漢族，正式與非正式（<span class="foreign">formal / informal</span>），公共與非公共（<span class="foreign">public / non-public</span>），可見與不可見（<span class="foreign">visible / invisible</span>），中心與邊陲（<span class="foreign">center / periphery</span>）——這些分類都是真實的，因為它們會影響身份、權力、資源和生活。但它們也從來不是自然、固定、無辜的。</p>
-          <p>所以我最感興趣的第一件事，是邊界。</p>
-          <p>不是因為我相信邊界是絕對的，而是因為我想知道：邊界是誰畫的？誰被放進去？誰被放在外面？誰被看見？誰又被消失？</p>
-          <p>這對我來說也是一個認識論上的挑戰（<span class="foreign">epistemic challenge</span>）：我們到底用什麼方式看世界？誰的知識被承認？誰的經驗被忽略？誰的語言被認為是正式的？誰的空間被認為是公共的？</p>
-          <p>所以跨領域（<span class="foreign">interdisciplinary</span>）對我來說不是一個漂亮的學術標籤。它是我理解世界的方式。因為世界本來就不是被清楚切開的。</p>
-        </section>
+      <div class="reading" id="reading">
+        <p class="hint" id="hint">點一座島嶼，文字會浮現。</p>
+      </div>
+    </div>
 
-        <!-- 島嶼 -->
-        <section class="movement">
-          <div class="movement-head"><span class="zh">島嶼</span><span class="en">Islands</span></div>
-          <p class="lede">我研究島嶼快十年了。</p>
-          <p>對我來說，島嶼不只是地理上的研究對象。它也是一種思考世界的方法。</p>
-          <p>島嶼看起來像邊界很清楚的地方：被海包圍，好像和其他地方分開。但事實上，島嶼從來不是封閉的。島嶼連接海洋、港口、船、風、等待、離開、回來、遷徙、戰爭、貿易、災害、記憶和想像。</p>
-          <p>我曾經去過三十幾個國家，橫跨四大洲，但我一直記得一個畫面：那一夜在加拿大北極的無人島上，枕著冰層入睡，聽見冰川掉落前的聲音。那時候我很強烈地感覺到，極端的邊界不是世界的例外，而是世界發聲的裂口。很多時候，不是地球無語，而是我們太久沒有傾身去聽。</p>
-          <p>而島，對我來說，是極端之中最溫柔的試煉。</p>
-          <p>它是地形，是語境，也是韌性的縮影。在無法選擇的地理中，練習重塑生存的秩序；在資源斷裂之處，建立屬於自己的敘事與結構。</p>
-          <p>我很喜歡一句話：「沒有人是一座孤島」（<span class="foreign">No one is an island</span>）。</p>
-          <p>但我也想反過來說：沒有任何一座島真的只是一座島。</p>
-          <p>對台灣學生來說，我覺得這件事情尤其重要。因為台灣本身就是一座島，而且在很多歷史敘事裡，台灣常常被放在中心—邊陲（<span class="foreign">center-periphery</span>）的關係裡理解。</p>
-          <p>在歷史課本裡，台灣常常像是不同王朝、帝國、殖民系統、政權或世界秩序的邊陲。它常常是被觀看、被命名、被治理、被爭奪的地方。</p>
-          <p>但我覺得我們可以重新想這件事。</p>
-          <p>邊陲不一定只是離中心很遠的地方。邊陲也不一定只是缺乏資源、缺乏聲音、等待中心承認的地方。邊陲也可以是一個看得更清楚的地方：看見流動、看見關係、看見權力、看見脆弱，也看見韌性。</p>
-          <p>從馬祖的角度來看，這件事對我更清楚。台灣是一座島，而馬祖是島嶼中的島嶼（<span class="foreign">an island of an island</span>）。它是邊陲中的邊陲，但也正因為如此，它不是沒有中心，而是可以從自己的位置長出自己的中心。</p>
-          <p>這也和我們這次要去的地方有關。敘羅斯（<span class="foreign">Syros</span>）可以被理解為雅典網絡中的一座島：它不一定在行政上屬於雅典，但它和雅典之間有交通、資源、文化、觀光、教育和想像上的連結。而蒂迪米（<span class="foreign">Didimi</span>）又可以被理解為敘羅斯的島嶼，是島嶼裡更小、更邊緣、更容易被忽略的存在。</p>
-          <p>所以如果用一種比較性的想像來說，蒂迪米（<span class="foreign">Didimi</span>）不一定真的等於馬祖，但它可以像「希臘的馬祖列島」一樣，幫助我們思考什麼是島中之島，什麼是邊陲中的邊陲，以及一個看似很小、很邊緣的地方，如何從自己的位置長出中心。</p>
-          <p>這其實也和我以前在聯合國與國際勞工組織（<span class="foreign">UN / ILO</span>）做的工作有關。我做過很多和永續發展、青年、經濟未來、勞工權益有關的工作。在那些議題裡，也有非常清楚的中心—邊陲關係：老闆與僱員，資本與勞動，政策制定者與被政策影響的人，全球中心與地方社群。</p>
-          <p>所以中心和邊陲不只存在於地理裡。它也存在於經濟裡，存在於勞動關係裡，存在於知識生產裡，也存在於我們每天如何理解自己和他人的方式裡。</p>
-          <p>因此，我不太想用「我們要讓別人知道我們很重要」這種方式來理解島嶼。</p>
-          <p>我更想問的是：我們的力量從哪裡來？我們如何從自己的位置、自己的歷史、自己的生活經驗出發，重新理解世界？</p>
-          <p>這是一種由內而外的力量（<span class="foreign">from within outward</span>）。</p>
-          <div class="verse">
-            <span>沒有人該是一座孤島。</span>
-            <span>但若命定身在島上，便學會成為他人的岸。</span>
-            <span>每一道邊緣，終將長出自己的中心。</span>
-          </div>
-        </section>
+    <!-- hidden content store (Traditional Chinese) -->
+    <div hidden id="store">
+      <div data-sec="border">
+        <p class="lede">大家好，我是 Sophia Chen。</p>
+        <p>我在福州出生，家裡有人來自馬祖。小時候，我的父母先移民到非洲的多哥共和國，後來又到了加拿大魁北克。我曾經在瑞士讀建築、工作，也回到那裡交換學建築。除此之外，我也在台北、加拿大北極地區、中美洲、巴貝多，以及其他地方生活和工作過。</p>
+        <p>所以如果要很簡單地介紹我自己，我會說：我是一個一直在邊界之間長大、移動和思考的人。</p>
+        <p>我的母語是閩東話，父語是法文。我從小就體會到，語言不只是溝通工具，語言本身也是一種邊界。你能說什麼語言，常常會影響你能不能被理解、被聽見、被承認，甚至能不能在某個地方找到自己的位置。</p>
+        <p>我也成長在很多不同的信仰與文化環境裡：佛教、道教、儒家思想、天主教、基督教、伊斯蘭教，也包括東正教。七年前，我曾經去保加利亞一個禮拜，研究和學習東正教文化。所以這次來到希臘，我也很自然地會注意到宗教如何影響空間、城市、島嶼和人的日常生活。</p>
+        <p>但對我來說，這些經驗不只是「我去過很多地方」。它們讓我很早就意識到：世界不是由乾淨、固定、絕對的分類組成的。</p>
+        <p>大陸與台灣，法語的魁北克與英語為主的加拿大，原住民與非原住民，少數民族與漢族，正式與非正式（<span class="foreign">formal / informal</span>），公共與非公共（<span class="foreign">public / non-public</span>），可見與不可見（<span class="foreign">visible / invisible</span>），中心與邊陲（<span class="foreign">center / periphery</span>）——這些分類都是真實的，因為它們會影響身份、權力、資源和生活。但它們也從來不是自然、固定、無辜的。</p>
+        <p>所以我最感興趣的第一件事，是邊界。</p>
+        <p>不是因為我相信邊界是絕對的，而是因為我想知道：邊界是誰畫的？誰被放進去？誰被放在外面？誰被看見？誰又被消失？</p>
+        <p>這對我來說也是一個認識論上的挑戰（<span class="foreign">epistemic challenge</span>）：我們到底用什麼方式看世界？誰的知識被承認？誰的經驗被忽略？誰的語言被認為是正式的？誰的空間被認為是公共的？</p>
+        <p>所以跨領域（<span class="foreign">interdisciplinary</span>）對我來說不是一個漂亮的學術標籤。它是我理解世界的方式。因為世界本來就不是被清楚切開的。</p>
+      </div>
 
-        <!-- 意義 -->
-        <section class="movement">
-          <div class="movement-head"><span class="zh">意義</span><span class="en">Meaning</span></div>
-          <p class="lede">我現在在加拿大紅十字會擔任社群製圖負責人（<span class="foreign">Community Mapping Lead</span>）。我之前也在加拿大聯邦政府工作過。關於我的工作，下週我會有比較完整的時間跟大家分享。</p>
-          <p>如果要說我關心什麼，我常常會說：我關心的是環境、政策、數據和人之間的交界。</p>
-          <p>這裡的環境，不只是自然環境，也包括地理環境、人文環境、社會環境和政治環境。</p>
-          <p>我自己有很強的技術和理工背景。我做地理資訊系統（<span class="foreign">GIS</span>）、空間分析、資料處理、災害風險和社群製圖。但同時，我也出過詩集，從小學音樂。我的父母雖然後來回到家族的法律與教育領域，但他們原本都是藝術畢業的。所以我從小也受到藝術、文學、音樂和語言的影響。</p>
-          <p>我最著迷的東西，其實一直是符號系統（<span class="foreign">symbolic systems</span>）。</p>
-          <ul class="cadence">
-            <li>語言是一種符號系統。</li>
-            <li>數學是一種符號系統。</li>
-            <li>地圖是一種符號系統。</li>
-            <li>建築是一種符號系統。</li>
-            <li>宗教、音樂、法律、城市，也都是人類理解世界、組織世界、想像世界的方法。</li>
-          </ul>
-          <p>所以對我來說，製圖（<span class="foreign">mapping</span>）從來不只是把資料放到地圖上，也不只是做一張好看的圖。製圖是一種符號系統（<span class="foreign">symbolic system</span>），也是一種再現（<span class="foreign">representation</span>），而這兩件事放在一起，就是我所理解的意義生成（<span class="foreign">meaning-making</span>）。</p>
-          <p>也就是說，製圖不是意義生成之外的一個工具。製圖本身就是意義生成的一部分。</p>
-          <p>地圖用線條、顏色、尺度、分類、圖例、邊界和空白來組織世界。它看起來好像很中立，但地圖從來不是完全中立的。它會選擇什麼被看見，也會決定什麼被忽略。</p>
-          <p>所以我關心的不只是：我們要畫什麼？</p>
-          <p>我更關心的是：我們為什麼要畫？我們從誰的視角出發？誰被放在中心？誰被放在邊陲？什麼被看見？什麼又被消失？</p>
-          <p>這就是我很在意的意義生成（<span class="foreign">meaning-making</span>）。</p>
-          <p>意義生成不是把一個漂亮的概念套到作品上。它是你真正知道自己為什麼使用某一種媒介，為什麼選擇某一種符號，為什麼用這種方式再現一個地方、一個人、一段記憶或一種關係。</p>
-          <p>所以不管你們最後用的是繪圖（<span class="foreign">drawing</span>）、影像或電影（<span class="foreign">film</span>）、裝置（<span class="foreign">installation</span>）、敘事地圖（<span class="foreign">story map</span>）、感官地圖（<span class="foreign">sensory map</span>）、記憶地圖（<span class="foreign">memory map</span>）、行走地圖（<span class="foreign">walking map</span>），或者傳統地圖，媒介本身都不是重點。</p>
-          <p>真正重要的是：你想讓什麼被看見？你想讓誰被聽見？你想讓什麼關係被重新理解？你想從哪裡重新建立自己的中心？</p>
-        </section>
-
-        <!-- 身體 -->
-        <section class="movement">
-          <div class="movement-head"><span class="zh">身體</span><span class="en">Body</span></div>
-          <p class="lede">我常常說，地理本身就是關係性的（<span class="foreign">relational</span>）。</p>
-          <p>但關係性不代表所有東西都可以隨便連在一起。真正重要的是，我們要有意識地問：這些關係是怎麼被建立的？對誰有意義？它們讓什麼變得更清楚？它們又可能遮蔽了什麼？</p>
-          <p>這也是為什麼我對很多二元對立（<span class="foreign">dichotomy</span>）都很感興趣：正式與非正式（<span class="foreign">formal / informal</span>）、公共與非公共（<span class="foreign">public / non-public</span>）、可見與不可見（<span class="foreign">visible / invisible</span>）、中心與邊陲（<span class="foreign">center / periphery</span>）。</p>
-          <p>我不是說這些差異不存在。相反，它們很重要，因為權力常常就是透過這些分類在運作。但我希望我們不要太快接受這些分類，也不要太快相信世界真的可以被切成兩邊。很多真正有意思的事情，其實都發生在中間、邊界、轉換、模糊和不穩定的地方。</p>
-          <p>我可以給一個例子。</p>
-          <p>如果有一個人對自己的身體、外型，或者自己如何被別人觀看感到不安。這不一定是她需要公開分享的事情，也不是我們要把個人的脆弱拿來展示。但如果對她來說，這個恐懼是真實的、有重量的、有意義的，那它就可以成為一個製圖的入口。</p>
-          <p>如果我們研究的是島嶼、海洋和海盜，那這裡其實有很多可以連接的地方。海盜在我們的想像裡，常常不是一個完整、乾淨、完美的身體。他可能獨眼、斷腿、有疤痕、有義肢。這些身體不是主流秩序裡被認為「完整」的身體，但它們仍然有力量，仍然能行動，仍然能重新命名自己的位置。</p>
-          <p>這裡就可以連到一個概念：身體作為疆域（<span class="foreign">the body as territory</span>）。</p>
-          <p>如果身體是一座島，那它的海岸線在哪裡？它的傷痕在哪裡？它的港口在哪裡？它的風暴在哪裡？它的避難所在哪裡？哪些地方需要保護？哪些地方願意和世界連接？</p>
-          <p>這樣的製圖可能不是傳統地圖，而是一張身體—島嶼地圖（<span class="foreign">body-island map</span>）。但在這個過程裡，那個人也許不只是完成一個作品，也可能重新看待自己和自己身體的關係。</p>
-          <p>這個例子對我來說很重要，因為它同時說明了我最關心的幾件事。</p>
-          <ul class="cadence">
-            <li>第一，它說明了邊界。身體有邊界，島嶼有邊界，地圖也會畫出邊界。</li>
-            <li>第二，它說明了再現與意義生成（<span class="foreign">representation / meaning-making</span>）。同一個身體，可以被外界用一種方式觀看，也可以被自己用另一種方式重新命名。</li>
-            <li>第三，它說明了轉變（<span class="foreign">transition</span>）。一個人可以透過製圖的過程，從被觀看、被評價、被規訓的位置，慢慢轉向重新理解自己、重新保護自己、重新與世界連接的位置。</li>
-          </ul>
-          <p>所以對我來說，轉變不是抽象概念。</p>
-          <ul class="cadence">
-            <li>經濟轉型是一種轉變。</li>
-            <li>建築裡的再利用（<span class="foreign">reuse</span>）和重新賦予用途（<span class="foreign">repurpose</span>）是一種轉變。</li>
-            <li>災害之後的復原（<span class="foreign">recovery</span>）也是一種轉變。</li>
-            <li>一個人重新理解自己的身體、身份和位置，也是一種轉變。</li>
-          </ul>
-          <p>我現在在紅十字會做的工作，很多時候其實就是幫助社區在災害後重新理解自己、重新組織資源、重新建立連結。</p>
-          <p>復原不只是把東西修回原本的樣子。復原也是一個社區重新問自己：我們失去了什麼？我們還擁有什麼？我們想保護什麼？我們要往哪裡去？</p>
-          <p>很多時候，真正的改變不是突然發生的。它是在邊界上、在過渡中、在一個人或一個地方還沒有完全知道自己會變成什麼的時候，慢慢長出來的。</p>
-          <p>這也是為什麼我很支持實驗性的工作（<span class="foreign">experimental work</span>）。但實驗不能只是形式上的新奇。它不能只是看起來很酷，也不能只是概念聽起來很漂亮。</p>
-          <p>實驗需要意義（<span class="foreign">experimentation needs meaning</span>）。</p>
-          <p>形式可以自由，但邏輯不能是空的。媒介可以很多元，但背後必須有清楚的意圖。</p>
-        </section>
-
-        <!-- 在場 -->
-        <section class="movement">
-          <div class="movement-head"><span class="zh">在場</span><span class="en">Presence</span></div>
-          <p class="lede">最後，我想說，我希望我們的製圖組不只是做地圖，而是學會講故事，也學會聽故事。</p>
-          <p>製圖是講故事（<span class="foreign">mapping is storytelling</span>）。但在講故事之前，我們要先學會聽故事。聽地方的故事，聽人的故事，聽空間裡沒有被說出來的故事，聽那些很小、很日常、很容易被忽略的東西。</p>
-          <p>這也是為什麼田野調查（<span class="foreign">fieldwork</span>）對我來說非常重要。田野調查不是為了證明我們原本就相信的東西。田野調查是一種現實檢驗（<span class="foreign">reality testing</span>）。</p>
-          <p>很多理論在紙上很漂亮，很多概念在簡報裡很聰明，很多圖像在牆上很好看。但現場會告訴我們：事情沒有那麼簡單。人的路徑、人的等待、人的恐懼、人的沉默、人的生活方式，常常會挑戰我們原本的想法。</p>
-          <p>所以做地理、做製圖、做田野，很重要的一點是保持謙卑。不要太快相信一刀切的答案，不要太快用同一套方法解釋所有地方，也不要太快把別人的生活變成我們自己的概念材料。</p>
-          <p>我最喜歡的學習方式，其實是蘇格拉底式對話（<span class="foreign">Socratic dialogue</span>）。它對我來說也是一種關係性的實踐。好的教學不是我給大家一個標準答案，而是我們一起問問題，一起把看似理所當然的東西拆開。</p>
-          <p>我們可以一起問：</p>
-          <ul class="cadence">
-            <li>我們為什麼這樣看？</li>
-            <li>這個分類從哪裡來？</li>
-            <li>這張地圖讓誰被看見？</li>
-            <li>又讓誰被消失？</li>
-            <li>如果從邊陲看，而不是從中心看，這個地方會變成什麼樣子？</li>
-            <li>如果從身體看，從記憶看，從災害後的復原看，又會變成什麼樣子？</li>
-          </ul>
-          <p>我其實很好相處。我不需要大家一開始就很會做圖，也不需要大家一開始就有很成熟的概念。我在乎兩件事。</p>
-          <p>第一個是在場（<span class="foreign">presence</span>）。簡單講，就是你有沒有到。請大家盡量不要遲到。如果有事，一定要講。沒有什麼事是不能講的。真正麻煩的不是有問題，而是不說。</p>
-          <p>第二個是在場的品質（<span class="foreign">quality of presence</span>）。你人在這裡的時候，你是不是真的在？你有沒有看？有沒有聽？有沒有想？有沒有對別人的故事、地方的細節、自己的作品負責？</p>
-          <p>我相信，如果一個人一直認真地存在，她不可能做出完全不好的作品。因為真正的作品不是突然變出來的，它是從注意力、誠實、觀察和投入裡長出來的。</p>
-          <p>我知道你們這一代面對的挑戰很多。氣候危機、戰爭、經濟不穩定、孤獨感、未來的不確定性，這些都不是小事情。我之前在聯合國與國際勞工組織（<span class="foreign">UN / ILO</span>）做青年代表時，也一直在處理年輕人、工作、未來和政策之間的問題。</p>
-          <p>所以我做製圖、研究島嶼、談「沒有人是一座孤島」（<span class="foreign">No one is an island</span>），對我來說不只是學術興趣。它也有一個很簡單的人道主義願望。</p>
-          <p>我希望有一天，當你們遇到困難，或者只是覺得迷失、不確定、不知道自己在哪裡的時候，你們看到一座島，不只會想到孤立，也能想到連結、中心、想像和勇氣。</p>
-          <ul class="cadence">
-            <li>看到一座島，也許可以想到：即使被海包圍，也還是可以和世界相連。</li>
-            <li>看到一座島，也許可以想到：即使被稱為邊陲，也不代表沒有力量。</li>
-            <li>看到一座島，也許可以想到：中心不一定要被別人給予，有時候中心是我們從自己的位置慢慢長出來的。</li>
-          </ul>
-          <div class="verse">
-            <span>每個人都像一座小島，有自己的邊界、記憶、傷痕和風暴。</span>
-            <span>但同時，沒有人真的應該是一座孤島。</span>
-          </div>
-          <p>而那座正在長出自己中心的島，也可能就是正在瘋狂成長的你。</p>
-          <p>所以我希望我們的製圖組可以是一個這樣的空間：我們不只是畫地圖，而是用製圖去觀察、去聆聽、去連結、去測試現實，也去創造意義。</p>
-          <div class="verse closing">
-            <span>因為沒有人是一座孤島。</span>
-            <span>而每一座島，也都不只是島。</span>
-          </div>
-          <p style="text-align:center; letter-spacing:0.3em; margin-top:2.5rem;">謝謝你們。</p>
-        </section>
-      </article>
-
-      <!-- ===================== English ===================== -->
-      <article class="panel" id="panel-en" role="tabpanel" aria-labelledby="tab-en" hidden>
-        <div class="pending">
-          <span class="zh">No One Is an Island</span>
-          <span class="en">The English translation is coming soon.</span>
+      <div data-sec="islands">
+        <p class="lede">我研究島嶼快十年了。</p>
+        <p>對我來說，島嶼不只是地理上的研究對象。它也是一種思考世界的方法。</p>
+        <p>島嶼看起來像邊界很清楚的地方：被海包圍，好像和其他地方分開。但事實上，島嶼從來不是封閉的。島嶼連接海洋、港口、船、風、等待、離開、回來、遷徙、戰爭、貿易、災害、記憶和想像。</p>
+        <p>我曾經去過三十幾個國家，橫跨四大洲，但我一直記得一個畫面：那一夜在加拿大北極的無人島上，枕著冰層入睡，聽見冰川掉落前的聲音。那時候我很強烈地感覺到，極端的邊界不是世界的例外，而是世界發聲的裂口。很多時候，不是地球無語，而是我們太久沒有傾身去聽。</p>
+        <p>而島，對我來說，是極端之中最溫柔的試煉。</p>
+        <p>它是地形，是語境，也是韌性的縮影。在無法選擇的地理中，練習重塑生存的秩序；在資源斷裂之處，建立屬於自己的敘事與結構。</p>
+        <p>我很喜歡一句話：「沒有人是一座孤島」（<span class="foreign">No one is an island</span>）。</p>
+        <p>但我也想反過來說：沒有任何一座島真的只是一座島。</p>
+        <p>對台灣學生來說，我覺得這件事情尤其重要。因為台灣本身就是一座島，而且在很多歷史敘事裡，台灣常常被放在中心—邊陲（<span class="foreign">center-periphery</span>）的關係裡理解。</p>
+        <p>在歷史課本裡，台灣常常像是不同王朝、帝國、殖民系統、政權或世界秩序的邊陲。它常常是被觀看、被命名、被治理、被爭奪的地方。</p>
+        <p>但我覺得我們可以重新想這件事。</p>
+        <p>邊陲不一定只是離中心很遠的地方。邊陲也不一定只是缺乏資源、缺乏聲音、等待中心承認的地方。邊陲也可以是一個看得更清楚的地方：看見流動、看見關係、看見權力、看見脆弱，也看見韌性。</p>
+        <p>從馬祖的角度來看，這件事對我更清楚。台灣是一座島，而馬祖是島嶼中的島嶼（<span class="foreign">an island of an island</span>）。它是邊陲中的邊陲，但也正因為如此，它不是沒有中心，而是可以從自己的位置長出自己的中心。</p>
+        <p>這也和我們這次要去的地方有關。敘羅斯（<span class="foreign">Syros</span>）可以被理解為雅典網絡中的一座島：它不一定在行政上屬於雅典，但它和雅典之間有交通、資源、文化、觀光、教育和想像上的連結。而蒂迪米（<span class="foreign">Didimi</span>）又可以被理解為敘羅斯的島嶼，是島嶼裡更小、更邊緣、更容易被忽略的存在。</p>
+        <p>所以如果用一種比較性的想像來說，蒂迪米（<span class="foreign">Didimi</span>）不一定真的等於馬祖，但它可以像「希臘的馬祖列島」一樣，幫助我們思考什麼是島中之島，什麼是邊陲中的邊陲，以及一個看似很小、很邊緣的地方，如何從自己的位置長出中心。</p>
+        <p>這其實也和我以前在聯合國與國際勞工組織（<span class="foreign">UN / ILO</span>）做的工作有關。我做過很多和永續發展、青年、經濟未來、勞工權益有關的工作。在那些議題裡，也有非常清楚的中心—邊陲關係：老闆與僱員，資本與勞動，政策制定者與被政策影響的人，全球中心與地方社群。</p>
+        <p>所以中心和邊陲不只存在於地理裡。它也存在於經濟裡，存在於勞動關係裡，存在於知識生產裡，也存在於我們每天如何理解自己和他人的方式裡。</p>
+        <p>因此，我不太想用「我們要讓別人知道我們很重要」這種方式來理解島嶼。</p>
+        <p>我更想問的是：我們的力量從哪裡來？我們如何從自己的位置、自己的歷史、自己的生活經驗出發，重新理解世界？</p>
+        <p>這是一種由內而外的力量（<span class="foreign">from within outward</span>）。</p>
+        <div class="verse">
+          <span>沒有人該是一座孤島。</span>
+          <span>但若命定身在島上，便學會成為他人的岸。</span>
+          <span>每一道邊緣，終將長出自己的中心。</span>
         </div>
-      </article>
+      </div>
 
-      <!-- ===================== Français ===================== -->
-      <article class="panel" id="panel-fr" role="tabpanel" aria-labelledby="tab-fr" hidden>
-        <div class="pending">
-          <span class="zh">Personne n’est une île</span>
-          <span class="en">La traduction française arrive bientôt.</span>
+      <div data-sec="meaning">
+        <p class="lede">我現在在加拿大紅十字會擔任社群製圖負責人（<span class="foreign">Community Mapping Lead</span>）。我之前也在加拿大聯邦政府工作過。關於我的工作，下週我會有比較完整的時間跟大家分享。</p>
+        <p>如果要說我關心什麼，我常常會說：我關心的是環境、政策、數據和人之間的交界。</p>
+        <p>這裡的環境，不只是自然環境，也包括地理環境、人文環境、社會環境和政治環境。</p>
+        <p>我自己有很強的技術和理工背景。我做地理資訊系統（<span class="foreign">GIS</span>）、空間分析、資料處理、災害風險和社群製圖。但同時，我也出過詩集，從小學音樂。我的父母雖然後來回到家族的法律與教育領域，但他們原本都是藝術畢業的。所以我從小也受到藝術、文學、音樂和語言的影響。</p>
+        <p>我最著迷的東西，其實一直是符號系統（<span class="foreign">symbolic systems</span>）。</p>
+        <ul class="cadence">
+          <li>語言是一種符號系統。</li>
+          <li>數學是一種符號系統。</li>
+          <li>地圖是一種符號系統。</li>
+          <li>建築是一種符號系統。</li>
+          <li>宗教、音樂、法律、城市，也都是人類理解世界、組織世界、想像世界的方法。</li>
+        </ul>
+        <p>所以對我來說，製圖（<span class="foreign">mapping</span>）從來不只是把資料放到地圖上，也不只是做一張好看的圖。製圖是一種符號系統（<span class="foreign">symbolic system</span>），也是一種再現（<span class="foreign">representation</span>），而這兩件事放在一起，就是我所理解的意義生成（<span class="foreign">meaning-making</span>）。</p>
+        <p>也就是說，製圖不是意義生成之外的一個工具。製圖本身就是意義生成的一部分。</p>
+        <p>地圖用線條、顏色、尺度、分類、圖例、邊界和空白來組織世界。它看起來好像很中立，但地圖從來不是完全中立的。它會選擇什麼被看見，也會決定什麼被忽略。</p>
+        <p>所以我關心的不只是：我們要畫什麼？</p>
+        <p>我更關心的是：我們為什麼要畫？我們從誰的視角出發？誰被放在中心？誰被放在邊陲？什麼被看見？什麼又被消失？</p>
+        <p>這就是我很在意的意義生成（<span class="foreign">meaning-making</span>）。</p>
+        <p>意義生成不是把一個漂亮的概念套到作品上。它是你真正知道自己為什麼使用某一種媒介，為什麼選擇某一種符號，為什麼用這種方式再現一個地方、一個人、一段記憶或一種關係。</p>
+        <p>所以不管你們最後用的是繪圖（<span class="foreign">drawing</span>）、影像或電影（<span class="foreign">film</span>）、裝置（<span class="foreign">installation</span>）、敘事地圖（<span class="foreign">story map</span>）、感官地圖（<span class="foreign">sensory map</span>）、記憶地圖（<span class="foreign">memory map</span>）、行走地圖（<span class="foreign">walking map</span>），或者傳統地圖，媒介本身都不是重點。</p>
+        <p>真正重要的是：你想讓什麼被看見？你想讓誰被聽見？你想讓什麼關係被重新理解？你想從哪裡重新建立自己的中心？</p>
+      </div>
+
+      <div data-sec="body">
+        <p class="lede">我常常說，地理本身就是關係性的（<span class="foreign">relational</span>）。</p>
+        <p>但關係性不代表所有東西都可以隨便連在一起。真正重要的是，我們要有意識地問：這些關係是怎麼被建立的？對誰有意義？它們讓什麼變得更清楚？它們又可能遮蔽了什麼？</p>
+        <p>這也是為什麼我對很多二元對立（<span class="foreign">dichotomy</span>）都很感興趣：正式與非正式（<span class="foreign">formal / informal</span>）、公共與非公共（<span class="foreign">public / non-public</span>）、可見與不可見（<span class="foreign">visible / invisible</span>）、中心與邊陲（<span class="foreign">center / periphery</span>）。</p>
+        <p>我不是說這些差異不存在。相反，它們很重要，因為權力常常就是透過這些分類在運作。但我希望我們不要太快接受這些分類，也不要太快相信世界真的可以被切成兩邊。很多真正有意思的事情，其實都發生在中間、邊界、轉換、模糊和不穩定的地方。</p>
+        <p>我可以給一個例子。</p>
+        <p>如果有一個人對自己的身體、外型，或者自己如何被別人觀看感到不安。這不一定是她需要公開分享的事情，也不是我們要把個人的脆弱拿來展示。但如果對她來說，這個恐懼是真實的、有重量的、有意義的，那它就可以成為一個製圖的入口。</p>
+        <p>如果我們研究的是島嶼、海洋和海盜，那這裡其實有很多可以連接的地方。海盜在我們的想像裡，常常不是一個完整、乾淨、完美的身體。他可能獨眼、斷腿、有疤痕、有義肢。這些身體不是主流秩序裡被認為「完整」的身體，但它們仍然有力量，仍然能行動，仍然能重新命名自己的位置。</p>
+        <p>這裡就可以連到一個概念：身體作為疆域（<span class="foreign">the body as territory</span>）。</p>
+        <p>如果身體是一座島，那它的海岸線在哪裡？它的傷痕在哪裡？它的港口在哪裡？它的風暴在哪裡？它的避難所在哪裡？哪些地方需要保護？哪些地方願意和世界連接？</p>
+        <p>這樣的製圖可能不是傳統地圖，而是一張身體—島嶼地圖（<span class="foreign">body-island map</span>）。但在這個過程裡，那個人也許不只是完成一個作品，也可能重新看待自己和自己身體的關係。</p>
+        <p>這個例子對我來說很重要，因為它同時說明了我最關心的幾件事。</p>
+        <ul class="cadence">
+          <li>第一，它說明了邊界。身體有邊界，島嶼有邊界，地圖也會畫出邊界。</li>
+          <li>第二，它說明了再現與意義生成（<span class="foreign">representation / meaning-making</span>）。同一個身體，可以被外界用一種方式觀看，也可以被自己用另一種方式重新命名。</li>
+          <li>第三，它說明了轉變（<span class="foreign">transition</span>）。一個人可以透過製圖的過程，從被觀看、被評價、被規訓的位置，慢慢轉向重新理解自己、重新保護自己、重新與世界連接的位置。</li>
+        </ul>
+        <p>所以對我來說，轉變不是抽象概念。</p>
+        <ul class="cadence">
+          <li>經濟轉型是一種轉變。</li>
+          <li>建築裡的再利用（<span class="foreign">reuse</span>）和重新賦予用途（<span class="foreign">repurpose</span>）是一種轉變。</li>
+          <li>災害之後的復原（<span class="foreign">recovery</span>）也是一種轉變。</li>
+          <li>一個人重新理解自己的身體、身份和位置，也是一種轉變。</li>
+        </ul>
+        <p>我現在在紅十字會做的工作，很多時候其實就是幫助社區在災害後重新理解自己、重新組織資源、重新建立連結。</p>
+        <p>復原不只是把東西修回原本的樣子。復原也是一個社區重新問自己：我們失去了什麼？我們還擁有什麼？我們想保護什麼？我們要往哪裡去？</p>
+        <p>很多時候，真正的改變不是突然發生的。它是在邊界上、在過渡中、在一個人或一個地方還沒有完全知道自己會變成什麼的時候，慢慢長出來的。</p>
+        <p>這也是為什麼我很支持實驗性的工作（<span class="foreign">experimental work</span>）。但實驗不能只是形式上的新奇。它不能只是看起來很酷，也不能只是概念聽起來很漂亮。</p>
+        <p>實驗需要意義（<span class="foreign">experimentation needs meaning</span>）。</p>
+        <p>形式可以自由，但邏輯不能是空的。媒介可以很多元，但背後必須有清楚的意圖。</p>
+      </div>
+
+      <div data-sec="presence">
+        <p class="lede">最後，我想說，我希望我們的製圖組不只是做地圖，而是學會講故事，也學會聽故事。</p>
+        <p>製圖是講故事（<span class="foreign">mapping is storytelling</span>）。但在講故事之前，我們要先學會聽故事。聽地方的故事，聽人的故事，聽空間裡沒有被說出來的故事，聽那些很小、很日常、很容易被忽略的東西。</p>
+        <p>這也是為什麼田野調查（<span class="foreign">fieldwork</span>）對我來說非常重要。田野調查不是為了證明我們原本就相信的東西。田野調查是一種現實檢驗（<span class="foreign">reality testing</span>）。</p>
+        <p>很多理論在紙上很漂亮，很多概念在簡報裡很聰明，很多圖像在牆上很好看。但現場會告訴我們：事情沒有那麼簡單。人的路徑、人的等待、人的恐懼、人的沉默、人的生活方式，常常會挑戰我們原本的想法。</p>
+        <p>所以做地理、做製圖、做田野，很重要的一點是保持謙卑。不要太快相信一刀切的答案，不要太快用同一套方法解釋所有地方，也不要太快把別人的生活變成我們自己的概念材料。</p>
+        <p>我最喜歡的學習方式，其實是蘇格拉底式對話（<span class="foreign">Socratic dialogue</span>）。它對我來說也是一種關係性的實踐。好的教學不是我給大家一個標準答案，而是我們一起問問題，一起把看似理所當然的東西拆開。</p>
+        <p>我們可以一起問：</p>
+        <ul class="cadence">
+          <li>我們為什麼這樣看？</li>
+          <li>這個分類從哪裡來？</li>
+          <li>這張地圖讓誰被看見？</li>
+          <li>又讓誰被消失？</li>
+          <li>如果從邊陲看，而不是從中心看，這個地方會變成什麼樣子？</li>
+          <li>如果從身體看，從記憶看，從災害後的復原看，又會變成什麼樣子？</li>
+        </ul>
+        <p>我其實很好相處。我不需要大家一開始就很會做圖，也不需要大家一開始就有很成熟的概念。我在乎兩件事。</p>
+        <p>第一個是在場（<span class="foreign">presence</span>）。簡單講，就是你有沒有到。請大家盡量不要遲到。如果有事，一定要講。沒有什麼事是不能講的。真正麻煩的不是有問題，而是不說。</p>
+        <p>第二個是在場的品質（<span class="foreign">quality of presence</span>）。你人在這裡的時候，你是不是真的在？你有沒有看？有沒有聽？有沒有想？有沒有對別人的故事、地方的細節、自己的作品負責？</p>
+        <p>我相信，如果一個人一直認真地存在，她不可能做出完全不好的作品。因為真正的作品不是突然變出來的，它是從注意力、誠實、觀察和投入裡長出來的。</p>
+        <p>我知道你們這一代面對的挑戰很多。氣候危機、戰爭、經濟不穩定、孤獨感、未來的不確定性，這些都不是小事情。我之前在聯合國與國際勞工組織（<span class="foreign">UN / ILO</span>）做青年代表時，也一直在處理年輕人、工作、未來和政策之間的問題。</p>
+        <p>所以我做製圖、研究島嶼、談「沒有人是一座孤島」（<span class="foreign">No one is an island</span>），對我來說不只是學術興趣。它也有一個很簡單的人道主義願望。</p>
+        <p>我希望有一天，當你們遇到困難，或者只是覺得迷失、不確定、不知道自己在哪裡的時候，你們看到一座島，不只會想到孤立，也能想到連結、中心、想像和勇氣。</p>
+        <ul class="cadence">
+          <li>看到一座島，也許可以想到：即使被海包圍，也還是可以和世界相連。</li>
+          <li>看到一座島，也許可以想到：即使被稱為邊陲，也不代表沒有力量。</li>
+          <li>看到一座島，也許可以想到：中心不一定要被別人給予，有時候中心是我們從自己的位置慢慢長出來的。</li>
+        </ul>
+        <div class="verse">
+          <span>每個人都像一座小島，有自己的邊界、記憶、傷痕和風暴。</span>
+          <span>但同時，沒有人真的應該是一座孤島。</span>
         </div>
-      </article>
-
-      <!-- ===================== Ελληνικά ===================== -->
-      <article class="panel" id="panel-el" role="tabpanel" aria-labelledby="tab-el" hidden>
-        <div class="pending">
-          <span class="zh">Κανείς δεν είναι νησί</span>
-          <span class="en">Η ελληνική μετάφραση θα είναι σύντομα διαθέσιμη.</span>
+        <p>而那座正在長出自己中心的島，也可能就是正在瘋狂成長的你。</p>
+        <p>所以我希望我們的製圖組可以是一個這樣的空間：我們不只是畫地圖，而是用製圖去觀察、去聆聽、去連結、去測試現實，也去創造意義。</p>
+        <div class="verse">
+          <span>因為沒有人是一座孤島。</span>
+          <span>而每一座島，也都不只是島。</span>
         </div>
-      </article>
-    </main>
-
-    <footer>SOPHIA CHEN · AAVS GREECE · MMXXVI</footer>
+        <p style="text-align:center; letter-spacing:0.3em; margin-top:2rem;">謝謝你們。</p>
+      </div>
+    </div>
 
     <script>
       (function () {
-        var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
-        var langByTab = { "tab-zh": "zh-Hant", "tab-en": "en", "tab-fr": "fr", "tab-el": "el" };
+        var isles = Array.prototype.slice.call(document.querySelectorAll(".isle"));
+        var archi = document.getElementById("archipelago");
+        var reading = document.getElementById("reading");
+        var store = document.getElementById("store");
 
-        function select(tab) {
-          tabs.forEach(function (t) {
-            var on = t === tab;
-            t.setAttribute("aria-selected", on ? "true" : "false");
-            var panel = document.getElementById(t.getAttribute("aria-controls"));
-            panel.classList.toggle("is-active", on);
-            if (on) { panel.removeAttribute("hidden"); } else { panel.setAttribute("hidden", ""); }
+        var lang = "zh";
+        var current = null;
+
+        var HINTS = {
+          zh: "點一座島嶼，文字會浮現。",
+          en: "Tap an island; the words will surface.",
+          fr: "Touchez une île ; les mots vont surgir.",
+          el: "Άγγιξε ένα νησί· οι λέξεις θα αναδυθούν.",
+        };
+        var SOON = {
+          zh: "翻譯即將推出。",
+          en: "Translation coming soon.",
+          fr: "Traduction à venir.",
+          el: "Η μετάφραση έρχεται σύντομα.",
+        };
+        var CLOSE = { zh: "← 回到群島", en: "← back to the archipelago", fr: "← retour à l’archipel", el: "← πίσω στο αρχιπέλαγος" };
+
+        function labelFor(isle) { return isle.getAttribute("data-" + lang) || isle.getAttribute("data-zh"); }
+
+        function relabel() {
+          isles.forEach(function (isle) {
+            isle.querySelector(".isle-label").textContent = labelFor(isle);
           });
-          document.documentElement.lang = langByTab[tab.id] || "zh-Hant";
-          window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        tabs.forEach(function (tab, i) {
-          tab.addEventListener("click", function () { select(tab); });
-          tab.addEventListener("keydown", function (e) {
-            if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-              e.preventDefault();
-              var dir = e.key === "ArrowRight" ? 1 : -1;
-              var next = tabs[(i + dir + tabs.length) % tabs.length];
-              next.focus();
-              select(next);
+        function showHint() {
+          reading.innerHTML = "";
+          var p = document.createElement("p");
+          p.className = "hint";
+          p.textContent = HINTS[lang];
+          reading.appendChild(p);
+        }
+
+        function render(sec) {
+          var isle = isles.filter(function (i) { return i.dataset.sec === sec; })[0];
+          var doc = document.createElement("div");
+          doc.className = "doc";
+
+          var eyebrow = document.createElement("p");
+          eyebrow.className = "doc-eyebrow";
+          eyebrow.textContent = isle.getAttribute("data-en");
+          doc.appendChild(eyebrow);
+
+          var h = document.createElement("h2");
+          h.className = "doc-title";
+          h.textContent = labelFor(isle);
+          doc.appendChild(h);
+
+          if (lang === "zh") {
+            var src = store.querySelector('[data-sec="' + sec + '"]');
+            var body = document.createElement("div");
+            body.innerHTML = src.innerHTML;
+            while (body.firstChild) doc.appendChild(body.firstChild);
+          } else {
+            var soon = document.createElement("p");
+            soon.className = "hint";
+            soon.style.textAlign = "left";
+            soon.textContent = SOON[lang];
+            doc.appendChild(soon);
+          }
+
+          var back = document.createElement("button");
+          back.className = "doc-close";
+          back.textContent = CLOSE[lang];
+          back.addEventListener("click", function (e) { e.stopPropagation(); deselect(); });
+          doc.appendChild(back);
+
+          reading.innerHTML = "";
+          reading.appendChild(doc);
+        }
+
+        function select(sec) {
+          current = sec;
+          archi.classList.add("has-active");
+          isles.forEach(function (isle) {
+            var on = isle.dataset.sec === sec;
+            isle.classList.remove("is-active");
+            if (on) {
+              // force reflow so the flicker animation restarts on every click
+              void isle.offsetWidth;
+              isle.classList.add("is-active");
+              isle.setAttribute("aria-pressed", "true");
+            } else {
+              isle.setAttribute("aria-pressed", "false");
             }
           });
+          render(sec);
+        }
+
+        function deselect() {
+          current = null;
+          archi.classList.remove("has-active");
+          isles.forEach(function (isle) {
+            isle.classList.remove("is-active");
+            isle.setAttribute("aria-pressed", "false");
+          });
+          showHint();
+        }
+
+        isles.forEach(function (isle) {
+          isle.setAttribute("aria-pressed", "false");
+          isle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (current === isle.dataset.sec) { deselect(); }
+            else { select(isle.dataset.sec); }
+          });
         });
+
+        // clicking the open sea deselects
+        document.querySelector(".sea").addEventListener("click", function () {
+          if (current) deselect();
+        });
+
+        // language switch
+        Array.prototype.slice.call(document.querySelectorAll(".langs button")).forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            lang = btn.getAttribute("data-lang");
+            document.documentElement.lang = lang === "zh" ? "zh-Hant" : lang;
+            document.querySelectorAll(".langs button").forEach(function (b) {
+              b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            });
+            relabel();
+            if (current) render(current); else showHint();
+          });
+        });
+
+        relabel();
+        showHint();
       })();
     </script>
   </body>
