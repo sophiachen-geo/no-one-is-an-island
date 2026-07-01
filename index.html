@@ -91,116 +91,90 @@
         position: sticky;
         top: 0;
         height: 100vh;
-        min-height: 560px;
-      }
-      .archipelago {
-        position: absolute;
-        inset: 5rem 0 0 0;
-      }
-
-      .isle {
-        appearance: none;
-        border: none;
-        background: none;
-        padding: 0;
-        cursor: pointer;
-        position: absolute;
-        left: var(--x);
-        top: var(--y);
-        width: var(--w);
-        transform: rotate(var(--r));
-        transition: transform 0.5s cubic-bezier(.2,.7,.2,1), opacity 0.5s ease;
+        min-height: 60vh;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        outline: none;
+        justify-content: center;
+        padding: 5rem 1rem 1.5rem;
       }
-      .isle:hover { transform: rotate(var(--r)) translateY(-5px); }
-      .isle:focus-visible .isle-label { color: var(--accent); }
+      .scene {
+        width: 100%;
+        height: auto;
+        max-height: 88vh;
+        display: block;
+        overflow: visible;
+      }
 
-      .isle-svg { display: block; width: 100%; height: auto; overflow: visible; }
-      .isle-fill {
+      .isle { cursor: pointer; outline: none; transition: opacity 0.5s ease; }
+
+      /* thin nautical-chart coastline */
+      .coast {
         fill: var(--isle);
-        stroke: var(--isle-edge);
-        stroke-width: 1;
-        transition: fill 0.4s ease;
+        fill-opacity: 0.4;
+        stroke: var(--ink-soft);
+        stroke-width: 1.4;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+        transition: fill 0.35s ease, fill-opacity 0.35s ease, stroke 0.35s ease;
       }
-      .isle-line {
-        fill: none;
-        stroke: var(--isle-edge);
-        stroke-width: 1;
-        opacity: 0.5;
-      }
-      .isle:hover .isle-fill { fill: #ece4d3; }
+      .isle:hover .coast { fill: #e7dccb; fill-opacity: 0.7; }
 
-      .isle-label {
-        margin-top: 0.6rem;
-        font-size: 0.9rem;
-        letter-spacing: 0.34em;
-        padding-left: 0.34em;
-        color: var(--ink-soft);
-        white-space: nowrap;
-        transition: color 0.3s ease, letter-spacing 0.4s ease;
+      .label {
+        font-family: "Noto Serif TC", "Cormorant Garamond", serif;
+        font-size: 25px;
+        letter-spacing: 0.16em;
+        fill: var(--ink-soft);
+        cursor: pointer;
+        transition: fill 0.3s ease;
+        -webkit-user-select: none;
+        user-select: none;
       }
+      .isle:hover .label { fill: var(--ink); }
+      .isle:focus-visible .label { fill: var(--accent); text-decoration: underline; }
 
-      /* ripple rings that emanate on selection */
+      /* ripple rings emanating from a selected island */
       .ripple {
-        position: absolute;
-        left: 50%;
-        top: calc(var(--w) * 0.43);
-        width: calc(var(--w) * 0.9);
-        height: calc(var(--w) * 0.9);
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        opacity: 0;
-      }
-      .ripple::before,
-      .ripple::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border: 1px solid var(--accent-soft);
-        border-radius: 50%;
-        transform: scale(0.25);
-        opacity: 0;
-      }
-
-      /* focus / dim siblings when a selection is active */
-      .archipelago.has-active .isle:not(.is-active) { opacity: 0.38; }
-      .archipelago.has-active .isle:not(.is-active):hover { opacity: 0.7; }
-
-      /* selected island: flicker, then a soft breathing glow */
-      .isle.is-active .isle-label {
-        color: var(--accent);
-        letter-spacing: 0.42em;
-      }
-      .isle.is-active .isle-fill {
-        fill: #dce4df;
+        fill: none;
         stroke: var(--accent-soft);
-        animation: flicker 0.9s steps(1, end) 1, breathe 3.2s ease-in-out 0.9s infinite;
+        stroke-width: 1.2;
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+        vector-effect: non-scaling-stroke;
+        pointer-events: none;
       }
-      .isle.is-active .isle-line { stroke: var(--accent-soft); opacity: 0.85; }
-      .isle.is-active .ripple { opacity: 1; }
-      .isle.is-active .ripple::before { animation: ring 2.6s ease-out infinite; }
-      .isle.is-active .ripple::after { animation: ring 2.6s ease-out 1.3s infinite; }
+
+      /* dim the others when one island is chosen */
+      .scene.has-active .isle:not(.is-active) { opacity: 0.3; }
+      .scene.has-active .isle:not(.is-active):hover { opacity: 0.6; }
+
+      /* selected island: brief shimmer, then a soft breathing wash */
+      .isle.is-active .coast {
+        fill: #cfdfda;
+        stroke: var(--accent);
+        animation: flicker 0.85s steps(1, end) 1, breathe 3.4s ease-in-out 0.85s infinite;
+      }
+      .isle.is-active .label { fill: var(--accent); }
+      .isle.is-active .ripple { animation: ring 2.8s ease-out infinite; }
+      .isle.is-active .ripple2 { animation: ring 2.8s ease-out 1.4s infinite; }
 
       @keyframes flicker {
         0%, 100% { opacity: 1; }
-        12% { opacity: 0.3; }
+        12% { opacity: 0.25; }
         24% { opacity: 0.85; }
         38% { opacity: 0.4; }
         52% { opacity: 1; }
-        66% { opacity: 0.55; }
+        66% { opacity: 0.5; }
         80% { opacity: 0.92; }
       }
       @keyframes breathe {
-        0%, 100% { filter: drop-shadow(0 0 0 rgba(53,98,95,0)); }
-        50% { filter: drop-shadow(0 3px 14px rgba(53,98,95,0.35)); }
+        0%, 100% { fill-opacity: 0.55; }
+        50% { fill-opacity: 0.9; }
       }
       @keyframes ring {
-        0% { transform: scale(0.25); opacity: 0.6; }
-        90% { opacity: 0; }
-        100% { transform: scale(1.5); opacity: 0; }
+        0% { transform: scale(0.2); opacity: 0.6; }
+        85% { opacity: 0; }
+        100% { transform: scale(1.55); opacity: 0; }
       }
 
       /* ---------- reading ---------- */
@@ -279,14 +253,24 @@
       /* ---------- responsive ---------- */
       @media (max-width: 820px) {
         .stage { grid-template-columns: 1fr; }
-        .sea { position: relative; height: 64vh; min-height: 420px; }
-        .reading { min-height: auto; justify-content: flex-start; padding-top: 1rem; }
+        .sea {
+          position: relative;
+          height: auto;
+          min-height: 48vh;
+          padding: 4.5rem 1rem 1rem;
+        }
+        .scene { max-height: 56vh; }
+        .reading { min-height: auto; justify-content: flex-start; padding-top: 0.5rem; }
+      }
+      @media (max-width: 460px) {
+        .langs { gap: 0.9rem; font-size: 0.74rem; right: 1rem; }
+        .label { font-size: 30px; }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .isle.is-active .isle-fill { animation: none; }
-        .isle.is-active .ripple::before,
-        .isle.is-active .ripple::after { animation: none; }
+        .isle.is-active .coast { animation: none; }
+        .isle.is-active .ripple,
+        .isle.is-active .ripple2 { animation: none; }
         .doc { animation: none; }
       }
     </style>
@@ -301,57 +285,47 @@
 
     <div class="stage">
       <div class="sea">
-        <div class="archipelago" id="archipelago">
-          <button class="isle" data-sec="border" style="--x:3%;  --y:9%;  --w:210px; --r:-6deg"
-            data-zh="邊界" data-en="Boundaries" data-fr="Frontières" data-el="Σύνορα">
-            <svg class="isle-svg" viewBox="0 0 140 120" aria-hidden="true">
-              <path class="isle-fill" d="M106.4,60 C103.7,63.1 108.9,66.1 106.3,67.7 C103.7,69.3 92.2,67.1 90.8,69.5 C89.4,71.9 96.8,77.4 98,82.2 C99.2,87.0 99.9,94.0 97.9,98.3 C95.9,102.5 90.9,107.8 86.2,107.7 C81.5,107.6 74.6,99.9 70,97.6 C65.4,95.3 61.6,95.8 58.5,93.8 C55.4,91.8 55.9,86.2 51.2,85.8 C46.5,85.4 33.8,92.7 30.2,91.5 C26.6,90.3 29.2,82.4 29.6,78.5 C30.0,74.6 34.0,71.0 32.6,67.9 C31.2,64.8 21.2,62.6 21.2,60 C21.2,57.4 31.1,55.1 32.5,52 C33.9,48.9 27.6,43.7 29.3,41.4 C31.0,39.1 39.4,40.1 42.6,38.3 C45.8,36.5 45.1,30.1 48.6,30.6 C52.1,31.2 60.2,44.4 63.8,41.6 C67.4,38.8 66.6,18.0 70,14 C73.4,10.0 80.9,14.8 84.3,17.7 C87.7,20.6 87.4,29.1 90.6,31.7 C93.8,34.3 103.6,30.3 103.6,33.4 C103.6,36.5 87.6,47.9 90.8,50.5 C94.0,53.1 119.9,47.3 122.5,48.9 C125.1,50.5 109.1,56.9 106.4,60 Z"/>
-              <path class="isle-line" d="M90.7,60.4 C89.1,62.2 92.2,63.9 90.7,64.8 C89.2,65.7 82.5,64.5 81.7,65.9 C80.9,67.3 85.1,70.4 85.8,73.2 C86.5,76.0 86.9,80.1 85.8,82.6 C84.7,85.1 81.7,88.1 79,88 C76.3,87.9 72.3,83.5 69.6,82.2 C66.9,80.9 64.7,81.2 62.9,80 C61.1,78.8 61.4,75.5 58.7,75.3 C56.0,75.1 48.6,79.3 46.5,78.6 C44.4,77.9 46.0,73.4 46.2,71.1 C46.4,68.8 48.7,66.7 47.9,64.9 C47.1,63.1 41.3,61.9 41.3,60.4 C41.3,58.9 47.1,57.5 47.9,55.7 C48.7,53.9 45.0,50.9 46,49.6 C47.0,48.3 51.8,48.8 53.7,47.8 C55.6,46.8 55.2,43.0 57.2,43.3 C59.3,43.6 63.9,51.3 66,49.7 C68.1,48.1 67.6,36.0 69.6,33.7 C71.6,31.4 75.9,34.1 77.9,35.8 C79.9,37.5 79.7,42.4 81.6,43.9 C83.5,45.4 89.1,43.1 89.1,44.9 C89.1,46.7 79.9,53.4 81.7,54.9 C83.5,56.4 98.6,53.0 100.1,53.9 C101.6,54.8 92.3,58.6 90.7,60.4 Z"/>
-            </svg>
-            <span class="isle-label">邊界</span>
-            <span class="ripple"></span>
-          </button>
+        <svg class="scene" id="scene" viewBox="0 0 760 680" preserveAspectRatio="xMidYMid meet" role="group" aria-label="archipelago">
+          <g class="isle" data-sec="border" tabindex="0" role="button" aria-label="邊界">
+            <circle class="ripple" cx="165" cy="175" r="82"></circle>
+            <circle class="ripple ripple2" cx="165" cy="175" r="82"></circle>
+            <path class="coast" d="M245.8,148.7 C248.9,150.5 254.2,152.0 257.1,154.3 C260.0,156.6 261.6,159.7 263.2,162.7 C264.8,165.7 266.9,169.1 266.4,172.5 C265.9,175.9 262.5,179.5 260.4,182.9 C258.3,186.3 256.1,189.7 253.6,193 C251.1,196.3 248.9,199.7 245.4,202.6 C241.9,205.5 238.1,208.7 232.8,210.2 C227.5,211.7 219.4,211.3 213.8,211.8 C208.3,212.3 203.8,212.7 199.5,213 C195.2,213.3 191.2,212.8 187.8,213.8 C184.4,214.8 182.3,216.9 179.3,218.9 C176.3,220.9 173.4,223.9 170,226.1 C166.6,228.3 162.8,230.3 158.8,232.1 C154.8,233.9 150.9,234.8 146,237.2 C141.1,239.6 134.9,244.2 129.2,246.5 C123.5,248.8 117.5,250.2 111.6,251.2 C105.7,252.2 97.5,254.4 93.8,252.6 C90.1,250.8 89.8,244.5 89.2,240.2 C88.6,235.9 90.0,230.7 89.9,226.8 C89.8,222.9 88.8,220.2 88.7,217 C88.6,213.8 88.9,210.8 89.2,207.8 C89.5,204.8 89.8,201.9 90.8,199.1 C91.8,196.3 94.4,193.3 95.1,190.7 C95.8,188.1 95.5,186.1 94.9,183.8 C94.3,181.5 94.1,179.5 91.5,176.8 C88.9,174.2 80.9,171.1 79.1,167.9 C77.3,164.7 78.9,161.0 80.4,157.8 C81.9,154.6 85.3,151.6 88.1,148.6 C90.8,145.6 93.8,142.6 96.9,139.7 C100.0,136.8 103.6,134.3 106.9,131.3 C110.2,128.3 112.3,123.7 116.5,121.6 C120.7,119.5 127.0,119.3 132,118.8 C137.0,118.3 142.0,118.4 146.6,118.3 C151.2,118.2 155.3,118.5 159.4,118 C163.6,117.5 167.2,116.7 171.5,115.3 C175.8,113.9 180.7,110.4 185,109.6 C189.3,108.8 193.7,109.5 197.2,110.7 C200.7,111.9 203.0,114.9 205.9,116.6 C208.8,118.3 211.3,119.9 214.4,121.1 C217.5,122.3 220.5,123.2 224.3,123.9 C228.1,124.6 234.4,123.8 237,125.4 C239.6,127.1 239.6,130.8 239.9,133.8 C240.2,136.8 237.6,140.7 238.6,143.2 C239.6,145.7 242.7,146.8 245.8,148.7 Z"/>
+            <text class="label" x="165" y="300" text-anchor="middle"
+              data-zh="邊界" data-en="Boundaries" data-fr="Frontières" data-el="Σύνορα">邊界</text>
+          </g>
 
-          <button class="isle" data-sec="islands" style="--x:47%; --y:2%;  --w:170px; --r:9deg"
-            data-zh="島嶼" data-en="Islands" data-fr="Îles" data-el="Νησιά">
-            <svg class="isle-svg" viewBox="0 0 140 120" aria-hidden="true">
-              <path class="isle-fill" d="M103.4,60 C106.9,64.0 119.8,71.8 119.1,75.1 C118.4,78.4 102.6,76.6 99,79.6 C95.4,82.6 98.8,88.3 97.5,93.2 C96.3,98.2 95.0,106.8 91.5,109.3 C88.0,111.8 81.0,110.5 76.6,108.1 C72.2,105.7 67.8,99.6 65.2,94.9 C62.7,90.2 64.8,80.6 61.3,80 C57.8,79.4 47.8,91.1 44.3,91.1 C40.8,91.1 43.5,83.0 40,80.2 C36.5,77.4 25.4,77.8 23.1,74.4 C20.8,71.0 24.7,64.4 26,60 C27.3,55.6 29.6,52.1 30.8,48 C32.0,43.9 31.0,38.4 33.3,35.3 C35.6,32.2 41.8,32.7 44.7,29.4 C47.6,26.1 47.5,18.7 50.6,15.5 C53.7,12.3 59.1,9.7 63.2,10.4 C67.4,11.1 71.1,18.9 75.5,19.7 C79.9,20.5 85.0,15.0 89.6,15 C94.2,15.0 102.9,14.7 103.2,19.8 C103.5,24.9 92.4,40.1 91.6,45.4 C90.8,50.6 96.3,48.9 98.3,51.3 C100.3,53.7 99.9,56.0 103.4,60 Z"/>
-              <path class="isle-line" d="M89.1,59.5 C91.1,61.8 98.6,66.4 98.2,68.3 C97.8,70.2 88.7,69.2 86.6,70.9 C84.5,72.7 86.4,75.9 85.7,78.8 C85.0,81.7 84.2,86.7 82.2,88.1 C80.2,89.5 76.1,88.8 73.6,87.4 C71.1,86.0 68.5,82.5 67,79.8 C65.5,77.1 66.7,71.5 64.7,71.1 C62.7,70.7 57.0,77.6 54.9,77.6 C52.8,77.6 54.4,72.9 52.4,71.3 C50.4,69.7 44.0,69.9 42.6,67.9 C41.2,65.9 43.5,62.0 44.2,59.5 C44.9,57.0 46.3,55.0 47,52.6 C47.7,50.2 47.1,47.0 48.5,45.2 C49.9,43.4 53.4,43.7 55.1,41.8 C56.8,39.9 56.7,35.5 58.5,33.7 C60.3,31.9 63.4,30.4 65.8,30.8 C68.2,31.2 70.5,35.8 73,36.2 C75.5,36.6 78.4,33.4 81.1,33.4 C83.8,33.4 88.8,33.3 89,36.2 C89.2,39.2 82.8,48.1 82.3,51.1 C81.8,54.1 85.1,53.1 86.2,54.5 C87.3,55.9 87.1,57.2 89.1,59.5 Z"/>
-            </svg>
-            <span class="isle-label">島嶼</span>
-            <span class="ripple"></span>
-          </button>
+          <g class="isle" data-sec="islands" tabindex="0" role="button" aria-label="島嶼">
+            <circle class="ripple" cx="545" cy="150" r="70"></circle>
+            <circle class="ripple ripple2" cx="545" cy="150" r="70"></circle>
+            <path class="coast" d="M611.5,179.6 C609.5,181.6 605.1,182.4 602.6,183.9 C600.1,185.4 598.2,186.9 596.5,188.8 C594.8,190.7 593.9,193.1 592.5,195.4 C591.1,197.7 590.7,201.8 588,202.6 C585.3,203.4 579.8,201.0 576.2,200.4 C572.7,199.8 569.7,199.3 566.7,199 C563.7,198.7 561.0,197.7 558.4,198.7 C555.8,199.7 553.9,202.5 551,204.9 C548.1,207.3 544.9,211.1 541.2,213.2 C537.5,215.3 532.6,217.7 528.7,217.4 C524.8,217.1 521.4,213.2 517.7,211.3 C514.1,209.4 510.5,207.8 506.8,205.9 C503.1,204.0 499.3,202.3 495.7,200.1 C492.1,197.9 488.3,195.7 485.3,193 C482.3,190.3 478.8,187.4 477.5,183.9 C476.3,180.4 477.0,175.8 477.8,172 C478.6,168.2 481.4,164.5 482.3,161.3 C483.3,158.1 483.8,155.6 483.5,152.9 C483.2,150.2 482.0,147.9 480.6,145.2 C479.3,142.4 476.3,139.3 475.4,136.4 C474.5,133.5 474.4,130.4 475,127.8 C475.6,125.1 476.8,122.5 478.8,120.5 C480.8,118.5 484.9,117.7 487.2,116 C489.4,114.3 490.9,112.5 492.3,110.3 C493.7,108.1 493.8,104.7 495.6,102.8 C497.4,100.9 500.2,99.4 503.1,98.7 C506.0,98.0 509.8,98.4 513.2,98.8 C516.6,99.2 520.4,101.1 523.4,101.3 C526.4,101.5 528.6,101.1 531.2,99.7 C533.8,98.3 535.8,95.5 538.8,93 C541.8,90.5 545.2,86.5 548.9,84.9 C552.6,83.3 557.1,82.8 561.1,83.3 C565.1,83.8 569.1,85.8 572.8,87.6 C576.5,89.4 579.6,92.2 583.2,94.2 C586.8,96.2 591.0,97.5 594.5,99.7 C598.0,101.9 601.3,104.5 604.2,107.3 C607.1,110.1 610.5,113.0 611.7,116.5 C612.9,120.0 611.8,124.5 611.5,128.2 C611.2,131.8 610.7,135.3 609.7,138.4 C608.7,141.6 605.2,144.3 605.4,147.1 C605.6,149.8 609.1,152.1 610.7,154.9 C612.3,157.7 614.5,160.8 615.1,163.7 C615.7,166.5 615.1,169.3 614.5,172 C613.9,174.7 613.5,177.6 611.5,179.6 Z"/>
+            <text class="label" x="545" y="258" text-anchor="middle"
+              data-zh="島嶼" data-en="Islands" data-fr="Îles" data-el="Νησιά">島嶼</text>
+          </g>
 
-          <button class="isle" data-sec="meaning" style="--x:24%; --y:37%; --w:200px; --r:-4deg"
-            data-zh="意義" data-en="Meaning" data-fr="Sens" data-el="Νόημα">
-            <svg class="isle-svg" viewBox="0 0 140 120" aria-hidden="true">
-              <path class="isle-fill" d="M123.7,60 C123.5,63.0 114.4,66.3 110.9,68.8 C107.4,71.3 104.6,72.6 102.7,74.9 C100.8,77.2 101.3,80.7 99.4,82.7 C97.5,84.7 94.2,86.1 91.3,86.8 C88.4,87.5 84.3,84.4 81.8,87.1 C79.3,89.8 78.5,103.7 76,102.7 C73.5,101.7 70.7,82.3 67,81.3 C63.3,80.3 58.6,93.8 54,96.7 C49.4,99.6 39.3,102.8 39.1,98.9 C38.9,95.0 53.9,76.9 52.8,73.3 C51.7,69.7 38.6,77.4 32.5,77.1 C26.4,76.8 18.4,74.3 16.4,71.5 C14.4,68.7 17.8,63.3 20.4,60 C22.9,56.7 26.9,53.4 31.7,51.8 C36.5,50.2 47.4,52.7 49.2,50.5 C51.0,48.3 43.4,42.7 42.4,38.7 C41.4,34.7 40.9,27.6 43.5,26.6 C46.1,25.6 54.6,33.1 58.2,32.9 C61.8,32.7 62.4,27.3 65.2,25.5 C68.0,23.7 73.1,19.5 75.3,22.1 C77.5,24.7 74.2,41.1 78.2,41.3 C82.2,41.5 93.3,25.7 99.1,23.3 C104.8,20.9 112.7,23.2 112.7,27.1 C112.8,31.0 99.5,42.6 99.4,46.6 C99.3,50.6 108.0,48.8 112,51 C116.0,53.2 123.9,57.0 123.7,60 Z"/>
-              <path class="isle-line" d="M101.4,60 C101.3,61.7 96.0,63.7 94,65.1 C92.0,66.5 90.3,67.3 89.2,68.6 C88.1,69.9 88.4,72.0 87.3,73.2 C86.2,74.4 84.3,75.1 82.6,75.5 C80.9,75.9 78.6,74.2 77.1,75.7 C75.6,77.3 75.1,85.4 73.7,84.8 C72.3,84.2 70.6,72.9 68.5,72.3 C66.4,71.7 63.7,79.6 61,81.3 C58.3,83.0 52.4,84.8 52.3,82.5 C52.2,80.2 60.9,69.8 60.3,67.7 C59.7,65.6 52.0,70.1 48.5,69.9 C45.0,69.7 40.4,68.4 39.2,66.7 C38.0,65.0 40.0,61.9 41.5,60 C43.0,58.1 45.2,56.1 48,55.2 C50.8,54.3 57.2,55.8 58.2,54.5 C59.2,53.2 54.8,49.9 54.2,47.6 C53.7,45.3 53.4,41.2 54.9,40.6 C56.4,40.0 61.3,44.4 63.4,44.3 C65.5,44.2 65.8,41.0 67.5,40 C69.2,39.0 72.0,36.5 73.3,38 C74.5,39.5 72.7,49.0 75,49.1 C77.3,49.2 83.8,40.1 87.1,38.7 C90.4,37.3 95.0,38.6 95,40.9 C95.0,43.1 87.4,49.9 87.3,52.2 C87.2,54.5 92.3,53.5 94.6,54.8 C96.9,56.1 101.5,58.3 101.4,60 Z"/>
-            </svg>
-            <span class="isle-label">意義</span>
-            <span class="ripple"></span>
-          </button>
+          <g class="isle" data-sec="meaning" tabindex="0" role="button" aria-label="意義">
+            <circle class="ripple" cx="360" cy="375" r="78"></circle>
+            <circle class="ripple ripple2" cx="360" cy="375" r="78"></circle>
+            <path class="coast" d="M472.7,359.2 C471.0,363.1 465.2,367.6 460.7,371.2 C456.2,374.8 450.3,377.9 445.7,380.7 C441.1,383.5 436.3,385.5 432.9,387.8 C429.5,390.1 427.6,392.2 425.6,394.5 C423.7,396.8 422.4,399.1 421.2,401.8 C420.0,404.5 420.3,408.1 418.4,410.6 C416.5,413.1 412.8,414.7 409.8,416.6 C406.8,418.5 403.8,420.4 400.6,422.2 C397.4,424.0 394.1,425.5 390.7,427.3 C387.3,429.1 384.2,431.8 380.5,433.2 C376.8,434.6 372.6,435.3 368.6,436 C364.6,436.7 360.1,438.2 356.3,437.2 C352.5,436.2 349.3,431.5 345.9,429.9 C342.5,428.3 339.5,427.8 335.9,427.5 C332.3,427.2 328.7,427.6 324.1,428.1 C319.6,428.7 314.4,429.9 308.6,430.8 C302.8,431.7 294.8,433.9 289.2,433.7 C283.6,433.5 279.1,431.3 274.8,429.4 C270.5,427.5 266.3,425.1 263.5,422.1 C260.7,419.2 260.3,415.1 258.1,411.7 C256.0,408.3 251.9,405.4 250.6,401.9 C249.3,398.3 248.8,394.3 250.1,390.4 C251.4,386.5 254.7,382.3 258.3,378.8 C261.9,375.3 266.7,371.9 271.9,369.2 C277.1,366.5 285.5,364.9 289.4,362.6 C293.3,360.4 293.8,358.2 295.2,355.7 C296.6,353.2 296.8,350.5 297.9,347.8 C299.0,345.1 299.3,341.6 301.6,339.4 C303.9,337.2 308.7,336.5 311.7,334.6 C314.7,332.8 316.7,330.0 319.8,328.3 C322.9,326.6 327.0,326.4 330.3,324.5 C333.6,322.6 336.0,318.5 339.5,316.9 C343.0,315.3 347.5,314.9 351.5,314.8 C355.5,314.7 359.6,315.8 363.5,316.3 C367.4,316.8 371.4,316.5 374.7,317.8 C378.0,319.1 379.9,323.4 383.4,324.2 C386.9,324.9 390.8,323.4 395.7,322.3 C400.6,321.2 406.9,318.6 412.9,317.5 C418.8,316.4 425.8,315.4 431.4,315.8 C437.0,316.2 442.4,317.7 446.3,319.9 C450.2,322.1 452.3,325.7 454.8,328.8 C457.3,331.9 458.8,335.4 461.5,338.5 C464.2,341.6 469.1,344.3 471,347.7 C472.9,351.1 474.4,355.3 472.7,359.2 Z"/>
+            <text class="label" x="360" y="500" text-anchor="middle"
+              data-zh="意義" data-en="Meaning" data-fr="Sens" data-el="Νόημα">意義</text>
+          </g>
 
-          <button class="isle" data-sec="body" style="--x:1%;  --y:64%; --w:206px; --r:6deg"
-            data-zh="身體" data-en="Body" data-fr="Corps" data-el="Σώμα">
-            <svg class="isle-svg" viewBox="0 0 140 120" aria-hidden="true">
-              <path class="isle-fill" d="M94,60 C93.0,64.0 118.9,67.9 122.2,71.3 C125.5,74.7 116.7,77.7 113.7,80.5 C110.7,83.3 106.8,84.7 104.1,88.1 C101.4,91.5 101.2,98.1 97.5,100.9 C93.8,103.7 86.9,107.7 82,104.7 C77.1,101.7 72.7,84.5 67.9,83.1 C63.1,81.7 58.1,94.5 53.2,96.4 C48.3,98.3 42.5,96.1 38.5,94.3 C34.5,92.5 30.5,89.2 28.9,85.8 C27.3,82.4 30.4,77.2 28.9,73.8 C27.4,70.4 19.8,68.3 19.7,65.3 C19.6,62.3 26.8,58.7 28.5,55.6 C30.2,52.5 28.5,49.3 29.8,46.5 C31.1,43.7 34.3,41.8 36.2,38.8 C38.1,35.8 37.8,29.9 41.2,28.6 C44.6,27.3 52.3,32.6 56.5,30.8 C60.7,29.0 62.6,18.1 66.3,17.8 C70.0,17.5 74.2,27.1 78.4,28.8 C82.6,30.5 90.2,25.0 91.7,27.8 C93.2,30.6 85.0,43.0 87.5,45.5 C90.0,48.0 100.2,42.4 107,42.7 C113.8,43.0 130.3,44.5 128.1,47.4 C125.9,50.3 95.0,56.0 94,60 Z"/>
-              <path class="isle-line" d="M83.8,60.6 C83.2,62.9 98.2,65.2 100.1,67.2 C102.0,69.2 97.0,70.9 95.2,72.5 C93.5,74.1 91.2,74.9 89.6,76.9 C88.0,78.9 87.9,82.8 85.8,84.4 C83.7,86.0 79.7,88.3 76.8,86.6 C73.9,84.9 71.4,74.8 68.6,74 C65.8,73.2 62.9,80.6 60.1,81.7 C57.3,82.8 54.0,81.5 51.6,80.5 C49.3,79.5 46.9,77.6 46,75.6 C45.1,73.6 46.9,70.6 46,68.6 C45.1,66.6 40.7,65.5 40.7,63.7 C40.7,62.0 44.8,59.9 45.8,58.1 C46.8,56.3 45.8,54.4 46.5,52.8 C47.2,51.2 49.1,50.0 50.2,48.3 C51.3,46.6 51.1,43.2 53.1,42.4 C55.1,41.6 59.6,44.7 62,43.7 C64.4,42.7 65.6,36.4 67.7,36.2 C69.8,36.0 72.3,41.5 74.7,42.5 C77.2,43.5 81.5,40.4 82.4,42 C83.3,43.6 78.5,50.8 80,52.2 C81.5,53.6 87.4,50.4 91.3,50.6 C95.2,50.8 104.8,51.6 103.5,53.3 C102.3,55.0 84.4,58.3 83.8,60.6 Z"/>
-            </svg>
-            <span class="isle-label">身體</span>
-            <span class="ripple"></span>
-          </button>
+          <g class="isle" data-sec="body" tabindex="0" role="button" aria-label="身體">
+            <circle class="ripple" cx="160" cy="470" r="72"></circle>
+            <circle class="ripple ripple2" cx="160" cy="470" r="72"></circle>
+            <path class="coast" d="M243,487.6 C240.3,489.7 233.0,490.5 229.6,492 C226.2,493.5 224.2,494.9 222.5,496.8 C220.8,498.7 220.0,500.6 219.4,503.1 C218.8,505.6 218.6,508.2 218.7,511.8 C218.8,515.4 220.3,520.4 219.9,524.5 C219.5,528.6 218.8,533.8 216.1,536.6 C213.4,539.4 208.6,540.9 204,541.5 C199.4,542.1 193.7,541.4 188.6,540.4 C183.5,539.4 178.1,536.8 173.3,535.2 C168.5,533.6 164.2,532.6 160,530.9 C155.8,529.1 152.0,526.9 148.4,524.7 C144.8,522.6 141.5,520.3 138.6,518 C135.7,515.7 133.4,512.9 130.9,510.8 C128.4,508.7 126.4,506.6 123.4,505.2 C120.4,503.8 117.3,503.0 113,502.2 C108.7,501.4 102.5,501.5 97.7,500.3 C92.9,499.1 87.5,497.4 84,495.1 C80.5,492.9 78.3,489.7 76.8,486.8 C75.3,483.9 75.3,480.6 75.1,477.6 C74.9,474.6 75.3,471.6 75.9,468.8 C76.5,466.0 78.7,463.6 78.6,460.8 C78.5,458.0 77.0,455.3 75.4,452 C73.9,448.8 70.9,445.0 69.3,441.3 C67.7,437.6 64.9,432.7 65.9,429.6 C66.9,426.5 71.2,424.3 75.3,422.8 C79.4,421.3 84.6,420.1 90.4,420.5 C96.3,420.9 105.0,423.9 110.4,424.9 C115.9,425.8 119.3,426.0 123.1,426.2 C126.8,426.4 129.9,426.5 132.9,426 C135.9,425.5 138.3,424.7 141.1,423.4 C143.8,422.1 146.3,419.6 149.4,418 C152.6,416.4 156.1,415.0 160,413.5 C163.9,412.0 168.6,409.6 173,409.1 C177.4,408.6 181.8,409.8 186.6,410.3 C191.3,410.8 197.1,410.5 201.5,411.9 C205.9,413.3 209.8,416.1 213.2,418.8 C216.5,421.5 219.3,424.7 221.6,427.8 C223.8,430.9 226.0,434.2 226.7,437.6 C227.4,441.0 225.7,445.1 225.9,448.2 C226.2,451.3 226.6,453.7 228.2,456.2 C229.8,458.7 232.6,460.7 235.4,463.2 C238.2,465.7 243.5,468.4 245.2,471.2 C246.9,473.9 246.0,477.0 245.6,479.7 C245.2,482.4 245.7,485.6 243,487.6 Z"/>
+            <text class="label" x="160" y="590" text-anchor="middle"
+              data-zh="身體" data-en="Body" data-fr="Corps" data-el="Σώμα">身體</text>
+          </g>
 
-          <button class="isle" data-sec="presence" style="--x:49%; --y:61%; --w:214px; --r:-9deg"
-            data-zh="在場" data-en="Presence" data-fr="Présence" data-el="Παρουσία">
-            <svg class="isle-svg" viewBox="0 0 140 120" aria-hidden="true">
-              <path class="isle-fill" d="M116.8,60 C117.2,62.9 109.7,65.0 110.3,69 C110.9,73.0 120.9,80.5 120.4,84.1 C119.9,87.7 111.5,88.8 107.3,90.6 C103.1,92.4 99.2,93.6 95.4,94.9 C91.6,96.2 87.9,95.5 84.3,98.5 C80.7,101.5 77.3,114.4 73.8,113.2 C70.3,112.0 66.9,94.7 63.1,91.6 C59.3,88.5 54.9,95.0 51.2,94.8 C47.5,94.6 44.9,92.0 41,90.6 C37.1,89.2 28.5,89.8 28.1,86.5 C27.7,83.2 41.7,74.1 38.7,70.8 C35.7,67.5 14.8,69.5 10.2,66.6 C5.6,63.7 7.3,56.8 10.9,53.5 C14.5,50.2 27.2,49.1 31.5,46.7 C35.8,44.3 33.4,40.0 36.8,39 C40.2,38.0 48.8,42.1 51.7,40.7 C54.6,39.3 52.2,32.4 54.2,30.7 C56.2,29.0 60.4,32.5 63.5,30.4 C66.6,28.3 69.8,18.7 73,17.8 C76.3,16.9 80.4,22.3 83,25 C85.6,27.8 84.4,33.8 88.7,34.3 C93.0,34.8 103.3,28.1 108.8,28.2 C114.3,28.3 122.1,31.2 121.9,35.1 C121.7,39.0 108.6,47.4 107.7,51.5 C106.8,55.6 116.4,57.1 116.8,60 Z"/>
-              <path class="isle-line" d="M97.5,60.7 C97.8,62.4 93.4,63.7 93.7,66 C94.0,68.3 99.9,72.6 99.6,74.7 C99.3,76.8 94.4,77.5 92,78.5 C89.6,79.5 87.3,80.2 85.1,81 C82.9,81.8 80.8,81.3 78.7,83.1 C76.6,84.9 74.6,92.3 72.6,91.6 C70.5,90.9 68.6,80.9 66.4,79.1 C64.2,77.3 61.6,81.0 59.5,80.9 C57.4,80.8 55.8,79.3 53.6,78.5 C51.4,77.7 46.3,78.0 46.1,76.1 C45.9,74.2 53.9,68.9 52.2,67 C50.5,65.1 38.4,66.3 35.7,64.6 C33.0,62.9 34.1,58.9 36.1,57 C38.1,55.1 45.5,54.4 48,53 C50.5,51.6 49.1,49.2 51.1,48.6 C53.1,48.0 58.1,50.3 59.8,49.5 C61.5,48.7 60.1,44.7 61.2,43.7 C62.3,42.7 64.8,44.8 66.6,43.6 C68.4,42.4 70.2,36.8 72.1,36.3 C74.0,35.8 76.4,38.8 77.9,40.4 C79.4,42.0 78.7,45.5 81.2,45.8 C83.7,46.1 89.7,42.2 92.9,42.3 C96.1,42.4 100.6,44.0 100.5,46.3 C100.4,48.5 92.7,53.4 92.2,55.8 C91.7,58.2 97.3,59.0 97.5,60.7 Z"/>
-            </svg>
-            <span class="isle-label">在場</span>
-            <span class="ripple"></span>
-          </button>
-        </div>
+          <g class="isle" data-sec="presence" tabindex="0" role="button" aria-label="在場">
+            <circle class="ripple" cx="600" cy="468" r="78"></circle>
+            <circle class="ripple ripple2" cx="600" cy="468" r="78"></circle>
+            <path class="coast" d="M690.3,431.5 C689.3,435.6 688.9,438.8 690.1,442 C691.3,445.2 695.7,447.4 697.6,450.6 C699.5,453.8 701.4,457.4 701.7,461.1 C702.0,464.8 701.0,469.0 699.5,472.8 C698.0,476.6 696.0,480.7 692.6,484.1 C689.2,487.5 683.0,490.3 678.9,493.1 C674.8,496.0 672.1,499.1 667.7,501.2 C663.3,503.3 657.1,504.1 652.4,505.4 C647.7,506.6 643.7,507.8 639.7,508.7 C635.7,509.6 631.3,509.1 628.2,510.9 C625.1,512.7 623.6,516.0 620.9,519.6 C618.2,523.2 615.7,530.1 612.2,532.5 C608.7,534.9 603.6,534.8 599.7,534.1 C595.8,533.4 592.0,530.3 588.8,528.4 C585.6,526.5 583.5,523.3 580.3,522.6 C577.1,522.0 573.6,523.4 569.5,524.5 C565.4,525.6 560.4,527.7 555.4,529.1 C550.4,530.5 543.9,532.7 539.2,532.7 C534.5,532.7 531.6,530.4 527.4,529.2 C523.2,528.0 517.6,527.7 514.1,525.7 C510.6,523.8 508.3,520.6 506.5,517.5 C504.7,514.4 504.3,510.5 503.5,507 C502.7,503.5 501.6,500.0 501.9,496.3 C502.2,492.6 504.5,488.6 505.3,484.9 C506.1,481.2 507.2,477.9 506.7,474.3 C506.2,470.7 503.5,467.3 502.4,463.3 C501.3,459.4 497.6,454.3 499.9,450.6 C502.2,447.0 510.1,443.7 516.2,441.4 C522.3,439.1 530.4,438.0 536.3,436.7 C542.2,435.4 547.9,435.3 551.8,433.6 C555.7,432.0 557.0,429.1 559.8,426.8 C562.5,424.5 565.4,422.4 568.3,419.9 C571.2,417.4 573.8,413.8 577.2,411.7 C580.6,409.6 584.8,408.3 588.6,407.2 C592.5,406.1 596.5,405.1 600.3,404.9 C604.1,404.6 607.9,405.2 611.5,405.7 C615.1,406.2 618.5,406.9 621.8,407.7 C625.0,408.5 627.9,409.9 631,410.7 C634.1,411.4 636.3,412.8 640.7,412.2 C645.1,411.6 651.6,408.3 657.3,407.1 C662.9,405.9 669.0,405.1 674.6,405.1 C680.2,405.1 687.0,405.1 690.6,407.1 C694.2,409.1 696.0,413.1 696,417.2 C696.0,421.3 691.3,427.4 690.3,431.5 Z"/>
+            <text class="label" x="600" y="600" text-anchor="middle"
+              data-zh="在場" data-en="Presence" data-fr="Présence" data-el="Παρουσία">在場</text>
+          </g>
+        </svg>
       </div>
 
       <div class="reading" id="reading">
@@ -503,8 +477,8 @@
 
     <script>
       (function () {
-        var isles = Array.prototype.slice.call(document.querySelectorAll(".isle"));
-        var archi = document.getElementById("archipelago");
+        var scene = document.getElementById("scene");
+        var isles = Array.prototype.slice.call(scene.querySelectorAll(".isle"));
         var reading = document.getElementById("reading");
         var store = document.getElementById("store");
 
@@ -525,11 +499,12 @@
         };
         var CLOSE = { zh: "← 回到群島", en: "← back to the archipelago", fr: "← retour à l’archipel", el: "← πίσω στο αρχιπέλαγος" };
 
-        function labelFor(isle) { return isle.getAttribute("data-" + lang) || isle.getAttribute("data-zh"); }
+        function labelEl(isle) { return isle.querySelector(".label"); }
+        function labelFor(isle) { var e = labelEl(isle); return e.getAttribute("data-" + lang) || e.getAttribute("data-zh"); }
 
         function relabel() {
           isles.forEach(function (isle) {
-            isle.querySelector(".isle-label").textContent = labelFor(isle);
+            labelEl(isle).textContent = labelFor(isle);
           });
         }
 
@@ -548,7 +523,7 @@
 
           var eyebrow = document.createElement("p");
           eyebrow.className = "doc-eyebrow";
-          eyebrow.textContent = isle.getAttribute("data-en");
+          eyebrow.textContent = labelEl(isle).getAttribute("data-en");
           doc.appendChild(eyebrow);
 
           var h = document.createElement("h2");
@@ -581,7 +556,7 @@
 
         function select(sec) {
           current = sec;
-          archi.classList.add("has-active");
+          scene.classList.add("has-active");
           isles.forEach(function (isle) {
             var on = isle.dataset.sec === sec;
             isle.classList.remove("is-active");
@@ -599,7 +574,7 @@
 
         function deselect() {
           current = null;
-          archi.classList.remove("has-active");
+          scene.classList.remove("has-active");
           isles.forEach(function (isle) {
             isle.classList.remove("is-active");
             isle.setAttribute("aria-pressed", "false");
@@ -609,10 +584,14 @@
 
         isles.forEach(function (isle) {
           isle.setAttribute("aria-pressed", "false");
-          isle.addEventListener("click", function (e) {
+          function toggle(e) {
             e.stopPropagation();
             if (current === isle.dataset.sec) { deselect(); }
             else { select(isle.dataset.sec); }
+          }
+          isle.addEventListener("click", toggle);
+          isle.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(e); }
           });
         });
 
