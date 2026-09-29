@@ -46,3 +46,11 @@ Then in your GitHub repo: Settings → Pages → Source: `gh-pages` branch.
 | | | | ap-lei-chau | |
 | | | | aberdeen | |
 | | | | ma-wan | |
+
+## Kansai subpage
+
+`kansai/index.html` — 新宮 Shingū: one small city planned at six overlapping scales (regional centre,
+polycentric compact city, hazard-filtered zoning, pre-disaster reconstruction, the three-prefecture Kumano
+basin, the pilgrimage landscape). A self-contained static page served at `/no-one-is-an-island/kansai/`.
+Its map data is generated offline from MLIT 国土数値情報, OpenStreetMap and SRTM by the scripts in
+`kansai/tools/` (see `kansai/tools/README.md`).
