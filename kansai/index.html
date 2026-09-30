@@ -106,6 +106,10 @@
       .zhint.show { opacity: 1; }
       .legend { position: absolute; left: 0.7rem; bottom: 2.4rem; max-width: calc(100% - 1.4rem); display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; font-size: 0.74rem; line-height: 1.4; color: var(--ink-soft); background: rgba(244,239,230,0.9); padding: 0.45rem 0.7rem; border-radius: 2px; pointer-events: none; }
       .legend:empty { display: none; }
+      .legend .lgbtn { display: none; }
+      .legend.collapsible { pointer-events: auto; }
+      .legend.collapsible .lgbtn { display: inline-flex; font: inherit; font-weight: 600; color: var(--ink); background: none; border: 0; padding: 0.1rem 0; cursor: pointer; }
+      .legend.collapsible.collapsed span { display: none; }
       .legend span { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
       .attrib { position: absolute; right: 0.6rem; bottom: 0.45rem; max-width: 70%; font-size: 0.62rem; color: var(--ink-faint); pointer-events: none; text-align: right; }
       .scalebar { position: absolute; left: 0.9rem; bottom: 0.7rem; pointer-events: none; }
@@ -477,6 +481,10 @@
         .viewname { font-size: 0.7rem; letter-spacing: 0.12em; }
         .facets { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1rem; }
         .after { padding: 3rem 1rem 3rem; }
+      }
+      @media (max-width: 600px) {
+        .attrib { max-width: 62%; font-size: 0.54rem; line-height: 1.25; }
+        .legend { bottom: 2.9rem; }
       }
       @media (max-width: 520px) {
         .facets, .continuity { grid-template-columns: 1fr; }
@@ -1906,6 +1914,7 @@
           micro_3: "micro", micro_5: "micro", micro_7: "micro", micro_10: "micro", micro_20: "micro", micro_40: "micro",
           river_main: "river", river_trib: "river", nr42: "nr", nr168: "nr", nr_other: "nr", expressway: "expressway", pref: "pref" };
         var TSD = [["fill", "#8a2b5f", { o: 0.3 }, "≤ 300 m to dry ground"], ["fill", "#8a2b5f", { o: 0.65 }, "300–600 m"], ["fill", "#4a0f2f", { o: 0.9 }, "> 600 m"]];
+        var legendOpen = false;
         function setLegend(keys, on) {
           legendEl.innerHTML = "";
           var ks = words(keys), seen = {};
@@ -1916,6 +1925,15 @@
               if (!it) return; var span = document.createElement("span"); span.appendChild(sw(it[0], it[1], it[2])); span.appendChild(document.createTextNode(it[3])); legendEl.appendChild(span);
             });
           });
+          // on a phone a long legend would hide the map: it folds behind one tap
+          var n = legendEl.children.length, small = window.innerWidth <= 600 && n > 4;
+          legendEl.classList.toggle("collapsible", small);
+          if (small) {
+            var bt = document.createElement("button"); bt.type = "button"; bt.className = "lgbtn"; bt.setAttribute("aria-expanded", legendOpen ? "true" : "false");
+            bt.textContent = "Legend · " + n + (legendOpen ? " ▴" : " ▾"); legendEl.insertBefore(bt, legendEl.firstChild);
+            legendEl.classList.toggle("collapsed", !legendOpen);
+            bt.addEventListener("click", function () { legendOpen = !legendOpen; setLegend(keys, on); declutterSoon(); });
+          } else legendEl.classList.remove("collapsed");
         }
 
         /* ================= hover to locate: words in the text light up their places ================= */
