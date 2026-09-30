@@ -25,10 +25,13 @@ const warn = (check, msg, where = '') => warnings.push({ check, msg, where });
 
 const browser = await chromium.launch();
 
-async function open(viewport) {
+async function open(viewport, opts = {}) {
   const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   const cache = process.env.QA_FONT_CACHE;
-  if (cache) {
+  await ctx.route(/cyberjapandata\.gsi\.go\.jp/, (route) => route.abort());   // imagery is checked geometrically, not fetched
+  if (opts.noFonts) {
+    await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (route) => route.abort());   // what a reader sees when the web fonts fail
+  } else if (cache) {
     mkdirSync(cache, { recursive: true });
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, async (route) => {
       const u = route.request().url(), f = resolve(cache, createHash('md5').update(u).digest('hex'));
@@ -39,7 +42,7 @@ async function open(viewport) {
   }
   const page = await ctx.newPage();
   page.on('pageerror', (e) => err('js-error', e.message, viewport.width + 'px'));
-  page.on('console', (m) => { if (m.type() === 'error') err('console-error', m.text(), viewport.width + 'px'); });
+  page.on('console', (m) => { if (m.type() === 'error' && !/ERR_FAILED|net::|Failed to load resource/.test(m.text())) err('console-error', m.text(), viewport.width + 'px'); });
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
@@ -58,7 +61,8 @@ if (hasQA) {
     const groups = new Set(Q.groups), layers = new Set(Q.layers);
     document.querySelectorAll('.step').forEach((s, i) => {
       const v = s.getAttribute('data-view'); if (!G.views[v]) out.push(['view', `step ${i}: data-view "${v}" not in GEO.views`]);
-      words(s.getAttribute('data-on')).forEach((n) => { if (!layers.has(n)) out.push(['layer', `step ${i}: data-on "${n}" has no layer`]); });
+      words(s.getAttribute('data-on')).forEach((n) => { if (!layers.has(n) && !(Q.ALIASES && Q.ALIASES[n]) && !(Q.pseudo || []).includes(n)) out.push(['layer', `step ${i}: data-on "${n}" has no layer`]); });
+      words(s.getAttribute('data-edge')).forEach((n) => { if (!Q.ptOf(n)) out.push(['point', `step ${i}: data-edge "${n}" is not a point`]); });
       words(s.getAttribute('data-overlay')).forEach((n) => { if (!groups.has(n)) out.push(['overlay', `step ${i}: data-overlay "${n}" has no labels/markers`]); });
       words(s.getAttribute('data-legend')).forEach((n) => { if (n !== 'tsd' && !Q.LEG[n]) out.push(['legend', `step ${i}: data-legend "${n}" not in LEG`]); });
       if (!s.getAttribute('data-name')) out.push(['view', `step ${i}: missing data-name`]);
@@ -66,8 +70,17 @@ if (hasQA) {
     Q.LABELS.forEach((l) => { if (!Q.ptOf(l[0])) out.push(['point', `label "${l[1]}" → unknown point "${l[0]}"`]); });
     Q.MARKERS.forEach((m) => { if (!Q.ptOf(m[0])) out.push(['point', `marker ${m[1]} → unknown point "${m[0]}"`]); });
     Q.LINKS.forEach((l) => { if (!Q.ptOf(l[0]) || !Q.ptOf(l[1])) out.push(['point', `link ${l[0]}→${l[1]} unresolved`]); });
+    document.querySelectorAll('[data-hl]').forEach((e) => {
+      const k = e.getAttribute('data-hl'), h = Q.HL[k];
+      if (!h) { out.push(['highlight', `data-hl "${k}" has no entry in HL`]); return; }
+      (h.pts || []).forEach((p) => { if (!Q.ptOf(p)) out.push(['highlight', `HL "${k}": point "${p}" missing`]); });
+      (h.layers || []).forEach((l) => { if (!layers.has(l)) out.push(['highlight', `HL "${k}": layer "${l}" missing`]); });
+      if (h.fit && h.fit.startsWith('view:') && !G.views[h.fit.slice(5)]) out.push(['highlight', `HL "${k}": view "${h.fit}" missing`]);
+    });
+    Q.MEDIA.forEach((m) => { if (!Q.ptOf(m.pt)) out.push(['media', `picture "${m.id}" → unknown point "${m.pt}"`]); words(m.groups).forEach((gname) => { if (!groups.has(gname)) out.push(['media', `picture "${m.id}" → unknown overlay group "${gname}"`]); }); });
+    Q.KPLACES.forEach((p) => { if (!Q.ptOf(p[0])) out.push(['point', `system map place "${p[0]}" missing`]); });
     Q.FACETS.forEach((f, i) => {
-      (f.layers || []).forEach((l) => { if (!G.layers[l[0]]) out.push(['layer', `facet ${i} "${f.q}": layer "${l[0]}" missing`]); });
+      (f.layers || []).forEach((l) => { if (!Q.LD(l[0])) out.push(['layer', `facet ${i} "${f.q}": layer "${l[0]}" missing`]); });
       (f.pts || []).forEach((p) => { if (!Q.ptOf(p[0])) out.push(['point', `facet ${i} "${f.q}": point "${p[0]}" missing`]); });
     });
     return out;
@@ -102,7 +115,10 @@ async function stepChecks(pg, tag) {
       }).map((t) => { const b = t.getBoundingClientRect(); return { t: t.textContent, x: b.left - sr.left, y: b.top - sr.top, w: b.width, h: b.height }; });
       const hiddenEls = [...document.querySelectorAll('#overlay .og text.hidden')].filter((t) => { const g = t.closest('.og'); return g && g.getAttribute('opacity') !== '0'; });
       const hidden = hiddenEls.filter((t) => !t.classList.contains('key')).map((t) => t.textContent);
-      const hiddenKey = hiddenEls.filter((t) => t.classList.contains('key')).map((t) => t.textContent);
+      const edgeList = (s.getAttribute('data-edge') || '').split(/\s+/).filter(Boolean);
+      const offKey = (t) => { const L = Q.LABELS.find((l) => l[1] === t.textContent || (l[1].split(' · ')[0] + ' · ' + (l[1].split(' · ')[1] || '')) === t.textContent); if (!L) return false;
+        const w = Q.ptOf(L[0]), sx = (w[0] - c.cx) * c.k + c.W / 2, sy = (w[1] - c.cy) * c.k + c.H / 2; return (sx < 0 || sy < 0 || sx > c.W || sy > c.H) && edgeList.includes(L[0]); };
+      const hiddenKey = hiddenEls.filter((t) => t.classList.contains('key') && !offKey(t)).map((t) => t.textContent);
       const overlaps = [];
       for (let a = 0; a < labs.length; a++) for (let b = a + 1; b < labs.length; b++) {
         const A = labs[a], B = labs[b];
@@ -113,8 +129,22 @@ async function stepChecks(pg, tag) {
       const on = (s.getAttribute('data-on') || '').split(/\s+/).filter(Boolean);
       const off = on.filter((k) => { const g = document.querySelector('#world .L.' + CSS.escape(k)); return g && !g.classList.contains('on'); });
       const legendItems = document.querySelectorAll('#legend span').length;
+      // every switched-on layer that means something is explained in the legend
+      const legText = document.getElementById('legend').textContent;
+      const onLayers = [...document.querySelectorAll('#world .L.on')].map((g) => [...g.classList].find((c) => c !== 'L' && c !== 'on'));
+      const missingLeg = onLayers.filter((n) => Q.LAYER_LEG[n] && !Q.BASE.includes(n)).filter((n) => {
+        const k = Q.LAYER_LEG[n]; const items = k === 'tsd' ? Q.TSD : [Q.LEG[k]];
+        return items.some((it) => it && !legText.includes(it[3]));
+      });
+      // places a step names but cannot show get an arrow at the frame edge
+      const edgeWant = (s.getAttribute('data-edge') || '').split(/\s+/).filter(Boolean).filter((k) => {
+        const w = Q.ptOf(k), sx = (w[0] - c.cx) * c.k + c.W / 2, sy = (w[1] - c.cy) * c.k + c.H / 2; return sx < 6 || sy < 6 || sx > c.W - 6 || sy > c.H - 6;
+      });
+      const edgeGot = document.querySelectorAll('#overlay .edgeg .edge').length;
+      const clab = [...document.querySelectorAll('#overlay .clab text')].map((t) => t.textContent);
       return { name: s.getAttribute('data-name'), inFrame: vis[0] >= F[0] - eps && vis[1] >= F[1] - eps && vis[2] <= F[2] + eps && vis[3] <= F[3] + eps,
-        vis, seen, overlaps, outside, hidden, hiddenKey, off, legend: legendItems, wantLegend: !!(s.getAttribute('data-legend') || '').trim(), nlabels: labs.length };
+        vis, seen, overlaps, outside, hidden, hiddenKey, off, legend: legendItems, wantLegend: !!(s.getAttribute('data-legend') || '').trim(), nlabels: labs.length,
+        missingLeg, edgeWant, edgeGot, clab, micro: onLayers.some((n) => /^micro_/.test(n)) };
     }, i);
     const where = `${tag} step ${i} “${r.name}”`;
     if (!r.inFrame) err('camera-frame', `view shows area outside the data frame ${JSON.stringify(r.vis.map((v) => +v.toFixed(1)))}`, where);
@@ -123,6 +153,9 @@ async function stepChecks(pg, tag) {
     r.outside.forEach((o) => err('label-outside', o, where));
     r.off.forEach((o) => err('layer-off', `data-on layer "${o}" not switched on`, where));
     if (r.wantLegend && !r.legend) err('legend-empty', 'legend requested but empty', where);
+    r.missingLeg.forEach((n) => err('legend-missing', `layer "${n}" is on but the legend does not explain it`, where));
+    if (r.edgeWant.length && r.edgeGot < r.edgeWant.length) err('edge-pointer', `off-screen place(s) ${r.edgeWant.join(', ')} have no edge arrow`, where);
+    if (tag === 'desktop' && r.micro && r.clab.length < 2) err('contour-labels', `ground contours are drawn but only ${r.clab.length} carry their height`, where);
     if (r.hidden.length) warn('label-hidden', `${r.hidden.length} label(s) hidden by declutter: ${r.hidden.join(' | ')}`, where);
     // labels the text refers to (class "key") must be readable at the step's own view on desktop; phones can zoom
     if (r.hiddenKey.length) (tag === 'desktop' ? err : warn)('key-label-hidden', `label(s) the text relies on are hidden: ${r.hiddenKey.join(' | ')}`, where);
@@ -171,27 +204,119 @@ if (hasQA) {
   }
 }
 
-// 5. charts + diagrams: no text overflowing its SVG, no text colliding with other text
-const charts = await page.evaluate(() => {
-  const out = [];
-  document.querySelectorAll('figure svg, #valley svg, .board svg, .pictos svg').forEach((svg, si) => {
-    if (svg.closest('.mini, #mapwrap, .legend') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
-    const vb = svg.viewBox && svg.viewBox.baseVal; if (!vb || !vb.width) return;
-    const texts = [...svg.querySelectorAll('text')].filter((t) => t.textContent.trim() && t.getBBox().width > 0);
-    const id = (svg.getAttribute('aria-label') || svg.closest('figure, section, div')?.id || 'svg#' + si).slice(0, 70);
-    const boxes = texts.map((t) => { const b = t.getBBox(); return { t: t.textContent.trim(), x: b.x, y: b.y, w: b.width, h: b.height }; });
-    boxes.forEach((b) => {
-      if (b.x < vb.x - 1 || b.y < vb.y - 1 || b.x + b.w > vb.x + vb.width + 1 || b.y + b.h > vb.y + vb.height + 1) out.push(['chart-overflow', `“${b.t}” spills outside the drawing`, id]);
-    });
-    for (let a = 0; a < boxes.length; a++) for (let b = a + 1; b < boxes.length; b++) {
-      const A = boxes[a], B = boxes[b];
-      const ox = Math.min(A.x + A.w, B.x + B.w) - Math.max(A.x, B.x), oy = Math.min(A.y + A.h, B.y + B.h) - Math.max(A.y, B.y);
-      if (ox > 1 && oy > 0.3 * Math.min(A.h, B.h)) out.push(['chart-overlap', `“${A.t}” overlaps “${B.t}”`, id]);
+// 4b. interactions the text promises: hover-to-locate, pictures, the linked system map, imagery
+let tiles = [], links = [];
+if (hasQA) {
+  const ia = await page.evaluate(async () => {
+    const Q = window.__QA, out = [], steps = [...document.querySelectorAll('.step')], wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    Q.hold(true);
+    // hover-to-locate: every tagged phrase lights its places (ring or edge arrow) and its layers
+    for (const e of document.querySelectorAll('[data-hl]')) {
+      const k = e.getAttribute('data-hl'), h = Q.HL[k]; if (!h) continue;
+      const st = e.closest('.step'); if (st) Q.activate(steps.indexOf(st));
+      Q.showHL(k);
+      const rings = document.querySelectorAll('#overlay .hlg .hlring, #overlay .hlg .edge').length;
+      if ((h.pts || []).length && rings < (h.pts || []).length) out.push(['highlight', `“${e.textContent.trim().slice(0, 40)}” (${k}) lights ${rings} of ${(h.pts || []).length} places`]);
+      (h.layers || []).forEach((l) => { const g = document.querySelector('#world .L.' + CSS.escape(l)); if (!g || !g.classList.contains('on') || !g.classList.contains('hl')) out.push(['highlight', `“${k}”: layer ${l} does not light up`]); });
+      if (!e.classList.contains('on')) out.push(['highlight', `“${k}”: the phrase itself is not marked while its places are lit`]);
+      Q.clearHL();
     }
+    // pictures: pulse ⇔ clickable ⇔ registered picture; each opens with its images
+    const pulses = [...document.querySelectorAll('#overlay .pulse')];
+    pulses.forEach((p) => { if (!Q.MEDIA.some((m) => m.id === p.getAttribute('data-media'))) out.push(['media', `a pulsing marker (${p.getAttribute('data-media')}) opens nothing`]); });
+    const anims = [...document.querySelectorAll('#overlay *')].filter((n) => getComputedStyle(n).animationName === 'pulse' && !n.closest('.pulse'));
+    if (anims.length) out.push(['media', `${anims.length} map element(s) pulse without being clickable`]);
+    for (const m of Q.MEDIA) {
+      const host = pulses.find((p) => p.getAttribute('data-media') === m.id);
+      if (!host) { out.push(['media', `picture “${m.id}” has no pulsing marker on the map`]); continue; }
+      const g = host.closest('.og'), gname = [...g.classList].includes('og') ? Object.keys(Q.groups).length : 0;
+      const st = steps.findIndex((s) => (s.getAttribute('data-overlay') || '').split(/\s+/).some((n) => (m.groups || '').split(/\s+/).includes(n)));
+      if (st < 0) { out.push(['media', `picture “${m.id}” belongs to no step`]); continue; }
+      Q.activate(st); Q.openMedia(m.id); await wait(30);
+      const card = document.getElementById('mcard'), slot = m.slot ? steps[st].querySelector(`.mslot[data-slot="${m.slot}"]`) : null;
+      const box = slot && slot.classList.contains('open') ? slot : (!card.hidden ? card : null);
+      if (!box) { out.push(['media', `picture “${m.id}” did not open`]); continue; }
+      const imgs = [...box.querySelectorAll('img')];
+      if (imgs.length !== m.images.length) out.push(['media', `picture “${m.id}” shows ${imgs.length} of ${m.images.length} images`]);
+      for (const im of imgs) { if (!im.complete) await new Promise((r) => { im.onload = im.onerror = r; setTimeout(r, 3000); }); if (!im.naturalWidth) out.push(['media', `image ${im.getAttribute('src')} does not load`]); }
+      if (!box.querySelector('.cr')) out.push(['media', `picture “${m.id}” has no credit line`]);
+      const close = box.querySelector('.mclose'); if (!close) out.push(['media', `picture “${m.id}” cannot be closed`]); else close.click();
+      await wait(20);
+      if (!card.hidden || (slot && slot.classList.contains('open'))) out.push(['media', `picture “${m.id}” does not close`]);
+    }
+    // the system map and the long profile light the same place together
+    for (const p of Q.KPLACES) {
+      const a = document.querySelectorAll(`#ksmap .kp[data-place="${p[0]}"]`).length, b = document.querySelectorAll(`#valley .kp[data-place="${p[0]}"]`).length;
+      if (!a || !b) { out.push(['linked-maps', `${p[1]} is on ${a ? 'the flat map' : 'the profile'} only`]); continue; }
+      Q.lightPlace(p[0]);
+      const lit = document.querySelectorAll(`.kp.lit[data-place="${p[0]}"]`).length;
+      if (lit < 2) out.push(['linked-maps', `${p[1]}: lighting it lights ${lit} of 2 views`]);
+    }
+    Q.lightPlace(null);
+    document.querySelectorAll('#valley .kp').forEach((g) => { if (!Q.KPLACES.some((p) => p[0] === g.getAttribute('data-place'))) out.push(['linked-maps', `profile place ${g.getAttribute('data-place')} is not on the flat map`]); });
+    // imagery: one switch drives every map; each map has one
+    const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km').length;
+    if (btns < maps) out.push(['satellite', `${maps} maps but ${btns} satellite switches`]);
+    Q.satSet(true); await wait(50);
+    if (!document.body.classList.contains('sat-on') || [...document.querySelectorAll('.satbtn')].some((b) => b.getAttribute('aria-pressed') !== 'true')) out.push(['satellite', 'the switch does not reach every map']);
+    if (!document.querySelectorAll('#world .satg image').length) out.push(['satellite', 'imagery tiles are not requested on the main map']);
+    Q.satSet(false);
+    try { localStorage.removeItem('kansai-sat'); } catch (e) {}
+    Q.hold(false);
+    return out;
   });
-  return out;
-});
-charts.forEach(([c, m, w]) => err(c, m, w));
+  ia.forEach(([c, m]) => err(c, m));
+  // tile placement samples: run.py re-projects the same corners with kansai/qa/tm.py
+  tiles = await page.evaluate(() => {
+    const Q = window.__QA, out = [], F = Q.frame;
+    const probes = [[F[0] + 5, F[1] + 5], [F[2] - 5, F[3] - 5], [(F[0] + F[2]) / 2, (F[1] + F[3]) / 2], [690, 805]];
+    for (let z = Q.TILESETS.sat.z[0]; z <= Q.TILESETS.sat.z[1]; z++) probes.forEach((q) => {
+      const ll = Q.invTM(q[0], q[1]), n = Math.pow(2, z), x = Math.floor((ll[0] + 180) / 360 * n), r = ll[1] * Math.PI / 180;
+      const y = Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n);
+      out.push({ z, x, y, m: Q.tileMatrix(x, y, z) });
+    });
+    return out;
+  });
+  links = await page.evaluate(() => [...document.querySelectorAll('a[href^="http"]')].map((a) => ({
+    href: a.href, text: a.textContent.replace(/\s+/g, ' ').trim(), cls: a.className,
+    block: (a.closest('li, p, .pl, figcaption, .cap, td, div') || a).textContent.replace(/\s+/g, ' ').trim() })));
+}
+
+// 5. charts + diagrams: no text overflowing its SVG, colliding with other text, or spilling out of the box it sits in
+async function chartChecks(pg, tag) {
+  const out = await pg.evaluate(() => {
+    const out = [];
+    document.querySelectorAll('figure svg, #valley, .board svg, .pictos svg').forEach((svg, si) => {
+      if (svg.closest('.mini, #mapwrap, .legend, #ksmap') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
+      const vb = svg.viewBox && svg.viewBox.baseVal; if (!vb || !vb.width) return;
+      const texts = [...svg.querySelectorAll('text')].filter((t) => t.textContent.trim() && t.getBBox().width > 0);
+      const id = (svg.getAttribute('aria-label') || svg.closest('figure, section, div')?.id || 'svg#' + si).slice(0, 70);
+      const boxes = texts.map((t) => { const b = t.getBBox(); return { t: t.textContent.trim(), x: b.x, y: b.y, w: b.width, h: b.height, el: t }; });
+      boxes.forEach((b) => {
+        if (b.x < vb.x - 1 || b.y < vb.y - 1 || b.x + b.w > vb.x + vb.width + 1 || b.y + b.h > vb.y + vb.height + 1) out.push(['chart-overflow', `“${b.t}” spills outside the drawing`, id]);
+      });
+      for (let a = 0; a < boxes.length; a++) for (let b = a + 1; b < boxes.length; b++) {
+        const A = boxes[a], B = boxes[b];
+        const ox = Math.min(A.x + A.w, B.x + B.w) - Math.max(A.x, B.x), oy = Math.min(A.y + A.h, B.y + B.h) - Math.max(A.y, B.y);
+        if (ox > 1 && oy > 0.3 * Math.min(A.h, B.h)) out.push(['chart-overlap', `“${A.t}” overlaps “${B.t}”`, id]);
+      }
+      // a label drawn in a box (a rect grouped with it, as in a diagram) must fit inside that box: the case that
+      // broke the plan diagram. Bars and invisible hit areas are not boxes.
+      boxes.forEach((b) => {
+        const g = b.el.parentNode; if (!g || g === svg || g.tagName.toLowerCase() !== 'g') return;
+        [...g.children].filter((r) => r.tagName.toLowerCase() === 'rect' && !r.classList.contains('khit') && getComputedStyle(r).stroke !== 'none').forEach((rEl) => {
+          const r = rEl.getBBox(), ax = +b.el.getAttribute('x'), ay = +b.el.getAttribute('y');
+          if (!(ax >= r.x && ax <= r.x + r.width && ay >= r.y && ay <= r.y + r.height)) return;
+          if (b.x < r.x - 0.5 || b.x + b.w > r.x + r.width + 0.5 || b.y < r.y - 0.5 || b.y + b.h > r.y + r.height + 0.5)
+            out.push(['text-in-box', `“${b.t}” spills out of its box (${b.w.toFixed(0)} wide in a ${r.width.toFixed(0)} box)`, id]);
+        });
+      });
+    });
+    return out;
+  });
+  out.forEach(([c, m, w]) => err(c, m, `${tag} · ${w}`));
+}
+await chartChecks(page, '1440px');
 
 // 6. mini-maps stay inside the data frame
 const minis = await page.evaluate(() => {
@@ -230,6 +355,11 @@ const inv = await page.evaluate(() => {
     Q.LABELS.forEach((l) => { add('map-label', l[1]); if (l[7]) add('map-tooltip', l[7]); });
     Object.values(Q.LEG).forEach((l) => l && add('legend', l[3])); Q.TSD.forEach((l) => add('legend', l[3]));
     Q.FACETS.forEach((f) => { add('facet', f.q); add('facet', f.r); add('facet', f.m); });
+    Q.MEDIA.forEach((m) => { add('media', m.title.replace(/<[^>]+>/g, '')); if (m.text) add('media', m.text.replace(/<[^>]+>/g, ''));
+      m.images.forEach((im) => { add('media', im.caption.replace(/<[^>]+>/g, '')); add('media-credit', im.credit.replace(/<[^>]+>/g, '')); add('media-alt', im.alt); }); });
+    (Q.G.roadlabels || []).forEach((r) => add('road-label', r[3]));
+    Object.values(Q.CLAB || {}).forEach((arr) => arr.forEach((c) => add('contour-label', c[3].toLocaleString('en') + ' m')));
+    Q.KPLACES.forEach((p) => add('system-map', p[1]));
     document.querySelectorAll('.step').forEach((s) => add('view-name', s.getAttribute('data-name')));
   }
   return out;
@@ -238,6 +368,9 @@ const usedPoints = hasQA ? await page.evaluate(() => {
   const Q = window.__QA, s = new Set();
   Q.LABELS.forEach((l) => s.add(l[0])); Q.MARKERS.forEach((m) => s.add(m[0])); Q.LINKS.forEach((l) => { s.add(l[0]); s.add(l[1]); });
   Q.FACETS.forEach((f) => (f.pts || []).forEach((p) => s.add(p[0])));
+  Object.values(Q.HL).forEach((h) => (h.pts || []).forEach((p) => s.add(p)));
+  Q.MEDIA.forEach((m) => s.add(m.pt)); Q.KPLACES.forEach((p) => s.add(p[0]));
+  document.querySelectorAll('.step[data-edge]').forEach((st) => st.getAttribute('data-edge').split(/\s+/).forEach((k) => k && s.add(k)));
   return [...s];
 }) : [];
 if (shotsDir) {
@@ -255,12 +388,34 @@ async function htmlOverflow(pg, tag) {
 await htmlOverflow(page, '1440px');
 await ctx.close();
 
-{
-  const mid = await open({ width: 1024, height: 768 });
-  await htmlOverflow(mid.page, '1024px');
-  const sw = await mid.page.evaluate(() => document.documentElement.scrollWidth);
-  if (sw > 1025) err('tablet-overflow', `page is ${sw}px wide on a 1024px screen`);
-  await mid.ctx.close();
+// ---------------------------------------------------------------- every screen class the page promises to fit
+for (const [w, h, name] of [[1920, 1080, 'desktop-large'], [1280, 800, 'laptop'], [1180, 820, 'tablet-landscape'], [1024, 768, 'tablet-1024'], [820, 1180, 'tablet-portrait']]) {
+  const v = await open({ width: w, height: h });
+  const tag = `${w}px`;
+  await htmlOverflow(v.page, tag);
+  await chartChecks(v.page, tag);
+  const m2 = await v.page.evaluate(() => ({ sw: document.documentElement.scrollWidth, map: document.getElementById('map')?.getBoundingClientRect() }));
+  if (m2.sw > w + 1) err('viewport-overflow', `page is ${m2.sw}px wide on a ${w}px ${name} screen`, tag);
+  if (!m2.map || m2.map.width < 280 || m2.map.height < 240) err('viewport-map', `map is ${m2.map && m2.map.width.toFixed(0)}×${m2.map && m2.map.height.toFixed(0)}px on a ${name} screen`, tag);
+  // the map re-fits when the window changes size (rotation, split screen)
+  const fitOk = await v.page.evaluate(async () => {
+    const Q = window.__QA; if (!Q) return true; Q.hold(true); Q.activate(0); const k0 = Q.cam().k;
+    return k0 > 0;
+  });
+  if (!fitOk) err('viewport-fit', 'camera did not fit the step view', tag);
+  await v.page.setViewportSize({ width: Math.round(h), height: Math.round(w) });   // rotate
+  await v.page.waitForTimeout(250);
+  const rot = await v.page.evaluate(() => { const Q = window.__QA, c = Q.cam(), r = document.getElementById('map').getBoundingClientRect(); return { W: c.W, H: c.H, rw: r.width, rh: r.height, sw: document.documentElement.scrollWidth, iw: window.innerWidth }; });
+  if (Math.abs(rot.W - rot.rw) > 2 || Math.abs(rot.H - rot.rh) > 2) err('viewport-resize', `after rotating, the map camera (${rot.W.toFixed(0)}×${rot.H.toFixed(0)}) does not match the map box (${rot.rw.toFixed(0)}×${rot.rh.toFixed(0)})`, tag);
+  if (rot.sw > rot.iw + 1) err('viewport-overflow', `page is ${rot.sw}px wide after rotating to ${rot.iw}px`, tag);
+  await v.ctx.close();
+}
+// ---------------------------------------------------------------- web fonts blocked: the fallback serif is wider, nothing may spill
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  const f = await open({ width: w, height: h }, { noFonts: true });
+  await htmlOverflow(f.page, `${w}px fallback-font`);
+  await chartChecks(f.page, `${w}px fallback-font`);
+  await f.ctx.close();
 }
 
 // ---------------------------------------------------------------- mobile pass
@@ -274,5 +429,5 @@ if (hasQA) await stepChecks(m.page, 'mobile');
 await m.ctx.close();
 await browser.close();
 
-writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints }, null, 1));
+writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints, tiles, links }, null, 1));
 console.log(`render QA: ${errors.length} error(s), ${warnings.length} warning(s), ${inv.length} text items`);

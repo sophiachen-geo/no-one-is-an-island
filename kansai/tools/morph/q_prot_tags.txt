@@ -1,0 +1,7 @@
+[out:json][timeout:60];
+(
+  nwr["boundary"="national_park"](33.38,135.25,34.45,136.42);
+  nwr["boundary"="protected_area"](33.38,135.25,34.45,136.42);
+  nwr["leisure"="nature_reserve"](33.38,135.25,34.45,136.42);
+);
+out tags;

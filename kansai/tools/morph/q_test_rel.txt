@@ -1,0 +1,8 @@
+[out:json][timeout:60];
+(
+  rel["name"="吉野熊野国立公園"];
+  way["name"="吉野熊野国立公園"];
+  rel["name"="新宮市"]["boundary"="administrative"];
+  rel["name:en"~"Yoshino"];
+);
+out tags;

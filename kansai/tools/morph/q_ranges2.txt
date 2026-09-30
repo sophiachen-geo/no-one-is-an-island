@@ -1,0 +1,7 @@
+[out:json][timeout:90];
+(
+  nwr["name"~"山脈|山地|連峰|山系|山塊|奥駈|大峯|大峰|台高|果無|熊野三山"](33.38,135.25,34.45,136.42);
+  nwr["natural"~"^(ridge|arete|mountain_range|massif|plateau|hill|saddle)$"]["name"](33.38,135.25,34.45,136.42);
+  nwr["place"~"^(region|area|locality|island)$"]["name"~"山|峰|岳|原"](33.38,135.25,34.45,136.42);
+);
+out tags center;

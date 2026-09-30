@@ -1,0 +1,284 @@
+# Every external link the Kansai page shows. The QA gate fails on an unregistered link, and on a plan
+# link whose visible text lacks either the Japanese title or the English name. check_links.py fetches
+# each URL (network) and reports anything that no longer answers with HTTP 200.
+# kind: plan (a plan or policy document) · record (official record/statistics) · source (supporting page) · tool · data · site
+
+[[link]]
+url = "https://github.com/sophiachen-geo/no-one-is-an-island/blob/main/kansai/CAVEATS.md"
+kind = "site"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://hsp.shingu.wakayama.jp/about/"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://maps.gsi.go.jp/development/ichiran.html"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://shingu.nigedoki-map.com/"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://shingu.nigedoki-map.com/en"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://shingu.nigedoki-map.com/ko"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://shingu.nigedoki-map.com/tl"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://shingu.nigedoki-map.com/zh"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/Info/10"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/Info/25"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/Info/402"
+kind = "plan"
+ja = "新宮市都市計画マスタープラン"
+en = "Urban Planning Master Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/Info/46"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/Info/773"
+kind = "plan"
+ja = "新宮市立地適正化計画"
+en = "Location Optimization Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/kikaku/pdf/rittekikaiteiban.pdf"
+kind = "plan"
+ja = "新宮市立地適正化計画（改訂版）"
+en = "Location Optimization Plan, revised (PDF)"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/1024"
+kind = "plan"
+ja = "新宮市国土強靭化地域計画"
+en = "National Resilience Regional Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/1132"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/1987"
+kind = "plan"
+ja = "第２次新宮市総合計画"
+en = "Second Comprehensive Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/2811"
+kind = "plan"
+ja = "新宮市津波防災地域づくり推進計画"
+en = "Tsunami Disaster-Resilient Community Development Promotion Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/412"
+kind = "plan"
+ja = "新宮市地域防災計画"
+en = "Regional Disaster Management Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/575"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/690"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/904"
+kind = "plan"
+ja = "新宮市観光振興計画"
+en = "Tourism Promotion Plan"
+publisher = "Shingū City"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.data.jma.go.jp/stats/etrn/view/rank_a.php?prec_no=65&block_no=0649&year=&month=&day=&view="
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.e-stat.go.jp/stat-search/files?page=1&layout=datalist&lid=000001491012"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/2gaiyo_hyo/gaiyo.asp"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.j-shis.bosai.go.jp/map/"
+kind = "tool"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.jstage.jst.go.jp/article/ajg/2017s/0/2017s_100266/_article/-char/ja/"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/index.html"
+kind = "plan"
+ja = "市田川 大規模浸水対策"
+en = "Ichida-gawa flood countermeasures"
+publisher = "MLIT Kinan"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/shiryou.pdf"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/index.html"
+kind = "plan"
+ja = "新宮川水系（熊野川）河川整備計画"
+en = "River Improvement Plan"
+publisher = "MLIT Kinki"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ryuiki_chisui/index.html"
+kind = "plan"
+ja = "流域治水プロジェクト2.0（熊野川）"
+en = "Basin-wide Flood Management Project 2.0"
+publisher = "MLIT Kinan"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/river/iinkaikatsudou/ol9a8v0000057xi3-att/14_shiryou_3-2.pdf"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.kodo.pref.mie.lg.jp/navi/"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.mlit.go.jp/river/basic_info/jigyo_keikaku/gaiyou/seibi/shingu_index.html"
+kind = "plan"
+ja = "新宮川水系河川整備基本方針"
+en = "Basic River Improvement Policy"
+publisher = "MLIT"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.mlit.go.jp/river/kasen/ryuiki_pro/index.html"
+kind = "plan"
+ja = "新宮川水系流域治水プロジェクト"
+en = "Basin-wide Flood Management Project"
+publisher = "MLIT"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.mlit.go.jp/river/shinngikai_blog/kaigankanrinoarikata/dai03kai/dai03kai_siryou2.pdf"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/bcms/prefg/082400/cruise/port_call_results.html"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/chiji/press/07/20260325_d/fil/260325_1.pdf"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
+kind = "plan"
+ja = "地震動予測及び津波浸水想定（令和8年公表）"
+en = "Seismic intensity and tsunami inundation assumptions 2026"
+publisher = "Wakayama Prefecture"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R01_doutaityousa.pdf"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R7houkokusho.pdf"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/080600/dosha/shitei_d/fil/260915shiteizyokyo.pdf"
+kind = "record"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/080900/masterplan/kuiki_mp.html"
+kind = "plan"
+ja = "東牟婁圏域 都市計画区域マスタープラン"
+en = "City Planning Area Master Plan, Higashimuro"
+publisher = "Wakayama Prefecture"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/081300/d00214686.html"
+kind = "source"
+checked = "2026-09-30"
+
+[[link]]
+url = "https://www.vill.kitayama.wakayama.jp/kanko/about/"
+kind = "source"
+checked = "2026-09-30"

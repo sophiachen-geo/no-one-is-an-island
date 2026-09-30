@@ -1,0 +1,7 @@
+[out:json][timeout:180];
+(
+  nwr["natural"="ridge"]["name"](33.38,135.25,34.45,136.42);
+  nwr["natural"="mountain_range"]["name"](33.38,135.25,34.45,136.42);
+  nwr["place"="region"]["name"](33.38,135.25,34.45,136.42);
+);
+out geom;

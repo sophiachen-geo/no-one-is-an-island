@@ -1,0 +1,16 @@
+[out:json][timeout:120];
+(
+  way["landuse"="forest"]["name"](33.38,135.25,34.45,136.42);
+  relation["landuse"="forest"]["name"](33.38,135.25,34.45,136.42);
+  way["natural"="wood"]["name"](33.38,135.25,34.45,136.42);
+  relation["natural"="wood"]["name"](33.38,135.25,34.45,136.42);
+  way["leisure"="nature_reserve"]["name"](33.38,135.25,34.45,136.42);
+  relation["leisure"="nature_reserve"]["name"](33.38,135.25,34.45,136.42);
+);
+out tags geom;
+(
+  node["landuse"="forest"]["name"](33.38,135.25,34.45,136.42);
+  node["natural"="wood"]["name"](33.38,135.25,34.45,136.42);
+  node["leisure"="nature_reserve"]["name"](33.38,135.25,34.45,136.42);
+);
+out tags;

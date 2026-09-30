@@ -28,14 +28,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Both pages are single self-contained static files (the Kansai map data is
-      # generated offline by kansai/tools and inlined), so there is no build step —
-      # we just stage them into a folder.
+      # Both pages are static (the Kansai map data is generated offline by kansai/tools and
+      # inlined; building footprints and photographs sit beside the page), so there is no
+      # build step — we just stage them into a folder.
       - name: Stage site
         run: |
           mkdir -p _site/kansai
           cp index.html _site/index.html
           cp kansai/index.html _site/kansai/index.html
+          if [ -d kansai/data ]; then cp -r kansai/data _site/kansai/data; fi
+          if [ -d kansai/img ]; then cp -r kansai/img _site/kansai/img; fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
