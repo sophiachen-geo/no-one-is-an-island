@@ -20,6 +20,8 @@ jobs:
   # Accuracy gate for the Kansai page: nothing is published unless it passes (see kansai/qa/).
   qa:
     uses: ./.github/workflows/kansai-qa.yml
+    with:
+      deploy: true
 
   build:
     needs: qa
