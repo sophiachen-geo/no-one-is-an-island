@@ -18,6 +18,7 @@ ax, *_ = np.linalg.lstsq(A, sxs, rcond=None); ay, *_ = np.linalg.lstsq(A, sys_, 
 err = np.hypot(A @ ax - sxs, A @ ay - sys_).max() * 100
 print("affine max error (m):", round(err, 1))
 g["aff"] = [round(v, 5) for v in list(ax) + list(ay)]
+g["crs"] = "EPSG:6674"; g["origin"] = [round(X0, 3), round(Y1, 3)]   # svg = ((E - X0) / 100, (Y1 - N) / 100); used by kansai/qa
 # exact positions for every "@lon,lat" label key used in the page
 html_src = open(HTML, encoding="utf-8").read()
 at = {}

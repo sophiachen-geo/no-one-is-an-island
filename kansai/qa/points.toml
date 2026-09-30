@@ -1,0 +1,520 @@
+# Independently sourced coordinates for every named point the Kansai page draws.
+# kansai/qa/run.py projects each (lon, lat) with its own Gauss–Krüger code and fails if the page's
+# point is further than tol_m from it, or if the page draws a point that has no entry here.
+#
+# tol_m by feature class: a building, shrine, station or structure 150 m; a dam 200 m (crest vs.
+# polygon centre); an approximate or historic place 300 m; a town or district label 500 m.
+# Refresh with: python3 kansai/qa/verify_points.py   (queries OpenStreetMap / Nominatim)
+# Checked 2026-09-30.
+
+# ---------------------------------------------------------------- old town and river mouth
+[points.shimohonmachi]
+name = "新宮下本町遺跡 (丹鶴ホール敷地)"
+lon = 135.98893
+lat = 33.73092
+source = "GSI/OSM: 丹鶴ホール building (下本町2-2-1), under which the excavated site lies; city page city.shingu.lg.jp/info/690"
+confidence = "medium"
+tol_m = 150
+
+[points.castle]
+name = "新宮城跡 本丸"
+lon = 135.99282
+lat = 33.73020
+source = "OSM node 2215791774 (historic=castle)"
+confidence = "high"
+tol_m = 150
+
+[points.mizunote]
+name = "新宮城跡 水ノ手"
+lon = 135.99190
+lat = 33.73090
+source = "OSM information boards 4905945465 / 4905945464 / 4905945487 + GSI terrain"
+confidence = "medium"
+tol_m = 150
+
+[points.kawaramachi]
+name = "川原町 (former riverbed town)"
+lon = 135.98620
+lat = 33.73380
+source = "centre of the GSI gravel-bar polygons between Hayatama Taisha and the Kumano Ōhashi; ja.wikipedia 川原町 (新宮市)"
+confidence = "low–medium"
+note = "the riverbed town left no footprint; the point is the middle of the gravel bar it stood on"
+tol_m = 300
+
+[points.kawaraya_yokocho]
+name = "川原家横丁"
+lon = 135.98480
+lat = 33.73218
+source = "OSM node 6849410534"
+confidence = "high"
+tol_m = 150
+
+[points.ikeda]
+name = "池田港"
+lon = 136.00216
+lat = 33.72777
+source = "GSI 電子国土基本図 label"
+confidence = "medium"
+tol_m = 200
+
+[points.kumano_mouth]
+name = "熊野川河口"
+lon = 136.0144
+lat = 33.7250
+source = "where the OSM Kumano River centreline meets the coastline"
+confidence = "medium"
+tol_m = 300
+
+[points.kumano_ohashi]
+name = "熊野大橋"
+lon = 135.98805
+lat = 33.73350
+source = "OSM way 121317841 (midpoint)"
+confidence = "high"
+tol_m = 150
+
+[points.gongen_gawara]
+name = "権現河原 (river-boat landing)"
+lon = 135.98552
+lat = 33.73432
+source = "centroid of the GSI gravel polygon NE of Hayatama Taisha"
+confidence = "low–medium"
+note = "the exact landing spot is not published; the point is the gravel bar where the boats land"
+tol_m = 300
+
+[points.ukishima]
+name = "浮島の森"
+lon = 135.99006
+lat = 33.72555
+source = "OSM way 211578007"
+confidence = "high"
+tol_m = 150
+
+[points.ekimae_se]
+name = "駅前本通り (station end)"
+lon = 135.99374
+lat = 33.72570
+source = "OSM relation 21023225 (県道 新宮停車場線)"
+confidence = "medium–high"
+tol_m = 150
+
+[points.ekimae_nw]
+name = "駅前本通り (仲之町 end)"
+lon = 135.99088
+lat = 33.72943
+source = "OSM ways 121365748 / 1531789358 / 121365750"
+confidence = "medium"
+tol_m = 150
+
+[points.station]
+name = "新宮駅"
+lon = 135.99408
+lat = 33.72508
+source = "OSM node 4355134041 (railway=station)"
+confidence = "high"
+tol_m = 150
+
+[points.shingu]
+name = "新宮市役所 (city label)"
+lon = 135.99249
+lat = 33.72412
+source = "OSM node 1423067948 (amenity=townhall)"
+confidence = "high"
+tol_m = 150
+
+[points.hayatama]
+name = "熊野速玉大社"
+lon = 135.98368
+lat = 33.73230
+source = "OSM way 211578006"
+confidence = "high"
+tol_m = 150
+
+[points.kamikura]
+name = "神倉神社 (summit shrine)"
+lon = 135.98281
+lat = 33.72220
+source = "OSM node 2270139651 (the precinct way 500803106 is the stair foot, 250 m NE)"
+confidence = "high"
+tol_m = 150
+
+[points.medical]
+name = "新宮市立医療センター"
+lon = 135.96409
+lat = 33.68681
+source = "OSM node 1423067961 (amenity=hospital)"
+confidence = "high"
+tol_m = 150
+
+[points.miwasaki]
+name = "三輪崎駅"
+lon = 135.98478
+lat = 33.68942
+source = "OSM node 267317818 (railway=station)"
+confidence = "high"
+tol_m = 150
+
+[points.port]
+name = "新宮港"
+lon = 135.98444
+lat = 33.66937
+source = "GSI label over the harbour basin off 佐野"
+confidence = "medium"
+note = "quays are not mapped individually; the point is the harbour label"
+tol_m = 300
+
+# ---------------------------------------------------------------- Ichida-gawa
+[points.ichida_sluice]
+name = "市田川水門"
+lon = 136.00866
+lat = 33.72386
+source = "GSI vector-tile structure (code 5515 = 水門) across the Ichida-gawa"
+confidence = "medium"
+tol_m = 150
+
+[points.ichida_pump]
+name = "市田川排水機場 (国)"
+lon = 136.00870
+lat = 33.72390
+source = "GSI buildings at the sluice; MLIT Ichida-gawa maps"
+confidence = "medium–low"
+note = "the pump houses flank the gate; the point sits on the gate"
+tol_m = 150
+
+[points.ukishima_pump]
+name = "浮島川排水機場 (県)"
+lon = 135.98778
+lat = 33.71883
+source = "read off MLIT's 特定都市河川 basin map (p. 2), georeferenced by an affine fit"
+confidence = "medium–low"
+note = "position read from a PDF map, not surveyed"
+tol_m = 250
+
+# ---------------------------------------------------------------- Aitano-gawa ring levees (Kihō)
+[points.ring_takaoka]
+name = "高岡 (輪中堤)"
+lon = 135.97617
+lat = 33.76426
+source = "GSI label; OSM node 7619627907; MLIT panel 10 (相野谷川 輪中堤)"
+confidence = "high"
+tol_m = 300
+
+[points.ring_funada]
+name = "鮒田 (輪中堤)"
+lon = 135.97999
+lat = 33.74486
+source = "GSI label; OSM node 7619627905"
+confidence = "high"
+tol_m = 300
+
+# ---------------------------------------------------------------- Kumanogawa-chō and Takata
+[points.kawabune]
+name = "熊野川川舟センター"
+lon = 135.89671
+lat = 33.79051
+source = "OSM way 1421062721"
+confidence = "high"
+tol_m = 150
+
+[points.hitari]
+name = "熊野川町日足"
+lon = 135.87066
+lat = 33.80515
+source = "OSM node 8547224957 (district label)"
+confidence = "medium–high"
+tol_m = 500
+
+[points.kuju]
+name = "熊野川町九重"
+lon = 135.85009
+lat = 33.86965
+source = "OSM node 6344873802 (district label)"
+confidence = "medium–high"
+tol_m = 500
+
+[points.shitaki]
+name = "熊野川町四瀧 (したき)"
+lon = 135.85608
+lat = 33.84786
+source = "OSM node 8038936915 (district label; reading くまのがわちょうしたき)"
+confidence = "high"
+tol_m = 500
+
+[points.takata]
+name = "高田"
+lon = 135.90718
+lat = 33.73931
+source = "OSM node 8547207606 (district label)"
+confidence = "medium"
+tol_m = 500
+
+[points.koguchi]
+name = "小口"
+lon = 135.84180
+lat = 33.75866
+source = "OSM node 3574003565 (place=neighbourhood)"
+confidence = "medium–high"
+tol_m = 500
+
+# ---------------------------------------------------------------- designated tsunami evacuation sites
+[points.ev_tankaku]
+name = "丹鶴城公園"
+lon = 135.99226
+lat = 33.73026
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_horai]
+name = "蓬莱公園築山"
+lon = 135.99624
+lat = 33.72451
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_miyaido]
+name = "宮井戸津波避難場所"
+lon = 136.00038
+lat = 33.72579
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_matsuyama]
+name = "松山公園"
+lon = 135.99612
+lat = 33.71212
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_koda]
+name = "鴻田公園"
+lon = 135.98492
+lat = 33.70880
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_kindai]
+name = "近大附属新宮高・中 グラウンド"
+lon = 135.99783
+lat = 33.71554
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_tankaku_hall]
+name = "丹鶴ホール"
+lon = 135.98935
+lat = 33.73063
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+[points.ev_shingu_hs]
+name = "新宮高校"
+lon = 135.98552
+lat = 33.72013
+source = "GSI 指定緊急避難場所 (tsunami), tile skhb05/10/898/410"
+confidence = "high"
+tol_m = 150
+
+# ---------------------------------------------------------------- shrines and regional towns
+[points.hongu]
+name = "熊野本宮大社"
+lon = 135.77363
+lat = 33.84035
+source = "OSM way 797748245"
+confidence = "high"
+tol_m = 150
+
+[points.nachi]
+name = "熊野那智大社"
+lon = 135.89044
+lat = 33.66843
+source = "OSM way 797310025"
+confidence = "high"
+tol_m = 150
+
+[points.hongu_office]
+name = "田辺市役所本宮行政局"
+lon = 135.77305
+lat = 33.83819
+source = "OSM node 2539532708 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.kiho]
+name = "紀宝町役場"
+lon = 136.00961
+lat = 33.73384
+source = "OSM node 1420999518 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.kitayama]
+name = "北山村役場"
+lon = 135.96915
+lat = 33.93209
+source = "OSM node 1423055408 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.kumano]
+name = "熊野市役所"
+lon = 136.10032
+lat = 33.88854
+source = "OSM way 1462557554 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.owase]
+name = "尾鷲市役所"
+lon = 136.19103
+lat = 34.07081
+source = "OSM node 1420982058 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.totsukawa]
+name = "十津川村役場"
+lon = 135.79248
+lat = 33.98850
+source = "OSM node 1423055480 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.nachikatsuura]
+name = "那智勝浦町役場"
+lon = 135.94098
+lat = 33.62604
+source = "OSM node 1423092319 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.kushimoto]
+name = "串本町"
+lon = 135.78699
+lat = 33.48576
+source = "OSM node 691599005 (place=town)"
+confidence = "high"
+tol_m = 500
+
+[points.tanabe]
+name = "田辺市役所"
+lon = 135.38891
+lat = 33.72907
+source = "OSM way 1267275161 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.gojo]
+name = "五條市役所"
+lon = 135.69560
+lat = 34.35637
+source = "OSM node 1423051391 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+[points.koyasan]
+name = "高野町 (Kōyasan)"
+lon = 135.58729
+lat = 34.21579
+source = "OSM node 2506691335 (place=town); Kongōbu-ji (way 1363855538) is ≈370 m SW"
+confidence = "high"
+tol_m = 500
+
+[points.yoshino]
+name = "吉野町役場"
+lon = 135.85746
+lat = 34.39585
+source = "OSM node 1423055878 (amenity=townhall)"
+confidence = "high"
+tol_m = 500
+
+# ---------------------------------------------------------------- dams (Kumano / Kitayama system)
+[points.dam_ikehara]
+name = "池原ダム"
+lon = 135.97158
+lat = 34.04742
+source = "OSM way 368543776 (waterway=dam)"
+confidence = "high"
+tol_m = 200
+
+[points.dam_kazeya]
+name = "風屋ダム"
+lon = 135.78860
+lat = 34.04427
+source = "OSM way 129235715 (waterway=dam); ja.wikipedia infobox 34°02′40″N 135°47′16″E agrees"
+confidence = "high"
+tol_m = 200
+
+[points.dam_futatsuno]
+name = "二津野ダム"
+lon = 135.78278
+lat = 33.90944
+source = "ja.wikipedia 二津野ダム infobox (33°54′34″N 135°46′58″E, citing ダム便覧); not named in OSM"
+confidence = "high"
+tol_m = 200
+
+[points.dam_nanairo]
+name = "七色ダム"
+lon = 136.00222
+lat = 33.96039
+source = "ja.wikipedia 七色ダム infobox (33°57′37.4″N 136°00′08.0″E); OSM 七色水力発電所 way 963637642 within 60 m"
+confidence = "high"
+note = "corrected 2026-09-30: the marker had been drawn ≈13 km downstream"
+tol_m = 200
+
+[points.dam_komori]
+name = "小森ダム"
+lon = 135.92784
+lat = 33.93474
+source = "OSM way 564391461 (waterway=dam)"
+confidence = "high"
+tol_m = 200
+
+[points.dam_saruya]
+name = "猿谷ダム"
+lon = 135.74135
+lat = 34.17939
+source = "OSM way 565843255 (waterway=dam)"
+confidence = "high"
+tol_m = 200
+
+[points.dam_asahi]
+name = "旭ダム"
+lon = 135.81187
+lat = 34.12163
+source = "OSM way 1128008368 (waterway=dam)"
+confidence = "high"
+tol_m = 200
+
+[points.dam_seto]
+name = "瀬戸ダム"
+lon = 135.82377
+lat = 34.12802
+source = "OSM way 561200481 (waterway=dam)"
+confidence = "high"
+tol_m = 200
+
+# ---------------------------------------------------------------- derived: hub points inside MLIT zones
+[points.uf_centre]
+name = "central urban-function zone (緑丘・城南)"
+inside = "uf"
+source = "representative point of the MLIT A55 (FY2024) urban-function zone polygon"
+confidence = "high"
+
+[points.uf_koyo]
+name = "Kōyō urban-function zone (光洋)"
+inside = "uf"
+source = "representative point of the MLIT A55 (FY2024) urban-function zone polygon"
+confidence = "high"
+
+[points.uf_miwasaki]
+name = "Miwasaki urban-function zone"
+inside = "uf"
+source = "representative point of the MLIT A55 (FY2024) urban-function zone polygon"
+confidence = "high"

@@ -49,8 +49,15 @@ Then in your GitHub repo: Settings → Pages → Source: `gh-pages` branch.
 
 ## Kansai subpage
 
-`kansai/index.html` — 新宮 Shingū: one small city planned at six overlapping scales (regional centre,
-polycentric compact city, hazard-filtered zoning, pre-disaster reconstruction, the three-prefecture Kumano
-basin, the pilgrimage landscape). A self-contained static page served at `/no-one-is-an-island/kansai/`.
-Its map data is generated offline from MLIT 国土数値情報, OpenStreetMap and SRTM by the scripts in
-`kansai/tools/` (see `kansai/tools/README.md`).
+`kansai/index.html` — 新宮 Shingū, “a city made by flows”: a scroll-driven essay whose zoomable map follows
+the text through river, sea, slope and planning scales (concentrate + connect + accommodate + evacuate +
+coordinate). A self-contained static page served at `/no-one-is-an-island/kansai/`. Its map data is
+generated offline from MLIT 国土数値情報, OpenStreetMap, GSI and SRTM by the scripts in `kansai/tools/`
+(see `kansai/tools/README.md`).
+
+Accuracy is enforced, not assumed: `kansai/qa/` holds a claims register (every number on the page, with
+its source and status), independently sourced coordinates for every map point, and a gate
+(`python3 kansai/qa/run.py`) that recomputes derived figures, drives the page in a browser and fails on
+any unsourced number, drifted claim, misplaced point or broken layout. The gate runs on every pull request
+and before every GitHub Pages deploy. Open issues are listed in `kansai/CAVEATS.md`, generated from the
+register.

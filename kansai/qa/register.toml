@@ -1,0 +1,609 @@
+# Claims register for the Kansai page (kansai/index.html).
+#
+# Every number a reader can see or hear, and every checkable fact, is listed here with its source.
+# kansai/qa/run.py enforces it:
+#   * a number on the page that no claim (or identifier) covers → the gate fails;
+#   * a claim whose text is no longer on the page → the gate fails (the register cannot drift);
+#   * a claim with a `check` is recomputed from the data embedded in the page → must still match.
+#
+# Fields
+#   match   – exact substring(s) as rendered on the page (whitespace collapsed)
+#   exact   – short labels that only count when they are the whole text item (chart labels like “86%”)
+#   status  – verified    checked against the cited source
+#             corrected   the draft differed from the source; the page follows the source
+#             derived     computed in this repo from cited data; recomputed on every run by `check`
+#             method      a parameter of this repo's own analysis or drawing
+#             approximate verified, but the page rounds or simplifies (listed in CAVEATS.md)
+#             author      from the author's text, not independently verified (listed in CAVEATS.md)
+#   check   – stat (+fmt) | area | share | overlap | length | dist | calc | valley_ve, with expect/tol
+#
+# Sources were read on 2026-09-30.
+
+# ================================================================ identifiers — numbers that are names
+[[identifier]]
+pattern = '\bNR\d+\b|National Route 168|Route 168'
+why = "road numbers"
+
+[[identifier]]
+pattern = '\bL2\b'
+why = "hazard level L2 (maximum-class), a name"
+
+[[identifier]]
+pattern = '\b(?:A31a|A33|A38|A40|A55|N03)\b'
+why = "MLIT 国土数値情報 dataset codes"
+
+[[identifier]]
+pattern = 'EPSG:6674|JGD2011|DEM5A|\bD8\b'
+why = "names of a CRS, a GSI product and an algorithm"
+
+[[identifier]]
+pattern = '図-1\.2|§6'
+why = "figure and section references"
+
+[[identifier]]
+pattern = 'Typhoon 21'
+why = "storm name (平成29年台風第21号)"
+
+[[identifier]]
+pattern = '^[1-7]$|^[1-7] · |^[1-7] (?=[a-z])|layers 1–7'
+why = "ordinal numbering of the seven layers of function"
+
+[[identifier]]
+pattern = 'no one is an island|ONE CITY, SEVERAL GEOGRAPHIES|THE KUMANO AS ONE SYSTEM|Interventions along one system|the dry one|one of that region’s most|cubic metres per second'
+why = "titles and idioms, not counts"
+
+# ================================================================ counts the page enumerates itself
+[[claim]]
+id = "count-structure"
+match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS CONVERGE", "Four directions of risk",
+         "Together, the two forms", "intersection of two major transitions", "THREE WATERS THREATENING THE CITY"]
+status = "verified"
+source = "counts of the items the page itself lists (7 functions, 6 river functions, 4 pathways, 2 forms, 2 transitions, 3 waters)"
+
+[[claim]]
+id = "three-shrines"
+match = ["converging on the three shrines"]
+status = "verified"
+source = "Kumano Sanzan: Hongū Taisha, Hayatama Taisha, Nachi Taisha (UNESCO World Heritage listing, 2004)"
+
+[[claim]]
+id = "three-prefecture-basin"
+match = ["three-prefecture Kumano watershed", "three overlapping hinterlands across Wakayama, Mie and Nara"]
+status = "verified"
+source = "the basin polygon on the page spans Nara, Wakayama and Mie (see the basin-share checks)"
+
+# ================================================================ old town, history
+[[claim]]
+id = "shimohonmachi-distance-text"
+title = "Shimohonmachi “roughly two kilometres above the river mouth”"
+match = ["located on a natural levee roughly two kilometres above the river mouth"]
+status = "approximate"
+source = "measured on the page's own points: 2.45 km straight line from the site (under Tankaku Hall) to the river mouth"
+note = "The site is about 2.5 km from the mouth, a little further than “roughly two kilometres”. The map label gives the measured ≈ 2.5 km."
+
+[[claim]]
+id = "shimohonmachi-distance-map"
+exact = ["≈ 2.5 km"]
+status = "derived"
+source = "distance between points shimohonmachi and kumano_mouth (points.toml)"
+check = { dist = ["shimohonmachi", "kumano_mouth"], expect = 2.45, tol = 0.1 }
+
+[[claim]]
+id = "shimohonmachi-finds"
+title = "Shimohonmachi excavation finds"
+match = ["Archaeology has revealed underground warehouses, smithing activity, boat nails, river-access stairs and ceramics arriving from distant parts of Japan"]
+status = "author"
+source = "新宮市 新宮下本町遺跡 page and survey report (not yet read)"
+url = "https://www.city.shingu.lg.jp/info/690"
+note = "The site and its report exist (新宮下本町遺跡). The individual finds (warehouses, smithing, boat nails, stairs, distant ceramics) have not been checked against the report."
+
+[[claim]]
+id = "micro-contours"
+match = ["ground contours at 3, 5, 7, 10, 20 and 40 m from the 5 m GSI laser elevation model", "ground contours 3–40 m (GSI 5 m)",
+         "historic sites (gold) on the 5 m relief", "GSI 5 m laser elevation"]
+status = "method"
+source = "kansai/tools: contours traced from GSI DEM5A (5 m) elevation tiles"
+
+[[claim]]
+id = "tankaku"
+title = "Tankaku-yama (丹鶴山)"
+match = ["Shingū Castle occupied Tankaku-yama (丹鶴山) above the river"]
+status = "corrected"
+source = "新宮市観光協会 「新宮城跡（丹鶴城跡）」 — 丹鶴 is read たんかく"
+url = "https://www.shinguu.jp/spots/detail/A0004"
+note = "The draft romanised 丹鶴山 as “Tanzuru-yama”; the reading is Tankaku."
+
+[[claim]]
+id = "mizunote-charcoal"
+match = ["its Mizunote precinct descended toward a landing place and a row of charcoal warehouses"]
+status = "verified"
+source = "南紀熊野ジオパーク 新宮城跡: a row of 炭納屋 at 水ノ手 facing the Kumano River; National Historic Site 新宮城跡 附 水野家墓所"
+url = "https://nankikumanogeo.jp/geosite/shingujoato/"
+
+[[claim]]
+id = "kawaramachi-trades"
+title = "Kawaramachi trades (merchants, inns, blacksmiths …)"
+match = ["merchants, inns, blacksmiths, restaurants, fishmongers, bathhouses and other businesses"]
+status = "author"
+note = "The list of trades in Kawaramachi has not been checked against a source."
+
+[[claim]]
+id = "kawaraya-count"
+match = ["almost 300 Kawaraya structures"]
+status = "verified"
+source = "ja.wikipedia 川原町 (新宮市): 「最盛期には300軒近くの建物があった」"
+url = "https://ja.wikipedia.org/wiki/川原町_(新宮市)"
+
+[[claim]]
+id = "kawaraya-peak-period"
+title = "Kawaraya peak “around the late Meiji and early Taishō periods”"
+match = ["at its peak around the late Meiji and early Taishō periods"]
+status = "author"
+note = "The sources checked give the count (about 300) but not when the peak was; one secondary source says “from Meiji to Shōwa”."
+
+[[claim]]
+id = "kawaraya-mobile"
+match = ["assembled from interlocking members without nails", "residents could dismantle them, move the components onto safer ground and rebuild once water levels receded"]
+status = "verified"
+source = "ja.wikipedia 川原町 (新宮市): 「釘を使わない簡易建築」「洪水が迫ると解体され、水が引くと再び組み立てられる」"
+url = "https://ja.wikipedia.org/wiki/川原町_(新宮市)"
+
+[[claim]]
+id = "kawaraya-flood-frequency"
+title = "Floods “five or six times in some years”"
+match = ["flooding as occurring five or six times in some years"]
+status = "author"
+note = "Not found in the sources checked (Wikipedia 川原町, city tourism and sabō pages). Needs the historical record the text refers to."
+
+[[claim]]
+id = "kawaramachi-gone"
+match = ["gone by 1950"]
+status = "verified"
+source = "ja.wikipedia 川原町 (新宮市): 「1950年（昭和25年）までに集落は消失した」 (other sources give 1948 or c. 1953)"
+url = "https://ja.wikipedia.org/wiki/川原町_(新宮市)"
+
+[[claim]]
+id = "miyako-ports"
+title = "熊野の都; timber and charcoal out through Ikeda and Miwasaki ports"
+match = ["outward through Ikeda and Miwasaki ports toward Osaka, Edo and other markets", "historically described as 熊野の都"]
+status = "author"
+note = "Not yet checked against a source (the term 熊野の都 and the role of the Ikeda and Miwasaki ports)."
+
+[[claim]]
+id = "agariya"
+title = "Agariya examples at Shingū, Hitari, Kujū and Shitaki"
+match = ["Agariya created a complementary form of resilience", "include settlements such as Shingū, Hitari, Kujū and Shitaki"]
+status = "author"
+note = "No published source on Agariya (アガリヤ) was found. The place names are real districts in OSM (日足 Hitari, 九重 Kujū, 四瀧 Shitaki)."
+
+[[claim]]
+id = "hitari"
+title = "Hitari (日足)"
+match = ["include settlements such as Shingū, Hitari, Kujū and Shitaki"]
+status = "corrected"
+source = "Wakayama river gauge 「新宮市 熊野川町日足(ひたり)」"
+url = "https://kasensabo01.pref.wakayama.lg.jp/sp/suiiDetail.html?ccd=804"
+note = "The draft wrote “Hiashi”; 日足 is read Hitari."
+
+[[claim]]
+id = "railway-1913"
+title = "Shingū Railway “opened in 1913”"
+match = ["The Shingū Railway opened in 1913", "Shingū Stn · 1913", "station (1913)"]
+status = "approximate"
+source = "官報 1913-03-07 via ja.wikipedia 新宮鉄道: 三輪崎–新宮 opened 1 Mar 1913 (full line); 勝浦–三輪崎 opened 4 Dec 1912"
+url = "https://ja.wikipedia.org/wiki/新宮鉄道"
+note = "The line's first section (Katsuura–Miwasaki) opened in December 1912; it reached Shingū station on 1 March 1913."
+
+[[claim]]
+id = "port-only"
+match = ["Shingū Port today remains Kinan’s only foreign-trade port, serving hinterlands extending into Mie and Nara while functioning simultaneously as a maritime gateway for Kumano tourism and cruise traffic",
+         "Shingū Port remains the Kinan region’s principal foreign-trade port"]
+status = "verified"
+source = "Wakayama Prefecture 新宮港: 「紀南地方唯一の外貿港湾である新宮港は、新宮地域のみならず三重県や奈良県をも含めた地域の拠点港」「熊野観光の海の玄関口…大型クルーズ客船の寄港が増加」"
+url = "https://www.pref.wakayama.lg.jp/prefg/080500/kowan/40shingu.html"
+
+# ================================================================ river, basin, 2011
+[[claim]]
+id = "river-route-length"
+match = ["river pilgrimage route (40.6 km)", "Reached from Hongū by the 40.6 km river route."]
+status = "derived"
+source = "length of the river pilgrimage route Hongū → Hayatama as mapped in OSM (kansai/tools)"
+check = { stat = "river_route_km", fmt = "{:.1f} km" }
+
+[[claim]]
+id = "talas-toll"
+title = "2011 Typhoon Talas in Shingū: 13 dead, 1 missing, 2,968 homes, 81 destroyed"
+match = ["Typhoon Talas caused 13 deaths, one missing person and damage to 2,968 homes, including 81 destroyed or washed away",
+         "13 deaths", "1 missing", "2,968 homes damaged", "81 destroyed or washed away", "The 2011 Kii Peninsula disaster",
+         "Shingū City disaster record (2011 Kii Peninsula flood)", "2011 disaster record"]
+status = "corrected"
+source = "Shingū City disaster record, ch. 2 p. 28: 「死者13人、行方不明者1人…住家被害が81棟の全壊および家屋流出を含む2,968棟」"
+url = "https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf"
+note = "The draft said 2,964 homes; the city record says 2,968 buildings (3,154 households)."
+
+[[claim]]
+id = "talas-infrastructure"
+title = "Failures of electricity, communications, water, roads and river infrastructure"
+match = ["Municipal records also document widespread failures of electricity, communications, water, roads and river infrastructure"]
+status = "author"
+note = "Only the casualty page (p. 28) of the city's disaster record was read; the infrastructure chapter was not checked."
+
+[[claim]]
+id = "oga-peak-2011"
+match = ["Peak discharge at Ōga ≈ 24,000 m³/s, the largest on record (MLIT)", "2011 flood ≈ 24,000 (record)", "the 2011 flood peaked at about 24,000",
+         "The revised design flood equals what 2011 already delivered."]
+status = "verified"
+source = "MLIT press attachment (Oct 2021): 2011 flood 「約24,000m3/s（観測史上最大）」 at 相賀"
+url = "https://www.mlit.go.jp/report/press/content/001427937.pdf"
+
+[[claim]]
+id = "basin-area"
+match = ["Basin 2,365 km²", "2,365 km² across Nara, Wakayama and Mie"]
+status = "derived"
+source = "Kumano basin delineated on SRTM (priority-flood D8) and clipped to the coast (kansai/tools)"
+check = { stat = "basin_km2", fmt = "{:,.0f} km²" }
+
+[[claim]]
+id = "basin-area-official"
+match = ["(official 2,360)"]
+status = "verified"
+source = "MLIT 新宮川水系河川整備基本方針 (2021): 「流域面積2,360km2」"
+url = "https://www.mlit.go.jp/river/shinngikai_blog/shaseishin/kasenbunkakai/bunkakai/dai59kai/pdf/4-1.pdf"
+
+[[claim]]
+id = "basin-share-nara"
+match = ["63% Nara", "Nara 63%"]
+status = "derived"
+source = "basin ∩ Nara Prefecture (MLIT N03) as a share of the basin"
+check = { share = ["basin_nara", "basin"], expect = 63, tol = 0.6 }
+
+[[claim]]
+id = "basin-share-wakayama"
+match = ["22% Wakayama", "Wakayama 22%"]
+status = "derived"
+source = "basin ∩ Wakayama Prefecture (MLIT N03) as a share of the basin"
+check = { share = ["basin_wakayama", "basin"], expect = 22, tol = 0.6 }
+
+[[claim]]
+id = "basin-share-mie"
+match = ["16% Mie", "Mie 16%"]
+status = "derived"
+source = "basin ∩ Mie Prefecture (MLIT N03) as a share of the basin"
+check = { share = ["basin_mie", "basin"], expect = 16, tol = 0.6 }
+
+[[claim]]
+id = "basin-share-shingu"
+match = ["Shingū City holds 10% of it", "Shingū City · 10% of the basin"]
+status = "derived"
+source = "basin ∩ Shingū City (MLIT N03) as a share of the basin"
+check = { overlap = ["basin", "shingu"], expect = 10, tol = 0.6 }
+
+# ================================================================ Ichida-gawa
+[[claim]]
+id = "ichida-typhoon21"
+match = ["Following severe internal flooding during Typhoon 21 in 2017",
+         "Typhoon 21 (Oct 2017) set the record for cumulative rainfall at the Shingū gauge; 1,124 homes flooded city-wide"]
+status = "verified"
+source = "MLIT 市田川流域大規模浸水対策計画 (2019) p. 11: 「観測史上1位となる累積雨量」「新宮市全域では1,124戸の浸水被害」"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/shiryou.pdf"
+
+[[claim]]
+id = "ichida-pumps"
+title = "Ichida national pumping station 17.1 → 28.0 m³/s, “in full operation from 2024”"
+match = ["in full operation from 2024, raised national pumping capacity from 17.1 to 28.0 m³/s", "17.1 cubic metres per second before, 28.0 after"]
+exact = ["17.1 m³/s", "from 2024", "28.0"]
+status = "corrected"
+source = "MLIT/Wakayama/Shingū leaflet: 「現況排水量17.1m3/sから28.0m3/sにポンプを増強」; 熊野新聞 2023-12-09: building finished autumn 2023, full operation the next fiscal year"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/leaflet.pdf"
+note = "The draft said the station was “completed in 2024”; it was built 2020–23 and entered full operation in 2024."
+
+[[claim]]
+id = "ichida-increase-abs"
+match = ["+10.9 m³/s"]
+status = "derived"
+source = "28.0 − 17.1 (the leaflet also states 10.9 m³/s)"
+check = { calc = "28.0 - 17.1", expect = 10.9, tol = 0.001 }
+
+[[claim]]
+id = "ichida-increase-pct"
+match = ["(+64%)"]
+status = "derived"
+source = "(28.0 − 17.1) / 17.1"
+check = { calc = "(28.0 - 17.1) / 17.1 * 100", expect = 64, tol = 0.5 }
+
+[[claim]]
+id = "ichida-area"
+match = ["Basin: 5.36 km² officially", "Ichida-gawa basin · 5.36 km²", "5.36 km² (official)"]
+status = "verified"
+source = "MLIT 市田川流域大規模浸水対策計画, 表-1.1: 流域面積 5.360 km²"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/shiryou.pdf"
+
+# ================================================================ tsunami
+[[claim]]
+id = "tsunami-2026"
+title = "Tsunami: 13 m maximum height and 5 minutes to a 1 m wave (Wakayama 2026)"
+match = ["Wakayama’s 2026 maximum-class scenario gives Shingū a reference maximum tsunami height of 13 m and approximately five minutes until a 1 m tsunami height",
+         "13 m maximum tsunami height (2026)", "5 min to a 1 m tsunami", "Five minutes transforms topography", "tsunami inundation assumption (2026)"]
+status = "approximate"
+source = "Wakayama Prefecture, 令和8年 tsunami assumption (Mw 9.1): Shingū maximum 13 m (2013: 14 m); +1 m arrival 5 min"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
+note = "Heights are rounded up and arrival times rounded down by the prefecture; the 5 minutes is the fastest arrival anywhere on Shingū's coast (about 30 m offshore), not at the city centre."
+
+[[claim]]
+id = "tsunami-walk-share"
+match = ["92% of the modelled inundation area lies ≤ 300 m from dry ground"]
+status = "derived"
+source = "walking-distance model (kansai/tools layers2.py) on the L2 inundation polygons"
+check = { stat = "ts_walk.share_le300_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "tsunami-walk-method"
+match = ["walking distance over land to the nearest dry patch ≥ 1 ha (≤ 300 m · 300–600 m · > 600 m; at 1 m/s, 300 m ≈ 5 minutes)",
+         "≤ 300 m to dry ground"]
+exact = ["300–600 m", "> 600 m"]
+status = "method"
+source = "kansai/tools layers2.py: geodesic walking distance on a 10 m grid over land, from dry patches of at least 1 ha; 1 m/s is a common evacuation-planning walking speed"
+
+[[claim]]
+id = "station-to-dry"
+match = ["station · 91 m to dry ground"]
+status = "derived"
+source = "walking-distance model at Shingū Station (kansai/tools layers2.py)"
+check = { stat = "ts_pt_dist.station", fmt = "{} m" }
+
+[[claim]]
+id = "tsunami-vintage"
+match = ["Inundation from the 2016 national dataset; the 2026 revision is published only as PDF maps", "A40 tsunami inundation (2016)"]
+status = "verified"
+source = "MLIT 国土数値情報 A40 (2016 release); Wakayama publishes the 2026 revision only as per-municipality PDF maps"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/d00221942.html"
+
+# ================================================================ landslides, planning
+[[claim]]
+id = "nr168-share"
+match = ["20% of Route 168 in Shingū"]
+status = "derived"
+source = "OSM road geometry ∩ MLIT A33 (Aug 2025) sediment-disaster zones, within Shingū City"
+check = { stat = "ls_roads.NR168.pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "nr168-km"
+match = ["(6.2 of 31 km)"]
+status = "derived"
+source = "as above; km inside zones"
+check = { stat = "ls_roads.NR168.in_zone_km", fmt = "{:.1f} of" }
+
+[[claim]]
+id = "nr168-total"
+match = ["(6.2 of 31 km)"]
+status = "derived"
+source = "as above; km of Route 168 inside the city"
+check = { stat = "ls_roads.NR168.km", fmt = "of {:.0f} km" }
+
+[[claim]]
+id = "local-roads-share"
+match = ["10% of the other main local roads"]
+status = "derived"
+source = "OSM main local roads ∩ MLIT A33 zones, within Shingū City"
+check = { stat = "ls_roads.local.pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "local-roads-km"
+match = ["(9.8 of 102 km)"]
+status = "derived"
+source = "as above; km inside zones"
+check = { stat = "ls_roads.local.in_zone_km", fmt = "{:.1f} of" }
+
+[[claim]]
+id = "local-roads-total"
+match = ["(9.8 of 102 km)"]
+status = "derived"
+source = "as above; km of main local roads inside the city"
+check = { stat = "ls_roads.local.km", fmt = "of {:.0f} km" }
+
+[[claim]]
+id = "data-vintages"
+match = ["(MLIT A33, Aug 2025)", "(MLIT A55, FY2024)", "(A33, Aug 2025)", "MLIT A55 (FY2024)", "N03 administrative areas (2026)",
+         "A55 urban-planning decisions, Shingū (FY2024)", "A31a flood inundation, maximum-assumed (2025)", "A33 sediment-disaster zones (Aug 2025)",
+         "A38 medical areas (2020)", "SRTM 1″ (NASA)", "on 3″ SRTM"]
+status = "method"
+source = "kansai/tools/01_fetch.sh — the dataset releases downloaded for this page"
+
+[[claim]]
+id = "riz-red-overlap"
+match = ["0.4% overlap with red zones"]
+status = "derived"
+source = "residential-inducement zone (A55) ∩ landslide red zones (A33), unsimplified polygons"
+check = { stat = "overlap.riz.red", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "plan-2025"
+title = "2025 tsunami plan “building on … and aligning with …”"
+match = ["The 2025 Tsunami Disaster-Resilient Community Development Promotion Plan strengthens that integration by building tsunami measures on the city’s comprehensive plan, resilience plan and disaster plan, and explicitly aligning them with the Urban Master Plan and Location Optimization Plan",
+         "The 2025 tsunami plan builds on the comprehensive, resilience and disaster plans and is aligned with the Urban Master Plan and the Location Optimization Plan",
+         "津波防災地域づくり推進計画 (2025)"]
+exact = ["2025"]
+status = "corrected"
+source = "新宮市 津波防災地域づくり推進計画 (Oct 2025): based on 第２次総合計画・国土強靱化地域計画・地域防災計画 (「を計画の基本とし」); aligned with 都市計画マスタープラン・立地適正化計画 (「との整合を図って」)"
+url = "https://www.city.shingu.lg.jp/info/2811"
+note = "The draft said the plan “coordinates with” five plans; the plan is based on three of them and aligned with the other two."
+
+[[claim]]
+id = "zone-share-centre"
+exact = ["86%"]
+status = "derived"
+source = "central urban-function zone (A55) inside river flood (A31a, Kumano + Ichida) or L2 tsunami (A40)"
+check = { stat = "overlap.centre.either", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-share-riz"
+exact = ["51%"]
+status = "derived"
+source = "residential-inducement zone (A55) inside river flood or L2 tsunami"
+check = { stat = "overlap.riz.either", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-share-miwasaki"
+exact = ["28%"]
+status = "derived"
+source = "Miwasaki urban-function zone (A55) inside river flood or L2 tsunami"
+check = { stat = "overlap.miwasaki.either", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-share-koyo"
+exact = ["0%"]
+status = "derived"
+source = "Kōyō (medical) urban-function zone (A55) inside river flood or L2 tsunami"
+check = { stat = "overlap.koyo_medical.either", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "hazard-map-languages"
+match = ["available in Japanese, English, Chinese, Korean and Tagalog", "Legibility in five languages"]
+status = "verified"
+source = "新宮市 WEB版ハザードマップ: 「対応言語：日本語、英語、中国語、韓国語、タガログ語」; flood/tsunami extent and depth, landslide zones, shelters, 逃げどき check"
+url = "https://www.city.shingu.lg.jp/info/1132"
+
+# ================================================================ river policy
+[[claim]]
+id = "river-plan-2022"
+title = "“The 2022 river improvement plan, building on the 2021 basin-wide flood-management project”"
+match = ["The 2022 river improvement plan, building on the 2021 basin-wide flood-management project", "新宮川水系河川整備計画 (2022)"]
+status = "corrected"
+source = "MLIT 近畿地方整備局 紀南河川国道事務所: 新宮川水系（熊野川）河川整備計画, March 2022, citing the 新宮川水系流域治水プロジェクト (March 2021)"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/index.html"
+note = "The draft said a 2026 river improvement plan; the only plan is the March 2022 one, and the combined approach comes from the 2021 basin-wide project."
+
+[[claim]]
+id = "policy-2021-first"
+match = ["In 2021, the Shingū and Gokase river systems became Japan’s first basic river-policy revisions", "2021 basic-policy revision (新宮川・五ヶ瀬川)"]
+status = "verified"
+source = "MLIT press release, 15 Oct 2021: 「気候変動の影響による降雨量の増大を考慮し、流域治水の観点も踏まえた全国初の見直し」"
+url = "https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html"
+
+[[claim]]
+id = "design-flood"
+match = ["19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision"]
+exact = ["2008 policy", "19,000", "2021 revision", "24,000"]
+status = "verified"
+source = "MLIT press attachment: 基本高水 at 相賀 「19,000m3/s ⇒ 24,000m3/sに変更」 (19,000 from the June 2008 policy)"
+url = "https://www.mlit.go.jp/report/press/content/001427937.pdf"
+
+[[claim]]
+id = "rainfall-factor"
+exact = ["1/100 rainfall × 1.1 for a +2 °C climate (MLIT, Oct 2021)"]
+status = "verified"
+source = "MLIT press attachment 「1/100確率雨量に、降雨量変化倍率（×1.1）を乗じ」; MLIT 気候変動を踏まえた治水計画のあり方 提言 (2019, rev. 2021): factor for 2 °C of warming"
+url = "https://www.mlit.go.jp/river/shinngikai_blog/chisui_kentoukai/pdf/r0304/01_teigen.pdf"
+
+# ================================================================ accessibility model, diagrams
+[[claim]]
+id = "drive-60"
+match = ["≈60 min drive from the Medical Center", "reach of the regional centre (≈60 min)"]
+status = "method"
+source = "kansai/tools: drive-time model on OSM roads from the Shingū Medical Center (speeds by road class)"
+
+[[claim]]
+id = "valley-scales"
+match = ["Horizontal scale ×3 downstream of Hongū and along the coast", "Hongū · horizontal scale ×3 →", "valley walls = highest ground within ≈3 km of the river"]
+exact = ["0", "500 m", "1,000 m", "1,500 m"]
+status = "method"
+source = "valley section drawing in index.html (long profile from kansai/tools 08_profile.py)"
+
+[[claim]]
+id = "valley-ve-up"
+match = ["vertical exaggeration ≈50× upstream"]
+status = "derived"
+source = "drawing scales of the valley section"
+check = { valley_ve = "up", expect = 50, tol = 1.5 }
+
+[[claim]]
+id = "valley-ve-down"
+match = ["≈17× downstream"]
+status = "derived"
+source = "drawing scales of the valley section"
+check = { valley_ve = "down", expect = 17, tol = 0.6 }
+
+# ================================================================ limitations (not claims; listed in CAVEATS.md)
+[[limitation]]
+topic = "Data vintage"
+title = "Tsunami map ≠ tsunami text"
+text = "The text quotes Wakayama's 2026 scenario (13 m, 5 min). The map shows the 2016 national dataset (A40, based on the prefecture's 2013 assumption), because the 2026 revision is published only as PDF maps. Extents differ in detail."
+
+[[limitation]]
+topic = "Data vintage"
+title = "River flood layers"
+text = "“L2 river flood (max. assumed)” is MLIT A31a (2025 release) for the Kumano. The Ichida flood is A31a's separate maximum-assumed map for the Ichida-gawa itself (市田川, river code 8606010002). Both are river-flood models; neither is a street-level rainfall (pluvial) model."
+
+[[limitation]]
+topic = "Models"
+title = "Walking distance to dry ground"
+text = "Distances are shortest walks over land on a 10 m grid to any dry patch of at least 1 ha. They are not routes to designated evacuation sites and ignore stairs, fences, bridges closed by the quake, crowding and mobility limits. The 1 m/s conversion to minutes is a planning convention."
+
+[[limitation]]
+topic = "Models"
+title = "60-minute drive area"
+text = "Drive times start at the Shingū Medical Center and use OSM roads with assumed speeds (expressway 70, trunk 45, primary 35, secondary 30, tertiary 25 km/h), no traffic and no closures, rasterised at 250 m. They show reach in normal conditions, not after a landslide or flood."
+
+[[limitation]]
+topic = "Models"
+title = "Landslide exposure of roads"
+text = "Road stretches are counted as exposed where they cross an A33 sediment-disaster zone polygon (red or yellow). That shows designated exposure, not the probability of a closure."
+
+[[limitation]]
+topic = "Geometry"
+title = "Ichida-gawa basin outline"
+text = "The dashed outline was digitised from MLIT's printed basin map (図-1.2). It covers 5.85 km², 9% more than the official 5.36 km², so the page quotes the official figure."
+
+[[limitation]]
+topic = "Geometry"
+title = "Kumano basin"
+text = "The basin was delineated from 3″ SRTM elevation (2,365 km²; official 2,360 km²). Prefecture shares come from that outline."
+
+[[limitation]]
+topic = "Geometry"
+title = "Kumano Kodō routes"
+text = "Nakahechi, Kohechi and Iseji follow OSM and Mie Prefecture data. Mie's Iseji KML is “All Rights Reserved”, so its use here needs permission before wide publication. The Ōmine Okugake and Ohechi routes are rebuilt by routing along OSM paths between waypoints; one long leg near Yoshino is drawn straight where no path connects."
+
+[[limitation]]
+topic = "Geometry"
+title = "Maps are simplified"
+text = "Map outlines are simplified for drawing; every statistic is computed on the unsimplified polygons, so recomputing from the drawn shapes gives slightly different decimals."
+
+[[limitation]]
+topic = "Drawings"
+title = "Valley section"
+text = "The long profile follows a D8 flow path on 3″ SRTM with meanders shortened (147 km vs. the official 183 km main-stem length). Coastal hills are schematic and intervention positions are indicative."
+
+[[limitation]]
+topic = "Drawings"
+title = "Sea lanes and flows"
+text = "The timber and charcoal flows follow the Kitayama and Kumano rivers; the sea lanes to Ōsaka and Edo are schematic lines, not historical routes."
+
+# ================================================================ errors the QA gate caught and fixed (listed in CAVEATS.md)
+[[fix]]
+what = "Nanairo dam drawn ≈13 km downstream of its real position"
+how = "moved to 七色ダム (33°57′37″N 136°00′08″E; ja.wikipedia infobox, OSM power station within 60 m)"
+
+[[fix]]
+what = "Kushimoto label 1.2 km from the town"
+how = "moved to OSM place=town node 691599005"
+
+[[fix]]
+what = "“Aidani” ring levees"
+how = "相野谷川 is read おのだにがわ; now “Onodani-gawa (相野谷川)” (Kotobank, ja.wikipedia)"
+
+[[fix]]
+what = "Map line labelled “≈ 2 km” from the medieval port site to the river mouth"
+how = "the line measures 2.45 km; label now “≈ 2.5 km”"
+
+[[fix]]
+what = "Ichida chart said Typhoon 21 flooded 1,124 homes “in the basin”"
+how = "MLIT gives 1,124 for the whole city (新宮市全域); caption now says city-wide"
+
+[[fix]]
+what = "“7 · Shingū Port” drawn on top of “Shingū Port · cruise gateway” in the visitor map"
+how = "the ordinal label now appears only on the seven-layers map"
+
+[[fix]]
+what = "Layout faults: land drawn in sea colour; views showing empty space beyond the data; pictogram captions running into each other; clipped or colliding chart labels"
+how = "CSS specificity fix, camera clamped to the data frame, caption and chart layouts reworked; all now checked automatically"

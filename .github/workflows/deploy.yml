@@ -17,7 +17,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Accuracy gate for the Kansai page: nothing is published unless it passes (see kansai/qa/).
+  qa:
+    uses: ./.github/workflows/kansai-qa.yml
+
   build:
+    needs: qa
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -1,0 +1,62 @@
+name: Kansai QA/QC
+
+# The accuracy gate for kansai/index.html (see kansai/qa/run.py). Runs on every pull request that touches
+# the page, and deploy.yml calls it before publishing — a failing check blocks the deploy, so the live
+# site keeps its last good version.
+on:
+  pull_request:
+    paths:
+      - "kansai/**"
+      - ".github/workflows/kansai-qa.yml"
+      - ".github/workflows/deploy.yml"
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright + Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Render checks in Chromium (desktop, tablet, phone)
+        run: node kansai/qa/check_render.mjs kansai/index.html qa-render.json --shots qa-shots
+
+      # data + claims + points + the render report above; exits non-zero on any error
+      - name: QA/QC gate
+        run: python3 kansai/qa/run.py --report qa-render.json --json qa-report.json
+
+      # plants known faults (unsourced number, drifted claim, stale statistic, moved point, …) and
+      # fails unless the gate catches every one of them
+      - name: Gate self-test
+        run: python3 kansai/qa/selftest.py --report qa-render.json
+
+      - name: Upload report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kansai-qa
+          path: |
+            qa-render.json
+            qa-report.json
+            qa-shots/
+          retention-days: 14
