@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Kansai QA outputs (CI artifacts)
+qa-report.json
+qa-shots/
+qa-render.json
+__pycache__/
