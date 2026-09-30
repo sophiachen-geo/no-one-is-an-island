@@ -7,28 +7,26 @@ Do not edit by hand: the QA gate fails if this file and the register disagree.
 The page follows the source, not the draft, in these places.
 
 - **Tankaku-yama (丹鶴山)** — The draft romanised 丹鶴山 as “Tanzuru-yama”; the reading is Tankaku. Source: 新宮市観光協会 「新宮城跡（丹鶴城跡）」 — 丹鶴 is read たんかく <https://www.shinguu.jp/spots/detail/A0004>
+- **Kawaraya: floods “five or six times a year”** — The draft said the historical record describes flooding five or six times in some years; the city's page gives it as a saying: sudden floods said to come five or six times a year. Source: Shingū City, 川原町の川原家: 「年に5～6回あるといわれる不時の洪水」 <https://www.city.shingu.lg.jp/Info/25>
+- **Timber and charcoal out through Ikeda port to Edo; 熊野の都** — The draft named Ikeda and Miwasaki ports and Osaka, and called 熊野の都 a historical description. The sources found name Ikeda (and Udono on the Mie bank) and Edo; Miwasaki and Osaka could not be confirmed. 熊野の都 is the slogan of the city's Urban Planning Master Plan; the port routes rest on the city tourism association's account. Source: 新宮市観光協会: 「新宮炭…新宮河口の池田港、あるいは鵜殿港から江戸へ」; Wakayama Prefecture: Shingū sent sawn timber to Edo; Urban Planning Master Plan (2012) slogan 「自然と人がおりなす 熊野の都 新宮」 <https://www.city.shingu.lg.jp/Info/402>
 - **Hitari (日足)** — The draft wrote “Hiashi”; 日足 is read Hitari. Source: Wakayama river gauge 「新宮市 熊野川町日足(ひたり)」 <https://kasensabo01.pref.wakayama.lg.jp/sp/suiiDetail.html?ccd=804>
 - **2011 Typhoon Talas in Shingū: 13 dead, 1 missing, 2,968 homes, 81 destroyed** — The draft said 2,964 homes; the city record says 2,968 buildings (3,154 households). Source: Shingū City disaster record, ch. 2 p. 28: 「死者13人、行方不明者1人…住家被害が81棟の全壊および家屋流出を含む2,968棟」 <https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf>
 - **Ichida national pumping station 17.1 → 28.0 m³/s, “in full operation from 2024”** — The draft said the station was “completed in 2024”; it was built 2020–23 and entered full operation in 2024. Source: MLIT/Wakayama/Shingū leaflet: 「現況排水量17.1m3/sから28.0m3/sにポンプを増強」; 熊野新聞 2023-12-09: building finished autumn 2023, full operation the next fiscal year <https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/leaflet.pdf>
-- **2025 tsunami plan “building on … and aligning with …”** — The draft said the plan “coordinates with” five plans; the plan is based on three of them and aligned with the other two. Source: 新宮市 津波防災地域づくり推進計画 (Oct 2025): based on 第２次総合計画・国土強靱化地域計画・地域防災計画 (「を計画の基本とし」); aligned with 都市計画マスタープラン・立地適正化計画 (「との整合を図って」) <https://www.city.shingu.lg.jp/info/2811>
-- **“The 2022 river improvement plan, building on the 2021 basin-wide flood-management project”** — The draft said a 2026 river improvement plan; the only plan is the March 2022 one, and the combined approach comes from the 2021 basin-wide project. Source: MLIT 近畿地方整備局 紀南河川国道事務所: 新宮川水系（熊野川）河川整備計画, March 2022, citing the 新宮川水系流域治水プロジェクト (March 2021) <https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/index.html>
 
 ## Not independently verified
 These come from the author's text. No source was found or checked for them yet.
 
-- **Shimohonmachi excavation finds** — The site and its report exist (新宮下本町遺跡). The individual finds (warehouses, smithing, boat nails, stairs, distant ceramics) have not been checked against the report. Source: 新宮市 新宮下本町遺跡 page and survey report (not yet read) <https://www.city.shingu.lg.jp/info/690>
-- **Kawaramachi trades (merchants, inns, blacksmiths …)** — The list of trades in Kawaramachi has not been checked against a source.
-- **Kawaraya peak “around the late Meiji and early Taishō periods”** — The sources checked give the count (about 300) but not when the peak was; one secondary source says “from Meiji to Shōwa”.
-- **Floods “five or six times in some years”** — Not found in the sources checked (Wikipedia 川原町, city tourism and sabō pages). Needs the historical record the text refers to.
-- **熊野の都; timber and charcoal out through Ikeda and Miwasaki ports** — Not yet checked against a source (the term 熊野の都 and the role of the Ikeda and Miwasaki ports).
-- **Agariya examples at Shingū, Hitari, Kujū and Shitaki** — No published source on Agariya (アガリヤ) was found. The place names are real districts in OSM (日足 Hitari, 九重 Kujū, 四瀧 Shitaki).
-- **Failures of electricity, communications, water, roads and river infrastructure** — Only the casualty page (p. 28) of the city's disaster record was read; the infrastructure chapter was not checked.
+- **Agariya examples at Shingū, Hitari, Kujū and Shitaki** — 上がり家 (agariya) are documented in the riverside settlements of Kumanogawa-chō, Totsukawa and Hongū; the page now writes the published form 上がり家 instead of the draft’s アガリヤ. The four named settlements are not named in the source read. Source: Watanabe et al., 日本地理学会 2017 spring meeting: 「川丈集落（奈良県十津川村、和歌山県新宮市熊野川町、同田辺市本宮町周辺…）に見られる「上がり家（あがりや）」」 <https://www.jstage.jst.go.jp/article/ajg/2017s/0/2017s_100266/_article/-char/ja/>
 
 ## Verified, but rounded or simplified on the page
 
 - **Shimohonmachi “roughly two kilometres above the river mouth”** — The site is about 2.5 km from the mouth, a little further than “roughly two kilometres”. The map label gives the measured ≈ 2.5 km. Source: measured on the page's own points: 2.45 km straight line from the site (under Tankaku Hall) to the river mouth
 - **Shingū Railway “opened in 1913”** — The line's first section (Katsuura–Miwasaki) opened in December 1912; it reached Shingū station on 1 March 1913. Source: 官報 1913-03-07 via ja.wikipedia 新宮鉄道: 三輪崎–新宮 opened 1 Mar 1913 (full line); 勝浦–三輪崎 opened 4 Dec 1912 <https://ja.wikipedia.org/wiki/新宮鉄道>
 - **Tsunami: 13 m maximum height and 5 minutes to a 1 m wave (Wakayama 2026)** — Heights are rounded up and arrival times rounded down by the prefecture; the 5 minutes is the fastest arrival anywhere on Shingū's coast (about 30 m offshore), not at the city centre. Source: Wakayama Prefecture, 令和8年 tsunami assumption (Mw 9.1): Shingū maximum 13 m (2013: 14 m); +1 m arrival 5 min <https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html>
+- **2005 merger; 255 km²** — 255.23 km² rounded to 255 km². Source: 新宮市過疎地域持続的発展計画: 「平成17年10月1日に、旧新宮市及び旧熊野川町が合併」「面積は、255.23ｋ㎡」 <https://www.city.shingu.lg.jp/div/kikaku/pdf/keikaku/kasokeikaku_ichibuhennkou202406.pdf>
+- **Rafting until the mid-1960s; mill closed 1995; jobs by sector (2020)** — Sources disagree on the last year of commercial rafting (c. 1963, March 1964, or from 1965), so the page says the mid-1960s; 20.1% and 19.3% are rounded to one in five and another fifth. Source: Rafting ended 1963–1965 by source (Wakayama Prefecture: 「昭和40年代にはいり…筏師もすっかり姿を消し」; 新宮原木市場: 昭和39年3月); 巴川 corporate history: 「1995年 新宮工場を閉鎖」; 2020 census: 医療，福祉 20.1%, 卸売業，小売業 19.3%, 第一次産業 2.2% <https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032143614&fileKind=0>
+- **75% chance of 6-lower in 30 years; 6-upper in both scenarios; 1946 fire burned a third of the town** — 74.8% is rounded to 75%; the J-SHIS edition behind the API's Y2024 key was not matched to a published map. Source: J-SHIS API Y2024 AVR/TTL_MTTL, 250 m mesh at 33.724N 135.992E: T30_I55_PS = 0.748; Wakayama press release 2026-03-25: 新宮市 震度6強 in both scenarios; Wakayama Prefecture: 「新宮市で市街地の3分の1が焼失」 (2,398 houses burned, Japan Coast Guard 1948) <https://www.pref.wakayama.lg.jp/chiji/press/07/20260325_d/fil/260325_1.pdf>
+- **Summit heights on the relief map** — Heights are OpenStreetMap values rounded to the metre; only Hakkyō (1,915 m) was compared with GSI. Source: OpenStreetMap natural=peak ele, rounded to the metre (八経ヶ岳 1,915 m agrees with GSI); highest of the 316 OSM summits with a height inside the frame
 
 ## Map positions with low confidence
 
@@ -70,4 +68,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 3 · author: 7 · corrected: 6 · derived: 24 · method: 5 · verified: 17 · map points: 63
+approximate: 7 · author: 1 · corrected: 6 · derived: 37 · method: 8 · verified: 45 · map points: 71

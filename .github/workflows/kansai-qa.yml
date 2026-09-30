@@ -50,6 +50,11 @@ jobs:
       - name: Gate self-test
         run: python3 kansai/qa/selftest.py --report qa-render.json
 
+      # every registered link still answers (advisory: a ministry outage must not block a publish)
+      - name: Link check (advisory)
+        continue-on-error: true
+        run: python3 kansai/qa/check_links.py --json qa-links.json
+
       - name: Upload report and screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -58,5 +63,6 @@ jobs:
           path: |
             qa-render.json
             qa-report.json
+            qa-links.json
             qa-shots/
           retention-days: 14

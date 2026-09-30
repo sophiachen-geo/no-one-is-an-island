@@ -26,6 +26,10 @@ python3 $T/13_flows.py          # timber/charcoal flows down the Kitayama and Ku
 python3 $T/14_ichida_basin.py   # digitise MLIT's Ichida-gawa basin map (図-1.2) → ichida/ichida_basin.json
 python3 $T/15_ichida_relief.py  # Ichida river line + old-town micro-relief contours (3–40 m)
 python3 $T/16_extras.py         # merge 10–15 + extra views/points (pts2.json) into geo.json
+python3 $T/fetch_facilities.py  # OSM services and numbered roads in Shingū City → fac/
+# morph/: see tools/morph/README.md — forest (L03-b), park zones (A10), OSM summits, GSI building footprints
+python3 $T/17_round3.py         # per-level contours + height labels, forest/parks/peaks, building exposure
+                                #   (→ buildings_page.json, copy to ../data/buildings.js), services, road labels
 python3 $T/09_inject.py         # write geo.json + profile.json into ../index.html
 python3 ../qa/run.py            # the QA/QC gate — must pass before anything is published
 ```

@@ -518,3 +518,68 @@ name = "Miwasaki urban-function zone"
 inside = "uf"
 source = "representative point of the MLIT A55 (FY2024) urban-function zone polygon"
 confidence = "high"
+
+# ---------------------------------------------------------------- round 3: system map, 2011 isolation, other hazards, heritage
+[points.mifunejima]
+name = "御船島 (Mifune-jima)"
+lon = 135.97320
+lat = 33.73595
+source = "Wikidata Q11489269 (P625); drawn from OSM way 212510589"
+confidence = "high"
+tol_m = 100
+
+[points.jma_shingu]
+name = "気象庁 新宮 地域気象観測所 (AMeDAS 65276)"
+lon = 135.97000
+lat = 33.68667
+source = "JMA AMeDAS station table (amedastable.json: 33°41.2′N 135°58.2′E); drawn from JMA's station page (block 0649)"
+confidence = "high"
+tol_m = 200
+
+[points.ida]
+name = "紀宝町井田 (Shichiri-mihama, Mie)"
+lon = 136.021667
+lat = 33.760536
+source = "GSI address search 三重県紀宝町井田 (district representative point)"
+confidence = "medium"
+tol_m = 500
+
+[points.oga]
+name = "新宮市相賀 (Ōga district)"
+lon = 135.932434
+lat = 33.733822
+source = "GSI address search 和歌山県新宮市相賀"
+confidence = "medium"
+tol_m = 800
+
+[points.minamihizue]
+name = "新宮市南檜杖 (Minami-Hizue district)"
+lon = 135.962067
+lat = 33.718327
+source = "GSI address search 和歌山県新宮市南檜杖"
+confidence = "medium"
+tol_m = 800
+
+[points.tenkawa]
+name = "天川村 (Tenkawa village centre, Sawatani)"
+lon = 135.855728
+lat = 34.239769
+source = "GSI address search 奈良県天川村沢谷 (village office district)"
+confidence = "medium"
+tol_m = 500
+
+[points.taiji]
+name = "太地町 (Taiji town)"
+lon = 135.957840
+lat = 33.591114
+source = "GSI address search 和歌山県太地町太地; the page marks the town on the coastal profile"
+confidence = "medium"
+tol_m = 1600
+
+[points.koza]
+name = "串本町古座 (Koza)"
+lon = 135.829575
+lat = 33.515858
+source = "GSI address search 和歌山県串本町古座"
+confidence = "medium"
+tol_m = 1200

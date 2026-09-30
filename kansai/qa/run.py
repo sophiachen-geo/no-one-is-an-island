@@ -172,6 +172,32 @@ def inside(d, x, y):
     return c
 
 
+_BLD = {}
+
+
+def bld_counts(g):
+    """Re-count the building footprints (one point inside each) against the page's own hazard layers."""
+    if _BLD:
+        return _BLD
+    from geomfast import Region
+    import os
+    raw = (Path(os.environ.get("KANSAI_DATA", KANSAI / "data")) / "buildings.js").read_text(encoding="utf-8").strip()
+    B = json.loads(raw[raw.index("=") + 1:].rstrip(";"))
+    L = g["layers"]
+    TS, FK, FI, CT = Region(L["tsunami"]), Region(L["flood"]), Region(L["flood_ichida"]), Region(L["shingu"])
+    c = B["cent"]; n = ts = fl = ei = 0
+    for i in range(0, len(c), 2):
+        x, y = c[i], c[i + 1]
+        if not CT.contains(x, y):
+            continue
+        n += 1; t = TS.contains(x, y); f = FK.contains(x, y) or FI.contains(x, y)
+        ts += t; fl += f; ei += (t or f)
+    _BLD.update(total=n, tsunami=ts, flood=fl, either=ei, either_pct=100 * ei / n)
+    if B.get("counts", {}).get("total") != n:
+        raise ValueError("buildings.js counts differ from a re-count — rebuild with tools/17_round3.py")
+    return _BLD
+
+
 # ------------------------------------------------------------------------------------------------ checks
 def check_derived(gate, g, claim):
     c = claim.get("check")
@@ -201,6 +227,8 @@ def check_derived(gate, g, claim):
             if not re.fullmatch(r"[\d\s.+\-*/()]+", c["calc"]):
                 raise ValueError("calc may only contain numbers and + - * / ( )")
             got = eval(c["calc"], {"__builtins__": {}}); what = c["calc"]
+        elif "bld" in c:
+            got = bld_counts(g)[c["bld"]]; what = f"buildings: {c['bld']} (re-counted from kansai/data/buildings.js)"
         elif "valley_ve" in c:
             pv = g["profile"]; B = pv["marks"]["hongu"][0]; KM = pv["river_km"]; ce = pv["coast"][-1][1]
             cpx = 880 / (B + 3 * (KM - B + ce)); ve = (250 / 1900) / (cpx / 1000)
@@ -323,6 +351,123 @@ def check_geo(gate, g):
     gate.ok("geo", f"{len(g['layers'])} layers, {len(g['views'])} views, {len(g['pts'])} points parse and sit in the frame")
 
 
+CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
+LATIN = re.compile(r"[A-Za-z]{3,}")
+
+
+def check_links(gate, reg, seen, media_sources=()):
+    """Every external link is registered; a plan is always named in Japanese and English next to its link.
+    Photo credits link to their source pages, which media.toml registers."""
+    R = {l["url"]: l for l in reg.get("link", [])}
+    for u in media_sources:
+        R.setdefault(u, {"url": u, "kind": "photo", "checked": "media.toml"})
+    for l in reg.get("link", []):
+        for k in ("url", "kind", "checked"):
+            if not l.get(k):
+                gate.err("links", f"register entry lacks {k}", l.get("url", "?"))
+        if l.get("kind") == "plan" and not (l.get("ja") and l.get("en")):
+            gate.err("links", "plan entries need both ja and en titles", l["url"])
+    used = set()
+    for a in seen:
+        u = a["href"]
+        used.add(u)
+        if u not in R:
+            gate.err("links", f"link “{a['text'][:60]}” → {u} is not in links.toml"); continue
+        own = a["text"] if (CJK.search(a["text"]) and LATIN.search(a["text"])) else a["block"]
+        if R[u].get("kind") == "plan" and not (CJK.search(own) and LATIN.search(own)):
+            gate.err("links", f"plan link “{a['text'][:60]}” is not named in both Japanese and English where it appears", u)
+    for u in R:
+        if u not in used and R[u].get("kind") != "photo":
+            gate.warn("links", "registered link no longer used on the page", u)
+    if not any(e[0] == "links" for e in gate.errors):
+        gate.ok("links", f"{len(used)} external links registered; plans named in Japanese and English")
+
+
+HTML_CACHE = {}
+
+
+def page_media(html):
+    HTML_CACHE["html"] = html
+    m = re.search(r'<script type="application/json" id="media-data">(.*?)</script>', html, re.S)
+    return json.loads(m.group(1)) if m else []
+
+
+OPEN_LICENCES = ("CC BY", "CC BY-SA", "CC0", "Public domain", "PD", "GSI", "Government of Japan Standard Terms of Use", "政府標準利用規約")
+
+
+def check_media(gate, reg, media):
+    """Every picture is a registered file with a source, an author and an open licence, credited as registered."""
+    R = {m["file"]: m for m in reg.get("media", [])}
+    n = 0
+    for item in media:
+        for im in item.get("images", []):
+            n += 1
+            src = im.get("src", "")
+            f = KANSAI / src
+            if not f.exists():
+                gate.err("media", f"image file missing: {src}", item.get("id")); continue
+            r = R.get(src)
+            if not r:
+                gate.err("media", f"{src} is not registered in media.toml", item.get("id")); continue
+            for k in ("source", "author", "licence", "licence_url", "shows"):
+                if not r.get(k):
+                    gate.err("media", f"media.toml entry lacks {k}", src)
+            if r.get("licence") and not any(r["licence"].startswith(x) for x in OPEN_LICENCES):
+                gate.err("media", f"licence “{r['licence']}” is not an open licence the page may use", src)
+            cr = re.sub(r"<[^>]+>", "", im.get("credit", ""))
+            if r.get("author") and r["author"] not in cr:
+                gate.err("media", f"credit line does not name the author “{r['author']}”", src)
+            if r.get("licence") and r["licence"] not in cr:
+                gate.err("media", f"credit line does not state the licence “{r['licence']}”", src)
+            if im.get("url") != r.get("source"):
+                gate.err("media", "the picture's source link differs from the register", src)
+    # pictures placed directly in the text: same rules, and the credit must sit in the picture's own caption
+    for fig in re.findall(r'<figure[^>]*>(.*?)</figure>', HTML_CACHE.get("html", ""), re.S):
+        for src in re.findall(r'<img[^>]+src="(img/[^"]+)"', fig):
+            n += 1
+            r = R.get(src)
+            if not (KANSAI / src).exists():
+                gate.err("media", f"image file missing: {src}"); continue
+            if not r:
+                gate.err("media", f"{src} is not registered in media.toml"); continue
+            cap = re.sub(r"<[^>]+>", "", fig)
+            if r.get("author") not in cap or r.get("licence") not in cap:
+                gate.err("media", "the caption does not credit the registered author and licence", src)
+            if r.get("source") and r["source"] not in fig:
+                gate.err("media", "the caption does not link the registered source", src)
+    files = {p.relative_to(KANSAI).as_posix() for p in (KANSAI / "img").glob("*") if p.is_file()} if (KANSAI / "img").exists() else set()
+    used = {im.get("src") for it in media for im in it.get("images", [])} | set(re.findall(r'<img[^>]+src="(img/[^"]+)"', HTML_CACHE.get("html", "")))
+    for f in sorted(files - used):
+        gate.warn("media", "image file not used by the page", f)
+    if not any(e[0] == "media" for e in gate.errors):
+        gate.ok("media", f"{n} pictures: files present, sources, authors and open licences registered and credited")
+
+
+def check_tiles(gate, tiles, g):
+    """Imagery tiles land where the QA's own projection says their corners are, and stay affine to < ½ pixel."""
+    worst, worst_res = 0.0, 0.0
+    for t in tiles:
+        z, x, y, m = t["z"], t["x"], t["y"], t["m"]
+        n = 2 ** z
+        def ll(tx, ty): return tx / n * 360 - 180, math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * ty / n))))
+        nw, ne, sw, se = (tm.to_svg(*ll(*c), g["origin"]) for c in ((x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)))
+        a, b, c, d, e, f = m
+        got = {"nw": (e, f), "ne": (e + 256 * a, f + 256 * b), "sw": (e + 256 * c, f + 256 * d)}
+        for k, want in (("nw", nw), ("ne", ne), ("sw", sw)):
+            worst = max(worst, math.dist(got[k], want))
+        pred_se = (e + 256 * (a + c), f + 256 * (b + d))
+        px = math.dist(nw, ne) / 256
+        worst_res = max(worst_res, math.dist(pred_se, se) / px)
+    if not tiles:
+        gate.err("tiles", "the render report has no tile samples"); return
+    if worst * 100 > 0.1:
+        gate.err("tiles", f"tile corners are {worst * 100:.3f} m from where tm.py puts them")
+    if worst_res > 0.5:
+        gate.err("tiles", f"affine tiles bend by {worst_res:.2f} px at the far corner (limit 0.5 px)")
+    if not any(e[0] == "tiles" for e in gate.errors):
+        gate.ok("tiles", f"{len(tiles)} imagery tiles (z11–18): corners within {worst * 100:.4f} m of tm.py, curvature ≤ {worst_res:.3f} px")
+
+
 # ------------------------------------------------------------------------------------------------ CAVEATS.md
 def caveats_md(reg, pts_ref):
     C = reg.get("claim", [])
@@ -396,6 +541,10 @@ def main():
 
     check_register(gate, reg, rep["inventory"], g)
     check_points(gate, pts_ref, g, rep["usedPoints"])
+    mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}
+    check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", [])])
+    check_media(gate, mreg, page_media(html))
+    check_tiles(gate, rep.get("tiles", []), g)
 
     md = caveats_md(reg, pts_ref)
     cav = Path(a.caveats)

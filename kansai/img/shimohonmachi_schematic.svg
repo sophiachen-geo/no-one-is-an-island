@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="Georgia, 'Noto Serif JP', serif">
+  <title>Shimohonmachi port settlement: schematic section (not to scale)</title>
+  <rect width="800" height="400" fill="#f4efe6"/>
+  <!-- natural levee and the bank down to the river -->
+  <path d="M0 250 C 120 238, 240 214, 360 208 C 450 204, 520 206, 560 214 L 600 300 L 800 300 L 800 400 L 0 400 Z" fill="#e3d6b8" stroke="#8f7b55" stroke-width="2"/>
+  <path d="M600 300 L 800 300 L 800 400 L 600 400 Z" fill="#9fbad0"/>
+  <path d="M560 300 C 620 294, 700 302, 800 296" fill="none" stroke="#5f8db0" stroke-width="2"/>
+  <!-- stone wall and stairs down the bank -->
+  <path d="M556 214 L 596 300" stroke="#6b6152" stroke-width="3"/>
+  <g fill="#bdb3a1" stroke="#6b6152" stroke-width="1.2">
+    <rect x="560" y="222" width="12" height="8"/><rect x="566" y="234" width="12" height="8"/><rect x="572" y="246" width="12" height="8"/>
+    <rect x="578" y="258" width="12" height="8"/><rect x="584" y="270" width="12" height="8"/><rect x="590" y="282" width="12" height="8"/>
+  </g>
+  <!-- storage pits dug into the levee, with light roofs above -->
+  <g stroke="#6b6152" stroke-width="1.6">
+    <rect x="150" y="232" width="70" height="46" fill="#cbb994"/><rect x="270" y="222" width="70" height="46" fill="#cbb994"/><rect x="390" y="212" width="70" height="46" fill="#cbb994"/>
+    <path d="M140 232 L 185 196 L 230 232 M260 222 L 305 186 L 350 222 M380 212 L 425 176 L 470 212" fill="none"/>
+  </g>
+  <g fill="#8a6c42"><ellipse cx="172" cy="262" rx="9" ry="12"/><ellipse cx="197" cy="264" rx="8" ry="10"/><ellipse cx="292" cy="252" rx="9" ry="12"/><ellipse cx="318" cy="254" rx="8" ry="10"/>
+    <rect x="404" y="236" width="18" height="14"/><rect x="428" y="238" width="18" height="12"/></g>
+  <!-- smithy -->
+  <g stroke="#6b6152" stroke-width="1.6" fill="#e9dfca"><rect x="480" y="182" width="50" height="30"/><path d="M474 182 L 505 160 L 536 182" fill="none"/></g>
+  <path d="M495 204 h20 v6 h-20z" fill="#3b3b3b"/><g stroke="#d3614e" stroke-width="1.5"><path d="M505 198 l-6 -8 M507 198 l2 -10 M509 198 l7 -7"/></g>
+  <!-- boat at the stairs -->
+  <path d="M640 292 Q 690 306 740 292 L 730 300 Q 690 312 650 300 Z" fill="#6b4f2f"/>
+  <!-- labels -->
+  <g font-size="17" fill="#2a2a2c">
+    <text x="150" y="140">storage pits · 地下式倉庫</text>
+    <text x="470" y="140" font-size="15">smithy · 鍛冶</text>
+    <text x="600" y="200" font-size="15">stone stairs to the river</text>
+    <text x="600" y="220" font-size="15">石段通路と石垣</text>
+    <text x="40" y="330" font-size="15" fill="#6b5a3a">natural levee · 自然堤防</text>
+    <text x="640" y="350" font-size="16" fill="#1f4f86">Kumano River</text>
+  </g>
+  <g stroke="#6b6152" stroke-width="1" fill="none"><path d="M205 148 L 240 196"/><path d="M500 148 L 505 158"/><path d="M630 226 L 590 254"/></g>
+  <text x="20" y="386" font-size="13" fill="#57555b">Schematic, not to scale, drawn for this page after Shingū City’s description of the excavated site (12th–16th c.).</text>
+</svg>
