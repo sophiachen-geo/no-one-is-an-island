@@ -1,0 +1,210 @@
+# Every picture the Kansai page shows. The QA gate fails if a picture on the page is missing here, if the
+# file is missing, if the licence is not an open one, or if the credit shown on the page does not name the
+# author and the licence registered here. Sources and licences were checked on the file pages on 2026-09-30.
+
+[[media]]
+file = "img/tankaku_hall.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Tankaku_Hall_2021-10_ac_(1).jpg"
+author = "Asturio Cantabrio"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Tankaku Hall (丹鶴ホール), Shingū's cultural complex at Shimohonmachi 2-2-1, built over the medieval Shingū Shimohonmachi site; exterior, October 2021."
+processing = "downloaded 1920px rendition; resized locally to 1600x1064 (1600px long side), JPEG q82; re-encoded for the web at 1280×851, JPEG q78"
+
+[[media]]
+file = "img/kawaramachi_1934.jpg"
+source = "https://commons.wikimedia.org/wiki/File:ShinguKawara1934.jpg"
+author = "Unknown photographer"
+licence = "Public domain (PD-Japan-oldphoto)"
+licence_url = "https://commons.wikimedia.org/wiki/Template:PD-Japan-oldphoto"
+shows = "Kawaramachi (川原町, Miyuki-chō Kawara) on the Kumano riverbed at Shingū in 1934: the dismantlable Kawaraya shop-houses of the seasonal riverbed town."
+processing = "Commons 500px rendition, unchanged (original download throttled by Wikimedia: HTTP 429); re-encoded for the web at 500×386, JPEG q78"
+upstream = "新宮市史編さん委員会編『新宮市史』新宮市役所, 1972, p.468"
+
+[[media]]
+file = "img/kawaramachi_1936.jpg"
+source = "https://commons.wikimedia.org/wiki/File:ShinguKawara1936.jpg"
+author = "辻井浩太郎 (Tsujii Kōtarō)"
+licence = "Public domain (PD-Japan + PD-1996)"
+licence_url = "https://commons.wikimedia.org/wiki/Template:PD-1996"
+shows = "Shops of Kawaramachi, Shingū, photographed 26 May 1936 by geographer Tsujii Kōtarō for his 1938 study of the riverbed town's decline."
+processing = "Commons 500px rendition, unchanged (original download throttled by Wikimedia: HTTP 429); re-encoded for the web at 500×292, JPEG q78"
+upstream = "辻井浩太郎「季節的聚落――新宮の川原町の衰滅」『地理研究』27(6), 1938, p.68"
+
+[[media]]
+file = "img/hayatama_haiden.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Shingu_Kumano_Hayatama-taisha_Haiden_Exterior_04.jpg"
+author = "Zairon"
+licence = "CC BY 4.0"
+licence_url = "https://creativecommons.org/licenses/by/4.0"
+shows = "Kumano Hayatama Taisha (熊野速玉大社): the vermilion worship hall seen from the inner courtyard, October 2023."
+processing = "downloaded 1920px rendition; resized locally to 1600x1019 (1600px long side), JPEG q82; re-encoded for the web at 1280×815, JPEG q78"
+
+[[media]]
+file = "img/hayatama_entrance.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Entrance,_Kumano_Hayatama_Shrine_-_May_23,_2019.jpg"
+author = "Tetsuhiro Terada"
+licence = "CC BY 2.0"
+licence_url = "https://creativecommons.org/licenses/by/2.0"
+shows = "Kumano Hayatama Taisha approach: the vermilion torii, stone lanterns and bridge at the shrine entrance, May 2019."
+processing = "downloaded 1920px rendition; resized locally to 1600x1067 (1600px long side), JPEG q82; re-encoded for the web at 1280×854, JPEG q78"
+upstream = "https://www.flickr.com/photos/ttshr1970/47949193813/"
+
+[[media]]
+file = "img/kamikura_gotobiki.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Kamikura-jinja,_shaden.jpg"
+author = "Saigen Jiro"
+licence = "CC0"
+licence_url = "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+shows = "Kamikura Shrine (神倉神社) on its stone terrace beneath the Gotobiki-iwa boulder, Shingū, November 2017."
+processing = "downloaded 1920px rendition; resized locally to 1600x1064 (1600px long side), JPEG q82; re-encoded for the web at 1280×851, JPEG q78"
+
+[[media]]
+file = "img/oto_matsuri_torches.jpg"
+source = "https://commons.wikimedia.org/wiki/File:519wakayama-Kumano_Oto_Festival-xl.jpg"
+author = "panpanzupan"
+licence = "CC BY 4.0"
+licence_url = "https://creativecommons.org/licenses/by/4.0"
+shows = "Oto Matsuri (御燈祭 / お燈まつり), 6 February 2016: white-clad torch-bearers packed below the torii at Kamikura Shrine before the gate opens (FIND/47 project)."
+processing = "downloaded 1920px rendition; resized locally to 1600x1065 (1600px long side), JPEG q82; re-encoded for the web at 1280×852, JPEG q78"
+upstream = "FIND/47 project (app.find47.jp)"
+
+[[media]]
+file = "img/oto_matsuri_steps.jpg"
+source = "https://commons.wikimedia.org/wiki/File:520wakayama-Kumano_Oto_Festival-xl.jpg"
+author = "panpanzupan"
+licence = "CC BY 4.0"
+licence_url = "https://creativecommons.org/licenses/by/4.0"
+shows = "Oto Matsuri, 6 February 2016: a stream of torches and white-clad participants on the Kamikura slope below the torii (FIND/47 project)."
+processing = "downloaded 1920px rendition; resized locally to 1600x1065 (1600px long side), JPEG q82; re-encoded for the web at 1280×852, JPEG q78"
+upstream = "FIND/47 project (app.find47.jp)"
+
+[[media]]
+file = "img/mifune_matsuri_hayafune.jpg"
+source = "https://commons.wikimedia.org/wiki/File:%E5%BE%A1%E8%88%B9%E7%A5%AD_%E6%97%A9%E8%88%B9.JPG"
+author = "Shindo"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Mifune Matsuri (御船祭), 16 October 2014: hayabune (早船) racing boats on the Kumano River, still rowing hard after the race."
+processing = "downloaded 1920px rendition; resized locally to 1600x1067 (1600px long side), JPEG q82; re-encoded for the web at 1280×854, JPEG q78"
+
+[[media]]
+file = "img/mifune_island.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Mifune_island.jpg"
+author = "Miyuki Meinaka"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Mifune-jima (御船島), the islet in the Kumano River that the Mifune Matsuri boats circle (Kihō, Mie side), August 2018."
+processing = "downloaded 1920px rendition; resized locally to 1600x1200 (1600px long side), JPEG q82; re-encoded for the web at 1280×960, JPEG q78"
+
+[[media]]
+file = "img/ukishima_no_mori.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Ukishima-no-mori-1.jpg"
+author = "Saigen Jiro"
+licence = "CC0"
+licence_url = "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+shows = "Ukishima-no-mori (浮島の森), the floating peat-island forest (national natural monument) in central Shingū, seen across its encircling water channel, November 2017."
+processing = "downloaded 1920px rendition; resized locally to 1600x1064 (1600px long side), JPEG q82; re-encoded for the web at 1280×851, JPEG q78"
+
+[[media]]
+file = "img/shingu_castle_walls.jpg"
+source = "https://commons.wikimedia.org/wiki/File:171008_Shingu_Castle_Shingu_Wakayama_pref_Japan01n.jpg"
+author = "663highland"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Shingū Castle ruins (新宮城跡 / 丹鶴城): stone walls above the Kumano River, with the JR Kisei Line bridge behind, October 2017."
+processing = "downloaded 1920px rendition; resized locally to 1600x1067 (1600px long side), JPEG q82; re-encoded for the web at 1280×854, JPEG q78"
+
+[[media]]
+file = "img/shingu_castle_mizunote.jpg"
+source = "https://commons.wikimedia.org/wiki/File:171008_Shingu_Castle_Shingu_Wakayama_pref_Japan17n.jpg"
+author = "663highland"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Shingū Castle ruins: looking down on the riverside lower terrace (the Mizunote / 水ノ手 area) with its low stone outlines beside the Kumano River, October 2017."
+processing = "downloaded 1920px rendition; resized locally to 1600x1067 (1600px long side), JPEG q82; re-encoded for the web at 1280×854, JPEG q78"
+
+[[media]]
+file = "img/shingu_port.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Chikyu_3.jpg"
+author = "K's"
+licence = "CC BY-SA 3.0"
+licence_url = "http://creativecommons.org/licenses/by-sa/3.0/"
+shows = "Shingū Port (新宮港) at night, with the deep-sea drilling vessel Chikyū moored and lit up, February 2008."
+processing = "Commons 1280px rendition, unchanged (original download throttled by Wikimedia: HTTP 429); re-encoded for the web at 1280×960, JPEG q78"
+
+[[media]]
+file = "img/kumano_river.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Kumano_River_(51929861553).jpg"
+author = "Raita Futo"
+licence = "CC BY 2.0"
+licence_url = "https://creativecommons.org/licenses/by/2.0"
+shows = "The Kumano River upstream of central Shingū, part of the river pilgrimage route between Hongū and Hayatama, November 2020 (no boats shown)."
+processing = "downloaded 1920px rendition; resized locally to 1600x1067 (1600px long side), JPEG q82; re-encoded for the web at 1280×854, JPEG q78"
+upstream = "https://www.flickr.com/photos/raita/51929861553/"
+
+[[media]]
+file = "img/kumano_river_mouth.jpg"
+source = "https://commons.wikimedia.org/wiki/File:3_bridges_at_the_mouth_of_Kumano_river.jpg"
+author = "r-lab"
+licence = "CC BY 2.0"
+licence_url = "https://creativecommons.org/licenses/by/2.0"
+shows = "The lower Kumano River near its mouth at Shingū, with the red-arched road bridge beyond the reed beds, November 2016."
+processing = "downloaded 1920px rendition; resized locally to 1600x1060 (1600px long side), JPEG q82; re-encoded for the web at 1280×848, JPEG q78"
+upstream = "https://www.flickr.com/photos/r-lab/30822390186/"
+
+[[media]]
+file = "img/shingu_view_from_kamikura.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Kamikura-jinja08s1680.jpg"
+author = "663highland"
+licence = "CC BY 2.5"
+licence_url = "https://creativecommons.org/licenses/by/2.5"
+shows = "Panorama over central Shingū to the Pacific from Kamikura Shrine, April 2005."
+processing = "Commons 1280px rendition, unchanged (original download throttled by Wikimedia: HTTP 429); re-encoded for the web at 1280×960, JPEG q78"
+
+[[media]]
+file = "img/shingu_aerial_2019.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Shingu_city_center_area_Aerial_photograph.2019.jpg"
+author = "国土地理院 (GSI)"
+licence = "GSI content terms (CC BY 4.0-compatible)"
+licence_url = "https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html"
+shows = "Aerial mosaic of central Shingū, Shingū Castle hill and the lower Kumano River, 5 October 2019."
+processing = "downloaded 1920px rendition; resized locally to 1577x1600 (1600px long side), JPEG q82; re-encoded for the web at 1262×1280, JPEG q78"
+upstream = "国土地理院 地図・空中写真閲覧サービス, photos CKK20194-C2/C3/C4-45…56 (36-frame mosaic made by the Commons uploader)"
+
+[[media]]
+file = "img/sato_haruo_museum.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Sato_Haruo_Memorial_Museum07.jpg"
+author = "Bioika0201"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Satō Haruo Memorial Museum (佐藤春夫記念館) in the Kumano Hayatama Taisha precinct: entrance gate and signboard."
+processing = "downloaded 1920px rendition; resized locally to 1600x900 (1600px long side), JPEG q82; re-encoded for the web at 1280×720, JPEG q78"
+
+[[media]]
+file = "img/nishimura_house.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Former_Nishimura_House_2021-10_ac_(1).jpg"
+author = "Asturio Cantabrio"
+licence = "CC BY-SA 4.0"
+licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
+shows = "Former Nishimura House (旧西村家住宅, Nishimura Isaku Memorial Museum), Isaku's own 1914 design, Important Cultural Property, October 2021."
+processing = "downloaded 1920px rendition; resized locally to 1600x1064 (1600px long side), JPEG q82; re-encoded for the web at 1280×851, JPEG q78"
+
+[[media]]
+file = "img/mizuya_analogue.jpg"
+source = "https://commons.wikimedia.org/wiki/File:Mizuya_02.jpg"
+author = "アセルス"
+licence = "CC0"
+licence_url = "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+shows = "ANALOGUE (not Shingū): a mizuya (水屋), the flood-refuge storehouse of Kiso Three Rivers wajū farmhouses, raised on a high stone base; reconstructed 'wajū farmhouse' exhibit at the Kiso Sansen Park Center, Kaizu, Gifu, February 2024."
+processing = "downloaded 1280px rendition; resized locally to 1232x1600 (1600px long side), JPEG q82; re-encoded for the web at 986×1280, JPEG q78"
+analogue = true
+
+[[media]]
+file = "img/shimohonmachi_schematic.svg"
+source = "https://www.city.shingu.lg.jp/info/690"
+author = "this page"
+licence = "CC BY 4.0"
+licence_url = "https://creativecommons.org/licenses/by/4.0/"
+shows = "Schematic, not to scale, drawn for this page after the city's description of the site: storage pits dug into the natural levee (地下式倉庫), a smithy, and stone stairs down to the river."
+processing = "drawn by hand as SVG; no photograph traced"

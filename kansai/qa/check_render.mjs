@@ -17,10 +17,12 @@ const { chromium } = pw.default || pw;
 
 const [,, pagePath, reportPath, ...rest] = process.argv;
 const shotsDir = rest[0] === '--shots' ? rest[1] : null;
+const chartsOnly = rest.includes('--charts-only');   // self-test: box and overflow rules on a small synthetic page
 if (shotsDir) mkdirSync(shotsDir, { recursive: true });
 const url = pathToFileURL(resolve(pagePath)).href;
 const errors = [], warnings = [];
 const err = (check, msg, where = '') => errors.push({ check, msg, where });
+const OVERFLOW_SEL = '.picto-row figcaption, .stats > div, .chain .i, .board p, figcaption, .legend span, .plans a.pl, .chips a, .gstats div, td, th, button, .viewname, .mini figcaption span';
 const warn = (check, msg, where = '') => warnings.push({ check, msg, where });
 
 const browser = await chromium.launch();
@@ -50,6 +52,18 @@ async function open(viewport, opts = {}) {
 }
 
 // ---------------------------------------------------------------- desktop pass
+if (chartsOnly) {
+  for (const noFonts of [false, true]) {
+    const o = await open({ width: 1440, height: 900 }, { noFonts });
+    await chartChecks(o.page, noFonts ? 'fallback-font' : '1440px');
+    await htmlOverflow(o.page, noFonts ? 'fallback-font' : '1440px');
+    await o.ctx.close();
+  }
+  await browser.close();
+  writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: [], usedPoints: [], tiles: [], links: [] }, null, 1));
+  console.log(`charts-only QA: ${errors.length} error(s)`);
+  process.exit(0);
+}
 const { ctx, page } = await open({ width: 1440, height: 900 });
 const hasQA = await page.evaluate(() => !!window.__QA);
 if (!hasQA) { err('qa-hook', 'window.__QA missing — page script failed or hook removed'); }
@@ -379,7 +393,6 @@ if (shotsDir) {
   const el = await page.$('#after'); if (el) await el.screenshot({ path: `${shotsDir}/desktop_after.png` });
 }
 // ---------------------------------------------------------------- HTML text boxes: nothing may overflow its own box
-const OVERFLOW_SEL = '.picto-row figcaption, .stats > div, .chain .i, .board p, figcaption, .legend span, td, th, button, .viewname, .mini figcaption span';
 async function htmlOverflow(pg, tag) {
   const bad = await pg.evaluate((sel) => [...document.querySelectorAll(sel)].filter((e) => e.offsetParent && e.clientWidth > 0 && e.scrollWidth > e.clientWidth + 1)
     .map((e) => `“${e.textContent.trim().slice(0, 60)}” is ${e.scrollWidth - e.clientWidth}px wider than its box`), OVERFLOW_SEL);

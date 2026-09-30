@@ -73,6 +73,39 @@ def main():
     rep = json.loads(json.dumps(base_rep)); rep["errors"].append({"check": "label-overlap", "msg": "A ⟷ B", "where": "desktop step 3"})
     results.append(case("a render failure blocks the gate", "render/", rep=rep))
     results.append(case("a hand-edited CAVEATS.md is caught", "caveats", cav=CAVEATS.read_text(encoding="utf-8") + "\n- sneaky edit\n"))
+    # links: every external link registered; a plan always named in Japanese and English
+    rep = json.loads(json.dumps(base_rep)); rep["links"].append({"href": "https://example.com/plan.pdf", "text": "a plan", "block": "a plan"})
+    results.append(case("an unregistered link is caught", "links", rep=rep))
+    rep = json.loads(json.dumps(base_rep)); rep["links"].append({"href": "https://www.city.shingu.lg.jp/Info/773", "text": "the plan", "block": "see the plan"})
+    results.append(case("a plan named only in English is caught", "links", rep=rep))
+    # imagery: a tile placed half a unit (50 m) off
+    rep = json.loads(json.dumps(base_rep)); rep["tiles"][0]["m"][4] += 0.5
+    results.append(case("a misplaced imagery tile is caught", "tiles", rep=rep))
+    # buildings: one footprint moved into the sea changes a count the text relies on
+    ddir = Path(tempfile.mkdtemp()); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
+    B = json.loads(raw[raw.index("=") + 1:].rstrip(";")); B["counts"]["total"] -= 1
+    (ddir / "buildings.js").write_text("window.__BLD=" + json.dumps(B, separators=(",", ":")) + ";", encoding="utf-8")
+    import os
+    os.environ["KANSAI_DATA"] = str(ddir)
+    results.append(case("building data that no longer matches is caught", "derived"))
+    del os.environ["KANSAI_DATA"]
+    # pictures: a picture whose file does not exist
+    html = base_html.replace('<script type="application/json" id="media-data">', '<script type="application/json" id="media-data">', 1)
+    m = re.search(r'(<script type="application/json" id="media-data">)(.*?)(</script>)', html, re.S)
+    media = json.loads(m.group(2)); media.append({"id": "ghost", "pt": "castle", "groups": "heritage", "title": "Ghost", "images": [{"src": "img/ghost.jpg", "w": 10, "h": 10, "alt": "", "caption": "", "credit": "Photo: nobody, CC BY 4.0"}]})
+    html = html[:m.start(2)] + json.dumps(media, ensure_ascii=False) + html[m.end(2):]
+    results.append(case("a picture without a registered file is caught", "media", html=html))
+    # boxes: the plan diagram that once spilled its label (rendered in Chromium, web fonts on and off)
+    syn = Path(tempfile.mkdtemp()) / "box.html"
+    syn.write_text('<!doctype html><meta charset="utf-8"><style>body{font-family:"Noto Serif JP",Georgia,serif}.chart text{font-size:10px}</style>'
+                   '<figure class="fig chart" style="width:420px"><svg viewBox="0 -5 400 151" aria-label="plan diagram">'
+                   '<g><rect x="261.5" y="92" width="138" height="26" rx="3" fill="#f4efe6" stroke="#1d998c"/>'
+                   '<text x="330.5" y="109" text-anchor="middle" class="s">Location Optimization Plan (立地適正化計画)</text></g></svg></figure>', encoding="utf-8")
+    out = syn.parent / "box.json"
+    r = subprocess.run(["node", str(HERE / "check_render.mjs"), str(syn), str(out), "--charts-only"], capture_output=True, text=True)
+    caught = out.exists() and any(e["check"] == "text-in-box" for e in json.loads(out.read_text(encoding="utf-8"))["errors"])
+    print(f"  {'✓' if caught else '✗'} {'text spilling out of a diagram box is caught':48s} → {'fails: text-in-box' if caught else 'not caught: ' + (r.stderr or r.stdout)[-300:]}")
+    results.append(caught)
     shutil.rmtree(tmp, ignore_errors=True)
     n_ok = sum(results)
     print(f"\n{n_ok}/{len(results)} self-test cases behave as expected")

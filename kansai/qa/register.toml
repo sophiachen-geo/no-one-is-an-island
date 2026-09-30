@@ -967,3 +967,27 @@ match = ["Location Optimization Plan (Shingū City, March 2017, revised Septembe
 status = "verified"
 source = "the documents' own pages: 立地適正化計画 「平成２９年３月 策定 / 令和３年９月 改訂」; 都市計画マスタープラン 「平成24年12月」; 国土強靭化地域計画 「令和元年12月に…策定し、第5回修正を令和8年3月」; 地域防災計画 令和８年３月修正版; 観光振興計画 平成30年4月; 東牟婁圏域マスタープラン 平成27年5月; 記録集 第2章 被害状況; hazard map in 日本語・English・中文・한국어・Tagalog"
 url = "https://www.city.shingu.lg.jp/Info/773"
+
+# ================================================================ round 3: pictures
+[[identifier]]
+pattern = 'CC BY(?:-SA)? \d\.\d(?:-compatible)?|CC0|PD-\d{4}|PD-Japan(?:-oldphoto)?|663highland|Bioika0201|Kiso Three Rivers'
+why = "licence names, photographers' user names and a place name"
+
+[[claim]]
+id = "photo-dates"
+title = "Dates of the photographs"
+match = ["Kawaramachi in 1934", "photographed on 26 May 1936", "with the JR Kisei Line bridge behind (2017)", "(identified from the view, 2017)",
+         "at the shrine entrance (2019)", "Oto Matsuri, 6 February 2016", "Mifune Matsuri, 16 October 2014", "that the boats circle (2018)",
+         "on the river route between Hongū and Hayatama (2020)", "the National Historic Site, October 2021", "from the air (GSI, 2019)", "the principle is the same: a second, higher room"]
+status = "verified"
+source = "dates from each file page on Wikimedia Commons and GSI (kansai/qa/media.toml)"
+url = "https://commons.wikimedia.org/"
+
+[[claim]]
+id = "sources-data-editions"
+title = "Data editions listed in Sources & method"
+match = ["land-use mesh L03-b (2021, forest), natural-park zones A10 (2015)", "sediment-disaster zone designations (September 2026)",
+         "and one GSI aerial photograph", "Building counts test one point inside each footprint"]
+status = "verified"
+source = "MLIT 国土数値情報 L03-b-21 (2021) and A10-15 (2015); Wakayama designations as of 2026-09-15; one GSI photograph (media.toml); method of 17_round3.py"
+url = "https://nlftp.mlit.go.jp/ksj/"

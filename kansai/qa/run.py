@@ -180,7 +180,8 @@ def bld_counts(g):
     if _BLD:
         return _BLD
     from geomfast import Region
-    raw = (KANSAI / "data" / "buildings.js").read_text(encoding="utf-8").strip()
+    import os
+    raw = (Path(os.environ.get("KANSAI_DATA", KANSAI / "data")) / "buildings.js").read_text(encoding="utf-8").strip()
     B = json.loads(raw[raw.index("=") + 1:].rstrip(";"))
     L = g["layers"]
     TS, FK, FI, CT = Region(L["tsunami"]), Region(L["flood"]), Region(L["flood_ichida"]), Region(L["shingu"])
@@ -354,9 +355,12 @@ CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
 LATIN = re.compile(r"[A-Za-z]{3,}")
 
 
-def check_links(gate, reg, seen):
-    """Every external link is registered; a plan is always named in Japanese and English next to its link."""
+def check_links(gate, reg, seen, media_sources=()):
+    """Every external link is registered; a plan is always named in Japanese and English next to its link.
+    Photo credits link to their source pages, which media.toml registers."""
     R = {l["url"]: l for l in reg.get("link", [])}
+    for u in media_sources:
+        R.setdefault(u, {"url": u, "kind": "photo", "checked": "media.toml"})
     for l in reg.get("link", []):
         for k in ("url", "kind", "checked"):
             if not l.get(k):
@@ -373,13 +377,17 @@ def check_links(gate, reg, seen):
         if R[u].get("kind") == "plan" and not (CJK.search(own) and LATIN.search(own)):
             gate.err("links", f"plan link “{a['text'][:60]}” is not named in both Japanese and English where it appears", u)
     for u in R:
-        if u not in used:
+        if u not in used and R[u].get("kind") != "photo":
             gate.warn("links", "registered link no longer used on the page", u)
     if not any(e[0] == "links" for e in gate.errors):
         gate.ok("links", f"{len(used)} external links registered; plans named in Japanese and English")
 
 
+HTML_CACHE = {}
+
+
 def page_media(html):
+    HTML_CACHE["html"] = html
     m = re.search(r'<script type="application/json" id="media-data">(.*?)</script>', html, re.S)
     return json.loads(m.group(1)) if m else []
 
@@ -413,8 +421,22 @@ def check_media(gate, reg, media):
                 gate.err("media", f"credit line does not state the licence “{r['licence']}”", src)
             if im.get("url") != r.get("source"):
                 gate.err("media", "the picture's source link differs from the register", src)
+    # pictures placed directly in the text: same rules, and the credit must sit in the picture's own caption
+    for fig in re.findall(r'<figure[^>]*>(.*?)</figure>', HTML_CACHE.get("html", ""), re.S):
+        for src in re.findall(r'<img[^>]+src="(img/[^"]+)"', fig):
+            n += 1
+            r = R.get(src)
+            if not (KANSAI / src).exists():
+                gate.err("media", f"image file missing: {src}"); continue
+            if not r:
+                gate.err("media", f"{src} is not registered in media.toml"); continue
+            cap = re.sub(r"<[^>]+>", "", fig)
+            if r.get("author") not in cap or r.get("licence") not in cap:
+                gate.err("media", "the caption does not credit the registered author and licence", src)
+            if r.get("source") and r["source"] not in fig:
+                gate.err("media", "the caption does not link the registered source", src)
     files = {p.relative_to(KANSAI).as_posix() for p in (KANSAI / "img").glob("*") if p.is_file()} if (KANSAI / "img").exists() else set()
-    used = {im.get("src") for it in media for im in it.get("images", [])}
+    used = {im.get("src") for it in media for im in it.get("images", [])} | set(re.findall(r'<img[^>]+src="(img/[^"]+)"', HTML_CACHE.get("html", "")))
     for f in sorted(files - used):
         gate.warn("media", "image file not used by the page", f)
     if not any(e[0] == "media" for e in gate.errors):
@@ -519,8 +541,8 @@ def main():
 
     check_register(gate, reg, rep["inventory"], g)
     check_points(gate, pts_ref, g, rep["usedPoints"])
-    check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []))
     mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}
+    check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", [])])
     check_media(gate, mreg, page_media(html))
     check_tiles(gate, rep.get("tiles", []), g)
 
