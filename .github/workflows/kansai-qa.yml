@@ -10,6 +10,11 @@ on:
       - ".github/workflows/kansai-qa.yml"
       - ".github/workflows/deploy.yml"
   workflow_call:
+    inputs:
+      deploy:
+        description: "Set by deploy.yml; skips the advisory link check so an outside website cannot hold up a publish"
+        type: boolean
+        default: false
   workflow_dispatch:
 
 permissions:
@@ -50,10 +55,14 @@ jobs:
       - name: Gate self-test
         run: python3 kansai/qa/selftest.py --report qa-render.json
 
-      # every registered link still answers (advisory: a ministry outage must not block a publish)
+      # every registered link still answers. Advisory: never part of a deploy (a ministry site that hangs
+      # rather than refuses would otherwise run the job into its 20-minute limit and block the publish), and
+      # cut off after 6 minutes here, which marks the step but does not fail the check
       - name: Link check (advisory)
+        if: ${{ !inputs.deploy }}
         continue-on-error: true
-        run: python3 kansai/qa/check_links.py --json qa-links.json
+        timeout-minutes: 6
+        run: python3 -u kansai/qa/check_links.py --json qa-links.json
 
       - name: Upload report and screenshots
         if: always()

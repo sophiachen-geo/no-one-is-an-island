@@ -6,8 +6,9 @@
 
 A link passes when it answers HTTP 200 (after redirects), or 206 to a ranged request. Some government
 servers refuse HEAD or bot user agents, so each URL is tried with GET and a browser-like agent, with retries.
-Exit status 1 if any link fails. CI runs this as an advisory job: an outage of a ministry website must not
-block a publish, but a link that stays broken shows up in every run until the register is fixed.
+Exit status 1 if any link fails. CI runs this as an advisory step on pull requests and manual QA runs, never
+inside a deploy: an outage of a ministry website must not block a publish, but a link that stays broken shows
+up in every pull-request run until the register is fixed.
 """
 import argparse, json, sys, time, urllib.error, urllib.request
 from pathlib import Path
