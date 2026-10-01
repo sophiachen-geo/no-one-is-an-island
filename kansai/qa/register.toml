@@ -57,13 +57,13 @@ pattern = '^[1-7]$|^[1-7] · |^[1-7] (?=[a-z])|layers 1–7'
 why = "ordinal numbering of the seven layers of function"
 
 [[identifier]]
-pattern = 'no one is an island|ONE CITY, SEVERAL GEOGRAPHIES|THE KUMANO AS ONE SYSTEM|Interventions along one system|the dry one|one of that region’s most|cubic metres per second'
+pattern = 'no one is an island|ONE CITY, SEVERAL GEOGRAPHIES|one city, several geographies|THE KUMANO AS ONE SYSTEM|The Kumano as one system|Interventions along one system|the dry one|one of that region’s most|cubic metres per second'
 why = "titles and idioms, not counts"
 
 # ================================================================ counts the page enumerates itself
 [[claim]]
 id = "count-structure"
-match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS CONVERGE", "Four directions of risk",
+match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS CONVERGE", "Four hazard pathways converge", "Four directions of risk",
          "Together, the two forms", "intersection of two major transitions", "WATER FROM THREE OF THE FOUR DIRECTIONS", "the slopes are the fourth",
          "This creates a second resilience requirement", "the last three manage that residual risk", "The four directions are not independent",
          "a hazard from one direction weakens the defences against another", "Two patterns follow",
@@ -3775,7 +3775,7 @@ why = "idioms and the name of a model, not counts"
 
 [[claim]]
 id = "fn-ride-circuit"
-match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "SHINGŪ’S THREE SHRINES BY BICYCLE",
+match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "SHINGŪ’S THREE SHRINES BY BICYCLE", "Field notes · Shingū’s three shrines by bicycle",
          "three stops, 25 photographs", "field visit, 28 September 2025", "the first stop"]
 status = "verified"
 source = "新宮市観光協会, 体験コース「世界遺産･新宮三社詣で まちなかサイクリング」 (itinerary 6): 阿須賀神社, 熊野速玉大社, 神倉神社; the date from our photographs' EXIF (DateTimeOriginal 2025:09:28, OffsetTimeOriginal +09:00); the photographs fall in three groups (town.py, within 150 m), the first at Asuka at 10:37"
