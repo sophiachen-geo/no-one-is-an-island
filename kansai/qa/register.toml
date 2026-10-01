@@ -816,10 +816,10 @@ check = { rk = "net_share.floodL2_cut_of_not_direct.Kiho", fmt = "{:.0f}% of Kih
 
 [[claim]]
 id = "net-replay"
-match = ["+26 min to the medical centre from Kumanogawa-chō with Route 168 cut as in 2011"]
+match = ["26 min more to the medical centre from Kumanogawa with Route 168 cut as in 2011"]
 status = "derived"
 source = "kansai/tools/risk (kansai/data/risk.js): mean drive time of Kumanogawa-chō's residents to 新宮市立医療センター with Route 168 宮井–city removed, minus the mean without"
-check = { rk = "net_replay_delta_min", fmt = "+{:.0f} min to the medical centre" }
+check = { rk = "net_replay_delta_min", fmt = "{:.0f} min more to the medical centre" }
 
 [[claim]]
 id = "net-caption"
