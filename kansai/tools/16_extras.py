@@ -32,7 +32,8 @@ def to_d(geom, prec=1):
 P = lambda gj: transform(TF, shape(gj))
 L = g["layers"]; S = g.setdefault("stats", {})
 
-# --- Kumano Kodo: surveyed/official (OSM relations Nakahechi+Kohechi; Mie Iseji KML) vs rebuilt on OSM network
+# --- Kumano Kodo: Nakahechi + Kohechi from OSM relations (layer kodo, built in 07_build.py); Iseji, Okugake and Ohechi
+#     rebuilt on the OSM path network by 11_routes_kodo.py (kodo_iseji keeps its own layer so the page can switch it alone)
 kr = {f["properties"]["route"]: f for f in json.load(open("kodo_routes.geojson"))["features"]}
 iseji = P(kr["iseji"]["geometry"])
 L["kodo_iseji"] = to_d(linemerge(iseji).simplify(25), 1)

@@ -22,7 +22,7 @@ python3 $T/06_admin.py     # N03 municipalities/prefectures, basin shares, Higas
 python3 $T/07_build.py     # all layers → geo.json (+ zone/hazard overlap stats, drive-time bands)
 python3 $T/08_profile.py   # Totsukawa–Kumano long profile → profile.json
 python3 $T/10_gsi_dem.py        # GSI DEM5A (5 m) tiles for the old town → gsi_dem5.npy
-python3 $T/11_routes_kodo.py --ohechi  # Kumano Kodō: Iseji (Mie KML), Okugake + Ohechi routed on OSM paths
+python3 $T/11_routes_kodo.py --ohechi  # Kumano Kodō: Iseji, Okugake and Ohechi routed on OSM paths
 python3 $T/12_hazard_access.py  # roads inside landslide zones (+ stats)
 python3 $T/13_flows.py          # timber/charcoal flows down the Kitayama and Kumano; schematic sea lanes
 python3 $T/14_ichida_basin.py   # digitise MLIT's Ichida-gawa basin map (図-1.2) → ichida/ichida_basin.json
@@ -53,7 +53,8 @@ number that reaches the page needs an entry in `kansai/qa/register.toml`; the ga
   (2023), P17 fire and P18 police stations (2012), P29 schools (2023).
 - © OpenStreetMap contributors (ODbL): coastline, rivers, roads, railway, Kumano Kodō, places, POIs.
 - SRTM 1″ (NASA) via AWS Terrain Tiles; GSI DEM5A 5 m laser elevation tiles (old-town relief, ground heights).
-- Mie Prefecture 熊野古道伊勢路ナビ (Iseji route KML); MLIT 市田川流域大規模浸水対策計画 (2019, basin map 図-1.2).
+- GSI 電子国土基本図 place names (experimental_anno tiles): the Iseji's passes and villages; MLIT 市田川流域大規模浸水対策計画
+  (2019, basin map 図-1.2).
 
 ## Choices worth knowing
 
@@ -64,8 +65,11 @@ number that reaches the page needs an entry in `kansai/qa/register.toml`; the ga
 - Drive time: OSM road classes at 70/45/35/30/25 km/h (motorway → tertiary) from the Shingū Municipal
   Medical Center; reached roads rasterised at 250 m and grown by a 1.2 km catchment. A sketch of reach,
   not a service-area study.
-- Kumano Kodō: Nakahechi and Kohechi come from OSM relations; Iseji from Mie Prefecture's 伊勢路ナビ KML
-  (official lines, marked All Rights Reserved); Ōmine Okugake and Ohechi are rebuilt by routing along OSM
-  paths between documented waypoints (`11_routes_kodo.py`), with a straight leg where no path connects.
+- Kumano Kodō: Nakahechi and Kohechi come from OSM relations. Iseji, Ōmine Okugake and Ohechi are rebuilt by
+  routing along OSM paths between documented waypoints (`11_routes_kodo.py`), with a straight leg where no path
+  connects. The Iseji's waypoints are the passes and villages GSI's base map names along the course (Mie Prefecture's
+  section names fix it; its route lines are All Rights Reserved and are not used), its 浜街道 the OSM coastline of
+  七里御浜 as far as 井田. Against a local copy of Mie's lines (`--check-mie`, not redistributed) the rebuilt Iseji lies a median
+  10 m away, 69% within 100 m and 98% within 500 m (1 October 2026); the 荷坂峠 variant is not drawn.
 - Map points that are not in `07_build.py` live in `pts2.json` (it overrides; e.g. the Nanairo dam and
   Kushimoto were corrected there after the QA points check).
