@@ -73,7 +73,7 @@ def okugake_weight(t):
     if "奥駈" in nm or "奥駆" in nm: return 0.25
     if hw in ("path", "footway", "steps", "bridleway"): return 1.0
     if hw == "track": return 1.8
-    if hw in ("unclassified", "residential", "service", "tertiary", "secondary"): return 3.0
+    if hw in ("unclassified", "residential", "service", "tertiary", "secondary", "primary"): return 3.0
     return None
 
 def ohechi_weight(t):
@@ -96,7 +96,8 @@ def pk(name, near=None):
     c = peaks[name]
     if near: c = sorted(c, key=lambda p: (p[0] - near[0]) ** 2 + (p[1] - near[1]) ** 2)
     return c[0]
-OKU = [(135.8589, 34.3656), pk("青根ヶ峰"), pk("四寸岩山"), pk("大天井ヶ岳"), pk("山上ヶ岳"), pk("大普賢岳"), pk("国見岳"), pk("七曜岳"),
+# the start: 金峯山寺 蔵王堂, the centre of OSM way 179810887
+OKU = [(135.85885, 34.36838), pk("青根ヶ峰"), pk("四寸岩山"), pk("大天井ヶ岳"), pk("山上ヶ岳"), pk("大普賢岳"), pk("国見岳"), pk("七曜岳"),
        pk("行者還岳"), pk("弁天の森"), pk("弥山"), pk("八経ヶ岳"), pk("明星ヶ岳"), pk("仏生嶽"), pk("孔雀岳"), pk("釈迦ヶ岳"),
        pk("大日岳", (135.905, 34.10)), pk("天狗山"), pk("地蔵岳", (135.90, 34.08)), pk("涅槃岳"), pk("転法輪岳"), pk("行仙岳", (135.905, 34.00)),
        pk("笠捨山"), pk("地蔵岳", (135.885, 33.987)), pk("玉置山", (135.83, 33.927)), pk("大森山", (135.805, 33.904)), (135.7707, 33.8408)]

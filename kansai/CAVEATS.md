@@ -64,7 +64,7 @@ These come from the author's text. No source was found or checked for them yet.
 ### Geometry
 - **Ichida-gawa basin outline** — The dashed outline was digitised from MLIT's printed basin map (図-1.2). It covers 5.85 km², 9% more than the official 5.36 km², so the page quotes the official figure.
 - **Kumano basin** — The basin was delineated from 3″ SRTM elevation (2,365 km²; official 2,360 km²). Prefecture shares come from that outline.
-- **Kumano Kodō routes** — Nakahechi and Kohechi follow OSM relations. The Iseji, Ōmine Okugake and Ohechi are rebuilt by routing along OSM paths between waypoints; one long leg near Yoshino is drawn straight where no path connects. The Iseji's waypoints are the passes and villages GSI's base map names along the course that Mie Prefecture's 熊野古道伊勢路ナビ sets out, routed on OSM paths and roads downloaded on 1 October 2026, with the 浜街道 along the OSM coastline of 七里御浜 as far as 井田; Mie's own route lines are All Rights Reserved and are not used or redistributed. Compared with them, the rebuilt Iseji lies a median 10 m away, 69% of it within 100 m and 98% within 500 m; it departs by more than 500 m only where OSM maps no old path, at most 1.0 km: near Furue between 三木峠 and 羽後峠, near Hobo, and near Itaya on the 本宮道. The later 荷坂峠 variant is not drawn: OSM maps no connected path down its south side.
+- **Kumano Kodō routes** — Nakahechi and Kohechi follow OSM relations. The Iseji, Ōmine Okugake and Ohechi are rebuilt by routing between waypoints along OSM paths and roads downloaded on 1 October 2026; the Okugake starts at Kinpusen-ji's Zaōdō. The Iseji's waypoints are the passes and villages GSI's base map names along the course that Mie Prefecture's 熊野古道伊勢路ナビ sets out, with the 浜街道 along the OSM coastline of 七里御浜 as far as 井田; Mie's own route lines are All Rights Reserved and are not used or redistributed. Compared with them, the rebuilt Iseji lies a median 10 m away, 69% of it within 100 m and 98% within 500 m; it departs by more than 500 m only where OSM maps no old path, at most 1.0 km: near Furue between 三木峠 and 羽後峠, near Hobo, and near Itaya on the 本宮道. The later 荷坂峠 variant is not drawn: OSM maps no connected path down its south side.
 - **Maps are simplified** — Map outlines are simplified for drawing; every statistic is computed on the unsimplified polygons, so recomputing from the drawn shapes gives slightly different decimals.
 
 ### Drawings
@@ -73,4 +73,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 7 · author: 1 · corrected: 6 · derived: 390 · method: 43 · verified: 143 · map points: 105
+approximate: 7 · author: 1 · corrected: 6 · derived: 390 · method: 43 · verified: 144 · map points: 105

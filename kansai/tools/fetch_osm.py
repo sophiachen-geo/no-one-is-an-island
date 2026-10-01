@@ -24,7 +24,7 @@ Q = {
 MIRRORS = ["https://maps.mail.ru/osm/tools/overpass/api/interpreter", "https://overpass-api.de/api/interpreter",
            "https://overpass.private.coffee/api/interpreter", EP]
 MAX_LAG_DAYS = 3
-HW_OKU = "^(path|footway|track|steps|bridleway|unclassified|residential|tertiary|secondary|service)$"
+HW_OKU = "^(path|footway|track|steps|bridleway|unclassified|residential|tertiary|secondary|primary|service)$"   # primary: the street through Yoshinoyama
 HW_OHE = "^(path|footway|track|steps|unclassified|tertiary|secondary|primary|trunk)$"
 HW_ISE = "^(path|footway|track|steps|bridleway|unclassified|residential|living_street|service|tertiary|secondary|primary|trunk)$"
 TRAILS = {   # name: (highway filter, [S, W, N, E tiles])
@@ -34,17 +34,17 @@ TRAILS = {   # name: (highway filter, [S, W, N, E tiles])
  "trail_iseji": (HW_ISE, [(34.15, 136.18, 34.45, 136.42), (33.98, 136.10, 34.15, 136.32), (33.84, 135.98, 33.98, 136.20), (33.70, 135.95, 33.84, 136.06),
                           (33.78, 135.74, 33.92, 135.98)]),
 }
-NAMED = {    # named old-road ways the router prefers
- "route_okugake": f'[out:json][timeout:240];way["highway"]["name"~"奥駈|奥駆"](33.82,135.74,34.38,136.00);out geom;',
- "route_ohechi": f'[out:json][timeout:240];way["highway"]["name"~"熊野古道|大辺路|長井坂|富田坂|仏坂"](33.42,135.36,33.76,135.96);out geom;',
+NAMED = {    # named old-road ways the router prefers: (filter, area), fetched like the trail tiles
+ "route_okugake": ('way["highway"]["name"~"奥駈|奥駆"]', (33.82, 135.74, 34.38, 136.00)),
+ "route_ohechi": ('way["highway"]["name"~"熊野古道|大辺路|長井坂|富田坂|仏坂"]', (33.42, 135.36, 33.76, 135.96)),
 }
 
 
-def overpass(q):
+def overpass(q, tries=None):
     """Run q on the first mirror that answers with data no older than MAX_LAG_DAYS; returns the parsed JSON."""
     import datetime as dt
     last = None
-    for attempt in range(3 * len(MIRRORS)):
+    for attempt in range(tries or 3 * len(MIRRORS)):
         ep = MIRRORS[attempt % len(MIRRORS)]
         try:
             req = urllib.request.Request(ep, data=urllib.parse.urlencode({"data": q}).encode(), headers={"User-Agent": "no-one-is-an-island kansai map build"})
@@ -63,6 +63,25 @@ def overpass(q):
     raise last
 
 
+def fetch_tile(hw, s, w, n, e, depth=0, flt=None):
+    """One tile of a trail set (or of a named-way filter `flt`). A tile every mirror times out on (dense towns, long
+    name searches) is fetched as four quarters, down to a 64th; ways that cross the cuts are kept once."""
+    sel = flt or f'way["highway"~"{hw}"]'
+    q = f'[out:json][timeout:300];{sel}({s},{w},{n},{e});out geom qt;'
+    try:
+        return overpass(q, tries=len(MIRRORS) if depth < 3 else None)
+    except Exception:
+        if depth >= 3: raise
+    ms, mw = round((s + n) / 2, 5), round((w + e) / 2, 5)
+    print(f"   splitting ({s}, {w}, {n}, {e})", flush=True)
+    parts = [fetch_tile(hw, *b, depth + 1, flt=flt) for b in ((s, w, ms, mw), (s, mw, ms, e), (ms, w, n, mw), (ms, mw, n, e))]
+    seen, els = set(), []
+    for p in parts:
+        for el in p["elements"]:
+            if (el["type"], el["id"]) not in seen: seen.add((el["type"], el["id"])); els.append(el)
+    return {"elements": els, "osm3s": {"timestamp_osm_base": min(p["osm3s"]["timestamp_osm_base"] for p in parts)}}
+
+
 if "--trails" in sys.argv:                 # python3 fetch_osm.py --trails [iseji okugake …]: all sets, or the named ones
     only = [a for a in sys.argv[sys.argv.index("--trails") + 1:] if not a.startswith("-")]
     for name, (hw, tiles) in TRAILS.items():
@@ -73,17 +92,17 @@ if "--trails" in sys.argv:                 # python3 fetch_osm.py --trails [isej
         for i, (s, w, n, e) in enumerate(tiles):
             part = f"osm/{name}.part{i}.json"           # tiles are kept until the set is complete, so a rerun resumes
             if not os.path.exists(part):
-                json.dump(overpass(f'[out:json][timeout:300];way["highway"~"{hw}"]({s},{w},{n},{e});out geom qt;'), open(part, "w"))
+                json.dump(fetch_tile(hw, s, w, n, e), open(part, "w"))
             js = json.load(open(part))
             out["elements"] += js["elements"]; base.append(js["osm3s"]["timestamp_osm_base"])
         out["osm_base"] = sorted(base)        # one stamp per tile
         json.dump(out, open(f"osm/{name}.json", "w")); print(name, len(out["elements"]), "ways", flush=True)
         for i in range(len(tiles)): os.remove(f"osm/{name}.part{i}.json")
-    for name, q in NAMED.items():
+    for name, (flt, (s, w, n, e)) in NAMED.items():
         if only and not any(o in name for o in only): continue
         if os.path.exists(f"osm/{name}.json"):
             print(name, "cached"); continue
-        js = overpass(q); json.dump(js, open(f"osm/{name}.json", "w")); print(name, len(js["elements"]), "ways", flush=True)
+        js = fetch_tile(None, s, w, n, e, flt=flt); json.dump(js, open(f"osm/{name}.json", "w")); print(name, len(js["elements"]), "ways", flush=True)
     sys.exit(0)
 
 for k in (sys.argv[1:] or Q):
