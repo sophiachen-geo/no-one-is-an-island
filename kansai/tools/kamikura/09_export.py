@@ -11,6 +11,7 @@ Writes into the repository (pass its kansai/ folder as the only argument):
                               relief and profile curvature (each over a faint hill shading)
   data/kamikura_study.geojson study area, its four edges with their rules, the slope break, the transect (WGS84)
   data/kamikura_study.kml     the same for Google Earth / My Maps
+Also summarises the coded images of field/gazes.csv into the data's "gaze" key (gazes.py).
 """
 import json, math, sys, os
 import numpy as np
@@ -447,6 +448,8 @@ def main():
             "trbox": [round(v, 4) for v in (*pg(tr_b[0], tr_b[3]), *pg(tr_b[2], tr_b[1]))],
             "profile": st["profile"], "runs": sacred.relabel_runs(st["profile_runs"], st), "stats": {k: v for k, v in st["stats"].items() if k not in ("riz_in_mountain_pct", "precinct_m2")},   # see ground.sacred.grounds
             "edges": elab, "bases": bases, "ground": ground}
+    import gazes                                              # the coded images of kansai/field/gazes.csv (gazes.py)
+    data["gaze"] = gazes.summary(repo, data)
     js = "window.__KMK=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
     open(f"{repo}/data/kamikura.js", "w", encoding="utf-8").write(js)
 

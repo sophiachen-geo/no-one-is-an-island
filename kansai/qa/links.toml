@@ -652,3 +652,60 @@ checked = "2026-10-01"
 url = "https://www.kkr.mlit.go.jp/plan/happyou/thesises/2020/ol9a8v000004c2iz-att/ino2-01.pdf"
 kind = "source"
 checked = "2026-10-01"
+
+# Kamikura · comparing gazes (まなざし)
+
+[[link]]
+url = "https://doi.org/10.1016/j.jort.2017.01.006"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://doi.org/10.14989/doctor.k20542"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.wakayama-kanko.or.jp/spots/detail_479.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.shinguu.jp/spots/detail/A0002"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.tb-kumano.jp/en/places/shingu/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nankikumanogeo.jp/view_point/view_point-5364/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nankikumanogeo.jp/eng/geosite/kamikurasan-no-gotobikiiwa/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://kumanohayatama.jp/?page_id=18"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.jstage.jst.go.jp/article/jjhg/59/1/59_7/_article/-char/ja/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://github.com/sophiachen-geo/no-one-is-an-island/blob/main/kansai/field/gazes.csv"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://github.com/sophiachen-geo/no-one-is-an-island/tree/main/kansai/field"
+kind = "site"
+checked = "2026-10-01"

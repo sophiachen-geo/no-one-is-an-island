@@ -433,3 +433,12 @@ licence_url = ""
 own = true
 shows = "12:12 · Across the channel from the shrine’s lower precinct: the grounds of the 出雲大社新宮教会."
 processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/kamikura_1913_plate58.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/29"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Plate 58, 神倉山上 (on top of Kamikura-yama), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106): trees and rock against the sky."
+processing = "NDL IIIF image of frame 29 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000029/full/full/0/default.jpg); the oval plate cut out at 627×448 with the page outside the oval set to white, greyscale, JPEG q82"
