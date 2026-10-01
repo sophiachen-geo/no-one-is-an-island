@@ -2866,7 +2866,7 @@
           // four cross-profiles through the foot; under each, one row per definition (A–D) with its position, and the
           // median of the four (the foot) drawn through profile and rows alike
           var sv = document.getElementById("kmkfoot"); if (!sv) return;
-          var P = D.ground.foot.samples, W = 1000, gap = 26, ml = 18, cw = (W - ml - 8) / P.length, mt = 26, ph = 150, rh = 10, VE = 2;
+          var P = D.ground.foot.samples, W = 1000, gap = 26, ml = 18, cw = (W - ml - 8) / P.length, mt = 26, ph = 150, rh = 16, VE = 2;   // rows fit a 1.45 em line box
           var sy = mt + ph + 8, H = sy + 4 * rh + 50;
           sv.setAttribute("viewBox", "0 0 " + W + " " + H); sv.innerHTML = "";
           var zmax = Math.max.apply(null, P.map(function (p) { return Math.max.apply(null, p.z); })), zmin = Math.min.apply(null, P.map(function (p) { return Math.min.apply(null, p.z); }));
@@ -2882,9 +2882,9 @@
             el("line", { x1: X(s0), x2: X(s1), y1: Y(p.plain), y2: Y(p.plain), stroke: "rgba(87,85,91,0.55)", "stroke-dasharray": "3 3" }, sv);
             KEYS.forEach(function (k, j) {
               var y = sy + j * rh;
-              el("rect", { x: X(s0), y: y, width: X(s1) - X(s0), height: rh - 2, fill: j % 2 ? "rgba(236,229,215,0.5)" : "rgba(236,229,215,0.9)" }, sv);
-              el("rect", { x: X(p[k]) - 1.6, y: y, width: 3.2, height: rh - 2, fill: COL[k] }, sv);
-              var t = el("text", { x: X(s0) - 4, y: y + rh - 3, "text-anchor": "end", "font-size": 9.5, fill: COL[k] }, sv); t.textContent = k;
+              el("rect", { x: X(s0), y: y + 2, width: X(s1) - X(s0), height: rh - 4, fill: j % 2 ? "rgba(236,229,215,0.5)" : "rgba(236,229,215,0.9)" }, sv);
+              el("rect", { x: X(p[k]) - 1.6, y: y + 2, width: 3.2, height: rh - 4, fill: COL[k] }, sv);
+              var t = el("text", { x: X(s0) - 4, y: y + rh - 4.5, "text-anchor": "end", "font-size": 9.5, fill: COL[k] }, sv); t.textContent = k;
             });
             el("line", { x1: X(p.foot), x2: X(p.foot), y1: mt - 2, y2: sy + 4 * rh - 2, stroke: "#1a1a1a", "stroke-width": 1.4 }, sv);
             var tl = el("text", { x: x0, y: mt - 10, "font-size": 11.5, fill: "#2a2a2c" }, sv); tl.textContent = ["profile 1 · north", "profile 2", "profile 3", "profile 4 · south"][i];
