@@ -28,7 +28,8 @@ S_PIECES = [(121367975, (135.98552, 33.72383), (135.98507, 33.72390)),    # (way
             (121370515, (135.98507, 33.72390), (135.98463, 33.72393)),    # carries the edge line
             (499568826, (135.98463, 33.72393), (135.98423, 33.72396))]
 SCHOOL = 1333972521
-PRECINCTS = [500803106, 500803107]           # 神倉神社 lower precinct (west of the stream) and the shrine plot east of it
+PRECINCTS = [500803106]                      # 神倉神社's lower precinct (west of the stream)
+IZUMO = 500803107                            # the grounds east of it hold the 出雲大社新宮教会 (its hall, torii and board), not the shrine
 STREAMS = {83739066: "市田川", 499568828: "Kamikura-yama stream", 83745066: "市田川", 83741819: "浮島川", 83745022: "浮島川"}
 STEPS = 121366071
 SUMMIT = 2270139651                          # 神倉神社 (summit shrine, at Gotobiki-iwa)
@@ -189,6 +190,7 @@ def main():
     # ------------------------------------------------------------------ features
     school = Polygon([P(p["lon"], p["lat"]) for p in osm[SCHOOL]["geometry"]])
     prec = [Polygon([P(p["lon"], p["lat"]) for p in osm[w]["geometry"]]) for w in PRECINCTS]
+    izumo = Polygon([P(p["lon"], p["lat"]) for p in osm[IZUMO]["geometry"]])
     streams = {w: way_line(osm[w]) for w in STREAMS if w in osm}
     # the channel itself from GSI (OSM maps only its southern half): water area → centre line from the north end
     WATER, SINGLE = gsi_water((135.9795, 33.7195, 135.9935, 33.7285))
@@ -297,6 +299,7 @@ def main():
         if mm[i]: c = "mountain"
         elif water_u.contains(p): c = "water"
         elif prec_u.contains(p): c = "precinct"
+        elif izumo.contains(p): c = "izumo"
         elif r42.contains(p): c = "route42"
         elif bld_u.contains(p): c = "building"
         elif street_u.contains(p): c = "street"

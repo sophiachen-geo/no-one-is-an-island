@@ -707,3 +707,129 @@ lat = 33.728068
 source = "GSI 注記 「千穂ヶ峯」 (a ridge name; the label marks the slope below it, pointing up)"
 confidence = "high"
 tol_m = 500
+
+# ---- the religious flow (sacred.py): features at the foot of the Kamikura steps and on them, mapped in OSM from aerial
+#      imagery and on the ground (stele, board and shrine-building objects); OSM is the only source that locates them
+[points.kmk_naka_jizo]
+name = "中ノ地蔵堂 (Naka-no-Jizō hall, on the steps)"
+lon = 135.983224
+lat = 33.723818
+source = "OSM node 4908399232 (stele 「中ノ地蔵堂」); the hall itself is OSM way 499575460, 2 m away, beside 火神社 (node 4908399231)"
+confidence = "medium"
+tol_m = 10
+
+[points.kmk_sarutahiko]
+name = "猿田彦神社・神倉三宝荒神社"
+lon = 135.984122
+lat = 33.724335
+source = "OSM node 4908399267 (stele 「猿田彦神社 神倉三宝荒神社」), its board node 4908399264 (「…御由緒」) 4 m away and the shrine roof way 494788839 4 m away"
+confidence = "medium"
+tol_m = 10
+
+[points.kmk_iwatate]
+name = "天磐盾 stele (神武天皇紀 到熊野神邑 且登天磐盾)"
+lon = 135.984114
+lat = 33.724190
+source = "OSM node 4908399260 (stele 「神武天皇紀 到熊野神邑 且登天磐盾」); its board 「天磐楯」 is node 4908399261, 2 m away"
+confidence = "medium"
+tol_m = 10
+
+[points.kmk_izumo]
+name = "出雲大社新宮教会"
+lon = 135.984343
+lat = 33.724104
+source = "OSM way 499568822 (building 「出雲大社新宮教会」, centroid); its torii (node 4908399301), stele (4908399302) and board (4908399296) lie 25–30 m east, inside its grounds (way 500803107)"
+confidence = "medium"
+tol_m = 15
+
+[points.kmk_manzan]
+name = "満山社 (on the summit terrace)"
+lon = 135.982368
+lat = 33.722494
+source = "OSM node 4908398790 (stele 「満山社」); the shrine building is OSM way 499575452, 2 m away"
+confidence = "medium"
+tol_m = 10
+
+# ---------------------------------------------------------------- Kamikura: the town figure of the religious flows (kmc_*)
+# The figure (#kmktown) draws these places at 1:25,000-like scale (0.2 px per metre); kansai/qa/run.py checks each
+# place in kamikura.js ground.sacred.town.places against its reference here. Derived points (the river abreast of a
+# place, the label anchor) are not listed: they are computed from the places and the river's centre line.
+[points.kmc_rock]
+name = "神倉神社 · ゴトビキ岩"
+lon = 135.982815
+lat = 33.722192
+source = "GSI 注記 「神倉神社」 (the figure draws OSM node 4908398809, natural=rock)"
+confidence = "high"
+tol_m = 30
+
+[points.kmc_foot]
+name = "神倉神社の石段の下 (foot of the steps)"
+lon = 135.984192
+lat = 33.724297
+source = "GSI address search: 新宮市神倉一丁目13番8号, the shrine's address at the foot (the figure draws the lower end of OSM way 121366071)"
+confidence = "high"
+tol_m = 40
+
+[points.kmc_hayatama]
+name = "熊野速玉大社"
+lon = 135.983542
+lat = 33.732175
+source = "GSI 注記 「熊野速玉大社」 (the figure draws OSM way 211578006)"
+confidence = "high"
+tol_m = 60
+
+[points.kmc_asuka]
+name = "阿須賀神社"
+lon = 135.997292
+lat = 33.728475
+source = "Wikidata Q11658011 (P625); GSI 注記 「阿須賀王子跡」 at 33.728545, 135.997275 (the figure draws OSM way 499565075)"
+confidence = "high"
+tol_m = 60
+
+[points.kmc_myoshin]
+name = "妙心寺 (千穂1-3-2)"
+lon = 135.984329
+lat = 33.724781
+source = "GSI address search: 新宮市千穂一丁目3番2号 (as kmk_myoshin)"
+confidence = "medium"
+tol_m = 25
+
+[points.kmc_mifunejima]
+name = "御船島"
+lon = 135.97320
+lat = 33.73595
+source = "Wikidata Q11489269 (P625), as mifunejima"
+confidence = "high"
+tol_m = 100
+
+[points.kmc_oji]
+name = "王子神社 (浜王子跡)"
+lon = 136.002194
+lat = 33.717056
+source = "Wikidata Q11557908 浜王子 (P625) (the figure draws OSM node 6853147598, wikidata=Q11557908)"
+confidence = "high"
+tol_m = 60
+
+[points.kmc_mouth]
+name = "熊野川河口"
+lon = 136.0144
+lat = 33.7250
+source = "as kumano_mouth: where the OSM Kumano centre line (way 59234786, from MLIT 国土数値情報 W05) meets the OSM coastline"
+confidence = "medium"
+tol_m = 100
+
+[points.kmc_school]
+name = "新宮市立神倉小学校"
+lon = 135.985373
+lat = 33.725487
+source = "GSI 注記 「市立神倉小学校」 (the figure draws a point inside OSM way 1333972521)"
+confidence = "high"
+tol_m = 80
+
+[points.kmc_gongen]
+name = "権現山 · 千穂ヶ峯 (253 m)"
+lon = 135.979535
+lat = 33.728068
+source = "GSI 注記 「千穂ヶ峯」 (the figure draws OSM node 4355134042, natural=peak, ele=253)"
+confidence = "high"
+tol_m = 60

@@ -336,7 +336,7 @@ def check_points(gate, pts_ref, g, used):
         if key not in P:
             gate.err("points", "map point has no sourced reference in points.toml", key); continue
     for key, p in P.items():
-        if key.startswith("kmk_"):
+        if key.startswith(("kmk_", "kmc_")):
             continue
         if key not in g["pts"]:
             gate.err("points", "reference point missing from the page data", key); continue
@@ -378,6 +378,24 @@ def check_kmk(gate, pts_ref, g, html):
     for key in P:
         if key.startswith("kmk_") and key[4:] not in {lab[0] for lab in K["pts"]}:
             gate.warn("kamikura", "reference point not used by the micro-study (stale entry?)", key)
+    # the town figure of the religious flows: every place it draws sits at its sourced coordinate
+    T = K.get("ground", {}).get("sacred", {}).get("town")
+    if T:
+        X0, Y1 = T["origin"]
+        derived = {"confluence", "kumano_lab", "abreast_hay", "abreast_mif"}     # computed from the river's centre line
+        for key, (x, y) in T["places"].items():
+            if key in derived:
+                continue
+            ref = P.get("kmc_" + key)
+            if not ref or not ref.get("source"):
+                gate.err("kamikura", f"town figure place “{key}” has no sourced reference (kmc_{key}) in points.toml", key); continue
+            E, N = tm.forward(ref["lon"], ref["lat"])
+            off = math.dist((E - X0, Y1 - N), (x, y))
+            if off > ref["tol_m"]:
+                gate.err("kamikura", f"town figure place “{key}” is {off:.0f} m from its reference ({ref['source']}); tolerance {ref['tol_m']} m", key)
+        for key in P:
+            if key.startswith("kmc_") and key[4:] not in T["places"]:
+                gate.warn("kamikura", "reference point not used by the town figure (stale entry?)", key)
     area = shoelace_m2(K["layers"]["poly"]) / 1e4
     if abs(area - K["stats"]["area_ha"]) > 0.01:
         gate.err("kamikura", f"the drawn study area is {area:.3f} ha but the statistics say {K['stats']['area_ha']} ha")

@@ -15,7 +15,8 @@ Feature classes (all in JGD2011 / CS VI metres)
   legal_water the cadastre's waterway parcels (水), registered in step 7
   backs       back boundaries of numbered parcels (kind "private" in parcels.json: a lot with a 地番, whoever owns it):
               the edges farthest from each parcel's street frontage
-  temple      the property of 妙心寺 and 宗応寺 (the parcels under each temple) and the shrine's lower precinct (OSM)
+  temple      the property of 妙心寺 and 宗応寺 (the parcels under each temple), the shrine's lower precinct and,
+              beside it, the grounds of the 出雲大社新宮教会 (OSM ways 500803106, 500803107): religious grounds
   lanes       OSM lanes, paths, steps and residential streets (not the national or prefectural roads)
   walls       retaining walls and cut faces found in DEM1A: ground stepping ≥ 1 m at ≥ 45° over 1 m, outside
               buildings (GSI outlines + 1.5 m) and the channel (+ 2 m), at least 4 m long
@@ -56,7 +57,7 @@ ANCHOR_PARCEL = ("千穂", "１丁目", "715-3")                     # the schoo
 
 
 def is_school(p): return (p["oaza"], p["chome"], p["chiban"]) == ANCHOR_PARCEL
-SHRINE_WAYS = [500803106, 500803107]
+SHRINE_WAYS = [500803106, 500803107]          # the shrine's lower precinct and the 出雲大社新宮教会's grounds beside it
 LANE_KINDS = {"residential", "unclassified", "service", "living_street", "path", "footway", "steps", "pedestrian", "track"}
 PIECE = 10.0
 SHIFT_MIN, SHIFT_CHECK = 25, 50                                 # profiles (2 m apart): 50 m, and 100 m as a check

@@ -302,9 +302,13 @@ def main():
     L["paths"] = path([l for g in paths for l in geoms_lines(g)])
     L["steps"] = path([l for g in steps for l in geoms_lines(g)])
     school = Polygon([LL2P.transform(p["lon"], p["lat"]) for p in osm[1333972521]["geometry"]])
-    prec = [Polygon([LL2P.transform(p["lon"], p["lat"]) for p in osm[w]["geometry"]]) for w in (500803106, 500803107)]
     L["school"] = path([list(school.exterior.coords)], closed=True)
-    L["precinct"] = path([list(p.exterior.coords) for p in prec], closed=True)
+    # the religious flow (sacred.py): the shrine's lower precinct alone (OSM way 500803106) and, beside it, the grounds
+    # of the 出雲大社新宮教会 (way 500803107, formerly drawn as part of the precinct), the ritual route, the small shrines
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import sacred
+    SL, ground["sacred"] = sacred.build(z, x0, y1, frame, st, pg, path)
+    L.update(SL)
     # buildings coloured by the step-8 test: the consensus foot, the town grid of GSI road edges, the same rule
     import importlib.util
     spec = importlib.util.spec_from_file_location("a8", os.path.join(os.path.dirname(os.path.abspath(__file__)), "08_align.py"))
@@ -379,16 +383,21 @@ def main():
     # [key, text, x, y (page), anchor, dx, dy, class, systems]
     ich = LineString(st["ichida"]); ich_lab = ich.interpolate(ich.project(Point(*ll(135.98520, 33.72610))))
     raw = [   # every place here has an independent reference in kansai/qa/points.toml (kmk_*)
-        ["summit", "神倉神社 · Gotobiki-iwa", nd(2270139651), "start", 8, -6, "em", "bichikei keidai"],
-        ["steps", "538 stone steps", ll(135.98330, 33.72366), "end", -6, -4, "", "michi keidai bichikei"],
-        ["entrance", "entrance · 下馬 stone", nd(4908399279), "start", 8, 16, "", "keidai michi"],
+        ["summit", "神倉神社 · Gotobiki-iwa", nd(2270139651), "start", 8, -6, "em", "bichikei keidai shinko"],
+        ["steps", "538 stone steps", ll(135.98330, 33.72366), "end", -6, -4, "", "michi keidai bichikei shinko"],
+        ["entrance", "entrance · 下馬 stone", nd(4908399279), "start", 8, 16, "", "keidai michi shinko"],
+        ["manzan", "満山社", nd(4908398790), "end", -7, 4, "small only", "shinko"],
+        ["naka_jizo", "中ノ地蔵堂", nd(4908399232), "end", -7, 4, "small only", "shinko"],
+        ["iwatate", "天磐盾 stele", nd(4908399260), "end", -7, 12, "small only", "shinko"],
+        ["sarutahiko", "猿田彦神社・神倉三宝荒神社", nd(4908399267), "end", -7, -4, "small only", "shinko"],
+        ["izumo", "出雲大社新宮教会", ll(135.984343, 33.724104), "start", 8, 12, "small only", "shinko"],
         ["horibata", "神倉堀端都市下水路", (ich_lab.x, ich_lab.y), "start", 7, 4, "water", "suikei"],
         ["mstream", "Kamikura-yama stream", ll(135.98330, 33.72446), "end", -4, -6, "water small", "suikei"],
         ["school", "神倉小学校 Kamikura Elementary", ll(135.98503, 33.72506), "middle", 0, 4, "", "kokyo"],
-        ["myoshin", "妙心寺", ll(135.984329, 33.724781), "end", -7, 2, "small", "keidai seikatsu"],
+        ["myoshin", "妙心寺", ll(135.984329, 33.724781), "end", -7, 2, "small", "keidai seikatsu shinko"],
         ["engawa", "Youth Library えんがわ", ll(135.984299, 33.724689), "end", -7, 12, "small", "kokyo seikatsu"],
         ["oishii", "おいしいパーク", ll(135.98417, 33.72512), "end", -7, 4, "small", "kokyo seikatsu"],
-        ["soo", "宗応寺", ll(135.984268, 33.725773), "end", -7, 4, "small", "keidai"],
+        ["soo", "宗応寺", ll(135.984268, 33.725773), "end", -7, 4, "small", "keidai shinko"],
         ["gym", "gym · shelter", ll(135.98524, 33.72488), "start", 7, 4, "small only", "saigai"],
         ["schoolhouse", "school building · tsunami refuge", ll(135.98517, 33.72553), "start", 7, -4, "small only", "saigai"],
         ["r42", "国道42号", ll(135.98657, 33.72600), "start", 6, 0, "small", "michi"],
@@ -421,7 +430,7 @@ def main():
             "transect": [[round(v, 4) for v in pg(*p)] for p in st["transect"]], "tsplit": st["transect_split_m"],
             "tcum": [round(LineString(st["transect"][:i + 1]).length, 1) if i else 0.0 for i in range(len(st["transect"]))],
             "trbox": [round(v, 4) for v in (*pg(tr_b[0], tr_b[3]), *pg(tr_b[2], tr_b[1]))],
-            "profile": st["profile"], "runs": st["profile_runs"], "stats": {k: v for k, v in st["stats"].items() if k != "riz_in_mountain_pct"},
+            "profile": st["profile"], "runs": sacred.relabel_runs(st["profile_runs"], st), "stats": {k: v for k, v in st["stats"].items() if k not in ("riz_in_mountain_pct", "precinct_m2")},   # see ground.sacred.grounds
             "edges": elab, "bases": bases, "ground": ground}
     js = "window.__KMK=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
     open(f"{repo}/data/kamikura.js", "w", encoding="utf-8").write(js)

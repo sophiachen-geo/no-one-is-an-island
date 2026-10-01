@@ -310,11 +310,21 @@ if (hasQA) {
       }
       K.setBase('relief');
       // the three figures of the ground section are drawn from the data
-      [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
+      [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle'], ['kmkclimb', 'circle'], ['kmksec', 'path'], ['kmktown', 'path']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
+      // the religious-flow figures: no label leaves its figure
+      for (const id of ['kmkclimb', 'kmksec', 'kmktown']) {
+        const sv = document.getElementById(id), vb = sv && sv.viewBox.baseVal;
+        [...(sv ? sv.querySelectorAll('text') : [])].forEach((t) => {
+          const bb = t.getBBox(), m = t.getCTM(), s0 = sv.getCTM();
+          const p0 = new DOMPoint(bb.x, bb.y).matrixTransform(m).matrixTransform(s0.inverse()), p1 = new DOMPoint(bb.x + bb.width, bb.y + bb.height).matrixTransform(m).matrixTransform(s0.inverse());
+          const x0 = Math.min(p0.x, p1.x), x1 = Math.max(p0.x, p1.x), y0 = Math.min(p0.y, p1.y), y1 = Math.max(p0.y, p1.y);
+          if (x0 < -1 || x1 > vb.width + 1 || y0 < -1 || y1 > vb.height + 1) out.push(['kamikura', `figure #${id}: “${t.textContent}” leaves the figure`]);
+        });
+      }
       // the two ground profiles are drawn at the vertical exaggeration their captions state
-      for (const id of ['kmkfoot', 'kmkprof']) {
+      for (const id of ['kmkfoot', 'kmkprof', 'kmkclimb', 'kmksec']) {
         const sv = document.getElementById(id), cap = sv && sv.closest('figure') && sv.closest('figure').querySelector('figcaption');
-        const m = cap && cap.textContent.match(/heights ×(\d+(?:\.\d+)?)/), ve = sv ? parseFloat(sv.getAttribute('data-ve')) : NaN;
+        const m = cap && (cap.textContent.match(/heights ×(\d+(?:\.\d+)?)/) || (/heights true to scale/.test(cap.textContent) ? [0, '1'] : null)), ve = sv ? parseFloat(sv.getAttribute('data-ve')) : NaN;
         if (!m || !(Math.abs(ve - parseFloat(m[1])) < 0.05)) out.push(['kamikura', `figure #${id} is drawn with heights ×${ve} but its caption says ${m ? '×' + m[1] : 'nothing'}`]);
       }
       K.setSys('all', true);

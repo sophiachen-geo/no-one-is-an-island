@@ -508,6 +508,15 @@
       svg.kmk-svg[data-sys="kokyo"] .k-school path { fill: rgba(118,56,144,0.2); stroke-width: 2; }
       svg.kmk-svg .k-prec path { fill: rgba(211,97,78,0.2); stroke: #d3614e; stroke-width: 1; }
       svg.kmk-svg[data-sys="keidai"] .k-prec path { fill: rgba(211,97,78,0.42); stroke-width: 2; }
+      svg.kmk-svg .k-izumo path { fill: rgba(108,90,146,0.18); stroke: #6c5a92; stroke-width: 1; }
+      svg.kmk-svg[data-sys="shinko"] .k-prec path { fill: rgba(211,97,78,0.42); stroke-width: 2; }
+      svg.kmk-svg[data-sys="shinko"] .k-izumo path, svg.kmk-svg[data-sys="keidai"] .k-izumo path { fill: rgba(108,90,146,0.4); stroke-width: 1.6; }
+      svg.kmk-svg .k-shrines path { fill: #9e2a2b; stroke: #f4efe6; stroke-width: 0.6; }
+      svg.kmk-svg .k-ritual path { stroke: #e0662a; stroke-width: 4.4; stroke-linecap: round; stroke-dasharray: 2 7; opacity: 0.95; }
+      @media (prefers-reduced-motion: no-preference) { svg.kmk-svg[data-sys="shinko"] .k-ritual path { animation: kdescend 1.6s linear infinite; } }
+      @keyframes kdescend { to { stroke-dashoffset: -18; } }
+      .kmk-ov .kptr text { font-size: 11px; fill: #9e2a2b; font-style: italic; }
+      .kmk-ov .kptr path { fill: #9e2a2b; stroke: #f4efe6; stroke-width: 1; }
       svg.kmk-svg .k-water path { stroke: #2f5f94; stroke-width: 1.6; }
       svg.kmk-svg .k-warea path { fill: #6d97c2; stroke: #2f5f94; stroke-width: 0.8; }
       svg.kmk-svg[data-sys="suikei"] .k-warea path { fill: #2f5f94; }
@@ -1344,16 +1353,18 @@
           <button type="button" class="kchip" data-ks="suikei" aria-pressed="false">水系 water</button>
           <button type="button" class="kchip" data-ks="michi" aria-pressed="false">道 paths</button>
           <button type="button" class="kchip" data-ks="saigai" aria-pressed="false">災害 hazard</button>
+          <button type="button" class="kchip" data-ks="shinko" aria-pressed="false">信仰 sacred</button>
         </div>
         <div class="kcards">
           <article class="kcard" data-ks="bichikei" tabindex="0"><h4><span>下部構造 · micro-relief</span>微地形</h4><p>The mountain does not grade into the town; it stops: 40° above the foot, 1° below it. Across the 25 m strip inside the west edge the ground rises 22.6 m (median; at most 33.8 m), then the plain stays near 6.6 m. In the town the bare-earth model finds no step of 1 m or more outside the buildings and the channel; every such step lies on the mountain face above the foot.</p></article>
           <article class="kcard" data-ks="yashiki" tabindex="0"><h4><span>中部構造 · plots</span>町割・屋敷割</h4><p>The Ministry of Justice parcel map here is a digitised cadastral drawing in arbitrary coordinates (任意座標系); fitted to GSI’s road edges, its road parcels sit a median 1.2 m from them. On the median its numbered parcels stop at the foot of the mountain; row by row the edge wanders (the middle half of the rows from 10 m upslope to 12 m out). Buildings are coloured by the alignment test below.</p></article>
-          <article class="kcard" data-ks="keidai" tabindex="0"><h4><span>中部構造 · precincts</span>境内</h4><p>The sacred properties sit between the slope and the channel: the shrine’s lower precinct at the entrance (1,951 m² inside the line); beside it 妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the shrine; and the Zen temple 宗応寺 further north.</p></article>
+          <article class="kcard" data-ks="keidai" tabindex="0"><h4><span>中部構造 · precincts</span>境内</h4><p>The sacred properties sit between the slope and the channel: the shrine’s lower precinct at the entrance (1,217 m² inside the line); north of it 妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the Kumano shrines; and the Zen temple 宗応寺 further north. Across the channel, on the town side, lie the grounds of the 出雲大社新宮教会 (734 m²), a separate body.</p></article>
           <article class="kcard" data-ks="seikatsu" tabindex="0"><h4><span>上部構造 · everyday life</span>生活</h4><p>Houses on small plots fill the blocks between precincts, school and streets: 126 of the 127 footprints are mapped as ordinary buildings (普通建物); the one robust building (堅ろう) is the school’s.</p></article>
           <article class="kcard" data-ks="kokyo" tabindex="0"><h4><span>上部構造 · public space</span>現代公共空間</h4><p>The school compound is the one large open ground: 1.20 ha inside the line, nearly a quarter of it, along the east bank of the channel. Its building is an emergency refuge for earthquake and tsunami (third floor, 14.3 m), its gym a core shelter. Across the channel two private projects turn old plots into public space: Youth Library えんがわ (2013), a library in an old house, and おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it.</p></article>
           <article class="kcard" data-ks="suikei" tabindex="0"><h4><span>流れ · water</span>水系</h4><p>神倉堀端都市下水路, the Kamikura Horibata Urban Drainage Channel: a municipal drainage channel in the upper Ichida-gawa system, crossing the area as an open, stone-faced channel cut up to 3.2 m below the plain. It comes in from the north on the town grid, cuts diagonally past the school and reaches the mountain only at the shrine entrance, where the stream from Kamikura-yama joins it after falling from 63.5 m to 4.7 m in 170 m. The headwater watercourse is also documented as Kamikura-gawa.</p></article>
           <article class="kcard" data-ks="michi" tabindex="0"><h4><span>流れ · paths</span>道</h4><p>The streets keep to the town grid. The pedestrian routes do not: the 538 steps of the steep 男坂 (Otoko-zaka) and the gentler 女坂 (Onna-zaka) climb from the entrance, and the bridge over the channel is the threshold between town and mountain.</p></article>
           <article class="kcard" data-ks="saigai" tabindex="0"><h4><span>流れ · hazard</span>災害</h4><p>83.3% of the area lies in a sediment-disaster warning zone, 15.2% in a special one. Two hazards overlap: slope failure on the 千穂ヶ峰 and 神倉 slopes (35.1%) and debris flow from the gullies above the shrine entrance (神倉川右支渓, 59.3%), a zone that fans out east across the school ground. 84.7% is inside the maximum assumed river flood. The residential-inducement area of the Location Optimization Plan covers 32.9% and stops short of the slope.</p></article>
+          <article class="kcard" data-ks="shinko" tabindex="0"><h4><span>流れ · sacred</span>信仰</h4><p>Gotobiki-iwa, where, by tradition, the Kumano gods first came down, lies outside the area, 330 m up the line. Inside it lies the threshold: the shrine’s lower precinct, the 下馬 stone, the 天磐盾 stele and the 猿田彦神社・神倉三宝荒神社 at the foot, and the last 20 m of the steps the torches run down every 6 February. Arrows at the edge point to 熊野速玉大社 (0.9 km), 阿須賀神社 (1.3 km) and the mouth of the Kumano (2.8 km).</p></article>
         </div>
 
         <h3 class="trio-head"><b>下部構造 · ground</b>Where does Kamikura-yama stop?</h3>
@@ -1364,7 +1375,7 @@
         <h3 class="trio-head"><b>下部構造 · ground</b>What follows the foot? Measured, not assumed</h3>
         <p class="kmk-p">The foot runs N 1° E along the 618 m measured and N 7° E over the 0.9 km of the frame; the town grid runs N 5° E: at the scale of the town, foot, grid and compass coincide, so the grid’s orientation alone cannot say whether the mountain or the compass drew it. The test therefore uses the places where the foot bends. Wherever its local direction differs from the town grid by 10° or more, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square. Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. A run counts as significant only if the result also holds when the slide is at least 100 m. Every test is rerun with each of the four foot definitions and with a second registration of the parcel map: six runs, which check that a result does not hang on those choices (they are not independent samples).</p>
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkscore" role="img" aria-label="Which features follow the mountain foot within 25 m, against chance, with the number of runs in which the result holds"></svg></div><figcaption>Within 25 m of the foot (steep steps: the 15 m above it), the share of the counted length that follows the foot (dot; buildings weighted by footprint area) against chance (tick: the same features with the foot’s directions slid along it by 50 m or more), and the number of the six runs in which the excess is significant (p &lt; 0.05) with both minimum slides, 50 m and 100 m. Orange: significant in at least 4 of the 6 runs.</figcaption></figure>
-        <p class="kmk-p"><b>Within 25 m, the channel and the lanes bend with the mountain.</b> The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4. Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude. <b>Other lines lean the same way without holding:</b> the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 of the six runs. Frontages, temple and shrine property, the drawn waterway and the steep steps on the foot face show nothing (0 of 6). <b>Beyond 25 m, nothing holds</b> but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6. The terrain draws the edge of the town and, within 25 m of it, the channel and the lanes; the grid draws the rest.</p>
+        <p class="kmk-p"><b>Within 25 m, the channel and the lanes bend with the mountain.</b> The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4. Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude. <b>Other lines lean the same way without holding:</b> the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 of the six runs. Frontages, temple, shrine and church grounds, the drawn waterway and the steep steps on the foot face show nothing (0 of 6). <b>Beyond 25 m, nothing holds</b> but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6. The terrain draws the edge of the town and, within 25 m of it, the channel and the lanes; the grid draws the rest.</p>
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkoff" role="img" aria-label="Distance from the mountain foot to the edge of the numbered parcels, the nearest lane, the cadastral waterway and the channel"></svg></div><figcaption>Row by row, every 2 m along the front: distance from the foot to the western edge of the numbered parcels in the parcel map, to the nearest lane, to the waterway parcels of the parcel map and to today’s channel, each over the rows where it is found (the lanes on 305 rows, the waterway parcels on 139). Dot: median; bar: the middle half of the rows.</figcaption></figure>
 
         <h3 class="trio-head"><b>中部構造 · lots</b>The parcel map on the ground</h3>
@@ -1393,6 +1404,17 @@
         <h3 class="trio-head"><b>流れ · flows</b>Transect: Gotobiki-iwa → the steps → the channel → houses → national road → city hall</h3>
         <p class="kmk-p">One line runs through the area: from the summit shrine at Gotobiki-iwa (ground at 88.3 m on the 1 m model; the rock itself is about 11 m high) down the path and the 538 steps to the bridge at their foot (6.6 m), then due east across the town to the city hall (8.5 m), 1,132 m in all. The first 331 m are mountain. Outside the channels, the town part lies between 3.7 m and 8.6 m; it dips to 2.1 m in the Ukishima-gawa channel and rises again towards the city hall.</p>
         <figure class="kmk-prof"><p class="vscroll-hint">Scroll the profile sideways →</p><div class="vscroll"><svg id="kmkprof" role="img" aria-label="Ground profile along the transect, from Gotobiki-iwa to the city hall"></svg></div><figcaption>Bare ground on GSI DEM1A, sampled every 2 m along the path, the steps and the line to the city hall; heights ×2. Under the line: what it crosses. Hover the profile or the dashed line on the map and the same point lights in both.</figcaption></figure>
+        <h3 class="trio-head"><b>流れ · sacred</b>Where the landscape itself became sacred</h3>
+        <p class="kmk-p"><b>Where the gods first came down.</b> Kumano Hayatama Taisha places the first descent of the Kumano gods on Gotobiki-iwa, the boulder on Kamikura-yama (<i>gotobiki</i> is the local word for a toad). From there, in the shrine’s account, they moved to 石淵 across the river (now 貴祢谷) and, in the 58th year of Emperor Keikō, to the present site, which was therefore called 新宮, the “new shrine”, with Kamikura as its 元宮, the original seat. The city gives this origin of the name only as one that “is also said” (ともいわれています). The cliff under the rock is identified with the 天磐盾 that Jimmu climbs at 熊野神邑 in the Nihon Shoki; the shrine on it enshrines 高倉下命 and 天照大御神 and belongs to Hayatama as a subsidiary shrine (摂社).</p>
+        <p class="kmk-p"><b>Gongen-yama: gods in the form of Buddhas.</b> Kamikura-yama is the southern peak of 権現山, a name the city glosses as “the mountain where Hayatama’s god appears provisionally” (権に現れる). In Hayatama’s words, the worship of the Kumano Gongen spread as that of “gods appearing provisionally in the form of Buddhas” (神が仮に仏の姿をかりて現れる), and by around the 10th century the Kumano gods were worshipped as the twelve Kumano Gongen (熊野十二社（所）大権現). UNESCO’s statement of the property’s value reads its sites, routes and forests as a cultural landscape of the fusion of Shinto, “rooted in the ancient tradition of nature worship”, and Buddhism, with Shugendō, “influenced by the former two faiths”, as a third element; the nomination lists Gotobiki-iwa first among the most typical natural objects where gods were held to descend. The rock carries the layers itself. Fragments of a late-Yayoi bronze bell found around it have been a prefectural property since 2012; repairs to the stone walls when the shrine was rebuilt in 1956 turned up about 300 Buddhist objects from three spots around the rock, late Heian to Muromachi: mirrors, sutra containers, a gilt-bronze Kannon, sutra stones written one character each. Since the Heian period, Shugendō practitioners training on the mountain had built sutra mounds around it.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkclimb" role="img" aria-label="The climb from Gotobiki-iwa to the 下馬 stone, true to scale, the ground coloured by slope, with the shrines and steles along it"></svg></div><figcaption>The climb from Gotobiki-iwa down the path and the steps to the 下馬 stone (OSM ways 121369321 and 121366071) on GSI DEM1A, heights true to scale, the ground line coloured by its slope over each 2 m. Numbered: the 2024 programme of the Oto Matsuri (新宮市観光協会). Under it, every stele, board and shrine OpenStreetMap maps within 12 m of the line. Dates: Wakayama Prefecture (下馬 stone), Kumano Shimbun, 9 May 2024 (the shrines), the board beside the stele (1990), 日本歴史地名大系 and the prefecture’s register (the finds). Hover the figure to find the same point on the map.</figcaption></figure>
+        <p class="kmk-p"><b>The climb as a sequence of thresholds.</b> From the town the way crosses the channel by the 下馬 stone (1672: a pillar telling riders to dismount here; a pilgrim from Ōshū gave it to mark his seven pilgrimages to the three Kumano shrines), passes the shrines and steles at the foot and climbs 538 stone steps, laid, by tradition, as Minamoto no Yoritomo’s gift in 1193 (鎌倉積み). On the 1 m model the mapped steps rise 71.2 m over 218.5 m on the map: 26.1° on average from the foot to 中ノ地蔵堂, 11.2° above it, 39.1° over the steepest 10 m, 44 m from the foot. Above them the path climbs about 11 m more over 110.6 m to the rock. A stone at the foot carries a poem by Fujiwara no Saneuji from the imperial anthology 続古今和歌集 (1265) that already speaks of the climb: 「三熊野の神倉山の石たゝみ のぼりはてゝも 猶祈るかな」, the stone way of Kamikura-yama climbed to its end, and still a prayer. Thresholds are where meaning is written down: of the 21 steles, boards and shrines that OpenStreetMap maps within 12 m of the line, 15 stand in its last 41 m.</p>
+        <p class="kmk-p"><b>6 February: the fire comes down.</b> The Oto Matsuri is Kamikura’s annual festival; the city describes it as carrying “the tradition of the Kumano yamabushi since ancient times” and calls it a Shugendō fire festival. In the 2024 programme the priests and their attendants leave Hayatama at 17:50 and reach Kamikura at 18:20; the sacred fire is kindled at 19:10; at about 19:25 the great torch goes down to 中ノ地蔵堂 and back while the climbers (上り子) are shut inside the gate; at about 20:00 the gate opens and they run down the steps with the fire in their torches. Afterwards the priests go on to 阿須賀神社 (about 21:40) and back to Hayatama (about 22:10); the next afternoon mochi are thrown on the school ground. By day the climbers, in white with straw rope, visit Hayatama, 阿須賀神社, 妙心寺 and others. The city speaks of about 2,000; the organisers counted 1,580 in 2026; women do not climb. Hayatama gives the festival’s meaning as receiving the god’s fire into each torch at the old new year and bringing the god into each household, to light the household altar and the hearth. With the shrine’s own festival, 新宮の速玉祭, it has been an Important Intangible Folk Cultural Property since March 2016.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmksec" role="img" aria-label="A measured section from Gotobiki-iwa through Kumano Hayatama Taisha to the Kumano River, with the gods’ seats, the fire and the water"></svg></div><figcaption>One measured section, 1.6 km: from Gotobiki-iwa down the path and the steps, through the streets to Kumano Hayatama Taisha (the shortest walk on OpenStreetMap’s streets, 1.0 km) and on to the nearest bank of the Kumano (GSI DEM1A inside the map’s frame, DEM5A beyond; no ground is measured over water; heights ×10). The river to its mouth, 3.0 km along its centre line (MLIT 国土数値情報 via OpenStreetMap), is a break. Under it, three things that move from the mountain towards the river, dotted where they leave the line.</figcaption></figure>
+        <p class="kmk-p"><b>Mountain, town, river, sea.</b> Measured on one line, the order falls from mountain to river: the ground at the rock at 88 m, the bridge at the foot of the steps at 6.6 m, Hayatama on higher ground, about 12 m (on the 5 m model), the river, near sea level, 294 m beyond it, 3.0 km above its mouth. The gods’ path, in the shrine’s account, leaves the line: from the rock across the river to 石淵, then back to Hayatama’s riverside site. The water runs down it by another way: the stream from Kamikura-yama joins 神倉堀端都市下水路 at the shrine entrance, and 市田川 carries it east through the town into the Kumano’s estuary, 0.4 km from the mouth. The city reads Hayatama’s own god, 熊野速玉大神, as the force of water made divine (水の勢いを神格化したものと考えられています). The river is itself part of the inscribed pilgrimage route: pilgrims on the Nakahechi mostly came down from Hongū by boat to Hayatama, then went from 阿須賀神社 to 浜王子 and over 高野坂 to Nachi; the city lists the Kumano and 御船島, where Hayatama’s god goes upriver by boat every 16 October, as World Heritage under the Nakahechi.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmktown" role="img" aria-label="Shingū from Mifune-jima to the river mouth, with the water, the pilgrims, the Oto Matsuri and the Mifune Matsuri drawn as flows"></svg></div><figcaption>Shingū from 御船島 to the mouth of the Kumano: water areas, 40 m contours, roads and the railway from GSI’s 最適化ベクトルタイル; 市田川, the Kumano’s centre line and the coastline from OpenStreetMap. The pilgrims’ order is Shingū City’s account of the Nakahechi (in the Edo period they went south through the town instead and over 広角 to 高野坂); the times are the 2024 programme (新宮市観光協会), the climbers’ visits Kumano Shimbun (8 February 2026), the Mifune Matsuri the Agency for Cultural Affairs’ description. Lines between places give the order, not the route.</figcaption></figure>
+        <p class="kmk-p"><b>Layers, not a single origin.</b> In the Middle Ages the mountain was run by shrine monks (神倉聖) and four hongan temples (本願), the fund-raisers for its upkeep. One of them, 妙心寺, a nunnery at the foot, administered Kamikura-yama under the Shingū hongan; in 1531 its nun 妙順尼 was granted the hongan title after a restoration funded by collections in the provinces. A copy of the Nachi pilgrimage mandala, the kind the Kumano bikuni are said to have carried and explained, is known as 妙心寺旧本 (now kept at Hayatama). The decrees separating kami from Buddhas (1868) and abolishing Shugendō (1872) cut through this: the Kumano shrines became Shinto only, and the hongan temples nearly all closed; 妙心寺 survives beside the shrine office. Later layers were added at the foot: the 天磐盾 stele of 1990, for the 2,650th year of the imperial era; 猿田彦神社・神倉三宝荒神社, built in 1983 and rebuilt in 2024, shrines to Sarutahiko, who guided Ninigi’s descent and is a god of crossroads in the Nihon Shoki, and to Sanbō Kōjin, guardian of the Three Treasures, worshipped in Shugendō and kept in homes as the god of the hearth; until the Meiji period a Sarutahiko shrine, known as Tengu-sama, stood on the mountain. The donation that rebuilt them in 2024 also paid for renewing or repairing 満山社, 火神社 and 中ノ地蔵堂, for the 20th anniversary of the World Heritage listing.</p>
+        <p class="kmk-p"><b>A living landscape is a remade one.</b> UNESCO’s statement records rites of Shinto, Buddhism and Shugendō “still underway even now”. Here they are also made and unmade. 神州院, a temple in the town, held an Ōmine fire rite with fire-walking at Kamikura on the day after the festival from the end of the Shōwa era; the 32nd, in 2019, was the last there. At Nachi, Seiganto-ji, whose head priest revived Kumano Shugendō in 1988, rebuilt in 2023, on a new site, the Gyōjadō (行者堂) of Kumano Shugendō demolished in the early Meiji years, about 150 years before, and closed it for three days of Shugendō practice (19–21 June 2026). Read along the climb, the sequence is spatial as well as temporal: the oldest finds came from around the rock; the 下馬 stone of 1672 and the stele of 1990 stand at the foot, where the town meets the mountain.</p>
         <p class="kmk-dl">For GIS: <a href="data/kamikura_study.geojson" download>GeoJSON</a> · <a href="data/kamikura_study.kml" download>KML</a>: the study area, its four edges with their rules, the break of slope, the mountain foot and the transect, in WGS84. <a href="data/kamikura_cadastre.geojson" download>Parcel map (GeoJSON)</a>: the registered cadastral drawing, approximate, without parcel numbers. Rebuilt by kansai/tools/kamikura.</p>
       </div>
 
@@ -1448,9 +1470,10 @@
           <li>The three layers of urban form: <a class="doc" href="https://www.jstage.jst.go.jp/article/jila1934/54/5/54_5_359/_article/-char/ja/" target="_blank" rel="noopener"><span lang="ja">松代旧城下町の景観変容に関わる土地の利用と経営の形態</span></a> — land use and management in the changing landscape of the former castle town of Matsushiro <span class="meta">(清水・宮城・田畑, 造園雑誌, 1990)</span>.</li>
           <li><a class="doc" href="https://www.city.shingu.lg.jp/info/123" target="_blank" rel="noopener"><span lang="ja">避難所・避難場所一覧</span></a> — evacuation shelters and sites <span class="meta">(Shingū City, updated April 2024)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/info/762" target="_blank" rel="noopener"><span lang="ja">津波避難ビル</span></a> — tsunami evacuation buildings <span class="meta">(Shingū City)</span>; <a class="doc" href="https://s-shingu.com/kamikura/guide.html" target="_blank" rel="noopener"><span lang="ja">新宮市立神倉小学校 学校案内</span></a> — Kamikura Elementary School <span class="meta">(formed from 丹鶴 and 千穂 elementary schools in April 2012)</span>.</li>
           <li><a class="doc" href="https://www.kkr.mlit.go.jp/kinan/kasen/tokuteitoshi/k1cog50000000bnk-att/o6p6va000000168z.pdf" target="_blank" rel="noopener"><span lang="ja">新宮川水系市田川等に係る特定都市河川及び特定都市河川流域の指定に関する説明資料</span></a> — designation of the Ichida-gawa as a Specified Urban River <span class="meta">(MLIT Kinan office, Wakayama Prefecture, Shingū City, September 2025)</span>.</li>
-          <li><a class="doc" href="https://kumanohayatama.jp/gotobiki/" target="_blank" rel="noopener"><span lang="ja">神倉神社・ゴトビキ岩</span></a> — Kamikura Shrine and its steps <span class="meta">(Kumano Hayatama Taisha)</span>; <a class="doc" href="https://nankikumanogeo.jp/enjoy/course06/" target="_blank" rel="noopener"><span lang="ja">南紀熊野ジオパーク</span></a> — Gotobiki-iwa <span class="meta">(Nanki Kumano Geopark)</span>; <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html" target="_blank" rel="noopener"><span lang="ja">神倉神社</span></a> — the shrine, its 下馬 stone and 妙心寺 <span class="meta">(Wakayama Prefecture)</span>.</li>
+          <li><a class="doc" href="https://kumanohayatama.jp/gotobiki/" target="_blank" rel="noopener"><span lang="ja">神倉神社・ゴトビキ岩</span></a> — Kamikura Shrine and its steps <span class="meta">(Kumano Hayatama Taisha)</span>; <a class="doc" href="https://nankikumanogeo.jp/enjoy/course06/" target="_blank" rel="noopener"><span lang="ja">南紀熊野ジオパーク</span></a> — Gotobiki-iwa <span class="meta">(Nanki Kumano Geopark)</span>; <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html" target="_blank" rel="noopener"><span lang="ja">神倉山</span></a> — the shrine, its 下馬 stone and 妙心寺 <span class="meta">(Wakayama Prefecture)</span>.</li>
           <li><a class="doc" href="https://kotobank.jp/word/%E5%A6%99%E5%BF%83%E5%AF%BA-139779" target="_blank" rel="noopener"><span lang="ja">妙心寺（日本歴史地名大系）</span></a> — Myōshin-ji, thought to have become the head temple of the 神倉本願 <span class="meta">(Heibonsha, via Kotobank)</span>; <a class="doc" href="https://www.kumano-sanzan.jp/sanzan/hongan.html" target="_blank" rel="noopener"><span lang="ja">熊野三山の本願</span></a> — the fund-raising temples of the three shrines <span class="meta">(熊野三山協議会)</span>; <a class="doc" href="https://sotozen-navi.com/detail/index_300052.html" target="_blank" rel="noopener"><span lang="ja">宗應寺</span></a> — Sōō-ji (宗応寺, in the older form of its second character) <span class="meta">(Sōtō Zen temple portal)</span>.</li>
           <li><a class="doc" href="https://kii3.com/engawa/" target="_blank" rel="noopener"><span lang="ja">Youth Library えんがわ</span></a> — the library and its opening <span class="meta">(Kii regional portal, interview)</span>; <a class="doc" href="https://www.td-ms.com/works/oishiipark/index.html" target="_blank" rel="noopener"><span lang="ja">おいしいパーク</span></a> — oishii park <span class="meta">(td-Atelier)</span>.</li>
+          <li>The religious flow: <a class="doc" href="https://kumanohayatama.jp/history/" target="_blank" rel="noopener"><span lang="ja">熊野信仰のはじまり</span></a> — the gods’ descent, 石淵 and the name 新宮, the twelve Gongen <span class="meta">(Kumano Hayatama Taisha)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/info/41" target="_blank" rel="noopener"><span lang="ja">世界遺産「紀伊山地の霊場と参詣道」</span></a> — Gongen-yama, Hayatama, the river route, 阿須賀神社, 御船島 <span class="meta">(Shingū City)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/info/35" target="_blank" rel="noopener"><span lang="ja">御燈祭り</span></a> — the Oto Matsuri <span class="meta">(Shingū City)</span>; <a class="doc" href="https://www.shinguu.jp/new-events/detail/208" target="_blank" rel="noopener"><span lang="ja">熊野速玉大社『御燈祭り』について</span></a> — the 2024 programme <span class="meta">(新宮市観光協会)</span>; <a class="doc" href="https://online.bunka.go.jp/heritages/detail/286380" target="_blank" rel="noopener"><span lang="ja">新宮の速玉祭・御燈祭り</span></a> — designation and description <span class="meta">(Agency for Cultural Affairs, 文化遺産オンライン)</span>; <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/500700/mokuroku/mokuroku/d00155289.html" target="_blank" rel="noopener"><span lang="ja">県指定文化財一覧</span></a> — the 神倉山銅鐸, designated 2012 <span class="meta">(Wakayama Prefecture)</span>; <a class="doc" href="https://kotobank.jp/word/%E7%A5%9E%E5%80%89%E5%B1%B1-2024217" target="_blank" rel="noopener"><span lang="ja">神倉山</span></a> — the 1956 finds and the 1265 poem <span class="meta">(日本歴史地名大系 and 日本国語大辞典, via Kotobank)</span>; <a class="doc" href="https://kotobank.jp/word/%E7%A5%9E%E5%80%89%E7%A5%9E%E7%A4%BE-3084770" target="_blank" rel="noopener"><span lang="ja">神倉神社</span></a> — its deities, the sutra mounds and the four hongan temples <span class="meta">(日本歴史地名大系, via Kotobank)</span>; <a class="doc" href="https://kotobank.jp/word/%E4%B8%89%E5%AE%9D%E8%8D%92%E7%A5%9E-514834" target="_blank" rel="noopener"><span lang="ja">三宝荒神</span></a> — Sanbō Kōjin <span class="meta">(日本国語大辞典, via Kotobank)</span>; <a class="doc" href="https://kotobank.jp/word/%E7%8C%BF%E7%94%B0%E5%BD%A6%E7%A5%9E-512504" target="_blank" rel="noopener"><span lang="ja">猿田彦神</span></a> — Sarutahiko <span class="meta">(デジタル大辞泉, via Kotobank)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/history/chronologicaltable2/index.html" target="_blank" rel="noopener"><span lang="ja">熊野学 略年表（中世）</span></a> — 1531 and <a class="doc" href="https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/history/chronologicaltable3/index.html" target="_blank" rel="noopener"><span lang="ja">略年表（近世）</span></a> — 1868 <span class="meta">(Shingū City, from 『熊野歴史手帳』)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/faith/data/data/3_NatiMandaraSyohon.htm" target="_blank" rel="noopener"><span lang="ja">那智参詣曼荼羅 諸本</span></a> — the copies of the mandala, 妙心寺旧本 among them <span class="meta">(Shingū City)</span>; <a class="doc" href="https://www.agara.co.jp/article/316173" target="_blank" rel="noopener"><span lang="ja">熊野修験の行者堂を再建</span></a> — the Gyōjadō at Nachi <span class="meta">(紀伊民報 AGARA, 21 October 2023)</span>; <a class="doc" href="https://seigantoji.or.jp/2026/06/06/%E9%82%A3%E6%99%BA%E5%B1%B1%E8%A1%8C%E8%80%85%E5%A0%82%E9%96%89%E5%A0%82%E3%81%AE%E5%BE%A1%E6%A1%88%E5%86%85/" target="_blank" rel="noopener"><span lang="ja">那智山行者堂閉堂の御案内</span></a> — its closure for Shugendō practice <span class="meta">(那智山青岸渡寺)</span>. Without links: UNESCO’s Statement of Outstanding Universal Value (WHC-13/37.COM/8E) and the nomination dossier; Kumano Shimbun, 9 February 2019, 9 May 2024 and 8 February 2026. Places: the steps, the path, the steles, boards and small shrines, the precincts, the 市田川, the Kumano’s centre line and the coastline from OpenStreetMap; the town figure’s ground from GSI’s vector tiles; every place on the town figure except the river mouth is checked against an independent coordinate (GSI annotations, Wikidata, address search) in <code>kansai/qa/points.toml</code>; the river mouth and the end of 市田川 come from the same OpenStreetMap lines that draw them, and the small shrines and steles from OpenStreetMap alone.</li>
           <li>Method: the edges, the break of slope, the ground layers, the mountain foot, the registration of the parcel map, the alignment test and the transect are rebuilt by <code>kansai/tools/kamikura/</code>. The break of slope (the west edge’s rule, and definition A of the foot) is the edge of ground at least 1 m above the plain of the whole frame (6.05 m, the median of near-flat ground) and steeper than 12° (or 3 m above it), connected to the slopes above 40 m. A building’s direction is the long side of its smallest enclosing rectangle; lines are cut into pieces of at most 10 m, and a boundary shared by two parcels counts once. Chance comes from sliding the foot’s sequence of directions along the foot by every offset of at least 50 m and recomputing the share each time, so that neighbouring pieces, which are not independent, move together; a run counts only if the result also holds with a minimum offset of 100 m.</li>
         </ul>
         <h3>Method and known imperfections</h3>
@@ -2590,10 +2613,11 @@
           suikei: { show: "c25 flood lwater b_far b_grid b_both b_foot water_area water roads major foot poly", em: "water_area water lwater flood", leg: "water lwater flood foot poly" },
           michi: { show: "b_far b_grid b_both b_foot water_area water roads major paths steps poly transect", em: "roads major paths steps transect", leg: "roads major paths steps poly" },
           yashiki: { show: "parcels lroad lwater b_far b_grid b_both b_foot backs roads major water_area water foot poly", em: "parcels lroad lwater b_far b_grid b_both b_foot backs foot", leg: "parcels lroad lwater backs bfoot bgrid bboth foot poly" },
-          keidai: { show: "c25 precinct b_far b_grid b_both b_foot water_area water roads steps paths foot poly", em: "precinct steps paths", leg: "precinct steps foot poly" },
+          keidai: { show: "c25 precinct izumo b_far b_grid b_both b_foot water_area water roads steps paths foot poly", em: "precinct izumo steps paths", leg: "precinct izumo steps foot poly" },
           seikatsu: { show: "b_far b_grid b_both b_foot b_robust water_area water roads major poly", em: "b_far b_grid b_both b_foot b_robust", leg: "bld brobust poly" },
           kokyo: { show: "school b_far b_grid b_both b_foot b_robust water_area water roads major poly", em: "school b_robust", leg: "school brobust poly" },
-          saigai: { show: "ls_yellow ls_red flood tsunami riz b_far b_grid b_both b_foot water_area water roads major foot poly", em: "ls_yellow ls_red flood riz", leg: "lsy lsr flood riz foot poly" }
+          saigai: { show: "ls_yellow ls_red flood tsunami riz b_far b_grid b_both b_foot water_area water roads major foot poly", em: "ls_yellow ls_red flood riz", leg: "lsy lsr flood riz foot poly" },
+          shinko: { show: "c25 precinct izumo b_far b_grid b_both b_foot water_area water roads paths steps ritual shrines poly", em: "precinct izumo ritual shrines steps", leg: "ritual precinct izumo shrines steps poly", home: "sacred" }
         };
         var KLEG = {   // [kind, colour, text]
           poly: ["line", "#35625f", "study area (its four rules in the text)"], water: ["line", "#2f5f94", "water (GSI): 神倉堀端都市下水路, the Kamikura-yama stream and other watercourses"],
@@ -2603,7 +2627,8 @@
           walls: ["line", "#b5179e", "steps of 1 m or more at 45° or steeper"],
           flood: ["fill", "rgba(71,129,199,0.35)", "maximum assumed river flood"], roads: ["line", "#2a2a2c", "streets"], major: ["line", "#4f4a43", "National Route 42"],
           paths: ["dash", "#8b6f47", "footpaths"], bfoot: ["fill", "#c0612b", "turns with the mountain foot"], bgrid: ["fill", "#6f6b66", "keeps the town grid"],
-          bboth: ["fill", "#d2ccc1", "foot and grid agree here"], precinct: ["fill", "rgba(211,97,78,0.42)", "shrine precinct at the entrance"],
+          bboth: ["fill", "#d2ccc1", "foot and grid agree here"], precinct: ["fill", "rgba(211,97,78,0.42)", "神倉神社's lower precinct, at the foot of the steps"], izumo: ["fill", "rgba(108,90,146,0.4)", "grounds of the 出雲大社新宮教会 (Izumo Taisha Shingū church)"],
+          ritual: ["line", "#e0662a", "the Oto Matsuri route: torches run down the steps from the shrine (6 February)"], shrines: ["fill", "#9e2a2b", "small shrines on the steps and at the foot (OSM)"],
           parcels: ["line", "#8a6d4b", "parcels of the cadastral drawing (registered; approximate)"], lwater: ["fill", "rgba(47,95,148,0.35)", "its waterway parcels (水)"],
           lroad: ["fill", "rgba(201,138,74,0.4)", "its road parcels (道)"], backs: ["line", "#4b3a2a", "back boundaries in the test"],
           brobust: ["fill", "#4b4741", "robust buildings (堅ろう)"], school: ["fill", "rgba(118,56,144,0.25)", "school compound"],
@@ -2653,8 +2678,8 @@
           var groups = {};
           [["ls_yellow", "k-lsy"], ["ls_red", "k-lsr"], ["flood", "k-fl"], ["tsunami", "k-ts"], ["foot_band", "k-fband"], ["c1", "k-c1"], ["c5", "k-c5"], ["c25", "k-c25"],
            ["lroad", "k-lroad"], ["lwater", "k-lwater"], ["parcels", "k-parcels"], ["school", "k-school"],
-           ["precinct", "k-prec"], ["water_area", "k-warea"], ["b_far", "k-b k-bfar"], ["b_grid", "k-b k-bgrid"], ["b_both", "k-b k-bboth"], ["b_foot", "k-b k-bfoot"], ["b_robust", "k-brob"],
-           ["backs", "k-backs"], ["water", "k-water"], ["roads", "k-roads"], ["major", "k-major"], ["paths", "k-paths"], ["steps", "k-steps"], ["walls", "k-walls"], ["foot", "k-foot"], ["riz", "k-riz"],
+           ["precinct", "k-prec"], ["izumo", "k-izumo"], ["water_area", "k-warea"], ["b_far", "k-b k-bfar"], ["b_grid", "k-b k-bgrid"], ["b_both", "k-b k-bboth"], ["b_foot", "k-b k-bfoot"], ["b_robust", "k-brob"],
+           ["backs", "k-backs"], ["water", "k-water"], ["roads", "k-roads"], ["major", "k-major"], ["paths", "k-paths"], ["steps", "k-steps"], ["ritual", "k-ritual"], ["shrines", "k-shrines"], ["walls", "k-walls"], ["foot", "k-foot"], ["riz", "k-riz"],
            ["poly", "k-poly"], ["transect", "k-tr"]].forEach(function (l) {
             if (!D.layers[l[0]]) return; var g = el("g", { class: l[1] }, wg); el("path", { d: D.layers[l[0]] }, g); groups[l[0]] = g;
           });
@@ -2673,6 +2698,14 @@
             var g = el("g", { class: "kl" }, ov), t = el("text", { class: "clab", "text-anchor": "middle", y: 3.5 }, g); t.textContent = c[2];
             nodes.push({ g: g, w: [c[0], c[1]], t: t, sys: ["bichikei", "keidai"], prio: 2, rot: c[3] });
           });
+          // the religious flow runs beyond the frame: pointers from the foot of the steps to Hayatama, Asuka and the sea
+          var SA = D.ground.sacred, ptrs = [];
+          if (SA) ["hayatama", "asuka", "river_end"].forEach(function (k) {
+            var q = SA.pointers[k]; if (!q) return;
+            var g = el("g", { class: "kl kptr" }, ov), a = el("path", { d: "M0 -6 L4.5 4 L0 1.6 L-4.5 4 Z" }, g), t = el("text", { y: 4 }, g);
+            t.textContent = q.name + " · " + (q.dist_m / 1000).toFixed(1) + " km";
+            ptrs.push({ g: g, a: a, t: t, b: q.bearing });
+          });
           var trm = el("circle", { class: "ktrm", r: 6, style: "display:none" }, ov);
           var zc = document.createElement("div"); zc.className = "zc";
           zc.innerHTML = '<button type="button" aria-label="Zoom in">+</button><button type="button" aria-label="Zoom out">−</button><button type="button" aria-label="Reset view">⟲</button>';
@@ -2685,12 +2718,29 @@
           function measure() { var r = sv.getBoundingClientRect(); Wm = Math.max(200, r.width); Hm = Math.max(200, r.height); sv.setAttribute("viewBox", "0 0 " + Wm + " " + Hm); }
           function kmin() { return Math.max(Wm / (F[2] - F[0]), Hm / (F[3] - F[1])); }
           function clamp(q) { q.k = Math.max(kmin(), Math.min(KMAXK, q.k)); var hw = Wm / 2 / q.k, hh = Hm / 2 / q.k; q.cx = Math.max(F[0] + hw, Math.min(F[2] - hw, q.cx)); q.cy = Math.max(F[1] + hh, Math.min(F[3] - hh, q.cy)); return q; }
-          function fitHome() { var b = D.home, k = Math.min(Wm / (b[2] - b[0]), Hm / (b[3] - b[1])); return clamp({ cx: (b[0] + b[2]) / 2, cy: (b[1] + b[3]) / 2, k: k }); }
+          function fitBox(b) { var k = Math.min(Wm / (b[2] - b[0]), Hm / (b[3] - b[1])); return clamp({ cx: (b[0] + b[2]) / 2, cy: (b[1] + b[3]) / 2, k: k }); }
+          function fitHome() { return fitBox(D.home); }
           function scr(w) { return [(w[0] - c.cx) * c.k + Wm / 2, (w[1] - c.cy) * c.k + Hm / 2]; }
           function wld(x, y) { return [c.cx + (x - Wm / 2) / c.k, c.cy + (y - Hm / 2) / c.k]; }
           function place() {
             // places first, then the edge rules, then contour heights; each tries its own side, then the other, else hides
             var boxes = [], sys = kmk.sys;
+            ptrs.forEach(function (p) {
+              var f = scr(SA.foot_pg), r = p.b * Math.PI / 180, dx = Math.sin(r), dy = -Math.cos(r), m = 18;
+              var tx = dx > 1e-9 ? (Wm - m - f[0]) / dx : dx < -1e-9 ? (m - f[0]) / dx : Infinity, ty = dy > 1e-9 ? (Hm - m - f[1]) / dy : dy < -1e-9 ? (m - f[1]) / dy : Infinity, tt = Math.min(tx, ty);
+              if (sys !== "shinko" || !(tt > 0)) { p.g.style.display = "none"; return; }
+              var x = f[0] + dx * tt, y = f[1] + dy * tt, side = tx < ty;   // leaves through a side (else top or bottom)
+              p.g.style.display = ""; p.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ")"); p.a.setAttribute("transform", "rotate(" + p.b + ")");
+              // the label hugs the edge beside its arrow: inward from a side, along the edge at the top or bottom
+              var cands = side ? [[dx > 0 ? "end" : "start", dx > 0 ? -10 : 10, 4]] : [["start", 10, 4], ["end", -10, 4]], fits = false;
+              p.t.style.display = "";
+              for (var ci = 0; ci < cands.length && !fits; ci++) {
+                p.t.setAttribute("text-anchor", cands[ci][0]); p.t.setAttribute("x", cands[ci][1]); p.t.setAttribute("y", cands[ci][2]);
+                var bb = p.t.getBBox(), bx = { x: x + bb.x - 2, y: y + bb.y - 1, w: bb.width + 4, h: bb.height + 2 };
+                fits = bx.x >= 2 && bx.x + bx.w <= Wm - 2 && bx.y >= 2 && bx.y + bx.h <= Hm - 2 && !boxes.some(function (o) { return bx.x < o.x + o.w && bx.x + bx.w > o.x && bx.y < o.y + o.h && bx.y + bx.h > o.y; });
+              }
+              if (fits) boxes.push(bx); p.t.style.display = fits ? "" : "none";
+            });
             nodes.slice().sort(function (a, b) { return a.prio - b.prio; }).forEach(function (n) {
               var s0 = scr(n.w), on = n.always || (sys === "all" ? !n.only : n.sys.indexOf(sys) >= 0);
               if (n.off) { n.t.style.display = ""; var t0 = n.t.getBBox(); s0 = [s0[0] + n.off[0] * (t0.width / 2 + 8), s0[1] + n.off[1] * (t0.height / 2 + 6)]; }   // just outside its edge
@@ -2759,7 +2809,9 @@
           kmk.setSys = function (key, pin) {
             if (!KSYS[key]) key = "all";
             var Sy = KSYS[key], show = Sy.show.split(" "), em = Sy.em ? Sy.em.split(" ") : [];
+            var prevHome = KSYS[kmk.pin] && KSYS[kmk.pin].home;
             kmk.sys = key; if (pin) kmk.pin = key;
+            if (pin && home && (Sy.home || prevHome)) { var hb = Sy.home === "sacred" && D.ground.sacred ? D.ground.sacred.home : null; c = hb ? fitBox(hb) : fitHome(); apply(); }
             sv.setAttribute("data-sys", key);
             Object.keys(groups).forEach(function (k) {
               groups[k].style.display = show.indexOf(k) >= 0 ? "" : "none";
@@ -2782,6 +2834,7 @@
           if (pv) cur = kmkProfile(pv, D, function (d) { kmk.setTr(d, false); }, function () { if (kmk.trFrom === "profile") kmk.setTr(null); });
           if (cur) curT = cur.label;
           kmkFoot(D); kmkScore(D); kmkOffsets(D);
+          if (D.ground.sacred) { kmkClimb(D, function (d) { kmk.setTr(d, false); }); kmkSection(D); kmkTown(D); }
           kmk.setBase = function (key) {
             var B = key !== "relief" && D.bases[key] ? D.bases[key] : null;
             kmk.base = B ? key : "relief";
@@ -2814,7 +2867,7 @@
           d += "L" + X(P[P.length - 1][0]).toFixed(1) + " " + base.toFixed(1) + "Z";
           el("path", { d: d, fill: "#e7dfcf", stroke: "none" }, svg);
           el("path", { d: d.replace(/^M[^L]+/, "M" + X(0).toFixed(1) + " " + Y(P[0][1]).toFixed(1)).replace(/L[^L]+Z$/, ""), fill: "none", stroke: "#2a2a2c", "stroke-width": 1.4 }, svg);
-          var COL = { mountain: "#9aa58a", precinct: "#d3614e", water: "#2f5f94", building: "#8f887d", street: "#f4efe6", open: "#e3dccd", route42: "#4f4a43" };
+          var COL = { mountain: "#9aa58a", precinct: "#d3614e", izumo: "#6c5a92", water: "#2f5f94", building: "#8f887d", street: "#f4efe6", open: "#e3dccd", route42: "#4f4a43" };
           D.runs.forEach(function (r) { el("rect", { x: X(r[0]).toFixed(1), y: by, width: Math.max(0.8, (r[1] - r[0]) * ppm).toFixed(1), height: bh, fill: COL[r[2]] || "#ccc" }, svg); });
           el("rect", { x: ml, y: by, width: W - ml - mr, height: bh, fill: "none", stroke: "rgba(87,85,91,0.45)", "stroke-width": 0.6 }, svg);
           // what the line passes, from data (heights read off the same profile)
@@ -2834,7 +2887,7 @@
             var t = el("text", { x: x, y: ty, "text-anchor": m[2], "font-size": 11.5, fill: "#2a2a2c" }, mg); t.textContent = m[1];
           });
           var lg = el("g", { class: "kplegend" }, svg), lx = ml;
-          [["mountain", "mountain"], ["precinct", "shrine precinct"], ["water", "water"], ["building", "buildings"], ["open", "yards, gaps"], ["street", "streets"], ["route42", "national road"]].forEach(function (k) {
+          [["mountain", "mountain"], ["precinct", "shrine precinct"], ["izumo", "Izumo church grounds"], ["water", "water"], ["building", "buildings"], ["open", "yards, gaps"], ["street", "streets"], ["route42", "national road"]].forEach(function (k) {
             el("rect", { x: lx, y: H - 19, width: 12, height: 8, fill: COL[k[0]], stroke: "rgba(87,85,91,0.45)", "stroke-width": 0.5 }, lg);
             var t = el("text", { x: lx + 16, y: H - 11.5, "font-size": 11, fill: "#57555b" }, lg); t.textContent = k[1]; lx += 22 + t.getComputedTextLength() + 12;
           });
@@ -2910,7 +2963,7 @@
           // which features follow the foot's bends within 25 m: share (dot) against chance (tick), robust runs
           var sv = document.getElementById("kmkscore"); if (!sv) return;
           var S = D.ground.scores, rows = [["channel", "channel centre line"], ["lanes", "lanes and paths (OSM)"], ["banks", "channel banks (GSI)"], ["backs", "back property boundaries (cadastre)"],
-            ["buildings", "buildings (GSI)"], ["fronts", "plot frontages (cadastre)"], ["temple", "temple and shrine property"], ["legal_water", "waterway parcels (cadastre)"], ["walls", "steep steps on the foot face (DEM)"]];
+            ["buildings", "buildings (GSI)"], ["fronts", "plot frontages (cadastre)"], ["temple", "temple, shrine and church grounds"], ["legal_water", "waterway parcels (cadastre)"], ["walls", "steep steps on the foot face (DEM)"]];
           var W = 1000, ml = 300, mr = 236, rh = 30, mt = 34, H = mt + rows.length * rh + 34;
           sv.setAttribute("viewBox", "0 0 " + W + " " + H); sv.innerHTML = "";
           function X(v) { return ml + v / 100 * (W - ml - mr); }
@@ -2939,6 +2992,207 @@
           });
           el("line", { x1: lx, x2: lx, y1: y - 10, y2: y + 2, stroke: "#2a2a2c", "stroke-width": 2 }, lg);
           var b = el("text", { x: lx + 8, y: y, "font-size": 11, fill: "#57555b" }, lg); b.textContent = "chance";
+        }
+        function kmkClimb(D, onMove) {
+          // the climb from the rock to the 下馬 stone, true to scale: the ground coloured by its slope, each threshold
+          // placed where it lies, the 6 February programme on it, and under it every stele, board and shrine that
+          // OpenStreetMap maps along the line; hovering lights the same point on the map
+          var sv = document.getElementById("kmkclimb"); if (!sv) return;
+          var A = D.ground.sacred, Q = A.sequence, M = A.markers, P = D.profile.filter(function (q) { return q[0] <= 380; });
+          var W = 1000, ml = 44, mr = 16, ppm = (W - ml - mr) / 380, mt = 70, base = mt + 95 * ppm, rug = base + 92, H = rug + 70;
+          sv.setAttribute("viewBox", "0 0 " + W + " " + Math.ceil(H)); sv.setAttribute("data-ve", "1.00"); sv.innerHTML = "";
+          function X(d) { return ml + d * ppm; } function Y(z) { return base - z * ppm; }
+          function txt(x, y, s, o) { var t = el("text", Object.assign({ x: x, y: y, "font-size": 11.5, fill: "#2a2a2c" }, o || {}), sv); t.textContent = s; return t; }
+          [0, 25, 50, 75].forEach(function (h) {
+            el("line", { x1: ml, x2: W - mr, y1: Y(h), y2: Y(h), stroke: h ? "rgba(87,85,91,0.14)" : "rgba(87,85,91,0.45)" }, sv);
+            txt(ml - 6, Y(h) + 3.5, h + " m", { "text-anchor": "end", "font-size": 11, fill: "#57555b" });
+          });
+          var area = "M" + X(P[0][0]) + " " + base; P.forEach(function (q) { area += "L" + X(q[0]).toFixed(1) + " " + Y(q[1]).toFixed(1); });
+          el("path", { d: area + "L" + X(P[P.length - 1][0]) + " " + base + "Z", fill: "#e7dfcf" }, sv);
+          var SC = [[10, "#b8b0a2"], [25, "#d9a441"], [40, "#c0612b"], [90, "#7a1f1f"]];
+          function col(deg) { for (var i = 0; i < SC.length; i++) if (deg < SC[i][0]) return SC[i][1]; return SC[SC.length - 1][1]; }
+          for (var i = 1; i < P.length; i++) {
+            var deg = Math.atan(Math.abs(P[i][1] - P[i - 1][1]) / (P[i][0] - P[i - 1][0])) * 180 / Math.PI;
+            el("line", { x1: X(P[i - 1][0]), y1: Y(P[i - 1][1]), x2: X(P[i][0]), y2: Y(P[i][1]), stroke: col(deg), "stroke-width": 3.2, "stroke-linecap": "round" }, sv);
+          }
+          // the channel crossed at the foot (the transect's water run)
+          D.runs.filter(function (r) { return r[2] === "water" && r[0] < 380; }).forEach(function (r) {
+            el("rect", { x: X(r[0]), y: base - 2.5, width: X(r[1]) - X(r[0]), height: 3.5, fill: "#2f5f94" }, sv);
+            txt((X(r[0]) + X(r[1])) / 2, Y(6.6) - 30, "channel", { "text-anchor": "middle", "font-size": 11, fill: "#2f5f94" });
+            el("line", { x1: (X(r[0]) + X(r[1])) / 2, x2: (X(r[0]) + X(r[1])) / 2, y1: Y(6.6) - 26, y2: base - 6, stroke: "#2f5f94", "stroke-width": 0.8 }, sv);
+          });
+          var at = {}; Q.forEach(function (q) { at[q[0]] = q; });
+          function dot(q) { el("circle", { cx: X(q[2]), cy: Y(q[3]), r: 3.2, fill: "#2a2a2c" }, sv); }
+          function lead(q, y) { el("line", { x1: X(q[2]), x2: X(q[2]), y1: Y(q[3]), y2: y, stroke: "#2a2a2c", "stroke-width": 0.8, "stroke-dasharray": "2 2" }, sv); }
+          // on the mountain: above the line
+          [["rock", 22, "Gotobiki-iwa, ground " + at.rock[3].toFixed(0) + " m"], ["manzan", 56, "満山社 (2024 donation)"], ["top", 80, "top of the steps"],
+           ["jizo", 124, "中ノ地蔵堂 · 火神社 (2024 donation)"]].forEach(function (r) {
+            var q = at[r[0]]; dot(q); lead(q, r[1] + 4); txt(X(q[2]) + (q[2] < 1 ? 0 : 4), r[1], r[2], { "text-anchor": "start" });
+          });
+          txt(X(0) + 5, 36, "Buddhist finds of late Heian to Muromachi and fragments of a late-Yayoi bronze bell, found around it", { "font-size": 11, fill: "#57555b" });
+          // at the foot: stacked under the ground line, each ending at its own leader
+          [["foot", "foot of the steps"], ["iwatate", "天磐盾 stele (1990)"], ["sarutahiko", "猿田彦神社・神倉三宝荒神社 (1983; rebuilt 2024)"], ["geba", "下馬 stone (1672)"]].forEach(function (r, k) {
+            var q = at[r[0]], y = base + 16 + 14 * k; dot(q); lead(q, y - 4);
+            el("line", { x1: X(q[2]), x2: X(q[2]) - 5, y1: y - 4, y2: y - 4, stroke: "#2a2a2c", "stroke-width": 0.8 }, sv);
+            txt(X(q[2]) - 8, y, r[1], { "text-anchor": "end" });
+          });
+          // 6 February, the 2024 programme: numbered on the climb, read in the block at the upper right
+          var F = [["1", X(at.rock[2]) + 14, Y(at.rock[3]) + 16, "19:10  the sacred fire is kindled"],
+                   ["2", X(at.jizo[2]) - 14, Y(at.jizo[3]) + 14, "≈19:25  the great torch to 中ノ地蔵堂 and back; the gate shuts"],
+                   ["3", X(300), Y(P.filter(function (q) { return q[0] >= 300; })[0][1]) + 28, "≈20:00  the gate opens: the torches run down"]];
+          var bx = 640, by = 30;
+          txt(bx, by, "6 February · the 2024 programme", { "font-size": 11.5, fill: "#c0612b", "font-weight": 600 });
+          F.forEach(function (f, k) {
+            [[f[1], f[2]], [bx + 7, by + 16 + 15 * k - 4]].forEach(function (p) {
+              el("circle", { cx: p[0], cy: p[1], r: 7, fill: "#c0612b" }, sv);
+              var n = txt(p[0], p[1] + 3.8, f[0], { "text-anchor": "middle", "font-size": 10.5, fill: "#fff", "font-weight": 600 });
+            });
+            txt(bx + 19, by + 16 + 15 * k, f[3], { "font-size": 11, fill: "#c0612b" });
+          });
+          // ③ down the steps: a line 12 px under the ground, from just below the top to just above the foot
+          var dn = P.filter(function (q) { return q[0] >= at.top[2] + 6 && q[0] <= at.foot[2] - 8; });
+          var dd = dn.map(function (q, i) { return (i ? "L" : "M") + X(q[0]).toFixed(1) + " " + (Y(q[1]) + 12).toFixed(1); }).join("");
+          el("path", { d: dd, stroke: "#c0612b", "stroke-width": 1.6, fill: "none", "stroke-dasharray": "5 3" }, sv);
+          var e1 = dn[dn.length - 1], e0 = dn[dn.length - 4], ux = X(e1[0]) - X(e0[0]), uy = Y(e1[1]) - Y(e0[1]), ul = Math.hypot(ux, uy); ux /= ul; uy /= ul;
+          var hx = X(e1[0]), hy = Y(e1[1]) + 12;
+          el("path", { d: "M" + (hx + ux * 4) + " " + (hy + uy * 4) + "L" + (hx - ux * 8 - uy * 5) + " " + (hy - uy * 8 + ux * 5) + "L" + (hx - ux * 8 + uy * 5) + " " + (hy - uy * 8 - ux * 5) + "Z", fill: "#c0612b" }, sv);
+          // the rug: every stele, board and shrine mapped within 12 m of the line
+          var KC = { stele: "#2a2a2c", board: "#8f887d", shrine: "#c0612b", torii: "#d3614e" };
+          el("line", { x1: ml, x2: W - mr, y1: rug, y2: rug, stroke: "rgba(87,85,91,0.35)" }, sv);
+          M.forEach(function (m) { el("line", { x1: X(m[0]), x2: X(m[0]), y1: rug - 9, y2: rug + 9, stroke: KC[m[1]] || "#2a2a2c", "stroke-width": 2 }, sv); });
+          var C = A.climb, foot0 = at.foot[2] - 5, foot1 = at.geba[2] + 1;
+          el("path", { d: "M" + X(foot0) + " " + (rug - 14) + "v-5H" + X(foot1) + "v5", fill: "none", stroke: "#2a2a2c", "stroke-width": 0.8 }, sv);
+          txt(X(foot0) - 6, rug - 14, C.foot_n + " of these " + C.markers_n + " stand in the last " + C.foot_span_m + " m of the climb", { "text-anchor": "end", "font-size": 11 });
+          var lx = ml, ly = rug + 26;
+          [["stele", "steles and stones"], ["board", "boards"], ["shrine", "shrines and small shrines"]].forEach(function (k) {
+            el("line", { x1: lx, x2: lx, y1: ly - 9, y2: ly + 2, stroke: KC[k[0]], "stroke-width": 2 }, sv);
+            var t = txt(lx + 6, ly, k[1], { "font-size": 11, fill: "#57555b" }); lx += 6 + t.getComputedTextLength() + 16;
+          });
+          txt(lx + 4, ly, "within 12 m of the line, as OpenStreetMap maps them", { "font-size": 11, fill: "#57555b" });
+          var lg = el("g", {}, sv); lx = ml; ly = rug + 50;
+          [["below 10°", 0], ["10–25°", 1], ["25–40°", 2], ["40° or more", 3]].forEach(function (k) {
+            el("line", { x1: lx, x2: lx + 18, y1: ly - 4, y2: ly - 4, stroke: SC[k[1]][1], "stroke-width": 3.2 }, lg);
+            var t = el("text", { x: lx + 24, y: ly, "font-size": 11, fill: "#57555b" }, lg); t.textContent = k[0]; lx += 24 + t.getComputedTextLength() + 18;
+          });
+          var t2 = el("text", { x: lx + 6, y: ly, "font-size": 11, fill: "#57555b" }, lg); t2.textContent = "slope of the ground, every 2 m · heights true to scale";
+          var hv = el("rect", { x: ml, y: mt - 20, width: W - ml - mr, height: base - mt + 20, fill: "transparent" }, sv);
+          hv.addEventListener("pointermove", function (e) { var r = sv.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width; onMove(Math.max(0, Math.min(380, (x - ml) / ppm))); });
+          hv.addEventListener("pointerleave", function () { onMove(null); });
+        }
+        function kmkSection(D) {
+          // one measured section, from the rock down the steps, through the streets to Hayatama and to the bank of the
+          // Kumano; the river to its mouth (water at sea level, no ground to measure) is a labelled break; heights ×10
+          var sv = document.getElementById("kmksec"); if (!sv) return;
+          var S = D.ground.sacred.section, T = D.ground.sacred.town.m, P = S.profile, L = S.length_m, VE = 10, tail = 0.16;
+          var W = 1000, ml = 44, mr = 16, w0 = (W - ml - mr) * (1 - tail), ppm = w0 / L, vpm = ppm * VE, mt = 46, base = mt + 92 * vpm, H = base + 132;
+          sv.setAttribute("viewBox", "0 0 " + W + " " + Math.ceil(H)); sv.setAttribute("data-ve", VE.toFixed(2)); sv.innerHTML = "";
+          function X(d) { return ml + d * ppm; } function Y(z) { return base - Math.max(0, z) * vpm; }
+          var xe = X(L), xt = W - mr;
+          [0, 25, 50, 75].forEach(function (h) {
+            el("line", { x1: ml, x2: xe, y1: Y(h), y2: Y(h), stroke: h ? "rgba(87,85,91,0.14)" : "rgba(87,85,91,0.45)" }, sv);
+            var t = el("text", { x: ml - 6, y: Y(h) + 3.5, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, sv); t.textContent = h + " m";
+          });
+          // ground where it was measured; gaps (water: the channel, the river) left open and drawn as water at 0 m
+          var runs = [], cur = null;
+          P.forEach(function (q) { if (q[1] == null) { cur = null; return; } if (!cur) { cur = []; runs.push(cur); } cur.push(q); });
+          runs.forEach(function (r) {
+            var d = "M" + X(r[0][0]).toFixed(1) + " " + base; r.forEach(function (q) { d += "L" + X(q[0]).toFixed(1) + " " + Y(q[1]).toFixed(1); });
+            el("path", { d: d + "L" + X(r[r.length - 1][0]).toFixed(1) + " " + base + "Z", fill: "#e7dfcf", stroke: "#2a2a2c", "stroke-width": 1 }, sv);
+          });
+          P.forEach(function (q, k) { if (q[1] == null) el("rect", { x: X(q[0]) - 1, y: base - 3, width: Math.max(2, X((P[k + 1] || q)[0]) - X(q[0]) + 1), height: 3, fill: "#2f5f94" }, sv); });
+          // the break: the Kumano to its mouth
+          el("path", { d: "M" + (xe + 6) + " " + (base - 9) + "l6 6-6 6M" + (xe + 12) + " " + (base - 9) + "l6 6-6 6", fill: "none", stroke: "#57555b", "stroke-width": 1 }, sv);
+          el("rect", { x: xe + 22, y: base - 3, width: xt - xe - 22, height: 3, fill: "#2f5f94" }, sv);
+          [["the Kumano,", 24], [(S.river_to_mouth_m / 1000).toFixed(1) + " km to its mouth", 10]].forEach(function (r) {
+            var tt = el("text", { x: xt, y: base - r[1], "text-anchor": "end", "font-size": 11, fill: "#2f5f94" }, sv); tt.textContent = r[0];
+          });
+          var st = S.stations;
+          st.forEach(function (q, k) {
+            var x = X(q[1]); el("line", { x1: x, x2: x, y1: mt - 8, y2: base + 4, stroke: "rgba(42,42,44,0.35)", "stroke-dasharray": "2 3" }, sv);
+            var t = el("text", { x: x + (k === st.length - 1 ? -4 : 4), y: mt - 14 + (k % 2) * 14, "text-anchor": k === st.length - 1 ? "end" : "start", "font-size": 11.5, fill: "#2a2a2c" }, sv); t.textContent = q[0];
+          });
+          // what moves this way, under the ground line: [colour, from, to (null: the sea), label, where it leaves this line]
+          var rows = [["#6c5a92", 0, st[2][1], "the gods, in Hayatama’s account: first on Gotobiki-iwa, then 石淵 across the river, then the present site, the “new shrine” (新宮); not along this line", 0],
+                      ["#c0612b", 0, st[1][1], "6 February, ≈20:00: the gate opens and the torches run down the steps", null],
+                      ["#2f5f94", 0, null, "rain on Kamikura-yama → 神倉堀端都市下水路 → 市田川, east through the town → the Kumano’s estuary, " + (T.conf_mouth / 1000).toFixed(1) + " km from its mouth (off this line)", st[1][1]]];
+          rows.forEach(function (r, k) {
+            var y = base + 26 + k * 30, x0 = X(r[1]), x1 = r[2] == null ? xt : X(r[2]), dir = x1 > x0 ? 1 : -1, xo = r[4] == null ? x1 : X(r[4]);
+            el("line", { x1: x0, x2: (r[4] == null ? x1 - dir * 6 : xo), y1: y, y2: y, stroke: r[0], "stroke-width": 2.4 }, sv);
+            if (r[4] != null) el("line", { x1: xo, x2: x1 - dir * 6, y1: y, y2: y, stroke: r[0], "stroke-width": 1.6, "stroke-dasharray": "2 4" }, sv);
+            el("path", { d: "M" + (x1 - dir * 8) + " " + (y - 5) + "L" + x1 + " " + y + "L" + (x1 - dir * 8) + " " + (y + 5) + "Z", fill: r[0] }, sv);
+            var t = el("text", { x: Math.min(x0, x1) + 2, y: y - 7, "font-size": 11, fill: r[0] }, sv); t.textContent = r[3];
+          });
+        }
+        function kmkTown(D) {
+          // the town at 1:25,000 ground (GSI water, contours, roads, railway) under four flows, each at its own time scale
+          var sv = document.getElementById("kmktown"); if (!sv) return;
+          var T = D.ground.sacred.town, Pl = T.places, W = 1000, k = W / T.size[0], hm = T.size[1] * k, H = hm + 96;
+          sv.setAttribute("viewBox", "0 0 " + W + " " + Math.ceil(H)); sv.innerHTML = "";
+          var g0 = el("g", { transform: "scale(" + k.toFixed(6) + ")" }, sv), sw = 1 / k;
+          function pth(d, a, g) { return el("path", Object.assign({ d: d, fill: "none", "vector-effect": "non-scaling-stroke" }, a), g || g0); }
+          function p(key) { return [Pl[key][0] * k, Pl[key][1] * k]; }
+          function txt(x, y, s, o) { var t = el("text", Object.assign({ x: x, y: y, "font-size": 11.5, fill: "#2a2a2c" }, o || {}), sv); t.textContent = s; return t; }
+          el("rect", { x: 0, y: 0, width: W, height: hm, fill: "#f6f1e7" }, sv);
+          sv.insertBefore(sv.lastChild, g0);
+          pth(T.water, { fill: "#cfdde8", "fill-rule": "evenodd", stroke: "#9db6c9", "stroke-width": 0.6 });
+          T.contours.forEach(function (c) { pth(c[1], { stroke: c[0] % 200 === 0 ? "rgba(122,106,82,0.55)" : "rgba(122,106,82,0.28)", "stroke-width": c[0] % 200 === 0 ? 0.9 : 0.6 }); });
+          T.roads.forEach(function (r) { pth(r[1], { stroke: r[0] ? "#c9bea9" : "#ddd5c6", "stroke-width": r[0] ? 1.6 : 0.8 }); });
+          pth(T.rail, { stroke: "#6f6a62", "stroke-width": 2.6 }); pth(T.rail, { stroke: "#f6f1e7", "stroke-width": 1.2, "stroke-dasharray": "6 6" });
+          pth(T.coast, { stroke: "#7f9fb8", "stroke-width": 0.9 });
+          // continuous: water from Kamikura-yama to the sea
+          var gw = el("g", {}, g0), wl = [T.channel, T.ichida, T.to_sea].map(function (d) { return pth(d, { stroke: "#2f5f94", "stroke-width": 1.8, "stroke-linecap": "round" }, gw); });
+          // Heian to Edo: the pilgrims (the river by boat, then the order of visits)
+          var rin = pth(T.river_in, { stroke: "rgba(138,90,43,0.32)", "stroke-width": 9, "stroke-linecap": "round" });
+          function seg(a, b, col, dash, bow, wdt) {
+            var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy), cx = mx - dy / L * bow, cy = my + dx / L * bow;
+            el("path", { d: "M" + a[0].toFixed(1) + " " + a[1].toFixed(1) + "Q" + cx.toFixed(1) + " " + cy.toFixed(1) + " " + b[0].toFixed(1) + " " + b[1].toFixed(1), fill: "none", stroke: col, "stroke-width": wdt || 1.8, "stroke-dasharray": dash || "" }, sv);
+            var ex = b[0] - cx, ey = b[1] - cy, eL = Math.hypot(ex, ey), ux = ex / eL, uy = ey / eL;
+            el("path", { d: "M" + (b[0] - ux * 9 - uy * 4.5).toFixed(1) + " " + (b[1] - uy * 9 + ux * 4.5).toFixed(1) + "L" + b[0].toFixed(1) + " " + b[1].toFixed(1) + "L" + (b[0] - ux * 9 + uy * 4.5).toFixed(1) + " " + (b[1] - uy * 9 - ux * 4.5).toFixed(1) + "Z", fill: col }, sv);
+          }
+          function shorten(a, b, r0, r1) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy); return [[a[0] + dx / L * r0, a[1] + dy / L * r0], [b[0] - dx / L * r1, b[1] - dy / L * r1]]; }
+          var PB = "#8a5a2b";
+          [["abreast_hay", "hayatama"], ["hayatama", "asuka"], ["asuka", "oji"]].forEach(function (s) { var q = shorten(p(s[0]), p(s[1]), 4, 8); seg(q[0], q[1], PB, "5 4", 0, 1.6); });
+          var o = p("oji"), br = T.koyazaka.bearing * Math.PI / 180, t0 = (hm - 4 - o[1]) / -Math.cos(br), ex = [o[0] + Math.sin(br) * t0, hm - 4];
+          var q0 = shorten(o, ex, 8, 0); seg(q0[0], q0[1], PB, "5 4", 0, 1.6);
+          txt(ex[0] + 8, hm - 10, "to 高野坂 and Nachi", { fill: PB, "font-size": 11 });
+          var r0 = rin.getPointAtLength(0); txt(r0.x * k + 6, r0.y * k - 12, "from Hongū, by boat", { fill: PB, "font-size": 11 });
+          // every 16 October: Hayatama's god goes upriver to Mifune-jima
+          var gm = el("g", {}, g0); pth(T.mifune, { stroke: "#2f7f7a", "stroke-width": 2 }, gm);
+          var m0 = p("abreast_mif"); el("path", { d: "M" + (m0[0] + 10) + " " + (m0[1] - 5) + "L" + m0[0] + " " + (m0[1] + 0.5) + "L" + (m0[0] + 10) + " " + (m0[1] + 6) + "Z", fill: "#2f7f7a" }, sv);
+          // every 6 February: the steps, the priests' times, the climbers' visits by day, the next day's mochi
+          pth(T.steps, { stroke: "#c0612b", "stroke-width": 3, "stroke-linecap": "round" });
+          var OR = "#c0612b";
+          [["hayatama", "foot", 10], ["foot", "asuka", 18], ["asuka", "hayatama", 18]].forEach(function (s) { var q = shorten(p(s[0]), p(s[1]), 9, 10); seg(q[0], q[1], OR, "2 3", s[2], 1.5); });
+          ["hayatama", "asuka", "myoshin"].forEach(function (key) { var q = p(key); el("circle", { cx: q[0], cy: q[1], r: 7.5, fill: "none", stroke: OR, "stroke-width": 1.6 }, sv); });
+          var sc = p("school"); el("rect", { x: sc[0] + 9, y: sc[1] - 4, width: 7, height: 7, fill: OR }, sv);
+          // places
+          var lab = [["rock", "神倉神社 · Gotobiki-iwa", -10, 4, "end"], ["hayatama", "熊野速玉大社", -12, 4, "end"], ["asuka", "阿須賀神社", 11, -8, "start"],
+                     ["myoshin", "妙心寺", -12, -4, "end"], ["mifunejima", "御船島", 0, -12, "middle"], ["oji", "王子神社 (浜王子跡)", 10, 4, "start"],
+                     ["mouth", "the mouth", -6, -10, "end"], ["gongen", "権現山 · 千穂ヶ峯 253 m", -8, -6, "end"]];
+          lab.forEach(function (l) { var q = p(l[0]); el("circle", { cx: q[0], cy: q[1], r: 2.8, fill: "#2a2a2c" }, sv); txt(q[0] + l[2], q[1] + l[3], l[1], { "text-anchor": l[4] }); });
+          var hy = p("hayatama"), ft = p("foot"), as = p("asuka"), sch = p("school");
+          txt(hy[0] - 12, hy[1] + 18, "17:50 out · ≈22:10 back", { "text-anchor": "end", fill: OR, "font-size": 11 });
+          var rk = p("rock"); txt(rk[0] - 10, rk[1] + 18, "18:20 arrive · 19:10 fire · ≈20:00 the gate opens", { "text-anchor": "end", fill: OR, "font-size": 11 });
+          txt(as[0] + 11, as[1] + 8, "≈21:40", { fill: OR, "font-size": 11 });
+          el("path", { d: "M" + (sch[0] + 12.5) + " " + (sch[1] + 4) + "V" + (sch[1] + 30) + "H" + (sch[0] + 18), fill: "none", stroke: OR, "stroke-width": 0.8 }, sv);
+          txt(sch[0] + 20, sch[1] + 34, "7 February 16:00: mochi on the school ground", { fill: OR, "font-size": 11 });
+          var kl = p("kumano_lab"); txt(kl[0], kl[1] + 4, "熊野川 the Kumano", { "text-anchor": "middle", fill: "#2f5f94", "font-style": "italic", "font-size": 12, transform: "rotate(" + T.kumano_angle + " " + kl[0].toFixed(1) + " " + kl[1].toFixed(1) + ")" });
+          var il = wl[1].getPointAtLength(wl[1].getTotalLength() * 0.62); txt(il.x * k + 8, il.y * k + 14, "市田川", { fill: "#2f5f94", "font-size": 11 });
+          txt(W - 60, hm - 70, "太平洋", { "text-anchor": "middle", fill: "#2f5f94", "font-style": "italic", "font-size": 12 });
+          // scale bar and north
+          var sb = 500 * k; el("path", { d: "M" + (W - 24 - sb) + " " + (hm - 16) + "h" + sb, stroke: "#2a2a2c", "stroke-width": 2 }, sv);
+          txt(W - 24 - sb / 2, hm - 22, "500 m", { "text-anchor": "middle", "font-size": 11 });
+          el("path", { d: "M" + (W - 24) + " 34l-6 14h12z", fill: "#2a2a2c" }, sv); txt(W - 24, 28, "N", { "text-anchor": "middle", "font-size": 11 });
+          // legend: one row per time scale
+          var LG = [["#2f5f94", "", "always · the water: rain on Kamikura-yama → 神倉堀端都市下水路 → 市田川 → the Kumano’s estuary, " + (T.m.conf_mouth / 1000).toFixed(1) + " km from its mouth → the sea"],
+                    [PB, "5 4", "before the Edo period · the pilgrims: by boat from Hongū → 熊野速玉大社 → 阿須賀神社 → 浜王子 → 高野坂 → Nachi (the order of visits; dashes are not routes)"],
+                    [OR, "2 3", "every 6 February · Oto Matsuri: the priests’ times (2024 programme); ○ visited by the climbers by day (2026); ■ the next day’s mochi"],
+                    ["#2f7f7a", "", "every 16 October · Mifune Matsuri: Hayatama’s god goes upriver by boat to 御船島"]];
+          LG.forEach(function (r, i) {
+            var y = hm + 20 + i * 19;
+            el("line", { x1: 8, x2: 34, y1: y - 4, y2: y - 4, stroke: r[0], "stroke-width": 2.4, "stroke-dasharray": r[1] }, sv);
+            txt(42, y, r[2], { "font-size": 11, fill: "#2a2a2c" });
+          });
         }
         function kmkOffsets(D) {
           // distance from the foot, row by row: median (dot) and the middle half of the rows (bar)
