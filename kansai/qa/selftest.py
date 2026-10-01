@@ -104,6 +104,8 @@ def main():
     results.append(kmk_case("a Kamikura label moved off its place is caught", "kamikura", lambda K: K["pts"][6].__setitem__(2, K["pts"][6][2] + 0.5)))
     # the ground section: a measured slope that drifts from the text, and a ground layer the switcher cannot load
     results.append(kmk_case("a drifting ground measurement is caught", "derived", lambda K: K["ground"]["foot"].update(up_deg=33.0)))
+    # comparing gazes: a coded count that no longer matches the figure drawn from it
+    results.append(kmk_case("a gaze count out of step with its figure is caught", "gaze", lambda K: K["gaze"]["rows"][0]["pos"].__setitem__(1, 6)))
     d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js"); (d / "kamikura_lrm.jpg").unlink()
     os.environ["KANSAI_DATA"] = str(d)
     results.append(case("a missing ground layer is caught", "kamikura"))
