@@ -71,6 +71,10 @@ if (chartsOnly) {
 const { ctx, page } = await open({ width: 1440, height: 900 });
 const hasQA = await page.evaluate(() => !!window.__QA);
 if (!hasQA) { err('qa-hook', 'window.__QA missing — page script failed or hook removed'); }
+// in-page links (the contents pane): every #anchor leads to an element
+const deadAnchors = await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href'))
+  .filter((h) => h.length > 1 && !document.getElementById(decodeURIComponent(h.slice(1)))));
+deadAnchors.forEach((h) => err('anchors', `in-page link ${h} leads nowhere`));
 
 // 1. references: every attribute/key the page uses must resolve to data
 if (hasQA) {
@@ -556,6 +560,7 @@ const mob = await m.page.evaluate(() => ({ sw: document.documentElement.scrollWi
 if (mob.sw > mob.iw + 1) err('mobile-overflow', `page is ${mob.sw}px wide on a ${mob.iw}px phone (sideways scroll)`);
 if (mob.map < 200) err('mobile-map', `map is only ${mob.map}px tall on a phone`);
 await htmlOverflow(m.page, '390px');
+await chartChecks(m.page, '390px');
 if (hasQA) await stepChecks(m.page, 'mobile');
 await m.ctx.close();
 await browser.close();

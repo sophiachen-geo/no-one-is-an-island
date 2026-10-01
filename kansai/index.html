@@ -68,6 +68,17 @@
       .back { font-family: "Cormorant Garamond", serif; letter-spacing: 0.2em; font-size: 0.82rem; color: var(--ink-faint); text-decoration: none; }
       .back:hover { color: var(--accent); }
       .masthead { padding: clamp(2.4rem, 8vh, 5rem) 0 1.4rem; }
+      /* ---------- contents pane (the page's navigation, at the top) ---------- */
+      .toc { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto 0.6rem; padding: 0 1.7rem; }
+      .toc-h { font-family: "Cormorant Garamond", serif; font-style: italic; letter-spacing: 0.22em; color: var(--accent); font-size: 0.95rem; margin: 0 0 0.5rem; }
+      .toc-cols { display: grid; grid-template-columns: 1fr 1.25fr 1.25fr; gap: 0.3rem 2.2rem; border-top: 1px solid var(--rule, rgba(87,85,91,0.25)); border-bottom: 1px solid var(--rule, rgba(87,85,91,0.25)); padding: 0.8rem 0; }
+      .toc-g { margin: 0; padding: 0; list-style: none; }
+      .toc-g li { margin: 0.18rem 0; line-height: 1.35; }
+      .toc-ch { list-style: decimal; padding-left: 1.3rem; }
+      .toc-ch li::marker { color: var(--ink-faint); font-size: 0.85em; }
+      .toc a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+      .toc a:hover, .toc a:focus-visible { border-bottom-color: currentColor; }
+      @media (max-width: 860px) { .toc-cols { grid-template-columns: 1fr; } .toc { padding: 0 1rem; } }
       .eyebrow { font-family: "Cormorant Garamond", serif; font-style: italic; letter-spacing: 0.22em; color: var(--accent); font-size: 0.95rem; margin: 0 0 0.6rem; }
       .title { font-family: "Noto Serif JP", serif; font-weight: 500; font-size: clamp(2.1rem, 6vw, 3.2rem); letter-spacing: 0.18em; line-height: 1.25; margin: 0 0 0.7rem; }
       .title .latin { font-family: "Cormorant Garamond", serif; font-weight: 500; letter-spacing: 0.12em; }
@@ -469,7 +480,7 @@
       /* the valley section keeps a legible size on small screens: it scrolls sideways inside its own box */
       .vscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .vscroll-hint { display: none; font-size: 0.75rem; color: var(--ink-faint); margin: 0 0 0.3rem; }
-      @media (max-width: 760px) { .vscroll #valley { min-width: 720px; } .vscroll #kmkprof, .vscroll #kmkfoot, .vscroll #kmkscore, .vscroll #kmkoff { min-width: 760px; } .vscroll-hint { display: block; } }
+      @media (max-width: 760px) { .vscroll #valley { min-width: 720px; } .vscroll #kmkprof, .vscroll #kmkfoot, .vscroll #kmkscore, .vscroll #kmkoff, .vscroll #kmkclimb, .vscroll #kmksec, .vscroll #kmktown { min-width: 760px; } .vscroll-hint { display: block; } }
       /* ---------- Kamikura mountain foot · a micro-morphology (last chapter) ---------- */
       .kmk { margin-top: 0.4rem; }
       .kmk .intro { max-width: 52rem; }
@@ -819,6 +830,32 @@
       </div>
     </header>
 
+    <nav class="toc" id="contents" aria-label="Contents">
+      <p class="toc-h">Contents</p>
+      <div class="toc-cols">
+        <ul class="toc-g">
+          <li><a href="#intro">Shingū at a glance</a></li>
+          <li><a href="#kumano-system">The Kumano as one system</a></li>
+          <li><a href="#finding">Finding, strategy, test</a></li>
+        </ul>
+        <ol class="toc-g toc-ch">
+          <li><a href="#ch1">Convergence created the city</a></li>
+          <li><a href="#ch2">Morphology, sacred landscape and adaptation</a></li>
+          <li><a href="#ch3">Four hazard pathways converge</a></li>
+          <li><a href="#ch4">Resilience through selective concentration</a></li>
+          <li><a href="#ch5">Resilience extends beyond the resident population</a></li>
+          <li><a href="#ch6">The watershed defines the governance scale</a></li>
+        </ol>
+        <ul class="toc-g">
+          <li><a href="#synthesis">Synthesis · one city, several geographies</a></li>
+          <li><a href="#resistance">From accommodation to resistance</a></li>
+          <li><a href="#fieldnotes">Field notes · Shingū’s three shrines by bicycle</a></li>
+          <li><a href="#kamikura">Kamikura mountain foot · the refuge inside the hazard</a></li>
+          <li><a href="#sources">Sources &amp; method</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <section class="topsec" id="intro" aria-label="Shingū at a glance and the Kumano river system">
 <div class="glance">
         <div class="gtext">
@@ -858,7 +895,7 @@
           </div>
         </aside>
       </div>
-      <h2 class="sec">The Kumano as one system</h2>
+      <h2 class="sec" id="kumano-system">The Kumano as one system</h2>
       <p class="intro">Shingū sits where one river system meets the sea. The flat map and the long profile show the same places: pick one in either and it lights up in both. The profile runs along the real bed of the Totsukawa–Kumano, from the Ōmine headwaters to the mouth, then on down the coast.</p>
       <div class="ksys">
         <figure class="ksys-map">
@@ -875,7 +912,7 @@
       </div>
     </section>
 
-    <section class="board" aria-label="Finding, strategy, test">
+    <section class="board" id="finding" aria-label="Finding, strategy, test">
       <div>
         <h3>FINDING</h3>
         <p>Shingū’s location plan concentrates the town where the water goes: 58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami. Evacuation is meant to close that gap and does so only under conditions. In central Shingū the margin hangs on the 2026 model, which keeps road and rail embankments standing and brings the water late; with water by 15 minutes, 2,040 residents of the zone fall short at Wakayama’s rule of leaving at 5 minutes and walking at 0.5 m/s. In the part of Kihō the animation covers, 75% fall short at the same rule.</p>
@@ -928,7 +965,7 @@
 
       <div class="steps" id="steps">
         <!-- ============ 1 ============ -->
-        <div class="chapter"><p class="cn">1</p><h2>Convergence created the city</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate</div></div>
+        <div class="chapter" id="ch1"><p class="cn">1</p><h2>Convergence created the city</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate</div></div>
 
         <article class="step" data-view="hinterland" data-name="Hinterland · river and sea" data-on="basin-faint river_main river_trib flow_kitayama flow_kumano sea_osaka sea_edo pref" data-overlay="base-region towns-flow flows-labels" data-legend="flows sealane pref">
           <div class="card">
@@ -978,7 +1015,7 @@
         </article>
 
         <!-- ============ 2 ============ -->
-        <div class="chapter"><p class="cn">2</p><h2>Morphology, sacred landscape and adaptation</h2><div class="tags"><svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
+        <div class="chapter" id="ch2"><p class="cn">2</p><h2>Morphology, sacred landscape and adaptation</h2><div class="tags"><svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
 
         <article class="step" data-view="region" data-name="Kii Mountains · relief and forest" data-on="shade forest park park_sp river_main river_trib pref" data-overlay="base-region peaks" data-legend="shade forest park parksp peak river" data-ranges>
           <div class="card">
@@ -1052,7 +1089,7 @@
         </article>
 
         <!-- ============ 3 ============ -->
-        <div class="chapter"><p class="cn">3</p><h2>Four hazard pathways converge</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
+        <div class="chapter" id="ch3"><p class="cn">3</p><h2>Four hazard pathways converge</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
 
         <article class="step" data-view="pathways" data-name="Four directions of risk" data-on="flood flood_l1 flood_ichida ichida_basin tsunami ts26_freq ls_red ls_yellow water river_main pref" data-overlay="pathways" data-legend="flood floodl1 floodichida tsunami tsfreq red yellow bts bfl bboth bdry" data-bld>
           <div class="card">
@@ -1242,7 +1279,7 @@
         </article>
 
         <!-- ============ 4 ============ -->
-        <div class="chapter"><p class="cn">4</p><h2>Resilience through selective concentration</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
+        <div class="chapter" id="ch4"><p class="cn">4</p><h2>Resilience through selective concentration</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
 
         <article class="step" data-view="connect" data-name="Mountain corridors · exposure" data-on="ls_roads nr168 nr42 road_local river_main shingu" data-overlay="hubs valley-sites" data-legend="lsroads hubs">
           <div class="card">
@@ -1326,7 +1363,7 @@
         </article>
 
         <!-- ============ 5 ============ -->
-        <div class="chapter"><p class="cn">5</p><h2>Resilience extends beyond the resident population</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
+        <div class="chapter" id="ch5"><p class="cn">5</p><h2>Resilience extends beyond the resident population</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
 
         <article class="step" data-view="region" data-name="The visitor’s Kumano" data-on="kodo kodo_iseji kodo_routed river_route river_main pref rail" data-overlay="base-region shrines gateways kodo-names" data-legend="kodo kodorouted riverroute rail">
           <div class="card">
@@ -1372,7 +1409,7 @@
         </article>
 
         <!-- ============ 6 ============ -->
-        <div class="chapter"><p class="cn">6</p><h2>The watershed defines the governance scale</h2><div class="tags"><svg class="pg"><use href="#pg-coordinate"/></svg> coordinate</div></div>
+        <div class="chapter" id="ch6"><p class="cn">6</p><h2>The watershed defines the governance scale</h2><div class="tags"><svg class="pg"><use href="#pg-coordinate"/></svg> coordinate</div></div>
 
         <article class="step" data-view="basin" data-name="The downstream fragment" data-on="basin basin_nara basin_wakayama basin_mie shingu river_main river_trib pref" data-overlay="base-region basin-labels" data-legend="basin urbanmun pref">
           <div class="card">
@@ -1427,12 +1464,12 @@
     </main>
 
     <section class="after" id="after">
-      <h2>Synthesis · one city, several geographies</h2>
+      <h2 id="synthesis">Synthesis · one city, several geographies</h2>
       <p class="intro">Shingū becomes most legible when its overlapping spatial systems are placed side by side. Each map below is drawn at its own scale — zoom any of them.</p>
       <div class="facets" id="facets"></div>
       <p class="closing">Laid side by side, these logics do not nest: the compact centre sits inside the flood and tsunami maps, and the hub kept dry depends on roads through slope hazard.</p>
 
-      <h2>From accommodation to resistance</h2>
+      <h2 id="resistance">From accommodation to resistance</h2>
       <ul class="continuity">
         <li><svg><use href="#pg-kawaraya"/></svg><span>Kawaraya were taken apart before a flood.</span></li>
         <li><svg><use href="#pg-agariya"/></svg><span>Agariya gave people and goods a house on higher ground.</span></li>
@@ -2906,7 +2943,7 @@
               if (!host) return res(false);
               if (kmk.ready) return res(true);
               waiting.push(res); if (started) return; started = true;
-              var go = function () { kmkBuild(window.__KMK); kmk.ready = true; done(true); };
+              var go = function () { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { kmkBuild(window.__KMK); kmk.ready = true; done(true); }); };   // labels are placed by measuring text: draw with the web fonts in
               if (window.__KMK) return go();
               var s = document.createElement("script"); s.src = "data/kamikura.js"; s.async = true;
               s.onload = function () { if (window.__KMK) go(); else fail(); };
@@ -3538,7 +3575,7 @@
               if (!host) return res(false);
               if (fn.ready) return res(true);
               waiting.push(res); if (started) return; started = true;
-              var go = function () { fnBuild(window.__FN); fn.ready = true; done(true); };
+              var go = function () { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { fnBuild(window.__FN); fn.ready = true; done(true); }); };   // as for Kamikura
               if (window.__FN) return go();
               var s = document.createElement("script"); s.src = "data/fieldnotes.js"; s.async = true;
               s.onload = function () { if (window.__FN) go(); else fail(); };
@@ -3905,6 +3942,24 @@
         });
 
         satSet(satOn);
+        // the contents pane: a link jumps straight to its part (no long smooth scroll through the story), opens the
+        // sources, and keeps the target in place while sections above it build as they come near and grow
+        document.querySelectorAll('.toc a[href^="#"]').forEach(function (a) {
+          a.addEventListener("click", function (e) {
+            var id = a.getAttribute("href").slice(1), t = document.getElementById(id); if (!t) return;
+            e.preventDefault();
+            if (t.tagName === "DETAILS") t.open = true;
+            if (history.pushState) history.pushState(null, "", "#" + id);
+            var html = document.documentElement, prev = html.style.scrollBehavior, n = 0;
+            html.style.scrollBehavior = "auto";
+            function settle() { var top = t.getBoundingClientRect().top; if (Math.abs(top) > 1) window.scrollTo(0, window.scrollY + top); }
+            settle();
+            var iv = setInterval(function () { settle(); if (++n >= 12) { clearInterval(iv); html.style.scrollBehavior = prev; } }, 120);
+            if (!t.hasAttribute("tabindex")) t.setAttribute("tabindex", "-1");
+            t.focus({ preventScroll: true });
+          });
+        });
+
         /* ================= QA hooks (read-only; used by kansai/qa/check_render.mjs) ================= */
         window.__QA = {
           G: G, LEG: LEG, GROUPLEG: GROUPLEG, LABELS: LABELS, MARKERS: MARKERS, LINKS: LINKS, FACETS: FACETS,
