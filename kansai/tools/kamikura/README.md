@@ -37,7 +37,8 @@ Break of slope: the edge of ground at least 1 m above the plain (median of near-
 
 - Every cell of the study area is DEM1A. The audit compares it with GSI's levelling benchmarks and triangulation
   points (vector-tile symbol layer) and with DEM5A, which agrees on flat open ground but loses most of the channel's
-  depth. 31% of the area is under buildings, where DEM1A is interpolated.
+  depth. 28% of the area is under buildings, where DEM1A is interpolated (the mask that leaves this ground out of the
+  analyses also takes every cell an outline crosses: 31%).
 - Local relief = ground minus its Gaussian-smoothed surface (σ 8 m). Profile and plan curvature are computed on ground
   smoothed with σ 2.5 m; negative profile curvature = concave (a foot).
 - The foot is found on 310 cross-profiles (every 2 m, perpendicular to the front smoothed over 41 m, 40 m upslope to

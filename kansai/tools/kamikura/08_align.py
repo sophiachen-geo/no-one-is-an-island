@@ -345,10 +345,14 @@ def analyse(sim=False, foot_def="consensus", aux=True):
         cand = [c for c in priv if c[1].contains(q)]
         if not cand: temple_parcels[name] = None; continue
         c = cand[0]
-        # a temple point inside the 1 ha school parcel identifies nothing: leave it out
-        if c[0]["chiban"] == "715-3": temple_parcels[name] = {"chiban": c[0]["chiban"], "used": False}; continue
-        temple_parcels[name] = {"chiban": c[0]["chiban"], "area_m2": round(c[1].area), "used": True}
-        feats["temple"].append(LineString(c[1].exterior.coords))
+        # how firmly the point sits in it: distance to the parcel's edge, and to the nearest other private parcel
+        edge = round(c[1].exterior.distance(q), 1)
+        other = round(min(g.distance(q) for pp, g in priv if g is not c[1]), 1)
+        rec = {"chiban": c[0]["chiban"], "area_m2": round(c[1].area), "edge_m": edge, "next_private_m": other}
+        # a point inside the 1 ha school parcel, or too close to an edge to tell, identifies nothing: leave it out
+        rec["used"] = c[0]["chiban"] != "715-3" and edge >= 2.0
+        temple_parcels[name] = rec
+        if rec["used"]: feats["temple"].append(LineString(c[1].exterior.coords))
     osm = json.load(open("osm.json"))["elements"]
     for e in osm:
         if e["type"] == "way" and e["id"] in SHRINE_WAYS:
@@ -429,16 +433,25 @@ def main():
     res = analyse()
     variants = {"similarity registration": dict(sim=True), "foot A (mask edge)": dict(foot_def="A"), "foot B (plain + 1 m)": dict(foot_def="B"),
                 "foot C (concavity)": dict(foot_def="C"), "foot D (hinge)": dict(foot_def="D")}
-    rob = {}
+    rob, rob_band = {}, {}
     for name, kw in variants.items():
         r = analyse(aux=False, **kw)
         for cls, v in r["classes"].items():
             b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
             rob.setdefault(cls, []).append({"variant": name, **({k: b.get(k) for k in ("follow_foot_pct", "chance_pct", "p", "n_disc")} if b else {})})
+            for bb in v["bands"]:
+                rob_band.setdefault((cls, bb["from"]), []).append(bb)
         if kw.get("sim"): res["courses_sim"] = r["courses"]
         rob.setdefault("_offsets", []).append({"variant": name, "cadastre_west": r["offsets"]["cadastre_west"]["median_m"],
                                                "legal_water": r["offsets"]["legal_water"]["median_m"], "lane": r["offsets"]["lane"]["median_m"],
                                                "together_rows": r["legal_vs_channel"]["together_rows"], "wiggle_r": r["wiggle"]["channel"].get("wiggle_r")})
+    # every band, not just the one next to the foot: in how many of the six runs does the excess hold?
+    for cls, v in res["classes"].items():
+        for bb in v["bands"]:
+            if bb.get("p") is None: continue
+            runs = [bb] + [x for x in rob_band.get((cls, bb["from"]), []) if x.get("p") is not None]
+            bb["robust"] = {"runs": len(runs), "significant": sum(1 for x in runs if x["p"] < 0.05),
+                            "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
     for cls, v in res["classes"].items():
         b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
         if not b or b.get("p") is None: continue

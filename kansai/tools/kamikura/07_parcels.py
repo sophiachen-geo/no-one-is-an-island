@@ -14,8 +14,8 @@ study area) is registered as one piece:
   3. fit     reported as the distance of road-parcel outlines to GSI road edges (median, 75th percentile, share
              within 1.5 m) and the school outline's distance to OSM's.
 
-The drawings come out 12–16 % smaller than the ground and turned about 14°, the usual state of Meiji-derived
-cadastral drawings (縄延び: land measured short when it was first registered). Positions remain approximate (the
+The drawings must be enlarged 13–16 % (31 % in area) and turned about 14° to fit the ground, the usual state of
+Meiji-derived cadastral drawings (縄伸び: land measured short when it was first registered). Positions remain approximate (the
 page says so); directions are what the alignment test uses. Writes parcels.json (transform, fit, every parcel in
 JGD2011 / CS VI metres with its 地番, 大字, 丁目 and class: private / road / water / strip).
 """

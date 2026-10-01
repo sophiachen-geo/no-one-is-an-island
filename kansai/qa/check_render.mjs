@@ -311,6 +311,12 @@ if (hasQA) {
       K.setBase('relief');
       // the three figures of the ground section are drawn from the data
       [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
+      // the two ground profiles are drawn at the vertical exaggeration their captions state
+      for (const id of ['kmkfoot', 'kmkprof']) {
+        const sv = document.getElementById(id), cap = sv && sv.closest('figure') && sv.closest('figure').querySelector('figcaption');
+        const m = cap && cap.textContent.match(/heights ×(\d+(?:\.\d+)?)/), ve = sv ? parseFloat(sv.getAttribute('data-ve')) : NaN;
+        if (!m || !(Math.abs(ve - parseFloat(m[1])) < 0.05)) out.push(['kamikura', `figure #${id} is drawn with heights ×${ve} but its caption says ${m ? '×' + m[1] : 'nothing'}`]);
+      }
       K.setSys('all', true);
       K.setTr(400, false); await wait(20);
       const mk = document.querySelector('#kmkmap .ktrm'), cu = document.querySelector('#kmkprof .kpcur');

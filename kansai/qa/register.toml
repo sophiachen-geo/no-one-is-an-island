@@ -1156,9 +1156,9 @@ check = { kmk = "stats.strip_gain_max", fmt = "at most {:.1f} m" }
 
 [[claim]]
 id = "kmk-cut"
-match = ["an open, stone-faced channel 3.2 m below the plain"]
+match = ["an open, stone-faced channel cut up to 3.2 m below the plain"]
 status = "derived"
-source = "median plain height minus the channel bed inside the polygon (GSI DEM1A)"
+source = "median plain height minus the lowest ground inside the polygon, the channel bed (GSI DEM1A): the deepest cut"
 check = { kmk = "stats.channel_cut_m", fmt = "{:.1f} m below" }
 
 [[claim]]
@@ -1429,36 +1429,43 @@ source = "GSI DEM5A (5 m, airborne laser), z15 tiles resampled to the same 1 m g
 url = "https://maps.gsi.go.jp/development/ichiran.html"
 
 [[claim]]
+id = "kmk-marks-dist"
+match = ["It agrees with the GSI survey marks within 800 m of the study area"]
+status = "derived"
+source = "distance from the study polygon to each GSI levelling benchmark and triangulation point used: 57, 546, 549, 412 and 795 m (the farthest, TR45035477901)"
+check = { kmk = "ground.audit.control.3.dist_m", expect = 795, tol = 5 }
+
+[[claim]]
 id = "kmk-bm-1"
-match = ["It meets GSI’s levelling benchmarks to within 0.01 m and 0.14 m (a third reads 0.79 m low)"]
+match = ["two of three levelling benchmarks to within 0.01 m and 0.14 m (the third reads 0.79 m low)"]
 status = "derived"
 source = "GSI levelling benchmarks in the optimal vector tiles (symbol ftCode 7103): L0100004811-1 5.953 m → DEM1A 5.96 m; L04000042-213 7.044 m → 7.19 m; L060000004810 9.793 m → 9.00 m"
 check = { kmk = "ground.audit.control.0.diff", expect = 0.01, tol = 0.005 }
 
 [[claim]]
 id = "kmk-bm-2"
-match = ["It meets GSI’s levelling benchmarks to within 0.01 m and 0.14 m (a third reads 0.79 m low)"]
+match = ["two of three levelling benchmarks to within 0.01 m and 0.14 m (the third reads 0.79 m low)"]
 status = "derived"
 source = "benchmark L04000042-213 (7.044 m)"
 check = { kmk = "ground.audit.control.1.diff", expect = 0.14, tol = 0.005 }
 
 [[claim]]
 id = "kmk-bm-3"
-match = ["It meets GSI’s levelling benchmarks to within 0.01 m and 0.14 m (a third reads 0.79 m low)"]
+match = ["two of three levelling benchmarks to within 0.01 m and 0.14 m (the third reads 0.79 m low)"]
 status = "derived"
 source = "benchmark L060000004810 (9.793 m); DEM1A reads 9.00 m (9.46 m is the highest ground within 3 m)"
 check = { kmk = "ground.audit.control.2.diff", expect = -0.79, tol = 0.005 }
 
 [[claim]]
 id = "kmk-tp-1"
-match = ["its triangulation points to within 0.08 m and 0.51 m"]
+match = ["the two triangulation points to within 0.08 m and 0.51 m"]
 status = "derived"
 source = "GSI triangulation points (symbol ftCode 7102): TR45035477901 19.17 m → 19.09 m; TR35035477801 (千穂ヶ峰) 253.29 m → 252.78 m"
 check = { kmk = "ground.audit.control.3.diff", expect = -0.08, tol = 0.005 }
 
 [[claim]]
 id = "kmk-tp-2"
-match = ["its triangulation points to within 0.08 m and 0.51 m"]
+match = ["the two triangulation points to within 0.08 m and 0.51 m"]
 status = "derived"
 source = "triangulation point TR35035477801 on 千穂ヶ峰 (253.29 m)"
 check = { kmk = "ground.audit.control.4.diff", expect = -0.51, tol = 0.005 }
@@ -1493,9 +1500,9 @@ check = { kmk = "ground.audit.dem5.channel_depth_1m_median", fmt = "reads {:.2f}
 
 [[claim]]
 id = "kmk-under-bld"
-match = ["31% of the study area lies under a GSI outline, where bare ground is interpolated"]
+match = ["28% of the study area lies under a GSI outline, where bare ground is interpolated"]
 status = "derived"
-source = "share of the study polygon's 1 m cells under GSI building outlines (optimal vector tiles)"
+source = "share of the study polygon's 1 m cells whose centre lies under a GSI building outline (optimal vector tiles) = the footprint share (stats.bld_cover_pct, 27.6%); the mask the analyses use to leave interpolated ground out also takes the cells the outlines cross (31.1%)"
 check = { kmk = "ground.audit.buildings.study_under_buildings_pct", fmt = "{:.0f}%" }
 
 [[claim]]
@@ -1659,10 +1666,17 @@ check = { kmk = "ground.weak_max_sig", fmt = "at most {} of 6 runs" }
 
 [[claim]]
 id = "kmk-beyond"
-match = ["the largest excess over chance is 7 points (back boundaries 50–100 m out)", "Beyond 25 m, nothing does"]
+match = ["the largest excess over chance is 7 points (back boundaries 50–100 m out)"]
 status = "derived"
-source = "largest excess over chance in the 25–50, 50–100 and 100–200 m bands over all classes: back boundaries, 50–100 m, 28.9% against 22.0% (p = 0.004)"
+source = "largest excess over chance in the 25–50, 50–100 and 100–200 m bands over all classes: back boundaries, 50–100 m, 28.9% against 22.0% (p = 0.004 in the consensus run, significant in 2 of 6 runs)"
 check = { kmk = "ground.beyond_max.excess", fmt = "{:.0f} points" }
+
+[[claim]]
+id = "kmk-beyond-runs"
+match = ["Beyond 25 m, nothing holds", "no class is significant in more than 2 of the 6 runs"]
+status = "derived"
+source = "the most runs (of six) in which any class is significant in the 25–50, 50–100 or 100–200 m band: 2, for back boundaries 50–100 m out (p = 0.004 in the consensus run) and buildings 100–200 m out (2.9 points, p = 0.003); within 25 m the robust classes hold in 4–6 runs"
+check = { kmk = "ground.beyond_max_sig", fmt = "more than {} of the 6 runs" }
 
 [[claim]]
 id = "kmk-beyond-band"
@@ -1782,38 +1796,59 @@ check = { kmk = "ground.cadastre.aff.rotation_deg", expect = -13.5, tol = 0.5 }
 
 [[claim]]
 id = "kmk-cad-area"
-match = ["31% more area than drawn"]
+match = ["(31% more area than drawn)"]
 status = "derived"
 source = "determinant of the affine transform: 1.313"
 check = { kmk = "ground.cadastre.aff.area_factor", expect = 1.313, tol = 0.005 }
 
 [[claim]]
 id = "kmk-nawanobi"
-match = ["Drawings descended from the Meiji land-tax surveys, which villagers measured themselves, are known to run short; MLIT puts the average excess of surveyed over registered area (縄伸び) at 26%."]
+match = ["Drawings descended from the Meiji land-tax surveys, which villagers measured themselves, are known to run short: MLIT puts the average excess of surveyed over registered area (縄伸び) at 26% in the cadastral surveys certified from 1970 to 2011."]
 status = "verified"
-source = "MLIT 地籍整備課『ご存じですか？地籍のこと』p. 24: 「「縄伸び」とは…登記簿に記載された面積より実際の土地の実測面積が多いことをいいます」, p. 25: 「平均で２６％の縄伸びが見られています」; MLIT「明治以降の地籍と地図の歴史」p. 6: 「改租事業における土地の測量や地図…の作成は、原則として村民自身の手で行いました」"
+source = "MLIT 地籍整備課『ご存じですか？地籍のこと』p. 24: 「「縄伸び」とは…登記簿に記載された面積より実際の土地の実測面積が多いことをいいます」, p. 22 (PDF p. 25): 「左の表は、昭和４５年度から平成２３年度までに認証された成果を集計した結果です。平均で２６％の縄伸びが見られています」 (roads and waterways excluded); p. 21: the Meiji survey was 「住民において土地丈量を行い…実際の面積より狭く測量しようとされた」; MLIT「明治以降の地籍と地図の歴史」p. 6: 「改租事業における土地の測量や地図…の作成は、原則として村民自身の手で行いました」"
 url = "https://www.chiseki.go.jp/about/images/naze_A4.pdf"
 
 [[claim]]
 id = "kmk-cad-fit"
-match = ["fitted to GSI’s road edges it sits within a median 1.2 m of them", "Its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m)"]
+match = ["fitted to GSI’s road edges, its road parcels sit a median 1.2 m from them", "its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m)"]
 status = "derived"
 source = "distance of the road parcels' outlines (every 1 m) to the nearest GSI road edge after the affine registration: median 1.19 m, 75th percentile 2.39 m"
 check = { kmk = "ground.cadastre.aff.road_median_m", fmt = "{:.1f} m" }
 
 [[claim]]
 id = "kmk-cad-fit-share"
-match = ["Its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m)"]
+match = ["its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m)"]
 status = "derived"
 source = "share of those outline points within 1.5 m of a GSI road edge"
 check = { kmk = "ground.cadastre.aff.road_within1_5_pct", fmt = "{:.0f}%" }
 
 [[claim]]
 id = "kmk-soo-parcel"
-match = ["宗応寺 stands on parcel 708-1"]
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
 status = "derived"
-source = "the registered private parcel containing 宗応寺's reference point (points.toml kmk_soo); 妙心寺's point falls inside parcel 715-3, the school parcel"
+source = "the registered private parcel containing 宗応寺's reference point (points.toml kmk_soo, its address 千穂1-3-34); distance to that parcel's edge and to the nearest other private parcel (affine registration; similarity: 3.5 m and 7.3 m)"
 check = { kmk = "ground.temple_parcels.宗応寺.chiban", fmt = "parcel {}" }
+
+[[claim]]
+id = "kmk-soo-edge"
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
+status = "derived"
+source = "distance from the reference point (points.toml kmk_soo, GSI address search) to the edge of parcel 708-1; corroborated by OSM node 6849428099 (宗応寺), which falls 11.3 m inside the same parcel (8.6 m in the similarity registration)"
+check = { kmk = "ground.temple_parcels.宗応寺.edge_m", fmt = "{:.1f} m inside" }
+
+[[claim]]
+id = "kmk-soo-next"
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
+status = "derived"
+source = "distance from the reference point to the nearest other private parcel (707-2)"
+check = { kmk = "ground.temple_parcels.宗応寺.next_private_m", fmt = "{:.1f} m away" }
+
+[[claim]]
+id = "kmk-myoshin-edge"
+match = ["妙心寺’s lies 0.8 m from the edge of the school parcel, among small parcels, so its plot cannot be identified at this accuracy and is left out"]
+status = "derived"
+source = "妙心寺's reference point (points.toml kmk_myoshin) falls in parcel 715-3, 0.8 m from its edge (similarity registration 2.4 m); waterway 水-39 and private parcels 711-11 and 711-1 (146 and 166 m²) lie within 3 m; points closer than 2 m to an edge, or in the school parcel, are not used"
+check = { kmk = "ground.temple_parcels.妙心寺.edge_m", fmt = "{:.1f} m from the edge" }
 
 # ---------------------------------------------------------------- 流れ · flows: the channel's names, width and history
 [[claim]]
@@ -1884,7 +1919,7 @@ url = "https://www.mlit.go.jp/common/001154321.pdf"
 
 [[claim]]
 id = "kmk-2025"
-match = ["2025–2026 A 神倉堀端下水路改修事業 of ¥4.53 million in the FY2025 budget; stone-facing repair in 千穂 (30 m² of wall facing, a landscaping licence required) tendered in August and again in September 2025, the works due by February 2026."]
+match = ["2025–2026 The FY2025 budget carries ¥4.53 million for the channel’s repair (神倉堀端下水路改修事業); stone-facing repair in 千穂 (30 m² of wall facing, a landscaping licence required) is tendered in August and again in September 2025, the works due by February 2026."]
 status = "verified"
 source = "新宮市 令和7年度当初予算書（一般会計）, PDF p. 106: 款8 土木費 / 都市下水路 「神倉堀端下水路改修事業 4,528」 (千円); 新宮市入札公告 令和7年8月13日 新財工第30号 and 再公告 令和7年9月10日 新財工第39号 「神倉堀端下水路石張改修工事」 新宮市千穂地内: 壁張り A＝30㎡, 造園工事業の許可, 工期 令和8年2月23日まで"
 url = "https://www.city.shingu.lg.jp/div/zaisei-1/pdf/nyusatsu-koukoku/7k39.pdf"
@@ -1940,7 +1975,7 @@ check = { kmk = "ground.courses_sim.diagonal.private_pct", fmt = "–{:.0f}%)" }
 
 [[claim]]
 id = "kmk-courses-south"
-match = ["in the south (about 100 m) it runs within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, then breaks through the lots to reach the old water line at the foot."]
+match = ["in the south (about 100 m) it runs within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, then breaks through the lots to reach the old water line along the foot."]
 status = "derived"
 source = "south of the diagonal: 103 m (affine) / 99 m (similarity); within 3 m of a waterway parcel 65.4% / 40.0%"
 check = { kmk = "ground.courses.south.length_m", expect = 100, tol = 5 }

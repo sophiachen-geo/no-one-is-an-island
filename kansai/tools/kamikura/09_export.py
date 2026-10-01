@@ -183,15 +183,17 @@ def ground_data(z, x0, y1, frame):
         b = next((b for b in v["bands"] if b["from"] == (-15 if k == "walls" else 0)), None)
         scores[k] = {"band": [b["from"], b["to"]] if b else None, "follow": b.get("follow_foot_pct") if b else None,
                      "chance": b.get("chance_pct") if b else None, "p": b.get("p") if b else None, "n": b.get("n_disc") if b else 0,
-                     "robust": v.get("robust"), "beyond": [{kk: bb.get(kk) for kk in ("from", "to", "follow_foot_pct", "chance_pct", "p", "n_disc")}
+                     "robust": v.get("robust"), "beyond": [{kk: bb.get(kk) for kk in ("from", "to", "follow_foot_pct", "chance_pct", "p", "n_disc", "robust")}
                                                            for bb in v["bands"] if bb["from"] >= 25]}
     audit = json.load(open("terrain_audit.json"))
-    ex = [(round(b["follow_foot_pct"] - b["chance_pct"], 1), k, b["from"], b["to"], b["p"]) for k, v in scores.items() for b in v["beyond"]
-          if b.get("follow_foot_pct") is not None]
+    ex = [(round(b["follow_foot_pct"] - b["chance_pct"], 1), k, b["from"], b["to"], b["p"], b["robust"]["significant"]) for k, v in scores.items()
+          for b in v["beyond"] if b.get("follow_foot_pct") is not None]
     beyond = max(ex)
+    beyond_sig = max(e[5] for e in ex)                     # beyond 25 m: the most runs (of six) in which any class is significant
     runs_west = [A["offsets"]["cadastre_west"]["median_m"]] + [r["cadastre_west"] for r in A["sensitivity"]["_offsets"]]
     weak = ("backs", "fronts", "temple", "walls", "legal_water")
-    out = {"foot": foot, "scores": scores, "beyond_max": {"excess": beyond[0], "class": beyond[1], "band": [beyond[2], beyond[3]], "p": beyond[4]},
+    out = {"foot": foot, "scores": scores, "beyond_max": {"excess": beyond[0], "class": beyond[1], "band": [beyond[2], beyond[3]], "p": beyond[4], "significant_runs": beyond[5]},
+           "beyond_max_sig": beyond_sig,
            "walls_town_m": sum(b["length_m"] for b in A["classes"]["walls"]["bands"] if b["from"] >= 0),
            "weak_max_sig": max(scores[k]["robust"]["significant"] for k in weak if scores[k].get("robust")),
            "cad_west_range": [min(runs_west), max(runs_west)], "offsets": A["offsets"], "wiggle": A["wiggle"], "lvc": A["legal_vs_channel"],
@@ -398,7 +400,7 @@ def main():
          "geometry": r7(tll(poly.exterior.intersection(unary_union([LineString(q) for q in tj["offset"]]).buffer(0.5))))},
         {"type": "Feature", "properties": {"name": "north edge", "rule": "lane closing the first full block north of the school and the temple row (OSM 266991552, 121369902)"},
          "geometry": r7(tll(LineString(st["edges"]["north"]).intersection(poly.buffer(0.5))))},
-        {"type": "Feature", "properties": {"name": "east edge", "rule": "street bounding the 千穂小学校 compound on the east, continued south (OSM 121367848, 1031510641, 121367953)"},
+        {"type": "Feature", "properties": {"name": "east edge", "rule": "street bounding the compound of 神倉小学校 (OSM: 千穂小学校) on the east, continued south (OSM 121367848, 1031510641, 121367953)"},
          "geometry": r7(tll(LineString(st["edges"]["east"]).intersection(poly.buffer(0.5))))},
         {"type": "Feature", "properties": {"name": "south edge", "rule": "street just south of the shrine-entrance cluster, carried west across the foot of the steps (OSM 121367975, 121370515, 499568826)"},
          "geometry": r7(tll(LineString(st["edges"]["south"]).intersection(poly.buffer(0.5))))},

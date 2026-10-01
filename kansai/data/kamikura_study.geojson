@@ -2701,7 +2701,7 @@
    "type": "Feature",
    "properties": {
     "name": "east edge",
-    "rule": "street bounding the 千穂小学校 compound on the east, continued south (OSM 121367848, 1031510641, 121367953)"
+    "rule": "street bounding the compound of 神倉小学校 (OSM: 千穂小学校) on the east, continued south (OSM 121367848, 1031510641, 121367953)"
    },
    "geometry": {
     "type": "LineString",

@@ -245,8 +245,10 @@ def main():
         # the highest ground within 3 m (a benchmark or pillar sits on its local top; positions carry ~1–2 m error)
         i, j = int(round(qy[0])), int(round(qx[0]))
         win = dem[max(i - 3, 0):i + 4, max(j - 3, 0):j + 4]
+        cx, cy = LL2P.transform(plon, plat)
         ctrl.append({"kind": kind, "code": code, "lon": round(plon, 6), "lat": round(plat, 6), "h": h,
-                     "dem1a": round(v, 2), "diff": round(v - h, 2), "dem1a_max3m": round(float(np.nanmax(win)), 2)})
+                     "dem1a": round(v, 2), "diff": round(v - h, 2), "dem1a_max3m": round(float(np.nanmax(win)), 2),
+                     "dist_m": round(poly.distance(Point(cx, cy)))})            # from the study area
 
     # derivatives
     zf = np.where(np.isnan(z), np.nanmedian(z), z)
@@ -255,8 +257,12 @@ def main():
     lrm[np.isnan(z)] = np.nan; prof[np.isnan(z)] = np.nan; plan[np.isnan(z)] = np.nan
     np.savez_compressed("terrain_plus.npz", lrm=lrm, prof=prof, plan=plan, src=srcg.astype(np.uint8),
                         under=under, z5=z5.astype(np.float32), frame=tz["frame"])
-    bshare = {"study_under_buildings_pct": round(100 * float(under[inpoly].mean()), 1),
-              "frame_under_buildings_pct": round(100 * float(under.mean()), 1)}
+    # the share under the outlines is counted by cell centre (= footprint area); the mask `under`, which the analyses use
+    # to leave interpolated ground out, also takes every cell an outline crosses (a deliberate margin of about half a cell)
+    exact = contains_xy(bld, gx, gy)
+    bshare = {"study_under_buildings_pct": round(100 * float(exact[inpoly].mean()), 1),
+              "frame_under_buildings_pct": round(100 * float(exact.mean()), 1),
+              "study_mask_pct": round(100 * float(under[inpoly].mean()), 1)}
     audit = {"coverage": cov, "dem5_vs_1": cmp5, "control": ctrl, "buildings": bshare,
              "sigma_lrm_m": SIG_LRM, "sigma_curv_m": SIG_CURV,
              "lrm_p": {k: round(float(np.nanpercentile(lrm[inpoly], q)), 2) for k, q in (("p01", 1), ("p50", 50), ("p99", 99))}}
