@@ -2,7 +2,7 @@
 
 The table codes every image of Kamikura that six publishers put on their pages (the promotional gaze), the two in
 Shingū's 2013 master plan (municipal), the Kubo studio's 1913 album (historical) and our own photographs at the foot
-(researcher) by the frame of Gou & Shibata (2017): where the camera stands, whether the town is in the frame, the
+(researcher) by the frame of Gou & Shibata (2017): where the camera stands, whether the town is in the frame as a view, the
 breadth of view, and up to two of their landscape categories (one added: Channel). See kansai/field/README.md.
 
     python3 gazes.py <kansai folder>     # rewrite only the "gaze" key of data/kamikura.js

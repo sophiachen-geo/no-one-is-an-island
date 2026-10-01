@@ -58,7 +58,7 @@ Comparisons:
 `gazes.csv` holds the gazes that need no participants, coded by the frame above: 37 images from six publishers'
 pages (34 photographic images and 3 maps or diagrams), 4 from the city's 2012 master plan, 1 plate from the 1913 album and
 our 10 photographs at the foot. Columns: `position` (mountain, threshold, foot, town; `map` for maps and diagrams),
-`town` (houses of the town in the frame), `breadth`, `category_1`/`category_2` (Gou & Shibata's, plus Channel),
+`town` (the town spread out in the frame as a view; houses seen at street level do not count), `breadth`, `category_1`/`category_2` (Gou & Shibata's, plus Channel),
 `festival`. The page's comparison is built from it (`tools/kamikura/gazes.py`). One coder so far: a second coder on
 the same images, and the visitor and resident gazes, are the next steps.
 

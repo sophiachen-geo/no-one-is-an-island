@@ -130,7 +130,7 @@ shares in the unnumbered strips, in numbered parcels and more than 3 m inside th
 `kansai/field/gazes.csv` codes every image of Kamikura on six publishers' pages (the promotional gaze, maps and
 diagrams kept but not counted), the four in Shingū's 2012 master plan, the one plate of the Kubo studio's 1913 album
 (NDL, public domain) and our ten photographs at the foot, by the frame of `kansai/field/README.md`: where the camera
-stands (mountain, threshold, foot, town), whether the town is in the frame, the breadth of view and up to two of
+stands (mountain, threshold, foot, town), whether the town is in the frame as a view, the breadth of view and up to two of
 Gou & Shibata's categories (Channel added). `gazes.py` summarises it into `kamikura.js` → `gaze` (`09_export.py` calls
 it too); our photographs' distance from the foot comes from their EXIF positions in `fieldnotes.js` against the foot
 line. The QA gate recomputes every label of the figure (`check_gaze`) and every count in the text from that summary.
