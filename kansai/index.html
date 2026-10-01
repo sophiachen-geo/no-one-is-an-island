@@ -562,6 +562,59 @@
       .kmk-wide { margin: 0.5rem 0 1.1rem; }
       .kmk-wide svg { width: 100%; height: auto; display: block; }
       .kmk-wide figcaption { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.55; margin-top: 0.35rem; }
+      /* ---- field notes: the ride, the three networks, the routes between the Kumano shrines ---- */
+      .fnchip { appearance: none; border: 1px solid rgba(87,85,91,0.3); border-radius: 999px; padding: 0.15rem 0.7rem; font: 400 0.84rem/1.5 "Noto Serif JP", serif; background: var(--paper); color: var(--ink); cursor: pointer; }
+      .fnchip:hover, .fnchip:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+      .fnchip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+      .fn svg.fn-svg { position: absolute; inset: 0; width: 100%; height: 100%; background: var(--land); border-radius: 2px; touch-action: pan-y; cursor: grab; }
+      .fn svg.fn-svg path { vector-effect: non-scaling-stroke; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+      svg.fn-svg .f-sea path { fill: #cdd8d4; stroke: none; }
+      svg.fn-svg .f-land path { fill: #f1ebdf; stroke: none; }
+      body.sat-on svg.fn-svg .f-land path, body.sat-on svg.fn-svg .f-sea path { fill: none; }
+      svg.fn-svg .f-water path { fill: rgba(95,141,176,0.35); stroke: #5f8db0; stroke-width: 0.8; }
+      svg.fn-svg .f-river path { stroke: #5f8db0; stroke-width: 1.4; }
+      svg.fn-svg .f-coast path { stroke: #8f8a80; stroke-width: 0.7; }
+      svg.fn-svg .f-net path { stroke: rgba(42,42,44,0.28); stroke-width: 0.9; }
+      svg.fn-svg .f-net.on path { stroke: rgba(42,42,44,0.55); stroke-width: 1.1; }
+      svg.fn-svg .f-leg path { stroke: #9e2a2b; stroke-width: 3.6; }
+      svg.fn-svg .f-legb path { stroke: #f4efe6; stroke-width: 6.5; }
+      svg.fn-svg .f-dots path { stroke-width: 3.2; }
+      svg.fn-svg .f-ch path { stroke: #8a7a60; stroke-width: 1.6; }
+      svg.fn-svg .f-ch path.nat { stroke: #6b5a3c; stroke-width: 2.2; }
+      svg.fn-svg .f-ch path.pref { stroke: #9a8358; stroke-width: 1.8; }
+      svg.fn-svg .f-ch path.muni { stroke: #b19d78; stroke-width: 1.5; stroke-dasharray: 4 2.5; }
+      svg.fn-svg .f-ch path.unp { stroke: #b19d78; stroke-width: 1.5; stroke-dasharray: 1.2 3; }
+      svg.fn-svg .f-ch path.sel { stroke: #9e2a2b; stroke-width: 3.6; stroke-dasharray: none; }
+      svg.fn-svg .f-mw path { stroke: #7d7a80; stroke-width: 1.4; stroke-dasharray: 6 3; opacity: 0.7; }
+      svg.fn-svg .f-rain path { stroke: #2f5f94; stroke-width: 6; stroke-opacity: 0.7; }
+      svg.fn-svg[data-sys="rain"] .f-ch path.sel { stroke: #8a7a60; stroke-width: 1.6; }
+      .fn-note { font-size: 0.78rem; color: var(--ink-soft); margin: 0.35rem 0 0; }
+      svg.fn-svg .f-pcr path { stroke: #1d7f8c; stroke-width: 6; stroke-opacity: 0.28; }
+      .fn-ov text { font-family: "Noto Serif JP", "Cormorant Garamond", serif; font-size: 11.5px; fill: var(--ink); paint-order: stroke; stroke: rgba(244,239,230,0.95); stroke-width: 3px; stroke-linejoin: round; }
+      .fn-ov text.em { font-size: 12.5px; font-weight: 600; }
+      .fn-ov text.small { font-size: 10.5px; }
+      .fn-ov text.rain { fill: #2f5f94; font-size: 10.5px; }
+      .fn-ov .fph { cursor: pointer; }
+      .fn-ov .fph path.cone { fill: rgba(158,42,43,0.22); stroke: rgba(158,42,43,0.65); stroke-width: 0.8; }
+      .fn-ov .fph circle { fill: #9e2a2b; stroke: #f4efe6; stroke-width: 1.4; }
+      .fn-ov .fph:hover circle, .fn-ov .fph:focus-visible circle, .fn-ov .fph.sel circle { fill: #f2c14e; stroke: #1a1a1a; }
+      .fn-ov .fph:focus-visible { outline: none; }
+      .fn-ov circle.fnode { fill: #f4efe6; stroke: #2a2a2c; stroke-width: 1.2; }
+      .fn-ov circle.fshrine { fill: #d3614e; stroke: #f4efe6; stroke-width: 1.6; }
+      .fn-ov circle.fstat { fill: #1d7f8c; stroke: #f4efe6; stroke-width: 1.2; }
+      .fn-ov .fcur { fill: #fbe7a1; stroke: #1a1a1a; stroke-width: 2; }
+      .fn .mcard { top: 2.4rem; }
+      .fn-opts { margin: 0.6rem 0 0.4rem; }
+      .fn-opts .fntabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
+      .fn-opts table { width: 100%; border-collapse: collapse; font-size: 0.82rem; line-height: 1.45; }
+      .fn-opts th { text-align: left; font-weight: 500; color: var(--ink-soft); border-bottom: 1px solid rgba(87,85,91,0.3); padding: 0.3rem 0.45rem; white-space: nowrap; }
+      .fn-opts td { border-bottom: 1px solid rgba(87,85,91,0.12); padding: 0.32rem 0.45rem; vertical-align: top; }
+      .fn-opts td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .fn-opts tbody tr { cursor: pointer; }
+      .fn-opts tbody tr:hover, .fn-opts tbody tr.on { background: rgba(236,229,215,0.85); }
+      .fn-opts tbody tr.on td:first-child { box-shadow: inset 3px 0 0 #9e2a2b; }
+      .fn-opts .wrap { overflow-x: auto; }
+      .fn-strip svg text, .fn-prof svg text { font-family: "Noto Serif JP", "Cormorant Garamond", serif; }
       .kflow { list-style: none; margin: 0.7rem 0 1rem; padding: 0; max-width: 48rem; }
       .kflow li { display: grid; grid-template-columns: minmax(8.5rem, 12rem) minmax(0, 1fr); gap: 0.4rem 1rem; align-items: baseline; padding: 0.45rem 0.75rem; border-left: 3px solid #2f5f94; background: rgba(236,229,215,0.5); }
       .kflow li + li { margin-top: 1.15rem; position: relative; }
@@ -1315,6 +1368,51 @@
       <h3 class="trio-head"><b>Three Waters Threatening the City</b>from the mountains, falling directly on the city, from the sea</h3>
       <div class="trio" id="trio-water"></div>
 
+      <h2 id="fieldnotes">Field notes · Shingū’s three shrines by bicycle</h2>
+      <div class="kmk fn" id="fn-study">
+        <p class="intro">On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as <a href="https://www.shinguu.jp/itineraries/detail/6" target="_blank" rel="noopener">「世界遺産･新宮三社詣で まちなかサイクリング」</a>: 阿須賀神社, 熊野速玉大社 and 神倉神社. Twenty-five of our phone photographs carry a position, good to 3.5–12.6 m, and a compass heading, from 10:37 at Asuka to 12:12 at the foot of Kamikura. They fix where we stopped. Between the stops the ride drawn here is inferred: the shortest route a bicycle may legally take.</p>
+        <div class="kmk-top">
+          <div class="kmk-text">
+            <div class="stats kstats">
+              <div><b>10:37 → 12:12</b><span>three stops, 25 photographs with position and heading</span></div>
+              <div><b>1.5 km · 0.9 km</b><span>the inferred legs, Asuka → Hayatama and Hayatama → Kamikura</span></div>
+              <div><b>61% · 42%</b><span>first leg: on roads 5.5 m or wider · with shops alongside</span></div>
+              <div><b>66% · 41%</b><span>second leg: on lanes under 3 m · beside the channel</span></div>
+              <div><b>1.38 · 1.39 · 1.46</b><span>median detour, door to door: on foot · by bicycle · by car</span></div>
+              <div><b>1,295 buildings</b><span>14% of the town core with no street of 3 m or more within 60 m</span></div>
+            </div>
+            <p><b>The bicycle as an instrument.</b> A bicycle reads a town between the scale of the doorstep and the scale of the road network. Every 20 m of the inferred ride is coded from open data: the class and width of the road in GSI’s survey, its height (GSI DEM5A, bridges interpolated), buildings 6–9 m either side of the line, shops, cafés and other businesses within 25 m, sacred ground within 30 m, water within 25 m. The two legs cross two towns. From Asuka to Hayatama 61% of the way is on roads 5.5 m or wider, among them 410 m of the station road, 新宮停車場線, and shops line 42% of it. From Hayatama to Kamikura 66% is on lanes under 3 m, and its last 350 m run beside 神倉堀端都市下水路: water beside 41% of the leg, sacred ground beside 30%.</p>
+            <p><b>Three networks in one fabric.</b> A lane 2.5 m wide is a short cut on foot, a street on a bicycle and, for through traffic by car, a dead end. From each of the 9,349 buildings of the town core we measured the detour, route length over straight-line distance, door to door, to a fixed sample of 260 buildings 150–800 m away, on three networks: walking (every street, path and stair), cycling (where the law admits bicycles, one-way streets respected) and driving (streets of 3 m or more in GSI’s width classes, one-way streets respected). The median detours are 1.38 on foot, 1.39 by bicycle and 1.46 by car; 1,295 buildings, 14%, have no street of 3 m or more within 60 m. Pick a mode under the map to see where the fabric opens and where it closes.</p>
+          </div>
+          <figure class="kmk-fig">
+            <div class="kmf" id="fnmap"></div>
+            <ul class="klegend" id="fnleg"></ul>
+            <figcaption>Town: road class and width, buildings and water from GSI 最適化ベクトルタイル; streets, paths and shops from OpenStreetMap (1 October 2026). Photographs: ours, each at its EXIF position, the wedge pointing where the camera faced (the phone’s magnetic heading turned to true north, 7.8° W by the World Magnetic Model 2025); click one to open it. Region: OpenStreetMap roads; heights from GSI DEM5A; rain closures from Wakayama’s and Mie’s lists.</figcaption>
+          </figure>
+        </div>
+        <div class="ksyschips" role="group" aria-label="What the field-notes map shows">
+          <span class="kgrp"><b>町</b> the town</span>
+          <button type="button" class="fnchip" data-fs="ride" aria-pressed="true">our ride</button>
+          <button type="button" class="fnchip" data-fs="walk" aria-pressed="false">on foot</button>
+          <button type="button" class="fnchip" data-fs="bike" aria-pressed="false">by bicycle</button>
+          <button type="button" class="fnchip" data-fs="car" aria-pressed="false">by car</button>
+          <span class="kgrp"><b>熊野三山</b> the region</span>
+          <button type="button" class="fnchip" data-fs="region" aria-pressed="false">routes between the shrines</button>
+          <button type="button" class="fnchip" data-fs="rain" aria-pressed="false">rain closures</button>
+        </div>
+        <figure class="kmk-wide fn-strip">
+          <svg id="fnstrip" role="img" aria-labelledby="fnstrip-t"><title id="fnstrip-t">The inferred ride coded every 20 m: road width, shops, sacred ground, water, buildings and road height</title></svg>
+          <figcaption>The two inferred legs, coded every 20 m. Rows, top to bottom: GSI width class; shops, cafés and other businesses within 25 m (OpenStreetMap); sacred ground within 30 m; water within 25 m; the share of points 6–9 m either side of the line that fall inside a building. The line under them is the height of the road: the ground (GSI DEM5A), with bridges interpolated between their ends; heights ×10.</figcaption>
+        </figure>
+        <p><b>The three Kumano shrines, by the same rule.</b> The Kumano Sanzan pilgrimage links 熊野本宮大社, 熊野速玉大社 and 熊野那智大社. On today’s network (OpenStreetMap of 1 October 2026; the motorways 那智勝浦新宮道路 and 新宮紀宝道路 are closed to bicycles) the shortest legal rides are 33.8 km from Hongū to Hayatama down National Route 168, with 103 m of climbing; 21.9 km from Hayatama to Nachi by Route 42 and 県道46, with 383 m, 8.8 km of it on the 太平洋岸自転車道 (Pacific Coast Cycling Road); and 52.9 km from Nachi back to Hongū through Shingū, with 245 m. The table lists the other families of route, from the Mie bank of the Kumano to the mountain roads, with their climbs, tunnels and hazards. Every route between Hongū and Hayatama crosses a section closed in heavy rain. Wakayama shuts Route 168 between 宮井 and the Tanabe boundary after 240 mm of continuous rain, and between 相賀 and 田長 after 320 mm; Mie shuts the road along its bank of the Kumano, 小船紀宝線, after 200 mm, or 40 mm in an hour. Routes D and G avoid the 240 mm section by the inland roads 県道45 and 44 and stay open longest, to 320 mm, for 462 m of climbing or more.</p>
+        <div class="fn-opts" id="fnopts"></div>
+        <p class="fn-note">Rain: the lowest continuous-rain threshold among the closure sections a route follows for 200 m or more, from Wakayama’s 異常気象時通行規制区間 and Mie’s 雨量規制区間 (Mie also closes at 40 mm in an hour); Route 42 has no such section between Shingū and Nachi. Mie names its sections by places; where a section is not a whole road, the map marks the road between the two places: 2.3 km of Route 311 for 矢ノ川–小栗須 (1.1 km on Mie’s list), 10.3 km of 御浜紀和線 for 阿田和–上野 (9.8 km). Tsunami: the maximum-class inundation area in MLIT’s A40 data, which still holds Wakayama’s 2013 and Mie’s 2015 assumptions; both prefectures published new ones in March 2026, so far only as PDF maps. Landslide: sediment-disaster warning and special warning zones (A33, 2025). Steepest 200 m: on 8 of the 16 routes, a shrine’s approach road.</p>
+        <figure class="kmk-wide fn-prof">
+          <svg id="fnprof" role="img" aria-labelledby="fnprof-t"><title id="fnprof-t">Height profile of the selected route between two Kumano shrines</title></svg>
+          <figcaption>Heights from GSI DEM5A on the road bed: at every 20 m the flattest ground within 15 m of the mapped line, since a road is a bench cut into the slope; tunnels and bridges are interpolated between their ends. Checked against the 44 GSI benchmarks, triangulation points and spot heights within 15 m of the routes: median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠. Blue bands: sections closed in heavy rain, labelled with their continuous-rain threshold (Mie closes also at 40 mm in an hour); heights ×10. Hover the profile to find the point on the map.</figcaption>
+        </figure>
+      </div>
+
       <h2 id="kamikura">Kamikura mountain foot · a micro-morphology</h2>
       <div class="kmk" id="kamikura-study">
         <p class="intro">One small piece of ground holds every system in this essay at once. At the foot of Kamikura-yama the sacred mountain and its stone steps, the city’s drainage channel at the head of the Ichida-gawa system, a row of temples and houses, a school compound and the town grid touch within a few hundred metres. This last chapter reads that ground plot by plot, on GSI’s 1 m laser elevation model, layer by layer: the ground (下部構造), the lots (中部構造), the buildings and open spaces on them (上部構造) and what flows through (流れ).</p>
@@ -1460,6 +1558,15 @@
         <h3>Pictures</h3>
         <ul>
           <li>Photographs from Wikimedia Commons under CC BY, CC BY-SA, CC0 or public-domain terms, and one GSI aerial photograph; each is credited and linked in its own caption. The Shimohonmachi drawing was made for this page. Register: <code>kansai/qa/media.toml</code>.</li>
+        </ul>
+        <h3>Field notes · the three shrines by bicycle</h3>
+        <ul>
+          <li>Our ride: the authors’ phone photographs of 28 September 2025, placed by their EXIF position and heading (published without any metadata; register: <code>kansai/qa/media.toml</code>); headings turned from magnetic to true north with the <a class="doc" href="https://www.ncei.noaa.gov/products/world-magnetic-model" target="_blank" rel="noopener">World Magnetic Model 2025</a> <span class="meta">(NOAA, BGS)</span>. The circuit: <a class="doc" href="https://www.shinguu.jp/itineraries/detail/6" target="_blank" rel="noopener"><span lang="ja">世界遺産･新宮三社詣で まちなかサイクリング</span></a> — the three-shrine cycling course <span class="meta">(新宮市観光協会)</span>; its route line is not reproduced.</li>
+          <li>Networks: © OpenStreetMap contributors (ODbL), roads, paths, one-way streets, shops and sacred ground as of 1 October 2026; bicycles kept off motorways and 自動車専用道路 under the Road Traffic Act. Road class and width, buildings, water and place annotations from <span lang="ja">国土地理院最適化ベクトルタイル</span>; heights from GSI DEM5A, checked against the benchmarks and spot heights of GSI’s vector tiles.</li>
+          <li>Rain closures: <a class="doc" href="https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho" target="_blank" rel="noopener"><span lang="ja">【和歌山県】異常気象時の道路規制</span></a> — Wakayama’s sections closed in abnormal weather <span class="meta">(Wakayama Prefecture, open data, CC BY 4.0; downloaded 1 October 2026)</span>; <a class="doc" href="https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm" target="_blank" rel="noopener"><span lang="ja">雨量規制区間</span></a> — Mie’s rainfall-closure sections and their section sheets <span class="meta">(Mie Prefecture)</span>; <a class="doc" href="https://www.kkr.mlit.go.jp/kinan/douro/closure/index.html" target="_blank" rel="noopener"><span lang="ja">異常気象時通行止区間</span></a> — Route 42 <span class="meta">(MLIT 紀南河川国道事務所)</span>. The Pacific Coast Cycling Road: <a class="doc" href="https://www.kkr.mlit.go.jp/road/pcr/map/" target="_blank" rel="noopener"><span lang="ja">太平洋岸自転車道 アクセス・ルートマップ</span></a> — its route data <span class="meta">(MLIT 近畿地方整備局)</span>, used to measure the overlap; the line itself is not reproduced.</li>
+          <li>Hazards on the routes: <span lang="ja">国土数値情報</span> A40 (tsunami, as distributed in <a class="doc" href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A40-2024.html" target="_blank" rel="noopener">its 2024 release</a>) and A33 (2025). The new assumptions: <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html" target="_blank" rel="noopener"><span lang="ja">令和8年公表 地震動予測及び津波浸水想定</span></a> — Wakayama, 25 March 2026; <a class="doc" href="https://www.pref.mie.lg.jp/D1BOUSAI/845440078610001.htm" target="_blank" rel="noopener"><span lang="ja">三重県南海トラフ地震被害想定について</span></a> — Mie, March 2026 <span class="meta">(both as PDF maps only)</span>.</li>
+          <li>Captions: the boards are read from our photographs; <a class="doc" href="https://online.bunka.go.jp/special_content/component/75" target="_blank" rel="noopener"><span lang="ja">熊野速玉大社</span></a> — the Nagi <span class="meta">(Agency for Cultural Affairs, 文化遺産オンライン)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/info/565" target="_blank" rel="noopener"><span lang="ja">徐福～神々の地に宿る徐福伝説</span></a> — 蓬莱山 and 阿須賀神社 <span class="meta">(Shingū City)</span>.</li>
+          <li>Method: <code>kansai/tools/bike/</code> — bicycle-legal routing and route families, road-bed heights and their check, the town’s three networks and detours, the coding of the ride, the mapping of the closure sections.</li>
         </ul>
         <h3>Kamikura micro-study</h3>
         <ul>
@@ -3234,6 +3341,411 @@
         });
         document.addEventListener("keydown", function (e) { var b = e.target.closest && e.target.closest(".kcard, .kh"); if (b && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); b.click(); } });
 
+        /* ================= Field notes · Shingū's three shrines by bicycle ================= */
+        // Built by kansai/tools/bike (data/fieldnotes.js, fetched when the section comes near): the ride of 28 Sep 2025 placed
+        // by our photographs, walk / bike / car detours from every building of the town core, and the bicycle corridors
+        // between the three Kumano shrines with their route families, road-bed profiles and rain-closure sections.
+        var FNSYS = {
+          ride: { frame: "town", show: "sea land twater rail net_bike legb leg", ov: "photos", leg: "leg photo net" },
+          walk: { frame: "town", show: "sea land twater net_walk dots_walk", ov: "", leg: "ramp noacc nscore net", mode: 0 },
+          bike: { frame: "town", show: "sea land twater net_bike dots_bike", ov: "", leg: "ramp noacc nscore net", mode: 1 },
+          car: { frame: "town", show: "sea land twater net_car dots_car", ov: "", leg: "ramp noacc nscore net", mode: 2 },
+          region: { frame: "region", show: "sea land river rwater coast mw pcr chains", ov: "nodes", leg: "sel nat pref muni unp pcr mw" },
+          rain: { frame: "region", show: "sea land river rwater coast chains rain", ov: "nodes rainlab", leg: "rain nat pref muni" }
+        };
+        var FNRAMP = ["#bdb7ac", "#1a9850", "#91cf60", "#d9ef8b", "#fee08b", "#fc8d59", "#d73027", "#a50026"];   // class 0 = no access; 1..7 = detour bins
+        var FNLEG = {
+          leg: ["line", "#9e2a2b", "the ride between stops, inferred: shortest legal bicycle route"], photo: ["dot", "#9e2a2b", "our photographs, wedge = compass heading (click to open)"],
+          net: ["line", "rgba(42,42,44,0.55)", "streets and paths of this network (OSM)"], noacc: ["dot", "#bdb7ac", "building with no street of this network within 60 m"],
+          nscore: ["dot", "#ffffff", "building not scored (fewer than 8 trips in range)"],
+          sel: ["line", "#9e2a2b", "the route selected in the table"], nat: ["line", "#6b5a3c", "national road (GSI class)"], pref: ["line", "#9a8358", "prefectural road"],
+          muni: ["dash", "#b19d78", "municipal road"], unp: ["dots", "#b19d78", "mapped unpaved in OSM (surface = ground)"],
+          pcr: ["band", "rgba(29,127,140,0.45)", "on the 太平洋岸自転車道 (Pacific Coast Cycling Road)"], mw: ["dash", "#7d7a80", "motorway: bicycles not allowed"],
+          rain: ["band", "rgba(47,95,148,0.6)", "closed in heavy rain, with the continuous-rain threshold (Wakayama 異常気象時通行規制; Mie 雨量規制, also at 40 mm/h)"]
+        };
+        var fn = { ready: false, D: null, sys: "ride", pair: "hongu-hayatama", opt: 0, setSys: null };
+        function fnSwatch(k) {
+          var L = FNLEG[k], s = '<svg viewBox="0 0 22 12" aria-hidden="true">';
+          if (L[0] === "dot") s += '<circle cx="11" cy="6" r="3.6" fill="' + L[1] + '" stroke="rgba(42,42,44,0.45)" stroke-width="0.6"/>';
+          else if (L[0] === "band") s += '<line x1="1" y1="6" x2="21" y2="6" stroke="' + L[1] + '" stroke-width="6" stroke-linecap="round"/>';
+          else s += '<line x1="1" y1="6" x2="21" y2="6" stroke="' + L[1] + '" stroke-width="2.2"' + (L[0] === "dash" ? ' stroke-dasharray="5 3"' : L[0] === "dots" ? ' stroke-dasharray="1.2 3" stroke-linecap="round"' : "") + "/>";
+          return s + "</svg>";
+        }
+        var fnLoad = (function () {
+          var sec = document.getElementById("fn-study"), host = document.getElementById("fnmap"), waiting = [], started = false;
+          function done(ok) { waiting.splice(0).forEach(function (r) { r(ok); }); }
+          function fail() { host.classList.add("kmk-fail"); host.textContent = "The field-notes map could not be loaded."; done(false); }
+          function load() {
+            return new Promise(function (res) {
+              if (!host) return res(false);
+              if (fn.ready) return res(true);
+              waiting.push(res); if (started) return; started = true;
+              var go = function () { fnBuild(window.__FN); fn.ready = true; done(true); };
+              if (window.__FN) return go();
+              var s = document.createElement("script"); s.src = "data/fieldnotes.js"; s.async = true;
+              s.onload = function () { if (window.__FN) go(); else fail(); };
+              s.onerror = fail;
+              document.head.appendChild(s);
+            });
+          }
+          if (sec && host) {
+            if ("IntersectionObserver" in window) {
+              var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); } }, { rootMargin: "900px 0px" });
+              io.observe(sec);
+            } else load();
+          }
+          return load;
+        })();
+        function fnBuild(D) {
+          fn.D = D;
+          var host = document.getElementById("fnmap"), R = D.region, T = D.town;
+          var sv = el("svg", { class: "fn-svg", role: "img", "aria-label": "Field-notes map: the ride through Shingū, the three movement networks, and the bicycle routes between the Kumano shrines", "data-sys": "ride" }); host.appendChild(sv);
+          var wg = el("g", {}, sv), ov = el("g", { class: "fn-ov" }, sv);
+          var groups = {};
+          function grp(key, cls) { var g = el("g", { class: cls }, wg); groups[key] = g; return g; }
+          el("path", { d: G.layers.frame }, grp("sea", "f-sea"));
+          el("path", { d: G.layers.land }, grp("land", "f-land"));
+          var sl = new TileLayer("sat", wg, groups.land.nextSibling); sl.on = function () { return satOn; }; satLayers.push(sl); watchTiles(host, sl);
+          el("path", { d: G.layers.water }, grp("rwater", "f-water"));
+          el("path", { d: T.water }, grp("twater", "f-water"));
+          el("path", { d: G.layers.river_main }, grp("river", "f-river"));
+          el("path", { d: G.layers.coast }, grp("coast", "f-coast"));
+          if (G.layers.rail) el("path", { d: G.layers.rail, style: "stroke:#2a2a2c;stroke-width:0.9;stroke-dasharray:4 2;opacity:0.6" }, grp("rail", "f-rail"));
+          ["walk", "bike", "car"].forEach(function (m) { el("path", { d: T.nets[m] }, grp("net_" + m, "f-net on")); });
+          // building dots: one path per class and mode, each dot a zero-length segment with round caps (constant size at any zoom)
+          var F = D.frames.town, dots = T.dots;
+          ["walk", "bike", "car"].forEach(function (m, mi) {
+            var g = grp("dots_" + m, "f-dots"), parts = {};
+            for (var i = 0; i < dots.length; i += 3) {
+              var code = dots[i + 2], cl = mi === 0 ? Math.floor(code / 100) : mi === 1 ? Math.floor(code / 10) % 10 : code % 10;
+              (parts[cl] = parts[cl] || []).push("M" + (F[0] + dots[i] / 100).toFixed(2) + " " + (F[1] + dots[i + 1] / 100).toFixed(2) + "h0");
+            }
+            Object.keys(parts).forEach(function (cl) {
+              var p = el("path", { d: parts[cl].join(""), "data-cl": cl }, g);
+              p.style.stroke = cl === "9" ? "#ffffff" : FNRAMP[+cl]; if (cl === "9") p.style.strokeOpacity = 0.9;
+            });
+          });
+          T.legs.forEach(function (L) { el("path", { d: L.d }, grp("legb", "f-legb")); });
+          groups.leg = el("g", { class: "f-leg" }, wg); T.legs.forEach(function (L) { el("path", { d: L.d }, groups.leg); });
+          el("path", { d: R.mw }, grp("mw", "f-mw"));
+          // the corridors that run on the Pacific Coast Cycling Road: drawn from our own (OSM) geometry where it overlaps MLIT's line
+          var gp = grp("pcr", "f-pcr"); R.chains.forEach(function (c) { if (c.pcr > 300) el("path", { d: c.d }, gp); });
+          var gc = grp("chains", "f-ch"), chEl = {};
+          R.chains.forEach(function (c) {
+            var top = c.gsi[0] ? c.gsi[0][0] : "", cls = c.unp > 0.25 * c.len ? "unp" : top === "国道" ? "nat" : top === "都道府県道" ? "pref" : "muni";
+            chEl[c.id] = el("path", { d: c.d, class: cls, "data-c": c.id }, gc);
+          });
+          var gr = grp("rain", "f-rain"); R.closures.forEach(function (c) { el("path", { d: c.d }, gr); });
+          // overlay (screen space): photographs, junctions and shrines, rain thresholds
+          var nodes = [];
+          var phG = el("g", { class: "fn-phs" }, ov);
+          T.photos.forEach(function (p, i) {
+            var g = el("g", { class: "fph", tabindex: 0, role: "button", "aria-label": "Open photograph " + p.time + ": " + p.cap.replace(/<[^>]+>/g, "") }, phG);
+            if (p.brg != null) {
+              var r0 = (p.brg - 26) * Math.PI / 180, r1 = (p.brg + 26) * Math.PI / 180, R0 = 26;
+              el("path", { class: "cone", d: "M0 0L" + (Math.sin(r0) * R0).toFixed(1) + " " + (-Math.cos(r0) * R0).toFixed(1) + "A" + R0 + " " + R0 + " 0 0 1 " + (Math.sin(r1) * R0).toFixed(1) + " " + (-Math.cos(r1) * R0).toFixed(1) + "Z" }, g);
+            }
+            el("circle", { r: 4.2 }, g);
+            nodes.push({ g: g, w: [p.x, p.y], sys: ["ride"], photo: i });
+            g.addEventListener("click", function () { fn.openPhoto(i); });
+            g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn.openPhoto(i); } });
+          });
+          var seenName = {}, shrineXY = R.nodes.filter(function (n) { return n.shrine; });
+          R.nodes.forEach(function (n) {
+            if (!n.shrine && (/丁目/.test(n.ja) || seenName[n.ja] || shrineXY.some(function (q) { return Math.hypot(q.x - n.x, q.y - n.y) < 12; }))) return;
+            seenName[n.ja] = 1;
+            var g = el("g", { class: "fnl" }, ov);
+            el("circle", { class: n.shrine ? "fshrine" : "fnode", r: n.shrine ? 6 : 2.8 }, g);
+            var t = el("text", { x: 8, y: 4, class: n.shrine ? "em" : "small" }, g);
+            t.textContent = n.shrine ? n.ja : n.ja + (n.en ? " " + n.en : "");
+            nodes.push({ g: g, t: t, w: [n.x, n.y], sys: ["region", "rain"], prio: n.shrine ? 0 : 2 });
+          });
+          (T.labels || []).forEach(function (n) {
+            var g = el("g", { class: "fnl" }, ov);
+            el("circle", { class: /station/.test(n.key) ? "fnode" : "fshrine", r: /station/.test(n.key) ? 3.4 : 4.6 }, g);
+            var t = el("text", { x: 8, y: 4, class: /station/.test(n.key) ? "small" : "em" }, g); t.textContent = n.ja;
+            nodes.push({ g: g, t: t, w: [n.x, n.y], sys: ["ride", "walk", "bike", "car"], prio: 0, town: 1 });
+          });
+          R.closures.forEach(function (c) {
+            var g = el("g", { class: "fnl" }, ov), t = el("text", { x: 0, y: -6, class: "rain", "text-anchor": "middle" }, g);
+            t.textContent = c.mm + " mm";
+            nodes.push({ g: g, t: t, w: c.mid, sys: ["rain"], prio: 1 });
+          });
+          var cur = el("circle", { class: "fcur", r: 6, style: "display:none" }, ov);
+          // photo card (inside the map, like the main map's picture cards)
+          var card = document.createElement("div"); card.className = "mcard"; card.hidden = true; card.setAttribute("role", "dialog");
+          card.innerHTML = '<button type="button" class="mclose" aria-label="Close picture">×</button><div class="mbody"></div>'; host.appendChild(card);
+          var cbody = card.querySelector(".mbody");
+          card.querySelector(".mclose").addEventListener("click", function () { fn.closePhoto(); });
+          fn.openPhoto = function (i) {
+            var p = T.photos[i];
+            phG.querySelectorAll(".fph").forEach(function (n, k) { n.classList.toggle("sel", k === i); });
+            cbody.innerHTML = '<h5 id="fn-card-t">' + p.time + " · 28 September 2025</h5>" + figHTML({ src: p.src, w: p.w, h: p.h, alt: p.cap.replace(/<[^>]+>/g, ""), caption: p.cap,
+              credit: "Photo: the authors, field visit, 28 September 2025 · all rights reserved", url: "" });
+            card.setAttribute("aria-labelledby", "fn-card-t"); card.hidden = false; card.scrollTop = 0;
+          };
+          fn.closePhoto = function () { card.hidden = true; cbody.innerHTML = ""; phG.querySelectorAll(".fph.sel").forEach(function (n) { n.classList.remove("sel"); }); };
+          var zc = document.createElement("div"); zc.className = "zc";
+          zc.innerHTML = '<button type="button" aria-label="Zoom in">+</button><button type="button" aria-label="Zoom out">−</button><button type="button" aria-label="Reset view">⟲</button>';
+          host.appendChild(zc);
+          var sbtn = document.createElement("button"); sbtn.type = "button"; sbtn.className = "satbtn"; sbtn.setAttribute("aria-pressed", satOn ? "true" : "false");
+          sbtn.title = "Switch every map between the drawn basemap and aerial imagery (GSI)"; sbtn.innerHTML = SATICON + "<span>Satellite</span>"; host.appendChild(sbtn);
+          var msat = document.createElement("div"); msat.className = "msat"; msat.textContent = "地理院タイル"; host.appendChild(msat);
+          var sbar = el("svg", { class: "msb", width: 120, height: 20 }); host.appendChild(sbar);
+          var Wm = 600, Hm = 480, c = { cx: 0, cy: 0, k: 1 }, home = null, KMAX = 900, FR = D.frames.town, curW = null;
+          function measure() { var r = sv.getBoundingClientRect(); Wm = Math.max(200, r.width); Hm = Math.max(200, r.height); sv.setAttribute("viewBox", "0 0 " + Wm + " " + Hm); }
+          function kmin() { return Math.min(Wm / (FR[2] - FR[0]), Hm / (FR[3] - FR[1])) * 0.9; }
+          function clamp(q) {
+            q.k = Math.max(kmin(), Math.min(KMAX, q.k));
+            var hw = Wm / 2 / q.k, hh = Hm / 2 / q.k, fw = (FR[2] - FR[0]) / 2, fh = (FR[3] - FR[1]) / 2;
+            q.cx = hw >= fw ? (FR[0] + FR[2]) / 2 : Math.max(FR[0] + hw, Math.min(FR[2] - hw, q.cx));
+            q.cy = hh >= fh ? (FR[1] + FR[3]) / 2 : Math.max(FR[1] + hh, Math.min(FR[3] - hh, q.cy));
+            return q;
+          }
+          function fitBox(b) { var k = Math.min(Wm / (b[2] - b[0]), Hm / (b[3] - b[1])); return clamp({ cx: (b[0] + b[2]) / 2, cy: (b[1] + b[3]) / 2, k: k }); }
+          function scr(w) { return [(w[0] - c.cx) * c.k + Wm / 2, (w[1] - c.cy) * c.k + Hm / 2]; }
+          function wld(x, y) { return [c.cx + (x - Wm / 2) / c.k, c.cy + (y - Hm / 2) / c.k]; }
+          function place() {
+            var sys = fn.sys, boxes = [], ovs = (FNSYS[sys].ov || "").split(" ");
+            phG.style.display = ovs.indexOf("photos") >= 0 ? "" : "none";
+            nodes.slice().sort(function (a, b) { return (a.prio || 0) - (b.prio || 0); }).forEach(function (n) {
+              var s0 = scr(n.w), on = n.sys.indexOf(sys) >= 0 && (n.photo != null || n.town || ovs.indexOf(n.t && n.t.classList.contains("rain") ? "rainlab" : "nodes") >= 0);
+              var vis = on && s0[0] > -30 && s0[1] > -30 && s0[0] < Wm + 30 && s0[1] < Hm + 30;
+              n.g.style.display = vis ? "" : "none"; if (!vis) return;
+              n.g.setAttribute("transform", "translate(" + s0[0].toFixed(1) + " " + s0[1].toFixed(1) + ")");
+              if (!n.t) return;
+              n.t.style.display = "";
+              var t = n.t, anch = t.getAttribute("text-anchor") || "start", cands = anch === "middle" ? [[0, "middle"]] : [[8, "start"], [-8, "end"]];
+              var ok = cands.some(function (cc) {
+                t.setAttribute("x", cc[0]); t.setAttribute("text-anchor", cc[1]);
+                var bb = t.getBBox(), bx = { x: s0[0] + bb.x - 2, y: s0[1] + bb.y - 1, w: bb.width + 4, h: bb.height + 2 };
+                if (bx.x < 2 || bx.x + bx.w > Wm - 2 || bx.y < 2 || bx.y + bx.h > Hm - 2) return false;
+                if (boxes.some(function (o) { return bx.x < o.x + o.w && bx.x + bx.w > o.x && bx.y < o.y + o.h && bx.y + bx.h > o.y; })) return false;
+                boxes.push(bx); return true;
+              });
+              t.style.display = ok ? "" : "none";
+            });
+            if (curW) { var s = scr(curW); cur.setAttribute("cx", s[0].toFixed(1)); cur.setAttribute("cy", s[1].toFixed(1)); cur.style.display = ""; } else cur.style.display = "none";
+          }
+          function apply() {
+            wg.setAttribute("transform", "translate(" + (Wm / 2 - c.cx * c.k) + " " + (Hm / 2 - c.cy * c.k) + ") scale(" + c.k + ")");
+            place(); scaleBar(sbar, c.k * 10);
+            sl.view = function () { return [c.cx - Wm / 2 / c.k, c.cy - Hm / 2 / c.k, c.cx + Wm / 2 / c.k, c.cy + Hm / 2 / c.k, Wm]; }; sl.refresh();
+          }
+          function zoom(f, sx, sy) { var w = wld(sx, sy), k = Math.max(kmin(), Math.min(KMAX, c.k * f)); c = clamp({ cx: w[0] - (sx - Wm / 2) / k, cy: w[1] - (sy - Hm / 2) / k, k: k }); apply(); }
+          zc.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; var i = Array.prototype.indexOf.call(zc.children, b); if (i === 0) zoom(1.6, Wm / 2, Hm / 2); else if (i === 1) zoom(1 / 1.6, Wm / 2, Hm / 2); else { c = home; apply(); } });
+          sv.addEventListener("wheel", function (e) { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); var r = sv.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * 0.0022), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+          sv.addEventListener("dblclick", function (e) { var r = sv.getBoundingClientRect(); zoom(e.shiftKey ? 0.5 : 2, e.clientX - r.left, e.clientY - r.top); });
+          var mp = {}, ml = null;
+          sv.addEventListener("pointerdown", function (e) { if (e.target.closest && e.target.closest(".fph")) return; mp[e.pointerId] = { x: e.clientX, y: e.clientY, t: e.pointerType }; if (e.pointerType === "mouse") sv.setPointerCapture(e.pointerId); ml = null; });
+          sv.addEventListener("pointermove", function (e) {
+            var p = mp[e.pointerId], r = sv.getBoundingClientRect(); if (!p) return;
+            var ids = Object.keys(mp);
+            if (ids.length === 2) {
+              var a = mp[ids[0]], b = mp[ids[1]], pa = ids[0] == e.pointerId ? { x: e.clientX, y: e.clientY } : a, pb = ids[1] == e.pointerId ? { x: e.clientX, y: e.clientY } : b, d = Math.hypot(pa.x - pb.x, pa.y - pb.y);
+              if (ml) zoom(d / ml, (pa.x + pb.x) / 2 - r.left, (pa.y + pb.y) / 2 - r.top); ml = d;
+            } else if (ids.length === 1 && (p.t === "mouse" || Math.abs(e.clientX - p.x) > Math.abs(e.clientY - p.y))) {
+              c = clamp({ cx: c.cx - (e.clientX - p.x) / c.k, cy: c.cy - (e.clientY - p.y) / c.k, k: c.k }); apply();
+            }
+            p.x = e.clientX; p.y = e.clientY;
+          });
+          function mu(e) { delete mp[e.pointerId]; ml = null; }
+          sv.addEventListener("pointerup", mu); sv.addEventListener("pointercancel", mu);
+          // ---- one system at a time
+          var legEl = document.getElementById("fnleg");
+          function legHTML(Sy) {
+            return Sy.leg.split(" ").map(function (k) {
+              if (k === "ramp") {
+                var B = D.bins, labs = ["≤ " + B[0]].concat(B.slice(1).map(function (b, i) { return B[i] + "–" + b; })).concat(["> " + B[B.length - 1]]);
+                return '<li><span>detour (route ÷ straight line):</span></li>' + labs.map(function (l, i) { return '<li><svg viewBox="0 0 22 12" aria-hidden="true"><circle cx="11" cy="6" r="3.6" fill="' + FNRAMP[i + 1] + '"/></svg><span>' + l + "</span></li>"; }).join("");
+              }
+              return "<li>" + fnSwatch(k) + "<span>" + FNLEG[k][2] + "</span></li>";
+            }).join("");
+          }
+          fn.setSys = function (key, pin) {
+            if (!FNSYS[key]) key = "ride";
+            var Sy = FNSYS[key], show = Sy.show.split(" "), prevFrame = FNSYS[fn.sys] && FNSYS[fn.sys].frame;
+            fn.sys = key; sv.setAttribute("data-sys", key);
+            Object.keys(groups).forEach(function (k) { groups[k].style.display = show.indexOf(k) >= 0 ? "" : "none"; });
+            FR = D.frames[Sy.frame];
+            if (prevFrame !== Sy.frame || pin) { home = fitBox(FR); c = home; }
+            if (legEl) legEl.innerHTML = legHTML(Sy);
+            document.querySelectorAll(".fnchip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-fs") === key ? "true" : "false"); });
+            if (key !== "ride") fn.closePhoto();
+            if (Sy.frame === "region") fn.showOpt(fn.pair, fn.opt, true);
+            apply();
+          };
+          // ---- route families: table, highlight, profile
+          fn.showOpt = function (pair, i, quiet) {
+            fn.pair = pair; fn.opt = i;
+            var O = R.options[pair].list[i], on = {};
+            O.seq.forEach(function (s) { on[s[0]] = 1; });
+            Object.keys(chEl).forEach(function (k) { chEl[k].classList.toggle("sel", !!on[k]); if (on[k]) gc.appendChild(chEl[k]); });
+            document.querySelectorAll("#fnopts tbody tr").forEach(function (tr) { tr.classList.toggle("on", tr.getAttribute("data-pair") === pair && +tr.getAttribute("data-i") === i); });
+            fnProfile(D, pair, i, function (w) { curW = w; place(); });
+            if (!quiet && FNSYS[fn.sys].frame !== "region") fn.setSys("region");
+          };
+          fn.cam = function () { return { cx: c.cx, cy: c.cy, k: c.k, W: Wm, H: Hm, FR: FR }; };
+          fn.zoom = zoom;
+          function init() { measure(); home = c = fitBox(FR); fn.setSys("ride", true); }
+          fnTable(D);
+          fnStrip(D);
+          init();
+          fn.showOpt("hongu-hayatama", 0, true);
+          if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", function () { place(); });
+          window.addEventListener("resize", function () { var k0 = home && c.k === home.k && c.cx === home.cx && c.cy === home.cy; measure(); home = fitBox(FR); if (k0) c = home; c = clamp(c); apply(); });
+        }
+        var FNPAIRS = [["hongu-hayatama", "Hongū → Hayatama"], ["hayatama-nachi", "Hayatama → Nachi"], ["nachi-hongu", "Nachi → Hongū"]];
+        function fnOptLabel(D, O) {
+          var C = {}; D.region.chains.forEach(function (c) { C[c.id] = c; });
+          var refs = []; O.seq.forEach(function (s) {
+            var c = C[s[0]]; if (c.len < 2000) return;
+            var r = c.refs[0] ? c.refs[0].split(";")[0] : null, top = c.gsi[0] ? c.gsi[0][0] : "";
+            var lab = r && top === "国道" ? "R" + r : r && top === "都道府県道" ? "県道" + r : top === "市区町村道等" ? "municipal road" : top === "国道" ? "national road" : "road";
+            if (c.unp > 0.25 * c.len) lab += " (partly unpaved)";
+            if (refs[refs.length - 1] !== lab) refs.push(lab);
+          });
+          return refs.join(" → ");
+        }
+        function fnTable(D) {
+          var box = document.getElementById("fnopts"); if (!box) return;
+          var h = '<div class="fntabs" role="group" aria-label="Pair of shrines">' + FNPAIRS.map(function (p) { return '<button type="button" class="fnchip fnpair" data-pair="' + p[0] + '" aria-pressed="' + (p[0] === fn.pair) + '">' + p[1] + "</button>"; }).join("") + "</div>";
+          h += '<div class="wrap"><table><thead><tr><th>route (roads, in order)</th><th>km</th><th>climb ↑ m</th><th>descent ↓ m</th><th>steepest 200 m</th><th>tunnels</th><th>closes in rain at</th><th>in tsunami area</th><th>in landslide zone</th></tr></thead><tbody></tbody></table></div><p class="fn-note" id="fnnote"></p>';
+          box.innerHTML = h;
+          function fill(pair) {
+            var tb = box.querySelector("tbody"), L = D.region.options[pair].list;
+            tb.innerHTML = L.map(function (O, i) {
+              var hz = O.haz || {}, ls = (hz.ls_yellow || 0) + (hz.ls_red || 0), mm = fnRainMin(D, O), gtxt = O.gmax > 25 ? "unreliable*" : O.gmax.toFixed(1) + " %";
+              return '<tr data-pair="' + pair + '" data-i="' + i + '" tabindex="0"><td>' + String.fromCharCode(65 + i) + " · " + fnOptLabel(D, O) + '</td><td class="n">' + (O.len / 1000).toFixed(1) + '</td><td class="n">' + O.up +
+                '</td><td class="n">' + O.down + '</td><td class="n">' + gtxt + '</td><td class="n">' + O.tun[0] + " · " + (O.tun[1] / 1000).toFixed(1) + ' km</td><td class="n">' + (mm ? mm.mm + " mm" + (mm.hr ? " or " + mm.hr + " mm/h" : "") : "—") + '</td><td class="n">' + ((hz.tsunami_l2_2016 || 0) / 1000).toFixed(1) +
+                ' km</td><td class="n">' + (ls / 1000).toFixed(1) + " km</td></tr>";
+            }).join("");
+            box.querySelectorAll(".fnpair").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-pair") === pair ? "true" : "false"); });
+            var note = document.getElementById("fnnote");
+            var gbad = L.filter(function (O) { return O.gmax > 25; }).map(function (O) { return O.gmax; });
+            if (note) note.textContent = gbad.length ? "* On the climb to 高瀬峠 (県道45) the mapped line runs straight up the slope, " + Math.round(Math.max.apply(null, gbad)) + " % over 200 m, on a section OpenStreetMap marks unpaved; the line there is not verified, and no grade is given for it." : "";
+          }
+          fill(fn.pair);
+          box.addEventListener("click", function (e) {
+            var b = e.target.closest(".fnpair"); if (b) { fill(b.getAttribute("data-pair")); fn.showOpt(b.getAttribute("data-pair"), 0); return; }
+            var tr = e.target.closest("tbody tr"); if (tr) fn.showOpt(tr.getAttribute("data-pair"), +tr.getAttribute("data-i"));
+          });
+          box.addEventListener("keydown", function (e) { var tr = e.target.closest("tbody tr"); if (tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); tr.click(); } });
+        }
+        function fnProfile(D, pair, i, onPos) {
+          var svg = document.getElementById("fnprof"); if (!svg) return;
+          var C = {}; D.region.chains.forEach(function (c) { C[c.id] = c; });
+          var O = D.region.options[pair].list[i], pts = [], cum = 0, rain = [], tun = [];
+          var NODE = {}; D.region.nodes.forEach(function (n) { NODE[n.id] = n; });
+          O.seq.forEach(function (s) {
+            var c = C[s[0]], h = s[1] > 0 ? c.h.slice() : c.h.slice().reverse(), n = h.length, step = c.len / (n - 1);
+            var a = NODE[s[1] > 0 ? c.a : c.b], b = NODE[s[1] > 0 ? c.b : c.a];
+            for (var k = 0; k < n; k++) pts.push([cum + k * step, h[k], a, b, k / (n - 1)]);
+            D.region.closures.forEach(function (rc) { if (rc.chains[c.id]) rain.push([cum, cum + c.len, rc.mm, rc.chains[c.id]]); });
+            cum += c.len;
+          });
+          var W = 1000, ml = 46, mr = 14, mt = 22, Lkm = cum / 1000, hmax = Math.max.apply(null, pts.map(function (p) { return p[1]; })), top = Math.max(100, Math.ceil(hmax / 100) * 100);
+          var ppm = (W - ml - mr) / cum, VE = 10, vpm = ppm * VE, base = mt + top * vpm, H = base + 44;
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H.toFixed(0)); svg.setAttribute("data-ve", (vpm / ppm).toFixed(2)); fnClear(svg);
+          function X(d) { return ml + d * ppm; } function Y(h) { return base - h * vpm; }
+          rain.forEach(function (r) { el("rect", { x: X(r[0]), y: mt - 8, width: Math.max(1, X(r[1]) - X(r[0])), height: base - mt + 8, fill: "rgba(47,95,148,0.13)" }, svg); var t = el("text", { x: X(r[0]) + 3, y: mt - 1, "font-size": 10.5, fill: "#2f5f94" }, svg); t.textContent = r[2] + " mm"; });
+          for (var hh = 0; hh <= top; hh += top > 400 ? 200 : 100) {
+            el("line", { x1: ml, x2: W - mr, y1: Y(hh), y2: Y(hh), stroke: "rgba(87,85,91,0.15)" }, svg);
+            var tl = el("text", { x: ml - 6, y: Y(hh) + 4, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, svg); tl.textContent = hh + " m";
+          }
+          var stepKm = Lkm > 40 ? 10 : 5;
+          for (var km = 0; km <= Lkm; km += stepKm) { var tk = el("text", { x: X(km * 1000), y: base + 16, "text-anchor": "middle", "font-size": 11, fill: "#57555b" }, svg); tk.textContent = km + " km"; }
+          var d = "M" + pts.map(function (p) { return X(p[0]).toFixed(1) + " " + Y(p[1]).toFixed(1); }).join("L");
+          el("path", { d: d + "L" + X(cum).toFixed(1) + " " + base + "L" + ml + " " + base + "Z", fill: "rgba(154,165,138,0.35)", stroke: "none" }, svg);
+          el("path", { d: d, fill: "none", stroke: "#4b3a2a", "stroke-width": 1.6 }, svg);
+          var ends = el("text", { x: ml, y: H - 8, "font-size": 11.5, fill: "#2a2a2c" }, svg);
+          ends.textContent = String.fromCharCode(65 + i) + " · " + FNPAIRS.filter(function (p) { return p[0] === pair; })[0][1] + ": " + Lkm.toFixed(1) + " km, ↑ " + O.up + " m, ↓ " + O.down + " m · heights ×" + VE;
+          var cl = el("line", { y1: mt - 8, y2: base, stroke: "#9e2a2b", "stroke-width": 1, style: "display:none" }, svg), cdot = el("circle", { r: 4, fill: "#9e2a2b", style: "display:none" }, svg);
+          function at(dm) {
+            var k = 0; while (k < pts.length - 1 && pts[k + 1][0] < dm) k++;
+            var p = pts[k], q = pts[Math.min(k + 1, pts.length - 1)], f = q[0] === p[0] ? 0 : (dm - p[0]) / (q[0] - p[0]);
+            return { h: p[1] + (q[1] - p[1]) * f, a: p[2], b: p[3], u: p[4] + (q[4] - p[4]) * f };
+          }
+          svg.onmousemove = function (e) {
+            var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width, dm = Math.max(0, Math.min(cum, (x - ml) / ppm)), q = at(dm);
+            cl.setAttribute("x1", X(dm)); cl.setAttribute("x2", X(dm)); cl.style.display = ""; cdot.setAttribute("cx", X(dm)); cdot.setAttribute("cy", Y(q.h)); cdot.style.display = "";
+            // the point on the map: along the chain's straight chord between its ends is too coarse; use the chain path itself
+            var c = fnChainAt(D, O, dm); if (c && onPos) onPos(c);
+          };
+          svg.onmouseleave = function () { cl.style.display = "none"; cdot.style.display = "none"; if (onPos) onPos(null); };
+        }
+        function fnClear(svg) { Array.prototype.slice.call(svg.childNodes).forEach(function (n) { if (n.nodeName !== "title") svg.removeChild(n); }); }
+        function fnRainMin(D, O) {
+          // the lowest continuous-rain threshold among the sections the route follows for 200 m or more (and Mie's hourly one)
+          var on = {}, mm = null, hr = null; O.seq.forEach(function (s) { on[s[0]] = 1; });
+          D.region.closures.forEach(function (c) {
+            if (!Object.keys(c.chains).some(function (k) { return on[k] && c.chains[k] >= 200; })) return;
+            mm = mm == null ? c.mm : Math.min(mm, c.mm); if (c.hr) hr = hr == null ? c.hr : Math.min(hr, c.hr);
+          });
+          return mm == null ? null : { mm: mm, hr: hr };
+        }
+        var fnPathCache = {};
+        function fnChainAt(D, O, dm) {
+          // the map point dm metres along option O: walk its chains, sample each chain's path by length fraction
+          var C = {}; D.region.chains.forEach(function (c) { C[c.id] = c; });
+          var cum = 0;
+          for (var k = 0; k < O.seq.length; k++) {
+            var c = C[O.seq[k][0]];
+            if (dm <= cum + c.len || k === O.seq.length - 1) {
+              var f = Math.max(0, Math.min(1, (dm - cum) / c.len)); if (O.seq[k][1] < 0) f = 1 - f;
+              var p = fnPathCache[c.id]; if (!p) { p = el("path", { d: c.d }); fnPathCache[c.id] = p; document.getElementById("fnmap").querySelector("svg").appendChild(p); p.style.display = "none"; p.__L = null; }
+              try { p.style.display = ""; var L = p.getTotalLength(), q = p.getPointAtLength(f * L); p.style.display = "none"; return [q.x, q.y]; } catch (e) { return null; }
+            }
+            cum += c.len;
+          }
+          return null;
+        }
+        function fnStrip(D) {
+          var svg = document.getElementById("fnstrip"); if (!svg) return;
+          var T = D.town, legs = T.legs, gap = 60, W = 1000, ml = 150, mr = 12, tot = legs.reduce(function (s, L) { return s + L.len; }, 0);
+          var ppm = (W - ml - mr - gap * (legs.length - 1)) / tot, rows = [["width", "GSI width class"], ["shops", "shops ≤ 25 m"], ["sacred", "sacred ground ≤ 30 m"], ["water", "water ≤ 25 m"], ["front", "buildings beside"]];
+          var rh = 16, mt = 30, hTop = mt + rows.length * (rh + 4) + 10, hmax = 0;
+          legs.forEach(function (L) { L.rows.forEach(function (r) { if (r[8] != null) hmax = Math.max(hmax, r[8]); }); });
+          var top = Math.ceil(hmax / 5) * 5, VE = 10, vpm = ppm * VE, base = hTop + top * vpm, H = base + 40;
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H.toFixed(0)); svg.setAttribute("data-ve", (vpm / ppm).toFixed(2)); fnClear(svg);
+          var WC = { "3m未満": "#d73027", "3m-5.5m未満": "#fc8d59", "5.5m-13m未満": "#91bfdb", "13m-19.5m未満": "#4575b4", "19.5m以上": "#313695" };
+          rows.forEach(function (r, i) { var t = el("text", { x: ml - 8, y: mt + i * (rh + 4) + rh - 4, "text-anchor": "end", "font-size": 11.5, fill: "#2a2a2c" }, svg); t.textContent = r[1]; });
+          var t0 = el("text", { x: ml - 8, y: base - 2, "text-anchor": "end", "font-size": 11.5, fill: "#2a2a2c" }, svg); t0.textContent = "road height";
+          var x0 = ml;
+          legs.forEach(function (L, li) {
+            var X = function (s) { return x0 + s * ppm; }, n = L.rows.length;
+            var lab = el("text", { x: X(0), y: mt - 10, "font-size": 12, fill: "#2a2a2c" }, svg);
+            lab.textContent = (li === 0 ? "Asuka → Hayatama" : "Hayatama → Kamikura") + " · " + L.t0 + "–" + L.t1 + " · " + (L.len / 1000).toFixed(1) + " km";
+            L.rows.forEach(function (r, k) {
+              var s0 = r[0], s1 = k < n - 1 ? L.rows[k + 1][0] : L.len, w = Math.max(0.6, (s1 - s0) * ppm);
+              el("rect", { x: X(s0), y: mt, width: w, height: rh, fill: WC[r[1]] || "#d9d4ca" }, svg);
+              if (r[4] > 0) el("rect", { x: X(s0), y: mt + (rh + 4), width: w, height: rh, fill: "#7a4f9a", opacity: Math.min(1, 0.35 + 0.2 * r[4]) }, svg);
+              if (r[5]) el("rect", { x: X(s0), y: mt + 2 * (rh + 4), width: w, height: rh, fill: "#d3614e" }, svg);
+              if (r[6]) el("rect", { x: X(s0), y: mt + 3 * (rh + 4), width: w, height: rh, fill: "#2f5f94" }, svg);
+              el("rect", { x: X(s0), y: mt + 4 * (rh + 4) + rh * (1 - r[7]), width: w, height: rh * r[7], fill: "#6f6b66" }, svg);
+            });
+            var d = "M" + L.rows.filter(function (r) { return r[8] != null; }).map(function (r) { return X(r[0]).toFixed(1) + " " + (base - r[8] * vpm).toFixed(1); }).join("L");
+            el("path", { d: d, fill: "none", stroke: "#4b3a2a", "stroke-width": 1.6 }, svg);
+            var tk = el("text", { x: X(L.len), y: base + 16, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, svg); tk.textContent = L.len + " m";
+            x0 += L.len * ppm + gap;
+          });
+          for (var hh = 0; hh <= top; hh += 5) {
+            el("line", { x1: ml, x2: W - mr, y1: base - hh * vpm, y2: base - hh * vpm, stroke: "rgba(87,85,91,0.12)" }, svg);
+            var hl = el("text", { x: W - mr, y: base - hh * vpm - 2, "text-anchor": "end", "font-size": 10, fill: "#57555b" }, svg); hl.textContent = hh + " m";
+          }
+          // key: only the width classes the two legs pass through
+          var seenW = {}; legs.forEach(function (L) { L.rows.forEach(function (r) { seenW[r[1] || ""] = 1; }); });
+          var keyY = H - 8, kx = ml, key = [["3m未満", "< 3 m"], ["3m-5.5m未満", "3–5.5 m"], ["5.5m-13m未満", "5.5–13 m"], ["13m-19.5m未満", "13–19.5 m"], ["19.5m以上", "≥ 19.5 m"], ["", "no GSI match"]]
+            .filter(function (k2) { return seenW[k2[0]]; }).map(function (k2) { return [WC[k2[0]] || "#d9d4ca", k2[1]]; });
+          key.forEach(function (k2) { el("rect", { x: kx, y: keyY - 10, width: 14, height: 10, fill: k2[0] }, svg); var kt = el("text", { x: kx + 18, y: keyY - 1, "font-size": 11, fill: "#57555b" }, svg); kt.textContent = k2[1]; kx += 18 + k2[1].length * 7 + 22; });
+          var ve = el("text", { x: W - mr, y: keyY - 1, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, svg); ve.textContent = "heights ×" + VE;
+        }
+        document.addEventListener("click", function (e) {
+          var b = e.target.closest && e.target.closest(".fnchip[data-fs]"); if (!b) return;
+          var key = b.getAttribute("data-fs");
+          fnLoad().then(function (ok) { if (ok) fn.setSys(key, true); });
+        });
+
         satSet(satOn);
         /* ================= QA hooks (read-only; used by kansai/qa/check_render.mjs) ================= */
         window.__QA = {
@@ -3247,7 +3759,8 @@
           HL: HL, showHL: showHL, clearHL: clearHL, MEDIA: MEDIA, openMedia: function (id) { var m = MEDIA.filter(function (x) { return x.id === id; })[0]; if (m) openMedia(m, document.querySelector('#overlay .pulse[data-media="' + id + '"]')); return !!m; },
           closeMedia: closeMedia, LAYER_LEG: LAYER_LEG, BASE: BASE, pseudo: ["shade"], current: function () { return current; },
           KPLACES: KPLACES, lightPlace: lightPlace, kmap: kmap, ALIASES: ALIASES, LD: LD, CLAB: CLAB,
-          kmkLoad: kmkLoad, kmk: kmk, KSYS: KSYS, KLEG: KLEG
+          kmkLoad: kmkLoad, kmk: kmk, KSYS: KSYS, KLEG: KLEG,
+          fnLoad: fnLoad, fn: fn, FNSYS: FNSYS, FNLEG: FNLEG
         };
       })();
     </script>

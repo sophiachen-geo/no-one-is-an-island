@@ -208,3 +208,228 @@ licence = "CC BY 4.0"
 licence_url = "https://creativecommons.org/licenses/by/4.0/"
 shows = "Schematic, not to scale, drawn for this page after the city's description of the site: storage pits dug into the natural levee (地下式倉庫), a smithy, and stone stairs down to the river."
 processing = "drawn by hand as SVG; no photograph traced"
+
+# ---------------------------------------------------------------- field notes: our own photographs (28 September 2025)
+# Taken by the authors on an iPhone 16; position and compass heading read from EXIF and placed on the field-notes map.
+# The published files carry no metadata at all (run.py check_fn verifies it). own = true: not an open licence, used by the
+# authors on their own page; the credit line on the page states it.
+
+[[media]]
+file = "img/field/20250928_103732.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "10:37 · 阿須賀神社 (Asuka-jinja), the first stop: its hall below the wooded hill of 蓬莱山 (Hōraisan)."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_105945.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "10:59 · Board of the Shingū City Board of Education (August 1992): 速玉大社のオガタマノキ, a city natural monument, 21 m tall with a girth of 1.65 m."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_105951.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "10:59 · The オガタマノキ (Michelia compressa) from below."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_105958.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "10:59 · Its trunk, beside one of the shrine’s buildings."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_110031.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:00 · Its roots at the foot of the building."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_110045.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:00 · 熊野速玉大社 (Kumano Hayatama Taisha): the halls behind the shrine’s banner."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_110602.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:06 · One of the halls: offering box and bell rope."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_110904.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:09 · Green citrus fruit in the shrine grounds."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_111827.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:18 · A moss-covered stone monument in the grounds."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_111900.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:19 · The Nagi (梛) behind its fence, south-south-east of the shrine gate: “estimated to be 800 years old”, said to have been planted when the halls were rebuilt in 1159 (Agency for Cultural Affairs)."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_111939.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:19 · Board: 熊野速玉大社参詣曼荼羅, the shrine’s pilgrimage mandala."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_111951.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:19 · Leaving along the approach, under the great torii, toward the town."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_115630.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:56 · At the foot of Kamikura: the board 「史跡 熊野三山（権現山）」 — Gongen-yama, its summit 千穂ヶ峰 (253 m), 神倉神社 on a cliff of nearly 100 m, and Gotobiki-iwa."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_115643.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:56 · Board: 天磐盾, dated 11 February 1990, for a stele set up in the 2,650th year of the imperial era; it cites the Nihon Shoki and names 高倉下命 and 八咫烏."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_115657.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:56 · Board: 神倉神社 — deities 高倉下命 and 天照大神; the Oto Matsuri on the night of 6 February."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_115930.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "11:59 · Youth Library えんがわ, a library in an old house at the foot of the mountain."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_120202.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:02 · Board of the Shingū City Board of Education: 妙心寺の由来 — the nunnery that was Kamikura’s 本願, the office that raised its funds; the role began with the nun 妙順尼’s collections for rebuilding Kamikura, from the Daiei years (1521–27) to 1531."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_120233.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:02 · 神倉堀端都市下水路, the drainage channel at the foot of Kamikura-yama, looking north-west."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_120247.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:02 · A gourd vine trained over a garden wall beside the channel."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_120624.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:06 · The lane along the channel, the mountain on the right."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_120755.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:07 · Crabs at the waterline of the channel wall."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"
+
+[[media]]
+file = "img/field/20250928_121251.jpg"
+source = "field visit, 28 September 2025"
+author = "the authors"
+licence = "© the authors, all rights reserved"
+licence_url = ""
+own = true
+shows = "12:12 · Across the channel from the shrine’s lower precinct: the grounds of the 出雲大社新宮教会."
+processing = "iPhone 16 original (JPEG, 4032×3024 or 5712×4284); orientation applied; long side 1280 px, JPEG q78, all EXIF removed; thumbnail 360 px q72 beside it (_t.jpg)"

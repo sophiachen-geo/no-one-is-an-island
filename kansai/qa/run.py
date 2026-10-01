@@ -185,6 +185,25 @@ def kmk_data():
     return _KMK
 
 
+_FN = {}
+
+
+def fn_data():
+    """The field notes (kansai/data/fieldnotes.js, built by kansai/tools/bike)."""
+    if not _FN:
+        import os
+        raw = (Path(os.environ.get("KANSAI_DATA", KANSAI / "data")) / "fieldnotes.js").read_text(encoding="utf-8").strip()
+        _FN.update(json.loads(raw[raw.index("=") + 1:].rstrip(";")))
+    return _FN
+
+
+def fn_value(dotted):
+    v = fn_data()
+    for k in dotted.split("."):
+        v = v[int(k)] if isinstance(v, list) else v[k]
+    return v
+
+
 def kmk_value(dotted):
     v = kmk_data()
     for k in dotted.split("."):
@@ -231,9 +250,9 @@ def check_derived(gate, g, claim):
     cid = claim["id"]
     L = g["layers"]
     try:
-        if "stat" in c or ("kmk" in c and "fmt" in c):
-            v = stat(g, c["stat"]) if "stat" in c else kmk_value(c["kmk"]); shown = c.get("fmt", "{}").format(v)
-            src = c["stat"] if "stat" in c else "kamikura." + c["kmk"]
+        if "stat" in c or ("kmk" in c and "fmt" in c) or ("fn" in c and "fmt" in c):
+            v = stat(g, c["stat"]) if "stat" in c else kmk_value(c["kmk"]) if "kmk" in c else fn_value(c["fn"]); shown = c.get("fmt", "{}").format(v)
+            src = c["stat"] if "stat" in c else ("kamikura." + c["kmk"]) if "kmk" in c else ("fieldnotes." + c["fn"])
             if not any(shown in m for m in claim.get("match", []) + claim.get("exact", [])):
                 gate.err("derived", f"data says {src} = {v} → “{shown}”, but the text says {claim.get('match') or claim.get('exact')}", cid)
             else:
@@ -255,6 +274,8 @@ def check_derived(gate, g, claim):
             got = eval(c["calc"], {"__builtins__": {}}); what = c["calc"]
         elif "kmk" in c:
             got = float(kmk_value(c["kmk"])); what = f"kamikura.{c['kmk']}"
+        elif "fn" in c:
+            got = float(fn_value(c["fn"])); what = f"fieldnotes.{c['fn']}"
         elif "bld" in c:
             got = bld_counts(g)[c["bld"]]; what = f"buildings: {c['bld']} (re-counted from kansai/data/buildings.js)"
         elif "valley_ve" in c:
@@ -309,6 +330,8 @@ def check_register(gate, reg, inventory, g):
     idents = [(re.compile(i["pattern"]), i["why"]) for i in reg.get("identifier", [])]
     seen_uncovered = set()
     for it in inventory:
+        if it["src"] in FN_VERIFIED:      # every cell recomputed from kansai/data/fieldnotes.js by check_fn
+            continue
         t = it["text"]; cov = []
         for c in reg.get("claim", []):
             for m in c.get("match", []):
@@ -332,6 +355,131 @@ def check_register(gate, reg, inventory, g):
         gate.ok("coverage", f"every number in {len(inventory)} text items is registered")
 
 
+FN_VERIFIED = {"td#fnopts", "text#fnprof"}
+
+
+def fn_table_rows(pair):
+    """The route table as the page must show it, recomputed here from the data (same rounding as the page)."""
+    D = fn_data(); R = D["region"]; C = {c["id"]: c for c in R["chains"]}
+    rows = []
+    for i, O in enumerate(R["options"][pair]["list"]):
+        labs = []
+        for cid, o in O["seq"]:
+            c = C[cid]
+            if c["len"] < 2000:
+                continue
+            r = c["refs"][0].split(";")[0] if c["refs"] else None
+            top = c["gsi"][0][0] if c["gsi"] else ""
+            lab = ("R" + r) if r and top == "国道" else ("県道" + r) if r and top == "都道府県道" else "municipal road" if top == "市区町村道等" else "national road" if top == "国道" else "road"
+            if c["unp"] > 0.25 * c["len"]:
+                lab += " (partly unpaved)"
+            if not labs or labs[-1] != lab:
+                labs.append(lab)
+        on = {cid for cid, o in O["seq"]}
+        mm = hr = None
+        for cl in R["closures"]:
+            if any(int(k) in on and v >= 200 for k, v in cl["chains"].items()):
+                mm = cl["mm"] if mm is None else min(mm, cl["mm"])
+                if cl.get("hr"):
+                    hr = cl["hr"] if hr is None else min(hr, cl["hr"])
+        hz = O["haz"]; ls = hz.get("ls_yellow", 0) + hz.get("ls_red", 0)
+        g = "unreliable*" if O["gmax"] > 25 else f"{O['gmax']:.1f} %"
+        rows.append([f"{chr(65 + i)} · " + " → ".join(labs), f"{O['len'] / 1000:.1f}", str(O["up"]), str(O["down"]), g,
+                     f"{O['tun'][0]} · {O['tun'][1] / 1000:.1f} km", (f"{mm} mm" + (f" or {hr} mm/h" if hr else "")) if mm else "—", f"{hz.get('tsunami_l2_2016', 0) / 1000:.1f} km", f"{ls / 1000:.1f} km"])
+    return rows
+
+
+def jpeg_metadata(path):
+    """Metadata segments in a JPEG (EXIF, XMP, IPTC), read from its markers with the standard library only."""
+    b = Path(path).read_bytes()
+    if b[:2] != b"\xff\xd8":
+        return ["no JPEG header"]
+    i, found = 2, []
+    while i + 4 <= len(b):
+        if b[i] != 0xFF:
+            return found + ["a corrupt marker"]
+        m = b[i + 1]
+        if m in (0xD9, 0xDA):                    # end of image / start of scan: the headers are over
+            break
+        if 0xD0 <= m <= 0xD7 or m in (0x01, 0xFF):
+            i += 2 if m != 0xFF else 1; continue
+        n = int.from_bytes(b[i + 2:i + 4], "big"); seg = b[i + 4:i + 2 + n]
+        if m == 0xE1 and seg.startswith(b"Exif\x00"):
+            found.append("EXIF")
+        elif m == 0xE1 and seg.startswith(b"http://ns.adobe.com/xap/"):
+            found.append("XMP")
+        elif m == 0xED:
+            found.append("IPTC")
+        i += 2 + n
+    return found
+
+
+def check_fn(gate, rep, pts_ref, mreg):
+    """Field notes: the route table and profile follow the data; the photographs are ours, registered, stripped of
+    location metadata and placed in the town; the town labels sit on their independent references."""
+    try:
+        D = fn_data()
+    except Exception as e:
+        gate.err("fieldnotes", f"kansai/data/fieldnotes.js could not be read: {e}"); return
+    F = rep.get("fn") or {}
+    n_bad = 0
+    for pair in D["region"]["options"]:
+        want, got = fn_table_rows(pair), (F.get("tables") or {}).get(pair)
+        if got is None:
+            gate.err("fieldnotes", f"the render pass did not report the table for {pair}"); n_bad += 1; continue
+        for i, (w, g) in enumerate(zip(want, got)):
+            if w != g:
+                gate.err("fieldnotes", f"{pair} row {chr(65 + i)}: page shows {g}, the data gives {w}"); n_bad += 1
+        if len(want) != len(got):
+            gate.err("fieldnotes", f"{pair}: {len(got)} rows on the page, {len(want)} in the data"); n_bad += 1
+        pv = (F.get("prof") or {}).get(pair) or {}
+        O = D["region"]["options"][pair]["list"][0]
+        name = {"hongu-hayatama": "Hongū → Hayatama", "hayatama-nachi": "Hayatama → Nachi", "nachi-hongu": "Nachi → Hongū"}[pair]
+        last = f"A · {name}: {O['len'] / 1000:.1f} km, ↑ {O['up']} m, ↓ {O['down']} m · heights ×10"
+        if pv.get("last") != last or pv.get("ve") != "10.00":
+            gate.err("fieldnotes", f"profile of {pair}: shows “{pv.get('last')}” at ×{pv.get('ve')}, the data gives “{last}” at ×10"); n_bad += 1
+    if F.get("strip") != "10.00":
+        gate.err("fieldnotes", f"the ride strip is drawn at heights ×{F.get('strip')}, its caption says ×10"); n_bad += 1
+    # photographs
+    M = {m["file"]: m for m in mreg.get("media", [])}
+    T = D["town"]; Fr = D["frames"]["town"]
+    for p in T["photos"]:
+        for key in ("src", "thumb"):
+            f = KANSAI / p[key]
+            if not f.exists():
+                gate.err("fieldnotes", f"photograph file missing: {p[key]}"); n_bad += 1; continue
+            meta = jpeg_metadata(f)
+            if meta:
+                gate.err("fieldnotes", f"{p[key]} still carries {', '.join(meta)} (location must not be published in the file)"); n_bad += 1
+        r = M.get(p["src"])
+        if not r or not r.get("own") or not r.get("licence") or not r.get("shows"):
+            gate.err("fieldnotes", f"{p['src']} is not registered in media.toml as our own photograph (own = true, licence, shows)"); n_bad += 1
+        if not (Fr[0] <= p["x"] <= Fr[2] and Fr[1] <= p["y"] <= Fr[3]):
+            gate.err("fieldnotes", f"photograph {p['id']} is placed outside the town frame"); n_bad += 1
+        # the time shown with each photograph is the one its file name took from EXIF (img/field/YYYYMMDD_HHMMSS.jpg)
+        mt = re.search(r"/(\d{8})_(\d{2})(\d{2})\d{2}\.jpg$", p["src"])
+        if not mt or f"{mt.group(2)}:{mt.group(3)}" != p.get("time") or mt.group(1) != "20250928":
+            gate.err("fieldnotes", f"photograph {p['id']}: time {p.get('time')} does not match its file {p['src']}"); n_bad += 1
+        if p.get("brg") is not None and not (0 <= p["brg"] < 360):
+            gate.err("fieldnotes", f"photograph {p['id']}: bearing {p['brg']} outside 0–359°"); n_bad += 1
+    # town labels on their references
+    P = pts_ref.get("points", {})
+    for lab in T.get("labels", []):
+        ref = P.get(lab["key"])
+        if not ref:
+            gate.err("fieldnotes", "town label has no reference in points.toml", lab["key"]); n_bad += 1; continue
+        want = tm.to_svg(ref["lon"], ref["lat"], fn_origin())
+        d = math.dist(want, (lab["x"], lab["y"])) * 100
+        if d > ref.get("tol_m", 60):
+            gate.err("fieldnotes", f"{lab['key']} is drawn {d:.0f} m from its reference (tolerance {ref.get('tol_m', 60)} m)"); n_bad += 1
+    if not n_bad:
+        gate.ok("fieldnotes", f"route tables of {len(D['region']['options'])} pairs and their profiles follow the data; {len(T['photos'])} photographs registered, without metadata, in the town; {len(T.get('labels', []))} town labels on their references")
+
+
+def fn_origin():
+    return [-69782.048, -171691.754]
+
+
 def check_points(gate, pts_ref, g, used):
     P = pts_ref.get("points", {})
     for key in sorted(set(used)):
@@ -344,7 +492,7 @@ def check_points(gate, pts_ref, g, used):
         if key not in P:
             gate.err("points", "map point has no sourced reference in points.toml", key); continue
     for key, p in P.items():
-        if key.startswith(("kmk_", "kmc_")):
+        if key.startswith(("kmk_", "kmc_", "fn_")):
             continue
         if key not in g["pts"]:
             gate.err("points", "reference point missing from the page data", key); continue
@@ -637,7 +785,8 @@ def main():
     check_points(gate, pts_ref, g, rep["usedPoints"])
     check_kmk(gate, pts_ref, g, html)
     mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}
-    check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", [])])
+    check_fn(gate, rep, pts_ref, mreg)
+    check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", []) if str(m.get("source", "")).startswith("http")])
     check_media(gate, mreg, page_media(html))
     check_tiles(gate, rep.get("tiles", []), g)
 

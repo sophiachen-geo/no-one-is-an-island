@@ -49,6 +49,8 @@ async function open(viewport, opts = {}) {
   await page.evaluate(() => document.fonts.ready);
   // the Kamikura micro-study loads when a reader scrolls near it; every pass checks it built
   await page.evaluate(() => (window.__QA && window.__QA.kmkLoad ? window.__QA.kmkLoad() : null));
+  // the field notes load the same way
+  await page.evaluate(() => (window.__QA && window.__QA.fnLoad ? window.__QA.fnLoad() : null));
   await page.waitForTimeout(300);
   return { ctx, page };
 }
@@ -221,7 +223,7 @@ if (hasQA) {
 }
 
 // 4b. interactions the text promises: hover-to-locate, pictures, the linked system map, imagery
-let tiles = [], links = [];
+let tiles = [], links = [], fnReport = { errors: [], tables: {}, prof: {}, strip: null };
 if (hasQA) {
   const ia = await page.evaluate(async () => {
     const Q = window.__QA, out = [], steps = [...document.querySelectorAll('.step')], wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -340,7 +342,7 @@ if (hasQA) {
       if (Math.abs(c3.k - c0.k) > 1e-6) out.push(['kamikura', 'reset does not return to the study area']);
     }
     // imagery: one switch drives every map; each map has one
-    const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km, #kmkmap svg.kmk-svg').length;
+    const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km, #kmkmap svg.kmk-svg, #fnmap svg.fn-svg').length;
     if (btns < maps) out.push(['satellite', `${maps} maps but ${btns} satellite switches`]);
     Q.satSet(true); await wait(50);
     if (!document.body.classList.contains('sat-on') || [...document.querySelectorAll('.satbtn')].some((b) => b.getAttribute('aria-pressed') !== 'true')) out.push(['satellite', 'the switch does not reach every map']);
@@ -351,6 +353,42 @@ if (hasQA) {
     return out;
   });
   ia.forEach(([c, m]) => err(c, m));
+  // field notes: every system draws; a photograph opens; every pair's table is reported (run.py recomputes it from the data)
+  fnReport = await page.evaluate(async () => {
+    const Q = window.__QA, out = { errors: [], tables: {}, prof: {}, strip: null }, wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    if (!Q.fnLoad) { out.errors.push('the field notes are not wired to the QA hooks'); return out; }
+    const ok = await Q.fnLoad(); if (!ok) { out.errors.push('the field-notes map did not build'); return out; }
+    const F = Q.fn;
+    for (const k of Object.keys(Q.FNSYS)) {
+      F.setSys(k, true); await wait(60);
+      const shown = [...document.querySelectorAll('#fnmap svg.fn-svg > g > g')].filter((g) => g.style.display !== 'none' && g.querySelector('path')).length;
+      if (!shown) out.errors.push(`system ${k} draws nothing`);
+      if (!document.querySelectorAll('#fnleg li').length) out.errors.push(`system ${k} has no legend`);
+      const pressed = document.querySelector(`.fnchip[data-fs="${k}"]`);
+      if (!pressed || pressed.getAttribute('aria-pressed') !== 'true') out.errors.push(`the chip of system ${k} does not show it is on`);
+    }
+    F.setSys('ride', true); await wait(60);
+    F.openPhoto(0); await wait(60);
+    const card = document.querySelector('#fnmap .mcard'), img = card && card.querySelector('img');
+    if (!card || card.hidden || !img || !/img\/field\//.test(img.getAttribute('src'))) out.errors.push('a photograph does not open in its card');
+    F.closePhoto();
+    for (const pair of Object.keys(F.D.region.options)) {
+      document.querySelector(`#fnopts .fnpair[data-pair="${pair}"]`).click(); await wait(80);
+      out.tables[pair] = [...document.querySelectorAll('#fnopts tbody tr')].map((tr) => [...tr.children].map((td) => td.textContent.trim()));
+      const sv = document.getElementById('fnprof');
+      out.prof[pair] = { ve: sv.getAttribute('data-ve'), last: [...sv.querySelectorAll('text')].map((t) => t.textContent).pop() };
+    }
+    const sp = document.getElementById('fnprof'), r = sp.getBoundingClientRect();
+    sp.dispatchEvent(new MouseEvent('mousemove', { clientX: r.left + r.width * 0.5, clientY: r.top + r.height * 0.5, bubbles: true })); await wait(40);
+    const cur = document.querySelector('#fnmap .fcur');
+    if (!cur || cur.style.display === 'none') out.errors.push('a point on the route profile does not light on the map');
+    sp.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true })); await wait(20);
+    out.strip = document.getElementById('fnstrip').getAttribute('data-ve');
+    document.querySelector('#fnopts .fnpair[data-pair="hongu-hayatama"]').click(); await wait(40);
+    F.setSys('ride', true);
+    return out;
+  });
+  fnReport.errors.forEach((m) => err('fieldnotes', m));
   // tile placement samples: run.py re-projects the same corners with kansai/qa/tm.py
   tiles = await page.evaluate(() => {
     const Q = window.__QA, out = [], F = Q.frame;
@@ -372,7 +410,7 @@ async function chartChecks(pg, tag) {
   const out = await pg.evaluate(() => {
     const out = [];
     document.querySelectorAll('figure svg, #valley, .board svg, .pictos svg').forEach((svg, si) => {
-      if (svg.closest('.mini, #mapwrap, .legend, #ksmap, #kmkmap, .klegend') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
+      if (svg.closest('.mini, #mapwrap, .legend, #ksmap, #kmkmap, #fnmap, .klegend') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
       const vb = svg.viewBox && svg.viewBox.baseVal; if (!vb || !vb.width) return;
       const texts = [...svg.querySelectorAll('text')].filter((t) => t.textContent.trim() && t.getBBox().width > 0);
       const id = (svg.getAttribute('aria-label') || svg.closest('figure, section, div')?.id || 'svg#' + si).slice(0, 70);
@@ -447,6 +485,11 @@ const inv = await page.evaluate(() => {
     Q.KPLACES.forEach((p) => add('system-map', p[1]));
     Object.values(Q.KLEG || {}).forEach((l) => add('legend', l[2]));
     document.querySelectorAll('.step').forEach((s) => add('view-name', s.getAttribute('data-name')));
+    if (Q.fn && Q.fn.D) {
+      Q.fn.D.town.photos.forEach((p) => { add('fn-photo', p.cap.replace(/<[^>]+>/g, '')); });
+      add('fn-photo-credit', 'Photo: the authors, field visit, 28 September 2025 · all rights reserved');
+      Object.keys(Q.FNSYS).forEach((k) => (Q.FNSYS[k].leg || '').split(' ').forEach((l) => l && l !== 'ramp' && Q.FNLEG && Q.FNLEG[l] && add('legend', Q.FNLEG[l][2])));
+    }
   }
   return out;
 });
@@ -514,5 +557,5 @@ if (hasQA) await stepChecks(m.page, 'mobile');
 await m.ctx.close();
 await browser.close();
 
-writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints, tiles, links }, null, 1));
+writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints, tiles, links, fn: fnReport }, null, 1));
 console.log(`render QA: ${errors.length} error(s), ${warnings.length} warning(s), ${inv.length} text items`);

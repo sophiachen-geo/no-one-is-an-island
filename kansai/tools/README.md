@@ -32,6 +32,7 @@ python3 $T/17_round3.py         # per-level contours + height labels, forest/par
                                 #   (→ buildings_page.json, copy to ../data/buildings.js), services, road labels
 python3 $T/09_inject.py         # write geo.json + profile.json into ../index.html
 # kamikura/: the last chapter's micro-study (1 m relief, study area, transect, alignment test) — see kamikura/README.md
+# bike/: field notes · the three shrines by bicycle (routes, road-bed heights, closures, the town's networks) — see bike/README.md
 python3 ../qa/run.py            # the QA/QC gate — must pass before anything is published
 ```
 

@@ -27,8 +27,9 @@ python3 kansai/qa/verify_points.py         # re-check map points against OpenStr
 | Pictures | `media.toml` | a picture's file is missing, it has no source, author or open licence, or its caption does not credit the registered author and licence |
 | Imagery | `run.py` | a web tile's corners are more than 0.1 cm from where `tm.py` projects them, or its affine drawing bends by more than ½ pixel |
 | Buildings | `run.py` | the building counts in the text differ from a fresh count of `data/buildings.js` against the hazard layers |
+| Field notes | `run.py` (`check_fn`), `fn` claims | a route-table cell or profile label differs from what `data/fieldnotes.js` gives; a number the text quotes drifts from its `stats`; one of our photographs is missing, still carries EXIF, XMP or IPTC (read from the JPEG markers), is not registered as ours, lies outside the town, or shows a time other than its file name’s (EXIF) time; a town label is off its reference in `points.toml` |
 | Caveats | `CAVEATS.md` | the file differs from what the register generates |
-| The gate | `selftest.py` | a planted fault (unsourced number, edited claim, stale statistic, moved point, render error, edited caveats, unregistered link, plan without its Japanese name, misplaced tile, stale building data, missing picture, text spilling out of a box) is not caught |
+| The gate | `selftest.py` | a planted fault (unsourced number, edited claim, stale statistic, moved point, render error, edited caveats, unregistered link, plan without its Japanese name, misplaced tile, stale building data, Kamikura or field-notes data that drifts, a photograph at the wrong time or still carrying EXIF, a route table out of step, missing picture, text spilling out of a box) is not caught |
 
 ## Claim statuses
 

@@ -2600,3 +2600,665 @@ match = ["“gods appearing provisionally in the form of Buddhas” (神が仮�
 status = "verified"
 source = "熊野速玉大社, 熊野信仰のはじまり: 「仏教が伝来すると神仏習合が進み、熊野では神が仮に仏の姿をかりて現れるとする熊野権現信仰が流布し」 (quoted as the shrine words it)"
 url = "https://kumanohayatama.jp/history/"
+
+# ================================================================ Field notes · Shingū’s three shrines by bicycle
+# Derived values are recomputed from kansai/data/fieldnotes.js (check fn), which kansai/tools/bike builds from
+# OpenStreetMap (1 October 2026), GSI vector tiles and DEM5A, the closure lists of Wakayama and Mie, and our photographs.
+# The route table (td#fnopts) and the profile labels (text#fnprof) are recomputed cell by cell by check_fn in run.py.
+[[identifier]]
+pattern = '県道\d+(?: and \d+)?'
+why = "prefectural road numbers"
+
+[[identifier]]
+pattern = 'Three networks in one fabric|cross two towns|one-way streets|click one to open it|one of the shrine’s buildings|One of the halls|a road is a bench cut|World Magnetic Model 2025'
+why = "idioms and the name of a model, not counts"
+
+[[claim]]
+id = "fn-ride-circuit"
+match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "SHINGŪ’S THREE SHRINES BY BICYCLE",
+         "three stops, 25 photographs", "field visit, 28 September 2025", "the first stop"]
+status = "verified"
+source = "新宮市観光協会, 体験コース「世界遺産･新宮三社詣で まちなかサイクリング」 (itinerary 6): 阿須賀神社, 熊野速玉大社, 神倉神社; the date from our photographs' EXIF (DateTimeOriginal 2025:09:28, OffsetTimeOriginal +09:00); the photographs fall in three groups (town.py, within 150 m), the first at Asuka at 10:37"
+url = "https://www.shinguu.jp/itineraries/detail/6"
+
+[[claim]]
+id = "fn-photos-gps"
+match = ["Twenty-five of our phone photographs carry a position"]
+status = "derived"
+source = "kansai/tools/photos/ingest.py: photographs with EXIF GPS position and image direction (22 of them shown; the others repeat a view)"
+check = { fn = "stats.ride.photos_gps", expect = 25, tol = 0 }
+
+[[claim]]
+id = "fn-photos-gps-box"
+match = ["three stops, 25 photographs with position and heading"]
+status = "derived"
+source = "as fn-photos-gps"
+check = { fn = "stats.ride.photos_gps", fmt = "{} photographs with position" }
+
+[[claim]]
+id = "fn-hpe-min"
+match = ["good to 3.5–12.6 m, and a compass heading"]
+status = "derived"
+source = "EXIF GPSHPositioningError of the 25 photographs (the phone's own horizontal accuracy estimate)"
+check = { fn = "stats.ride.hpe_min", fmt = "good to {}–" }
+
+[[claim]]
+id = "fn-hpe-max"
+match = ["good to 3.5–12.6 m, and a compass heading"]
+status = "derived"
+source = "as fn-hpe-min"
+check = { fn = "stats.ride.hpe_max", fmt = "–{} m, and a compass" }
+
+[[claim]]
+id = "fn-t-first"
+match = ["from 10:37 at Asuka", "10:37 → 12:12"]
+status = "derived"
+source = "EXIF DateTimeOriginal (JST, +09:00) of the first photograph"
+check = { fn = "stats.ride.t_first", fmt = "from {} at Asuka" }
+
+[[claim]]
+id = "fn-t-first-box"
+match = ["10:37 → 12:12"]
+status = "derived"
+source = "as fn-t-first"
+check = { fn = "stats.ride.t_first", fmt = "{} →" }
+
+[[claim]]
+id = "fn-t-last"
+match = ["to 12:12 at the foot of Kamikura", "10:37 → 12:12"]
+status = "derived"
+source = "EXIF DateTimeOriginal of the last photograph"
+check = { fn = "stats.ride.t_last", fmt = "to {} at the foot" }
+
+[[claim]]
+id = "fn-t-last-box"
+match = ["10:37 → 12:12"]
+status = "derived"
+source = "as fn-t-last"
+check = { fn = "stats.ride.t_last", fmt = "→ {}" }
+
+[[claim]]
+id = "fn-leg1-km"
+match = ["1.5 km · 0.9 km"]
+status = "derived"
+source = "town.py: the shortest legal bicycle route from the last photograph at one stop to the first at the next (OSM, one-way streets respected)"
+check = { fn = "stats.ride.leg1_km", fmt = "{:.1f} km ·" }
+
+[[claim]]
+id = "fn-leg2-km"
+match = ["1.5 km · 0.9 km"]
+status = "derived"
+source = "as fn-leg1-km"
+check = { fn = "stats.ride.leg2_km", fmt = "· {:.1f} km" }
+
+[[claim]]
+id = "fn-leg1-wide-box"
+match = ["61% · 42%"]
+status = "derived"
+source = "share of the 20 m samples of leg 1 on GSI width classes 5.5m-13m未満 and wider (RdCL vt_rnkwidth conflated onto OSM)"
+check = { fn = "stats.ride.leg1_wide_pct", fmt = "{}% ·" }
+
+[[claim]]
+id = "fn-leg1-shops-box"
+match = ["61% · 42%"]
+status = "derived"
+source = "share of the 20 m samples of leg 1 with an OSM shop, café, restaurant, bank, pharmacy, post office or fuel station within 25 m"
+check = { fn = "stats.ride.leg1_shops_pct", fmt = "· {}%" }
+
+[[claim]]
+id = "fn-leg2-narrow-box"
+match = ["66% · 41%"]
+status = "derived"
+source = "share of the 20 m samples of leg 2 on GSI width class 3m未満"
+check = { fn = "stats.ride.leg2_narrow_pct", fmt = "{}% ·" }
+
+[[claim]]
+id = "fn-leg2-water-box"
+match = ["66% · 41%"]
+status = "derived"
+source = "share of the 20 m samples of leg 2 within 25 m of GSI water (all of them on the leg's last stretch, beside the channel)"
+check = { fn = "stats.ride.leg2_water_pct", fmt = "· {}%" }
+
+[[claim]]
+id = "fn-width-classes"
+match = ["first leg: on roads 5.5 m or wider", "second leg: on lanes under 3 m", "on roads 5.5 m or wider, among them", "is on lanes under 3 m"]
+exact = ["< 3 m", "3–5.5 m", "5.5–13 m"]
+status = "verified"
+source = "GSI 最適化ベクトルタイル (optimal_bvmap-v1) RdCL attribute vt_rnkwidth: 3m未満, 3m-5.5m未満, 5.5m-13m未満, 13m-19.5m未満, 19.5m以上 (GSI 提供データ仕様); the strip's key lists the classes the two legs pass through"
+url = "https://github.com/gsi-cyberjapan/optimal_bvmap"
+
+[[claim]]
+id = "fn-detour-walk-box"
+match = ["1.38 · 1.39 · 1.46"]
+status = "derived"
+source = "town.py: median over buildings of each building's median detour (network length + access at both ends) ÷ straight-line distance"
+check = { fn = "stats.town.med_walk", fmt = "{} ·" }
+
+[[claim]]
+id = "fn-detour-bike-box"
+match = ["1.38 · 1.39 · 1.46"]
+status = "derived"
+source = "as fn-detour-walk-box, on the cycling network"
+check = { fn = "stats.town.med_bike", fmt = "· {} ·" }
+
+[[claim]]
+id = "fn-detour-car-box"
+match = ["1.38 · 1.39 · 1.46"]
+status = "derived"
+source = "as fn-detour-walk-box, on the driving network"
+check = { fn = "stats.town.med_car", fmt = "· {}" }
+
+[[claim]]
+id = "fn-nocar-n-box"
+match = ["1,295 buildings"]
+status = "derived"
+source = "town.py: buildings of the town core whose footprint point lies more than 60 m from the driving network"
+check = { fn = "stats.town.nocar_n", fmt = "{:,} buildings" }
+
+[[claim]]
+id = "fn-nocar-pct-box"
+match = ["14% of the town core with no street of 3 m or more within 60 m"]
+status = "derived"
+source = "1,295 ÷ 9,349"
+check = { fn = "stats.town.nocar_pct", fmt = "{}% of the town core" }
+
+[[claim]]
+id = "fn-method-ride"
+match = ["Every 20 m of the inferred ride is coded", "buildings 6–9 m either side of the line, shops, cafés and other businesses within 25 m, sacred ground within 30 m, water within 25 m",
+         "The two inferred legs, coded every 20 m", "shops, cafés and other businesses within 25 m (OpenStreetMap); sacred ground within 30 m; water within 25 m; the share of points 6–9 m either side of the line",
+         "The two legs"]
+exact = ["shops ≤ 25 m", "sacred ground ≤ 30 m", "water ≤ 25 m", "15 m"]
+status = "method"
+source = "town.py, section 4: a sample every 20 m along each leg; frontage = 20 points at 6 m and 9 m either side, every 4 m over ±8 m, tested inside GSI footprints; OSM shop=* and amenity in (restaurant, cafe, fast_food, bar, pub, bank, pharmacy, post_office, ice_cream, marketplace, fuel) within 25 m; landuse=religious or amenity=place_of_worship within 30 m; GSI water areas and lines (WA, WL) within 25 m; two legs between three stops; the strip's height axis in 5 m steps"
+
+[[claim]]
+id = "fn-heights-ve"
+match = ["heights ×10"]
+status = "method"
+source = "fnStrip and fnProfile draw heights 10 times the horizontal scale (data-ve, checked by check_render.mjs)"
+
+[[claim]]
+id = "fn-leg1-wide"
+match = ["From Asuka to Hayatama 61% of the way is on roads 5.5 m or wider"]
+status = "derived"
+source = "as fn-leg1-wide-box"
+check = { fn = "stats.ride.leg1_wide_pct", fmt = "Hayatama {}% of the way" }
+
+[[claim]]
+id = "fn-leg1-station"
+match = ["among them 410 m of the station road, 新宮停車場線"]
+status = "derived"
+source = "length of leg 1 within 4 m of the OSM ways named 新宮停車場線 (県道42, the road from Shingū station)"
+check = { fn = "stats.ride.leg1_station_m", fmt = "among them {} m of the station road" }
+
+[[claim]]
+id = "fn-leg1-shops"
+match = ["and shops line 42% of it"]
+status = "derived"
+source = "as fn-leg1-shops-box"
+check = { fn = "stats.ride.leg1_shops_pct", fmt = "shops line {}% of it" }
+
+[[claim]]
+id = "fn-leg2-narrow"
+match = ["From Hayatama to Kamikura 66% is on lanes under 3 m"]
+status = "derived"
+source = "as fn-leg2-narrow-box"
+check = { fn = "stats.ride.leg2_narrow_pct", fmt = "Kamikura {}% is on lanes" }
+
+[[claim]]
+id = "fn-leg2-channel"
+match = ["its last 350 m run beside 神倉堀端都市下水路"]
+status = "derived"
+source = "length of leg 2 within 25 m of GSI water: one piece, from 515 m to the end of the 865 m leg (write_fn.py)"
+check = { fn = "stats.ride.leg2_channel_m", fmt = "its last {} m run" }
+
+[[claim]]
+id = "fn-leg2-water"
+match = ["water beside 41% of the leg"]
+status = "derived"
+source = "as fn-leg2-water-box"
+check = { fn = "stats.ride.leg2_water_pct", fmt = "water beside {}% of the leg" }
+
+[[claim]]
+id = "fn-leg2-sacred"
+match = ["sacred ground beside 30%"]
+status = "derived"
+source = "share of the 20 m samples of leg 2 within 30 m of OSM religious land or a place of worship"
+check = { fn = "stats.ride.leg2_sacred_pct", fmt = "sacred ground beside {}%" }
+
+[[claim]]
+id = "fn-method-networks"
+match = ["A lane 2.5 m wide is a short cut on foot", "to a fixed sample of 260 buildings 150–800 m away, on three networks",
+         "driving (streets of 3 m or more in GSI’s width classes", "have no street of 3 m or more within 60 m", "with no street of 3 m or more within 60 m",
+         "the three movement networks"]
+exact = ["building with no street of this network within 60 m", "building not scored (fewer than 8 trips in range)"]
+status = "method"
+source = "town.py: walking = every OSM way but motorways (no one-way rule); cycling = the bicycle-legal network of route.py (道路交通法), oneway and oneway:bicycle respected; driving = public roads whose GSI width class is 3 m or more, one-way respected; 260 destinations drawn once (seed 20250928); a trip counts when the two buildings are 150–800 m apart in a straight line; each building's access to its network ≤ 60 m; buildings with fewer than 8 trips are not scored; 2.5 m is an example inside GSI's narrowest class (3m未満)"
+
+[[claim]]
+id = "fn-dest-n"
+match = ["to a fixed sample of 260 buildings 150–800 m away, on three networks"]
+status = "derived"
+source = "town.py dest_idx"
+check = { fn = "stats.town.dest_n", fmt = "sample of {} buildings" }
+
+[[claim]]
+id = "fn-bld-n"
+match = ["From each of the 9,349 buildings of the town core"]
+status = "derived"
+source = "GSI building footprints (BldA) whose point lies in the town core (135.976–136.001 E, 33.716–33.734 N), duplicates across tiles removed; the map draws one dot per building"
+check = { fn = "stats.town.bld_n", fmt = "the {:,} buildings of the town core" }
+
+[[claim]]
+id = "fn-detour-walk"
+match = ["The median detours are 1.38 on foot, 1.39 by bicycle and 1.46 by car"]
+status = "derived"
+source = "as fn-detour-walk-box"
+check = { fn = "stats.town.med_walk", fmt = "are {} on foot" }
+
+[[claim]]
+id = "fn-detour-bike"
+match = ["The median detours are 1.38 on foot, 1.39 by bicycle and 1.46 by car"]
+status = "derived"
+source = "as fn-detour-bike-box"
+check = { fn = "stats.town.med_bike", fmt = "{} by bicycle" }
+
+[[claim]]
+id = "fn-detour-car"
+match = ["The median detours are 1.38 on foot, 1.39 by bicycle and 1.46 by car"]
+status = "derived"
+source = "as fn-detour-car-box"
+check = { fn = "stats.town.med_car", fmt = "{} by car" }
+
+[[claim]]
+id = "fn-nocar-n"
+match = ["1,295 buildings, 14%, have no street"]
+status = "derived"
+source = "as fn-nocar-n-box"
+check = { fn = "stats.town.nocar_n", fmt = "{:,} buildings, " }
+
+[[claim]]
+id = "fn-nocar-pct"
+match = ["1,295 buildings, 14%, have no street"]
+status = "derived"
+source = "as fn-nocar-pct-box"
+check = { fn = "stats.town.nocar_pct", fmt = "buildings, {}%, have" }
+
+[[claim]]
+id = "fn-osm-edition"
+match = ["streets, paths and shops from OpenStreetMap (1 October 2026)", "On today’s network (OpenStreetMap of 1 October 2026"]
+status = "verified"
+source = "Overpass (maps.mail.ru mirror) timestamp_osm_base 2026-10-01T08:35–08:42Z for the roads, 12:16Z for the town's shops and sacred ground (kansai/tools/bike/fetch.py, town_fetch.py); mirrors with older bases were not used"
+url = "https://www.openstreetmap.org/copyright"
+
+[[claim]]
+id = "fn-declination"
+match = ["the phone’s magnetic heading turned to true north, 7.8° W by the World Magnetic Model 2025"]
+status = "derived"
+source = "EXIF GPSImgDirectionRef = M (magnetic) on every photograph; declination of the World Magnetic Model 2025 (NOAA/BGS, pygeomag) at each photograph on 28 September 2025: −7.8° (export_misc.py true_bearing)"
+check = { fn = "stats.ride.decl_w", fmt = "{}° W by" }
+url = "https://www.ncei.noaa.gov/products/world-magnetic-model"
+
+[[claim]]
+id = "fn-strip-leg1"
+match = ["Asuka → Hayatama · 10:37–10:59 · 1.5 km"]
+status = "derived"
+source = "leg 1: from the photograph at Asuka (10:37) to the first at Hayatama (10:59)"
+check = { fn = "town.legs.0.t0", fmt = "· {}–" }
+
+[[claim]]
+id = "fn-strip-leg1-t1"
+match = ["Asuka → Hayatama · 10:37–10:59 · 1.5 km"]
+status = "derived"
+source = "as fn-strip-leg1"
+check = { fn = "town.legs.0.t1", fmt = "–{} ·" }
+
+[[claim]]
+id = "fn-strip-leg1-km"
+match = ["Asuka → Hayatama · 10:37–10:59 · 1.5 km"]
+status = "derived"
+source = "as fn-leg1-km"
+check = { fn = "stats.ride.leg1_km", fmt = "· {:.1f} km" }
+
+[[claim]]
+id = "fn-strip-leg2"
+match = ["Hayatama → Kamikura · 11:19–11:56 · 0.9 km"]
+status = "derived"
+source = "leg 2: from the last photograph at Hayatama (11:19) to the first at the foot of Kamikura (11:56)"
+check = { fn = "town.legs.1.t0", fmt = "· {}–" }
+
+[[claim]]
+id = "fn-strip-leg2-t1"
+match = ["Hayatama → Kamikura · 11:19–11:56 · 0.9 km"]
+status = "derived"
+source = "as fn-strip-leg2"
+check = { fn = "town.legs.1.t1", fmt = "–{} ·" }
+
+[[claim]]
+id = "fn-strip-leg2-km"
+match = ["Hayatama → Kamikura · 11:19–11:56 · 0.9 km"]
+status = "derived"
+source = "as fn-leg2-km"
+check = { fn = "stats.ride.leg2_km", fmt = "· {:.1f} km" }
+
+[[claim]]
+id = "fn-strip-leg1-m"
+exact = ["1503 m"]
+status = "derived"
+source = "length of leg 1 (end tick of the strip)"
+check = { fn = "stats.ride.leg1_m", fmt = "{} m" }
+
+[[claim]]
+id = "fn-strip-leg2-m"
+exact = ["865 m"]
+status = "derived"
+source = "length of leg 2 (end tick of the strip)"
+check = { fn = "stats.ride.leg2_m", fmt = "{} m" }
+
+[[claim]]
+id = "fn-region-three"
+match = ["The three Kumano shrines, by the same rule. The Kumano Sanzan pilgrimage links 熊野本宮大社, 熊野速玉大社 and 熊野那智大社",
+         "the motorways 那智勝浦新宮道路 and 新宮紀宝道路 are closed to bicycles"]
+status = "verified"
+source = "Kumano Sanzan: Hongū Taisha, Hayatama Taisha, Nachi Taisha (UNESCO 1142); both roads are 自動車専用道路 (highway=motorway in OSM), closed to bicycles under 道路交通法 — route.py excludes them"
+url = "https://whc.unesco.org/en/list/1142/"
+
+[[claim]]
+id = "fn-hh-km"
+match = ["the shortest legal rides are 33.8 km from Hongū to Hayatama down National Route 168"]
+status = "derived"
+source = "options.py / export_fn.py: shortest bicycle-legal route between the shrine nodes on OSM of 1 October 2026"
+check = { fn = "stats.region.hh_km", fmt = "rides are {} km from Hongū" }
+
+[[claim]]
+id = "fn-hh-up"
+match = ["with 103 m of climbing"]
+status = "derived"
+source = "climb on the road-bed profile with a 5 m hysteresis (metrics.py climb)"
+check = { fn = "stats.region.hh_up", fmt = "with {} m of climbing" }
+
+[[claim]]
+id = "fn-hn-km"
+match = ["21.9 km from Hayatama to Nachi by Route 42 and 県道46, with 383 m"]
+status = "derived"
+source = "as fn-hh-km"
+check = { fn = "stats.region.hn_km", fmt = "{} km from Hayatama to Nachi" }
+
+[[claim]]
+id = "fn-hn-up"
+match = ["21.9 km from Hayatama to Nachi by Route 42 and 県道46, with 383 m"]
+status = "derived"
+source = "as fn-hh-up"
+check = { fn = "stats.region.hn_up", fmt = "with {} m" }
+
+[[claim]]
+id = "fn-hn-pcr"
+match = ["8.8 km of it on the 太平洋岸自転車道 (Pacific Coast Cycling Road)"]
+status = "derived"
+source = "pcr.py: length of the route's own (OSM) line within 30 m of the route line in MLIT 近畿地方整備局's KML of the 太平洋岸自転車道 (used for the overlap only; the line itself is not reproduced)"
+check = { fn = "stats.region.hn_pcr_km", fmt = "{} km of it on the" }
+url = "https://www.kkr.mlit.go.jp/road/pcr/"
+
+[[claim]]
+id = "fn-nh-km"
+match = ["and 52.9 km from Nachi back to Hongū through Shingū, with 245 m"]
+status = "derived"
+source = "as fn-hh-km"
+check = { fn = "stats.region.nh_km", fmt = "and {} km from Nachi" }
+
+[[claim]]
+id = "fn-nh-up"
+match = ["and 52.9 km from Nachi back to Hongū through Shingū, with 245 m"]
+status = "derived"
+source = "as fn-hh-up"
+check = { fn = "stats.region.nh_up", fmt = "Shingū, with {} m" }
+
+[[claim]]
+id = "fn-hh-all-close"
+match = ["Every route between Hongū and Hayatama crosses a section closed in heavy rain"]
+status = "derived"
+source = "write_fn.py: routes between Hongū and Hayatama that follow a closure section for 200 m or more (8 of 8)"
+check = { fn = "stats.region.hh_closing", expect = 8, tol = 0 }
+
+[[claim]]
+id = "fn-hh-n"
+match = ["Every route between Hongū and Hayatama crosses a section closed in heavy rain"]
+status = "derived"
+source = "number of route families between Hongū and Hayatama in the table"
+check = { fn = "stats.region.hh_n", expect = 8, tol = 0 }
+
+[[claim]]
+id = "fn-rain-168-240"
+match = ["Wakayama shuts Route 168 between 宮井 and the Tanabe boundary after 240 mm of continuous rain"]
+status = "verified"
+source = "和歌山県 異常気象時通行規制区間 (open data, CC BY 4.0; downloaded 1 October 2026), No.2 国道１６８号 新宮市熊野川町宮井～新宮市・田辺市境界: 「通行止め：連続雨量240mm以上」"
+check = { fn = "stats.region.rain.2.mm", fmt = "after {} mm of continuous rain" }
+url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
+
+[[claim]]
+id = "fn-rain-168-320"
+match = ["and between 相賀 and 田長 after 320 mm"]
+status = "verified"
+source = "as fn-rain-168-240, No.1 国道１６８号 新宮市相賀～新宮市熊野川町田長: 「通行止め：連続雨量320mm以上」"
+check = { fn = "stats.region.rain.1.mm", fmt = "田長 after {} mm" }
+url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
+
+[[claim]]
+id = "fn-rain-mie-200"
+match = ["Mie shuts the road along its bank of the Kumano, 小船紀宝線, after 200 mm, or 40 mm in an hour"]
+status = "verified"
+source = "三重県 雨量規制区間 (page read 1 October 2026), No.44 小船紀宝線 熊野市紀和町小船～南牟婁郡紀宝町鮒田, 23.1 km, 時間雨量40mm/連続雨量200mm; its section sheet (三重県-01-047) draws the whole road along the Kumano"
+check = { fn = "stats.region.rain.三重44.mm", fmt = "小船紀宝線, after {} mm" }
+url = "https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm"
+
+[[claim]]
+id = "fn-rain-mie-hr"
+match = ["Mie shuts the road along its bank of the Kumano, 小船紀宝線, after 200 mm, or 40 mm in an hour",
+         "(Mie also closes at 40 mm in an hour)", "(Mie closes also at 40 mm in an hour)", "Mie 雨量規制, also at 40 mm/h"]
+status = "verified"
+source = "三重県 雨量規制区間: every section in the 熊野 area closes at 時間雨量40mm or its continuous threshold, whichever comes first"
+check = { fn = "stats.region.rain.三重44.hr", fmt = "or {} mm in an hour" }
+url = "https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm"
+
+[[claim]]
+id = "fn-hh-longest"
+match = ["Routes D and G avoid the 240 mm section by the inland roads 県道45 and 44 and stay open longest, to 320 mm, for 462 m of climbing or more"]
+status = "derived"
+source = "write_fn.py: the routes whose lowest closure threshold is highest"
+check = { fn = "stats.region.hh_longest", fmt = "Routes {} avoid" }
+
+[[claim]]
+id = "fn-hh-longest-mm"
+match = ["Routes D and G avoid the 240 mm section by the inland roads 県道45 and 44 and stay open longest, to 320 mm, for 462 m of climbing or more"]
+status = "derived"
+source = "as fn-hh-longest"
+check = { fn = "stats.region.hh_longest_mm", fmt = "longest, to {} mm" }
+
+[[claim]]
+id = "fn-hh-longest-up"
+match = ["Routes D and G avoid the 240 mm section by the inland roads 県道45 and 44 and stay open longest, to 320 mm, for 462 m of climbing or more"]
+status = "derived"
+source = "the smaller climb of routes D and G"
+check = { fn = "stats.region.hh_longest_up_min", fmt = "for {} m of climbing or more" }
+
+[[claim]]
+id = "fn-rain-rule"
+match = ["Rain: the lowest continuous-rain threshold among the closure sections a route follows for 200 m or more",
+         "Route 42 has no such section between Shingū and Nachi", "where a section is not a whole road, the map marks the road between the two places"]
+status = "verified"
+source = "fnRainMin (the 200 m rule); Route 42 is managed by MLIT, whose 異常気象時通行止区間 (紀南河川国道事務所) all lie west of this area (串本町田原 to みなべ町), and is not on the prefectures' lists"
+url = "https://www.kkr.mlit.go.jp/kinan/douro/closure/index.html"
+
+[[claim]]
+id = "fn-mie-between-311"
+match = ["2.3 km of Route 311 for 矢ノ川–小栗須 (1.1 km on Mie’s list)"]
+status = "derived"
+source = "closures.py: Route 311 between GSI's place annotations 紀和町矢ノ川 and 紀和町小栗須 (Mie No.14 gives 1.1 km and no points)"
+check = { fn = "stats.region.mie_between.三重14.drawn_km", fmt = "{} km of Route 311" }
+
+[[claim]]
+id = "fn-mie-list-311"
+match = ["2.3 km of Route 311 for 矢ノ川–小栗須 (1.1 km on Mie’s list)"]
+status = "verified"
+source = "三重県 雨量規制区間 No.14 国道311号 熊野市紀和町矢ノ川～熊野市紀和町小栗須, 1.1 km"
+check = { fn = "stats.region.mie_between.三重14.mie_km", fmt = "({} km on Mie’s list)" }
+url = "https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm"
+
+[[claim]]
+id = "fn-mie-between-62"
+match = ["10.3 km of 御浜紀和線 for 阿田和–上野 (9.8 km)"]
+status = "derived"
+source = "closures.py: 御浜紀和線 from its end at 阿田和 to the OSM place 上野 (Mie No.36 gives 9.8 km and no points)"
+check = { fn = "stats.region.mie_between.三重36.drawn_km", fmt = "{} km of 御浜紀和線" }
+
+[[claim]]
+id = "fn-mie-list-62"
+match = ["10.3 km of 御浜紀和線 for 阿田和–上野 (9.8 km)"]
+status = "verified"
+source = "三重県 雨量規制区間 No.36 御浜紀和線 南牟婁郡御浜町阿田和～南牟婁郡御浜町上野, 9.8 km"
+check = { fn = "stats.region.mie_between.三重36.mie_km", fmt = "阿田和–上野 ({} km)" }
+url = "https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm"
+
+[[claim]]
+id = "fn-tsunami-edition"
+match = ["the maximum-class inundation area in MLIT’s A40 data, which still holds Wakayama’s 2013 and Mie’s 2015 assumptions; both prefectures published new ones in March 2026, so far only as PDF maps",
+         "sediment-disaster warning and special warning zones (A33, 2025)"]
+status = "verified"
+source = "国土数値情報 A40 (latest release 2025-05-30) still serves A40-16_30 (Wakayama, 平成25年3月 assumption) and A40-16_24 (Mie, 2015 assumption under the Tsunami Act); Wakayama published its 令和8年 assumption on 25 March 2026 and Mie its new one on 30–31 March 2026, both as PDF maps only (checked 1 October 2026); A33 2025 edition for both prefectures (hazards.py)"
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A40-2024.html"
+
+[[claim]]
+id = "fn-steep-shrine"
+match = ["Steepest 200 m: on 8 of the 16 routes, a shrine’s approach road"]
+status = "derived"
+source = "write_fn.py: routes whose steepest 200 m lies within 400 m of either end (a shrine)"
+check = { fn = "stats.region.steep_at_shrine", fmt = "on {} of the 16" }
+
+[[claim]]
+id = "fn-routes-n"
+match = ["Steepest 200 m: on 8 of the 16 routes, a shrine’s approach road"]
+status = "derived"
+source = "route families in the table: 8 + 2 + 6"
+check = { fn = "stats.region.routes_n", fmt = "of the {} routes" }
+
+[[claim]]
+id = "fn-steepest-head"
+exact = ["steepest 200 m"]
+status = "method"
+source = "options.py: the largest height change over any 200 m of the road-bed profile, as a percentage"
+
+[[claim]]
+id = "fn-unverified-grade"
+match = ["the mapped line runs straight up the slope, 61 % over 200 m"]
+status = "derived"
+source = "OSM way 121370676 (県道45 那智勝浦本宮線, surface=ground) runs due north at 135.7755 E, 33.762–33.770 N, just south of 高瀬峠 (GSI annotation 135.7769 E, 33.7715 N); the road-bed and the line's own heights both give 61 % over 200 m"
+check = { fn = "stats.region.unverified_grade", fmt = "slope, {} % over 200 m" }
+
+[[claim]]
+id = "fn-rain-labels"
+exact = ["320 mm", "240 mm", "550 mm", "560 mm", "460 mm", "200 mm"]
+status = "verified"
+source = "continuous-rain thresholds of the closure sections on the corridors: Wakayama Nos. 1 (320), 2 (240), 3 (550), 20 (560), 22 (460); Mie Nos. 44, 14, 36 (200)"
+url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
+
+[[claim]]
+id = "fn-profile-method"
+match = ["at every 20 m the flattest ground within 15 m of the mapped line", "spot heights within 15 m of the routes"]
+status = "method"
+source = "benchdp.py / metrics.py roadbed(): Viterbi tracking of the flattest ground across the line every 20 m, 15 m either side; validate_final.py matches GSI 基準点 and 標高点 within 15 m"
+
+[[claim]]
+id = "fn-dem-n"
+match = ["Checked against the 44 GSI benchmarks"]
+status = "derived"
+source = "validate_final.py: GSI levelling benchmarks (水準点), triangulation points (三角点) and spot heights (標高点) within 15 m of the corridors"
+check = { fn = "stats.dem.n", fmt = "the {} GSI benchmarks" }
+
+[[claim]]
+id = "fn-dem-median"
+match = ["median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠"]
+status = "derived"
+source = "as fn-dem-n: median absolute difference, road bed − published height"
+check = { fn = "stats.dem.median_abs", fmt = "median error {} m" }
+
+[[claim]]
+id = "fn-dem-lev-n"
+match = ["median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠"]
+status = "derived"
+source = "as fn-dem-n"
+check = { fn = "stats.dem.by_kind.levelling benchmark.n", fmt = "({} levelling benchmarks" }
+
+[[claim]]
+id = "fn-dem-lev-median"
+match = ["median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠"]
+status = "derived"
+source = "as fn-dem-n"
+check = { fn = "stats.dem.by_kind.levelling benchmark.median_abs", fmt = "benchmarks: {} m)" }
+
+[[claim]]
+id = "fn-dem-worst"
+match = ["median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠"]
+status = "derived"
+source = "as fn-dem-n: a spot height of 108.0 m against 94.2 m on the road bed of the chain over 高瀬峠, 8 m from the line"
+check = { fn = "stats.dem.max_abs", fmt = "worst {} m" }
+
+[[claim]]
+id = "fn-photo-times"
+match = ["Open photograph 10:37", "Open photograph 10:59", "Open photograph 11:00", "Open photograph 11:06", "Open photograph 11:09", "Open photograph 11:18",
+         "Open photograph 11:19", "Open photograph 11:56", "Open photograph 11:59", "Open photograph 12:02", "Open photograph 12:06", "Open photograph 12:07",
+         "Open photograph 12:12"]
+status = "verified"
+source = "EXIF DateTimeOriginal (JST) of each photograph; the file names (img/field/YYYYMMDD_HHMMSS.jpg) carry the same time and check_fn compares them"
+
+[[claim]]
+id = "fn-photo-ogatama"
+match = ["(August 1992): 速玉大社のオガタマノキ, a city natural monument, 21 m tall with a girth of 1.65 m"]
+status = "verified"
+source = "the board in our photograph IMG_5124 (新宮市教育委員会, 平成4年8月): 「新宮市指定文化財 天然記念物 速玉大社のオガタマノキ … 樹高21m・目通り幹周り1.65m」"
+
+[[claim]]
+id = "fn-photo-nagi"
+match = ["south-south-east of the shrine gate: “estimated to be 800 years old”, said to have been planted when the halls were rebuilt in 1159 (Agency for Cultural Affairs)"]
+status = "verified"
+source = "文化遺産オンライン (Agency for Cultural Affairs), 熊野速玉大社: 「熊野速玉神社のナギは神門の南南東にある推定樹齢800年を誇る古木で、1159年の社殿再建の際に有力武士が寄進植樹したと伝えられ」"
+url = "https://online.bunka.go.jp/special_content/component/75"
+
+[[claim]]
+id = "fn-photo-gongen"
+match = ["its summit 千穂ヶ峰 (253 m), 神倉神社 on a cliff of nearly 100 m"]
+status = "verified"
+source = "the board in our photograph IMG_5149 (史跡 熊野三山（権現山）): 「主峰は千穂ヶ峰（253m）」, 「権現山の南、高さ100m近い断崖絶壁には神倉神社があり」"
+
+[[claim]]
+id = "fn-photo-iwatate"
+match = ["dated 11 February 1990, for a stele set up in the 2,650th year of the imperial era"]
+status = "verified"
+source = "the board in our photograph IMG_5150 (熊野三山元宮 神倉神社): 「紀元二千六百五十年を奉祝し…この碑を建立し顕彰するものであります。平成二年二月十一日」"
+
+[[claim]]
+id = "fn-photo-oto"
+match = ["the Oto Matsuri on the night of 6 February"]
+status = "verified"
+source = "the board in our photograph IMG_5151 (神倉神社): 「例祭 二月六日 夜 御灯祭り」"
+
+[[claim]]
+id = "fn-photo-myoshinji"
+match = ["from the Daiei years (1521–27) to 1531"]
+status = "verified"
+source = "the board in our photograph IMG_5161 (新宮市教育委員会, 妙心寺の由来): 「本願寺院としての活動は、大永年中（一五二一～二七）より享禄四年（一五三一）に至る、比丘尼妙順尼と弟子祐珍尼の神倉勧進・再興にはじまる」"
+
+[[claim]]
+id = "fn-photo-horaisan"
+match = ["its hall below the wooded hill of 蓬莱山 (Hōraisan)"]
+status = "verified"
+source = "Shingū City, 徐福～神々の地に宿る徐福伝説: 「蓬莱山南麓の阿須賀神社には「徐福の宮」もあります」"
+url = "https://www.city.shingu.lg.jp/info/565"
+
+[[claim]]
+id = "fn-sources"
+match = ["the authors’ phone photographs of 28 September 2025", "shops and sacred ground as of 1 October 2026", "CC BY 4.0; downloaded 1 October 2026",
+         "and A33 (2025)", "its 2024 release", "令和8年公表 地震動予測及び津波浸水想定 — Wakayama, 25 March 2026", "Mie, March 2026",
+         "Field notes · the three shrines by bicycle", "the three-shrine cycling course", "the town’s three networks"]
+status = "verified"
+source = "EXIF dates of our photographs; Overpass osm_base 2026-10-01; BODIK dataset 300004_080300_doro_ijoukisho (CC BY 4.0), re-downloaded 2026-10-01 13:16 UTC and identical; KSJ A40 2024年度版 (released 2025-05-30) and A33 2025; Wakayama 令和8年 assumption (知事メッセージ dated 令和８年３月２５日); Mie 「三重県南海トラフ地震被害想定について」 (令和08年03月31日)"
+url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
