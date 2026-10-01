@@ -355,6 +355,8 @@ def check_register(gate, reg, inventory, g):
     for it in inventory:
         if it["src"] in FN_VERIFIED:      # every cell recomputed from kansai/data/fieldnotes.js by check_fn
             continue
+        if it["src"] in GZ_VERIFIED:      # every label recomputed from kamikura.js (gaze) by check_gaze
+            continue
         if it["src"].startswith("rk:"):   # recomputed from kansai/data/risk.js by check_rk_cells
             continue
         t = it["text"]; cov = []
@@ -381,6 +383,37 @@ def check_register(gate, reg, inventory, g):
 
 
 FN_VERIFIED = {"td#fnopts", "text#fnprof"}
+GZ_VERIFIED = {"text#kmkgaze"}
+
+
+def gaze_labels(G):
+    """Every label with a number that the gaze figure (svg#kmkgaze) must show, from kamikura.js → gaze (built from
+    kansai/field/gazes.csv by tools/kamikura/gazes.py)."""
+    R = {r["key"]: r for r in G["rows"]}
+    p, m, h, o = R["promotional"], R["municipal"], R["historical"], R["researcher"]
+    out = {f"{p['n']} images · {p['publishers']} publishers", f"{m['n']} photographs · master plan, 2012",
+           f"{h['n']} plate · album, 1913", f"{o['n']} photographs · 28 September 2025",
+           f"town in frame {p['town']} · festival {p['festival']}",
+           f"circle area ∝ number of images · a dash: none · maps and diagrams not counted: {sum(r['maps'] for r in G['rows'])}"}
+    out |= {str(c) for r in G["rows"] for c in r["pos"] if c}
+    return out
+
+
+def check_gaze(gate, inventory):
+    """The gaze figure: each numbered label is one the data gives, and every one the data gives is drawn."""
+    G = kmk_data().get("gaze")
+    got = [it["text"] for it in inventory if it["src"] in GZ_VERIFIED]
+    if not G:
+        if got: gate.err("gaze", "the gaze figure is drawn but kamikura.js has no gaze summary")
+        return
+    want = gaze_labels(G)
+    bad = [t for t in got if (NUM_RE.search(t) or WORD_RE.search(t)) and t not in want]
+    for t in bad:
+        gate.err("gaze", f"“{t}” in the gaze figure does not follow from kamikura.js (gaze)")
+    for t in sorted(want - set(got)):
+        gate.err("gaze", f"the gaze figure lacks “{t}”")
+    if not bad and want <= set(got):
+        gate.ok("gaze", f"{len(want)} labels of the gaze figure recomputed from kamikura.js (gaze ← kansai/field/gazes.csv)")
 
 
 def fn_table_rows(pair):
@@ -829,6 +862,7 @@ def main():
     check_rk_cells(gate, rep["inventory"])
     check_points(gate, pts_ref, g, rep["usedPoints"])
     check_kmk(gate, pts_ref, g, html)
+    check_gaze(gate, rep["inventory"])
     mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}
     check_fn(gate, rep, pts_ref, mreg)
     check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", []) if str(m.get("source", "")).startswith("http")])

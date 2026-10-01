@@ -15,6 +15,7 @@ python3 $T/06_foot.py          # the mountain foot, four ways, on cross-profiles
 python3 $T/07_parcels.py       # the MoJ parcel map (任意座標系) registered to GSI road edges; spline check (→ parcels.json)
 python3 $T/08_align.py         # what follows the foot: nine classes, effects, intervals, q (→ align.json, walls.json, …)
 python3 $T/09_export.py /path/to/no-one-is-an-island/kansai   # page data, ground layers, GeoJSON/KML
+python3 $T/gazes.py /path/to/no-one-is-an-island/kansai      # only the comparison of gazes, after editing field/gazes.csv
 python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-checks every number and label
 ```
 
@@ -123,3 +124,14 @@ shares in the unnumbered strips, in numbered parcels and more than 3 m inside th
   along routes.
 - Sources for the text (shrine, city, prefecture, Agency for Cultural Affairs, Kotobank, UNESCO, the press) are in
   `kansai/qa/register.toml` under “Kamikura · 流れ · sacred”.
+
+## Comparing gazes (gazes.py)
+
+`kansai/field/gazes.csv` codes every image of Kamikura on six publishers' pages (the promotional gaze, maps and
+diagrams kept but not counted), the four in Shingū's 2012 master plan, the one plate of the Kubo studio's 1913 album
+(NDL, public domain) and our ten photographs at the foot, by the frame of `kansai/field/README.md`: where the camera
+stands (mountain, threshold, foot, town), whether the town is in the frame, the breadth of view and up to two of
+Gou & Shibata's categories (Channel added). `gazes.py` summarises it into `kamikura.js` → `gaze` (`09_export.py` calls
+it too); our photographs' distance from the foot comes from their EXIF positions in `fieldnotes.js` against the foot
+line. The QA gate recomputes every label of the figure (`check_gaze`) and every count in the text from that summary.
+

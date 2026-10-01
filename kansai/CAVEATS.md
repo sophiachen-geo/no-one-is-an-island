@@ -73,4 +73,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 7 · author: 1 · corrected: 6 · derived: 390 · method: 43 · verified: 144 · map points: 105
+approximate: 7 · author: 1 · corrected: 6 · derived: 406 · method: 44 · verified: 148 · map points: 105

@@ -316,9 +316,9 @@ if (hasQA) {
       }
       K.setBase('relief');
       // the three figures of the ground section are drawn from the data
-      [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle'], ['kmkclimb', 'circle'], ['kmksec', 'path'], ['kmktown', 'path']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
+      [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle'], ['kmkclimb', 'circle'], ['kmksec', 'path'], ['kmktown', 'path'], ['kmkgaze', 'circle']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
       // the religious-flow figures: no label leaves its figure
-      for (const id of ['kmkclimb', 'kmksec', 'kmktown']) {
+      for (const id of ['kmkclimb', 'kmksec', 'kmktown', 'kmkgaze']) {
         const sv = document.getElementById(id), vb = sv && sv.viewBox.baseVal;
         [...(sv ? sv.querySelectorAll('text') : [])].forEach((t) => {
           const bb = t.getBBox(), m = t.getCTM(), s0 = sv.getCTM();
