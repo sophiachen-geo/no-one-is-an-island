@@ -12,7 +12,7 @@ The polygon follows four rules (see the README in this folder):
   S  the street just south of the shrine-entrance cluster (OSM 121367975 · 121370515 · 499568826), carried straight
      west across the foot of the steps to the W line
 """
-import json, math
+import json, math, os
 import numpy as np
 from pyproj import Transformer
 from shapely.geometry import shape, Polygon, MultiPolygon, LineString, MultiLineString, Point, box, mapping
@@ -253,9 +253,22 @@ def main():
         return transform(lambda x, y, z=None: LL2P.transform(x, y), g)
 
     frame_p = box(fx0, fy0, fx1, fy1)
-    TS = proj(unary_union([g.buffer(0) for g in feats(f"{KSJ}/A40-16_30_GML/A40-16_30.geojson")])).intersection(frame_p)
-    FL = proj(unary_union([g.buffer(0) for fn in ("8606010001", "8606010002", "8606010006")
-                           for g in feats(f"{KSJ}/20_想定最大規模/A31a-20-25_86_{fn}_10.geojson")])).intersection(frame_p)
+    # the same layers as the main page's analysis (tools/risk): the 2026 maximum tsunami (tools/tsunami2026, the main
+    # build's TSUNAMI2026 directory) and the A31b-25 meshes of every mapped river, planned scale and maximum
+    TS26 = os.environ.get("TSUNAMI2026", "../tsunami2026")
+    TS = proj(unary_union([g.buffer(0) for g in feats(f"{TS26}/shingu_r8_max.geojson")] or [Polygon()])).intersection(frame_p)
+    def mesh(theme):
+        """A31b-25 mesh cells of one theme near the study frame, as {rank: union}"""
+        import glob, shapefile
+        by = {}
+        for f in glob.glob(f"{KSJ}/A31b-25/{theme}/*.shp"):
+            for sr in shapefile.Reader(f[:-4], encoding="cp932").iterShapeRecords():
+                b = sr.shape.bbox
+                if b[2] < 135.97 or b[0] > 136.0 or b[3] < 33.71 or b[1] > 33.735 or not sr.record[0]: continue
+                by.setdefault(int(sr.record[0]), []).append(shape(sr.shape.__geo_interface__).buffer(0))
+        return {k: proj(unary_union(v)).intersection(frame_p) for k, v in by.items()}
+    FL2 = mesh("20_想定最大規模"); FL1 = mesh("10_計画規模")
+    FL = unary_union(list(FL2.values())) if FL2 else Polygon()
     a33 = json.load(open(f"{KSJ}/A33-25_30Polygon.geojson", encoding="utf-8"))["features"]
     red = [shape(f["geometry"]).buffer(0) for f in a33 if f["properties"]["A33_002"] in (2, 4) and shape(f["geometry"]).intersects(box(135.97, 33.71, 136.0, 33.735))]
     yel = [shape(f["geometry"]).buffer(0) for f in a33 if f["properties"]["A33_002"] not in (2, 4) and shape(f["geometry"]).intersects(box(135.97, 33.71, 136.0, 33.735))]
@@ -273,6 +286,40 @@ def main():
     UF = proj(unary_union([shape(f["geometry"]).buffer(0) for f in rit if f["properties"]["AreaType"] == "都市機能誘導区域"])).intersection(frame_p)
 
     def share(g): return round(100 * poly.intersection(g).area / area, 1)
+
+    # the school: its ground (OSM) and the two designated emergency sites in it (GSI 指定緊急避難場所, Shingū's list)
+    import csv
+    sa = school.area
+    def sshare(g): return round(100 * school.intersection(g).area / sa, 1)
+    deb_red = proj(unary_union([shape(f["geometry"]).buffer(0) for f in a33 if f["properties"]["A33_001"] == 2 and f["properties"]["A33_002"] in (2, 4)
+                                and shape(f["geometry"]).intersects(box(135.97, 33.71, 136.0, 33.735))] or [Polygon()])).intersection(frame_p)
+    deb_zones = [f["properties"] for f in a33 if f["properties"]["A33_001"] == 2 and shape(f["geometry"]).intersects(box(135.97, 33.71, 136.0, 33.735))
+                 and proj(shape(f["geometry"]).buffer(0)).intersects(school)]
+    HZ = ["洪水", "崖崩れ、土石流及び地滑り", "高潮", "地震", "津波", "大規模な火事", "内水氾濫", "火山現象"]
+    sites = []
+    for row in csv.DictReader(open(os.environ.get("GSI_SITES", "sites_30207.csv"), encoding="utf-8-sig")):
+        if not row["施設・場所名"].startswith("神倉小学校"): continue
+        pt = Point(*P(float(row["経度"]), float(row["緯度"])))
+        # the GSI building outline at the site point: how much of it lies in each zone
+        fp = next((b["g"] for b in blds if b["g"].contains(pt)), None)
+        def fshare(g): return round(100 * fp.intersection(g).area / fp.area, 1) if fp is not None else None
+        sites.append({"name": row["施設・場所名"], "for": [h for h in HZ if row.get(h, "").strip() == "1"],
+                      "in_school": school.contains(pt), "in_debris_zone": DEBRIS.contains(pt), "in_debris_red": deb_red.contains(pt),
+                      "flood_max_rank": max([k for k, g in FL2.items() if g.contains(pt)] or [0]), "in_tsunami_max": TS.contains(pt),
+                      "building": None if fp is None else {
+                          "code": next(b["code"] for b in blds if b["g"] is fp), "m2": round(fp.area), "debris_pct": fshare(DEBRIS),
+                          "debris_red_pct": fshare(deb_red), "slope_pct": fshare(SLOPE), "flood_max_pct": fshare(FL),
+                          "flood_max_by_rank_pct": {str(k): fshare(g) for k, g in sorted(FL2.items()) if fshare(g)},
+                          "flood_planned_by_rank_pct": {str(k): fshare(g) for k, g in sorted(FL1.items()) if fshare(g)},
+                          "tsunami_max_m": round(fp.distance(TS)) if not TS.is_empty else None}})
+    school_stats = {"ground_m2": round(sa), "flood_max_pct": sshare(FL), "flood_planned_pct": sshare(unary_union(list(FL1.values())) if FL1 else Polygon()),
+                       "flood_max_by_rank_pct": {str(k): sshare(g) for k, g in sorted(FL2.items())}, "debris_pct": sshare(DEBRIS), "debris_red_pct": sshare(deb_red),
+                       "slope_pct": sshare(SLOPE), "tsunami_max_pct": sshare(TS),
+                       "debris_and_flood_pct": sshare(DEBRIS.intersection(FL)),
+                       "flood_planned_by_rank_pct": {str(k): sshare(g) for k, g in sorted(FL1.items()) if sshare(g)},
+                       "tsunami_max_m": round(school.distance(TS)) if not TS.is_empty else None,
+                       "debris_zones": [{"id": z["A33_004"], "name": z["A33_005"], "special": z["A33_002"] in (2, 4), "designated": z["A33_007"]} for z in deb_zones],
+                       "sites": sites}
 
     # ------------------------------------------------------------------ transect: summit → entrance → city hall
     # down the mountain on the pilgrims' own route: summit shrine → path to the top of the stairway (OSM 121369321) →
@@ -453,7 +500,7 @@ def main():
             "riz_pct": share(RIZ), "uf_pct": share(UF),
             "summit_ground_m": round(float(zz[0]), 1), "entrance_m": round(float(zz[int(d_entr)]), 1), "cityhall_m": round(float(zz[-1]), 1),
             "transect_m": round(tr.length), "stream_to_break_med": round(float(np.median(sd)), 1) if sd else None,
-            "stream_to_break_max": round(float(np.max(sd)), 1) if sd else None, **extra,
+            "stream_to_break_max": round(float(np.max(sd)), 1) if sd else None, **extra, "school": school_stats,
         },
         "align": align, "decay": decay, "grid_town": round(grid_town, 1), "grid_town_R": round(grid_R, 2), "disc": disc,
         "disc_excess_beyond_25": round(max(d["follow_foot_pct"] - d["chance_pct"] for d in disc if d["from"] >= 25), 1),

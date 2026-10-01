@@ -1,7 +1,8 @@
 """Kamikura micro-study, step 9 (last): write the page's data and the GIS downloads.
 
 Reads (work dir): study.json (03), terrain.npz / terrain.json (02), terrain_plus.npz / terrain_audit.json (05),
-foot.json (06), parcels.json (07), align.json / walls.json / backs.json (08), osm.json, ../ksj hazard layers.
+foot.json (06), parcels.json (07), align.json / walls.json / backs.json (08), osm.json, ../ksj hazard layers and the
+2026 tsunami ($TSUNAMI2026, default ../tsunami2026).
 Writes into the repository (pass its kansai/ folder as the only argument):
   data/kamikura.js            window.__KMK = {...}: layers as SVG paths in page units (1 unit = 100 m, the page's
                               JGD2011 / CS VI frame), labels, the profile, statistics, the alignment test
@@ -195,7 +196,13 @@ def ground_data(z, x0, y1, frame):
                      "chance": b.get("chance_pct") if b else None, "p": b.get("p") if b else None, "p_100": b.get("p_100") if b else None,
                      "n": b.get("n_disc") if b else 0, "units": b.get("n_units") if b else 0, "units_follow": b.get("n_units_follow") if b else 0,
                      "robust": v.get("robust"),
-                     "beyond": [{kk: bb.get(kk) for kk in ("from", "to", "follow_foot_pct", "chance_pct", "p", "p_100", "n_disc", "n_units", "n_units_follow", "robust")}
+                     # the effect (share that follows the foot minus chance, points) with its 95% block-bootstrap interval,
+                     # the chance range and the false-discovery-controlled q over the nine classes
+                     "effect": b.get("effect_pp") if b else None, "effect_lo": b.get("effect_lo") if b else None, "effect_hi": b.get("effect_hi") if b else None,
+                     "chance_lo": b.get("chance_lo") if b else None, "chance_hi": b.get("chance_hi") if b else None,
+                     "q": b.get("q_primary") if b else None, "q100": b.get("q_primary_100") if b else None, "blocks": b.get("n_blocks") if b else 0,
+                     "beyond": [{kk: bb.get(kk) for kk in ("from", "to", "follow_foot_pct", "chance_pct", "p", "p_100", "n_disc", "n_units", "n_units_follow", "robust",
+                                                           "effect_pp", "effect_lo", "effect_hi", "q_all", "q_all_100")}
                                 for bb in v["bands"] if bb["from"] >= 25]}
     audit = json.load(open("terrain_audit.json"))
     ex = [(round(b["follow_foot_pct"] - b["chance_pct"], 1), k, b["from"], b["to"], b["p"], b["robust"]["significant"]) for k, v in scores.items()
@@ -210,20 +217,26 @@ def ground_data(z, x0, y1, frame):
               if b.get("robust") and max(b["robust"]["significant"], b["robust"]["significant_100"]) < 3]
     runs_west = [A["offsets"]["cadastre_west"]["median_m"]] + [r["cadastre_west"] for r in A["sensitivity"]["_offsets"]]
     weak = ("fronts", "temple", "walls", "legal_water")     # the classes that show nothing within 25 m
-    out = {"foot": foot, "scores": scores, "beyond_max": {"excess": beyond[0], "class": beyond[1], "band": [beyond[2], beyond[3]], "p": beyond[4], "significant_runs": beyond[5]},
+    sens = {k: [{kk: r.get(kk) for kk in ("variant", "effect_pp", "effect_lo", "effect_hi", "p")} for r in v]
+            for k, v in A["sensitivity"].items() if not k.startswith("_")}
+    q_beyond = [(b["q_all"], k, b["from"], b["to"], b["effect_pp"]) for k, v in scores.items() for b in v["beyond"] if b.get("q_all") is not None]
+    q_beyond_100 = [(b["q_all_100"], k, b["from"], b["to"], b["effect_pp"]) for k, v in scores.items() for b in v["beyond"] if b.get("q_all_100") is not None]
+    out = {"foot": foot, "scores": scores, "bends": A["bends"], "family": A["family"], "sens": sens,
+           "beyond_q_min": {"q": min(q_beyond)[0], "class": min(q_beyond)[1], "band": [min(q_beyond)[2], min(q_beyond)[3]], "effect": min(q_beyond)[4]} if q_beyond else None,
+           "beyond_q_min_100": {"q": min(q_beyond_100)[0], "class": min(q_beyond_100)[1], "band": [min(q_beyond_100)[2], min(q_beyond_100)[3]], "effect": min(q_beyond_100)[4]} if q_beyond_100 else None, "beyond_max": {"excess": beyond[0], "class": beyond[1], "band": [beyond[2], beyond[3]], "p": beyond[4], "significant_runs": beyond[5]},
            "beyond_hits": beyond_hits, "beyond_rest_max_sig": max(others),
            "walls_town_m": sum(b["length_m"] for b in A["classes"]["walls"]["bands"] if b["from"] >= 0),
            "weak_max_sig": max(max(scores[k]["robust"]["significant"], scores[k]["robust"]["significant_100"]) for k in weak if scores[k].get("robust")),
            "cad_west_range": [min(runs_west), max(runs_west)], "offsets": A["offsets"], "wiggle": A["wiggle"], "lvc": A["legal_vs_channel"],
            "grid": {"town": A["grid_deg"], "R": A["grid_R"], "front_near": A["near_front_deg"], "front_regional": A["regional_front_deg"]},
            "walls": A["walls"], "temple_parcels": A["temple_parcels"], "sens_offsets": A["sensitivity"]["_offsets"],
-           "courses": A["courses"], "courses_sim": A["courses_sim"],
+           "courses": A["courses"], "courses_sim": A["courses_sim"], "courses_tps": A["courses_tps"],
            "audit": {"coverage": audit["coverage"], "dem5": audit["dem5_vs_1"], "buildings": audit["buildings"],
                      "control": [c for c in audit["control"] if c["kind"] != "spot height (1:25,000)"], "sigma_lrm": audit["sigma_lrm_m"],
                      "sigma_curv": audit["sigma_curv_m"]},
            "cadastre": {k: P[k] for k in ("sheet", "name", "crs", "n_parcels")} | {"aff": {k: v for k, v in P["aff"].items() if k != "params"}
                         | {"area_factor": round(abs(P["aff"]["params"][0] * P["aff"]["params"][3] - P["aff"]["params"][1] * P["aff"]["params"][2]), 3)},
-                        "sim": {k: v for k, v in P["sim"].items() if k != "params"}, "anchor": P["anchor"],
+                        "sim": {k: v for k, v in P["sim"].items() if k != "params"}, "anchor": P["anchor"], "tps": P.get("tps"),
                         "kinds": {("numbered" if k == "private" else k): sum(1 for p in P["parcels"] if p["kind"] == k) for k in ("private", "road", "water", "strip", "other")}}}
     return L, out
 
@@ -338,7 +351,9 @@ def main():
     a33 = f"{KSJ}/A33-25_30Polygon.geojson"
     RED = proj(unary_union(list(feats(a33, lambda p: p["A33_002"] in (2, 4))))).intersection(frame)
     YEL = proj(unary_union(list(feats(a33, lambda p: p["A33_002"] not in (2, 4))))).intersection(frame).difference(RED)
-    TS = proj(unary_union(list(feats(f"{KSJ}/A40-16_30_GML/A40-16_30.geojson")))).intersection(frame)
+    # tsunami: Wakayama's 2026 maximum for Shingū, as on the main page and in step 3 (the 2016 A40 layer is used there
+    # only outside Shingū and Kihō)
+    TS = proj(unary_union(list(feats(os.path.join(os.environ.get("TSUNAMI2026", "../tsunami2026"), "shingu_r8_max.geojson"))) or [Polygon()])).intersection(frame)
     rit = f"{KSJ}/A55-24_30207_GEOJSON/30207_ritteki.geojson"
     RIZ = proj(unary_union(list(feats(rit, lambda p: p["AreaType"] == "居住誘導区域")))).intersection(frame)
     for k, g in (("flood", FL), ("ls_red", RED), ("ls_yellow", YEL), ("tsunami", TS)):
@@ -398,8 +413,8 @@ def main():
         ["engawa", "Youth Library えんがわ", ll(135.984299, 33.724689), "end", -7, 12, "small", "kokyo seikatsu"],
         ["oishii", "おいしいパーク", ll(135.98417, 33.72512), "end", -7, 4, "small", "kokyo seikatsu"],
         ["soo", "宗応寺", ll(135.984268, 33.725773), "end", -7, 4, "small", "keidai shinko"],
-        ["gym", "gym · shelter", ll(135.98524, 33.72488), "start", 7, 4, "small only", "saigai"],
-        ["schoolhouse", "school building · tsunami refuge", ll(135.98517, 33.72553), "start", 7, -4, "small only", "saigai"],
+        ["gym", "gym · refuge for floods and debris flows", ll(135.98524, 33.72488), "start", 7, 4, "small only", "saigai"],
+        ["schoolhouse", "school building · refuge for earthquake and tsunami", ll(135.98517, 33.72553), "start", 7, -4, "small only", "saigai"],
         ["r42", "国道42号", ll(135.98657, 33.72600), "start", 6, 0, "small", "michi"],
         ["cityhall", "新宮市役所 city hall", nd(1423067948), "end", -8, -8, "em", "michi"],
         ["chiho", "千穂ヶ峰 ↑", ll(135.98150, 33.72660), "middle", 0, 0, "small", "bichikei"],
