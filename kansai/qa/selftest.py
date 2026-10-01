@@ -116,6 +116,9 @@ def main():
         return case(name, expect)
     results.append(fn_case("field-notes data that drifts from the text is caught", "derived", lambda D: D["stats"]["ride"].update(leg2_channel_m=360)))
     results.append(fn_case("a field photograph shown at the wrong time is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(time="10:38")))
+    exif = Path(tempfile.mkdtemp()) / "20250928_103732.jpg"     # a JPEG whose header still holds an EXIF block
+    exif.write_bytes(b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00MM\x00\x2a\x00\x00\x00\x08\xff\xd9")
+    results.append(fn_case("a photograph that still carries EXIF is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(src=str(exif))))
     results.append(fn_case("a route table out of step with its data is caught", "fieldnotes",
                            lambda D: D["region"]["options"]["hongu-hayatama"]["list"][0].update(up=D["region"]["options"]["hongu-hayatama"]["list"][0]["up"] + 5)))
     del os.environ["KANSAI_DATA"]

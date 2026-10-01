@@ -389,6 +389,31 @@ def fn_table_rows(pair):
     return rows
 
 
+def jpeg_metadata(path):
+    """Metadata segments in a JPEG (EXIF, XMP, IPTC), read from its markers with the standard library only."""
+    b = Path(path).read_bytes()
+    if b[:2] != b"\xff\xd8":
+        return ["no JPEG header"]
+    i, found = 2, []
+    while i + 4 <= len(b):
+        if b[i] != 0xFF:
+            return found + ["a corrupt marker"]
+        m = b[i + 1]
+        if m in (0xD9, 0xDA):                    # end of image / start of scan: the headers are over
+            break
+        if 0xD0 <= m <= 0xD7 or m in (0x01, 0xFF):
+            i += 2 if m != 0xFF else 1; continue
+        n = int.from_bytes(b[i + 2:i + 4], "big"); seg = b[i + 4:i + 2 + n]
+        if m == 0xE1 and seg.startswith(b"Exif\x00"):
+            found.append("EXIF")
+        elif m == 0xE1 and seg.startswith(b"http://ns.adobe.com/xap/"):
+            found.append("XMP")
+        elif m == 0xED:
+            found.append("IPTC")
+        i += 2 + n
+    return found
+
+
 def check_fn(gate, rep, pts_ref, mreg):
     """Field notes: the route table and profile follow the data; the photographs are ours, registered, stripped of
     location metadata and placed in the town; the town labels sit on their independent references."""
@@ -423,12 +448,9 @@ def check_fn(gate, rep, pts_ref, mreg):
             f = KANSAI / p[key]
             if not f.exists():
                 gate.err("fieldnotes", f"photograph file missing: {p[key]}"); n_bad += 1; continue
-            try:
-                from PIL import Image
-                if Image.open(f).getexif():
-                    gate.err("fieldnotes", f"{p[key]} still carries EXIF metadata (location must not be published in the file)"); n_bad += 1
-            except Exception as e:
-                gate.err("fieldnotes", f"{p[key]} could not be opened: {e}"); n_bad += 1
+            meta = jpeg_metadata(f)
+            if meta:
+                gate.err("fieldnotes", f"{p[key]} still carries {', '.join(meta)} (location must not be published in the file)"); n_bad += 1
         r = M.get(p["src"])
         if not r or not r.get("own") or not r.get("licence") or not r.get("shows"):
             gate.err("fieldnotes", f"{p['src']} is not registered in media.toml as our own photograph (own = true, licence, shows)"); n_bad += 1
