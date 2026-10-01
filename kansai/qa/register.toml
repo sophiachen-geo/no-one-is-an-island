@@ -15,7 +15,7 @@
 #             method      a parameter of this repo's own analysis or drawing
 #             approximate verified, but the page rounds or simplifies (listed in CAVEATS.md)
 #             author      from the author's text, not independently verified (listed in CAVEATS.md)
-#   check   – stat (+fmt) | kmk (+fmt, or expect/tol; from kansai/data/kamikura.js) | area | share | overlap | length | dist | calc | valley_ve, with expect/tol
+#   check   – stat (+fmt) | kmk (+fmt, or expect/tol; from kansai/data/kamikura.js) | fn (fieldnotes.js) | rk (risk.js stats) | area | share | overlap | length | dist | calc | valley_ve, with expect/tol
 #
 # Sources were read on 2026-09-30.
 
@@ -31,6 +31,14 @@ why = "hazard level L2 (maximum-class), a name"
 [[identifier]]
 pattern = '\b(?:A31a|A33|A38|A40|A55|N03)\b'
 why = "MLIT 国土数値情報 dataset codes"
+
+[[identifier]]
+pattern = '\bL1\b'
+why = "hazard level L1 (frequent class / planned scale), a name"
+
+[[identifier]]
+pattern = '\b(?:A31b|P04|P05|P14|P17|P18|P29)\b|\b(?:A31b|A33)-25\b'
+why = "MLIT 国土数値情報 dataset codes (with the edition suffix -25 = 2025)"
 
 [[identifier]]
 pattern = 'EPSG:6674|JGD2011|DEM5A|\bD8\b'
@@ -329,40 +337,18 @@ url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/sh
 id = "tsunami-2026"
 title = "Tsunami: 13 m maximum height and 5 minutes to a 1 m wave (Wakayama 2026)"
 match = ["Wakayama’s 2026 maximum-class scenario (地震動予測及び津波浸水想定（令和8年公表）) gives Shingū a reference maximum tsunami height of 13 m and approximately five minutes until a 1 m tsunami height",
-         "13 m maximum tsunami height (2026)", "5 min to a 1 m tsunami", "Five minutes transforms topography",
+         "13 m maximum tsunami height (2026)", "5 min to a 1 m tsunami",
          "地震動予測及び津波浸水想定（令和8年公表） — Seismic intensity and tsunami inundation assumptions (Wakayama Prefecture, 2026)"]
 status = "approximate"
 source = "Wakayama Prefecture, 令和8年 tsunami assumption (Mw 9.1): Shingū maximum 13 m (2013: 14 m); +1 m arrival 5 min"
 url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
 note = "Heights are rounded up and arrival times rounded down by the prefecture; the 5 minutes is the fastest arrival anywhere on Shingū's coast (about 30 m offshore), not at the city centre."
 [[claim]]
-id = "tsunami-walk-share"
-match = ["92% of the modelled inundation area lies ≤ 300 m from dry ground"]
-status = "derived"
-source = "walking-distance model (kansai/tools layers2.py) on the L2 inundation polygons"
-check = { stat = "ts_walk.share_le300_pct", fmt = "{:.0f}%" }
-
-[[claim]]
-id = "tsunami-walk-method"
-match = ["walking distance over land to the nearest dry patch ≥ 1 ha (≤ 300 m · 300–600 m · > 600 m; at 1 m/s, 300 m ≈ 5 minutes)",
-         "≤ 300 m to dry ground"]
-exact = ["300–600 m", "> 600 m"]
-status = "method"
-source = "kansai/tools layers2.py: geodesic walking distance on a 10 m grid over land, from dry patches of at least 1 ha; 1 m/s is a common evacuation-planning walking speed"
-
-[[claim]]
-id = "station-to-dry"
-match = ["station · 91 m to dry ground"]
-status = "derived"
-source = "walking-distance model at Shingū Station (kansai/tools layers2.py)"
-check = { stat = "ts_pt_dist.station", fmt = "{} m" }
-
-[[claim]]
 id = "tsunami-vintage"
-match = ["Inundation from the 2016 national dataset; the 2026 revision is published only as PDF maps", "A40 tsunami inundation (2016)"]
+match = ["A40 tsunami inundation (2016), outside Shingū and Kihō"]
 status = "verified"
-source = "MLIT 国土数値情報 A40 (2016 release); Wakayama publishes the 2026 revision only as per-municipality PDF maps"
-url = "https://www.pref.wakayama.lg.jp/prefg/011400/d00221942.html"
+source = "MLIT 国土数値情報 A40 (2016 release: Wakayama's 2013 and Mie's 2015 assumptions). Inside Shingū and Kihō the page draws Wakayama's and Mie's 2026 maps instead (kansai/tools/tsunami2026)"
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A40-2024.html"
 
 # ================================================================ landslides, planning
 [[claim]]
@@ -410,14 +396,14 @@ check = { stat = "ls_roads.local.km", fmt = "of {:.0f} km" }
 [[claim]]
 id = "data-vintages"
 match = ["(MLIT A33, Aug 2025)", "(MLIT A55, FY2024)", "(A33, Aug 2025)", "MLIT A55 (FY2024)", "N03 administrative areas (2026)",
-         "A55 urban-planning decisions, Shingū (FY2024)", "A31a flood inundation, maximum-assumed (2025)", "A33 sediment-disaster zones (Aug 2025)",
+         "A55 urban-planning decisions, Shingū (FY2024)", "A31b flood meshes of every mapped river (2025) and the A31a map of the Ichida-gawa", "A40 tsunami inundation (2016)", "A33 sediment-disaster zones (Aug 2025)",
          "A38 medical areas (2020)", "SRTM 1″ (NASA)", "on 3″ SRTM"]
 status = "method"
 source = "kansai/tools/01_fetch.sh — the dataset releases downloaded for this page"
 
 [[claim]]
 id = "riz-red-overlap"
-match = ["0.4% overlap with red zones"]
+match = ["0.4% overlap with red zones", "avoids the landslide red zones: 0.4% of its area overlaps them"]
 status = "derived"
 source = "residential-inducement zone (A55) ∩ landslide red zones (A33), unsimplified polygons"
 check = { stat = "overlap.riz.red", fmt = "{:.1f}%" }
@@ -432,34 +418,6 @@ exact = ["2025", "第２次新宮市総合計画", "Comprehensive Plan (second)"
 status = "verified"
 source = "Shingū City, 津波防災地域づくり推進計画 (令和7年10月): 「総合計画、国土強靭化地域計画、地域防災計画に基づき…都市計画マスタープラン、立地適正化計画との整合」; 第２次新宮市総合計画 後期基本計画 R5–R9"
 url = "https://www.city.shingu.lg.jp/info/2811"
-[[claim]]
-id = "zone-share-centre"
-exact = ["86%"]
-status = "derived"
-source = "central urban-function zone (A55) inside river flood (A31a, Kumano + Ichida) or L2 tsunami (A40)"
-check = { stat = "overlap.centre.either", fmt = "{:.0f}%" }
-
-[[claim]]
-id = "zone-share-riz"
-exact = ["51%"]
-status = "derived"
-source = "residential-inducement zone (A55) inside river flood or L2 tsunami"
-check = { stat = "overlap.riz.either", fmt = "{:.0f}%" }
-
-[[claim]]
-id = "zone-share-miwasaki"
-exact = ["28%"]
-status = "derived"
-source = "Miwasaki urban-function zone (A55) inside river flood or L2 tsunami"
-check = { stat = "overlap.miwasaki.either", fmt = "{:.0f}%" }
-
-[[claim]]
-id = "zone-share-koyo"
-exact = ["0%"]
-status = "derived"
-source = "Kōyō (medical) urban-function zone (A55) inside river flood or L2 tsunami"
-check = { stat = "overlap.koyo_medical.either", fmt = "{:.0f}%" }
-
 [[claim]]
 id = "hazard-map-languages"
 match = ["available in Japanese, English, Chinese, Korean and Tagalog", "Legibility in five languages"]
@@ -527,21 +485,696 @@ status = "derived"
 source = "drawing scales of the valley section"
 check = { valley_ve = "down", expect = 17, tol = 0.6 }
 
+# ================================================================ Phase B: exposure, evacuation, plan, network (kansai/tools/risk)
+[[claim]]
+id = "tier-l1-role"
+match = ["Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō."]
+status = "verified"
+source = "Central Disaster Management Council, expert committee report (28 September 2011): the frequent class (L1) sets the height of coastal defences, the maximum class (L2) is met with evacuation at the core of combined measures"
+url = "https://www.bousai.go.jp/kaigirep/chousakai/tohokukyokun/pdf/Report.pdf"
+
+[[claim]]
+id = "tier-ts-l1-shingu"
+match = ["Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of buildings inside Wakayama's 2026 frequent-class map (3連動)"
+check = { rk = "tiers.Shingu.ts_l1.people", fmt = "reaches {:,} residents of Shingū" }
+
+[[claim]]
+id = "tier-ts-max-shingu"
+match = ["Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents inside Wakayama's 2026 maximum-class map"
+check = { rk = "tiers.Shingu.ts_max.people", fmt = "the maximum class reaches {:,}," }
+
+[[claim]]
+id = "tier-ts-max-kiho"
+match = ["Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents inside Mie's 2026 maximum-class map (sheet 22)"
+check = { rk = "tiers.Kiho.ts_max.people", fmt = "and {:,} more across the river" }
+
+[[claim]]
+id = "tier-table-head"
+exact = ["Residents, 2020", "65+"]
+status = "method"
+source = "2020 census (令和2年国勢調査): the latest with small-area and 250 m mesh tables by age; 65+ is the census age group 65歳以上"
+
+[[claim]]
+id = "tier-table-classes"
+exact = ["3 m or deeper", "0.5 m or deeper", "standing 3 days or more"]
+status = "method"
+source = "the source maps' own classes: tsunami depth classes (3–5 m and up), A31b depth ranks (0.5–3 m, 3–5 m, …) and duration ranks (3 days–1 week and up)"
+
+[[claim]]
+id = "tier-caption"
+match = ["Residents: 2020 census by 250 m cell and small area (all ages, 65+), fitted to the footprints of homes (GSI building outlines, non-residential sites left out); 2020 is the latest census with tables this fine, and the 2025 count found 10% fewer people in Shingū. Tsunami: Wakayama’s 2026 maps for Shingū (frequent class: Tōkai–Tōnankai–Nankai; maximum class: Nankai Trough) and Mie’s 2026 map for Kihō (maximum class only), digitised from the published PDFs. River flood: MLIT A31b-25 meshes of every national and prefectural river with a map (planned scale, maximum, duration, zones where floods can sweep houses away). Landslide zones: MLIT A33-25. Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both."]
+status = "method"
+source = "pop_bld.py (e-Stat T001142 mesh and T001082 small areas, GSI optimal_bvmap BldA, OSM non-residential sites), expo.py (Wakayama R8 maps, Mie 2026 sheet 22, A31b-25, A33-25); the 2025 count: Shingū 24,331 against 27,171 in 2020, −10.4% (the page's census claim)"
+
+[[claim]]
+id = "tier-65-shingu"
+match = ["Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share aged 65+ of all residents"
+check = { rk = "tiers.Shingu.total.pct65", fmt = "are {:.0f}% of Shingū" }
+
+[[claim]]
+id = "tier-65-kiho"
+match = ["Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "tiers.Kiho.total.pct65", fmt = "and {:.0f}% of Kihō" }
+
+[[claim]]
+id = "tier-65-collapse-shingu"
+match = ["Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share aged 65+ inside A31b-25 家屋倒壊等氾濫想定区域 (氾濫流 or 河岸侵食)"
+check = { rk = "tiers.Shingu.collapse.pct65", fmt = "but {:.0f}% and" }
+
+[[claim]]
+id = "tier-65-collapse-kiho"
+match = ["Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "tiers.Kiho.collapse.pct65", fmt = "and {:.0f}% of those living" }
+
+[[claim]]
+id = "ev-arrival-kiho"
+match = ["The Pacific introduces another temporal regime entirely. Wakayama’s 2026 maximum-class scenario (地震動予測及び津波浸水想定（令和8年公表）) gives Shingū a reference maximum tsunami height of 13 m and approximately five minutes until a 1 m tsunami height at the modelled reference point. Its animation shows how unevenly that time reaches the town: water touches the median inhabited building in Kihō after 10 minutes, in central Shingū after 33."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): median over inhabited buildings of the first wet frame in Wakayama's 2026 2D animation (16_shinguu_nk_2D_k.mp4), Kihō inside its frame"
+check = { rk = "ev_groups.Kiho_anim.arrival_q.1", fmt = "Kihō after {:.0f} minutes" }
+
+[[claim]]
+id = "ev-arrival-shingu"
+match = ["The Pacific introduces another temporal regime entirely. Wakayama’s 2026 maximum-class scenario (地震動予測及び津波浸水想定（令和8年公表）) gives Shingū a reference maximum tsunami height of 13 m and approximately five minutes until a 1 m tsunami height at the modelled reference point. Its animation shows how unevenly that time reaches the town: water touches the median inhabited building in Kihō after 10 minutes, in central Shingū after 33."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same, Shingū inside the frame"
+check = { rk = "ev_groups.Shingu_anim.arrival_q.1", fmt = "central Shingū after {:.0f}." }
+
+[[claim]]
+id = "ev-people"
+match = ["7,663 residents inside the 2026 maximum inundation, 3,008 aged 65+"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of inhabited buildings inside the 2026 maximum-class maps (Shingū and Kihō)"
+check = { rk = "ev_people", fmt = "{:,} residents inside" }
+
+[[claim]]
+id = "ev-p65"
+match = ["7,663 residents inside the 2026 maximum inundation, 3,008 aged 65+"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev_p65", fmt = "{:,} aged 65+" }
+
+[[claim]]
+id = "ev-buildings"
+match = ["For each of the 5,838 inhabited buildings inside that inundation, the margin is the water’s arrival minus the time to set off, to walk the road network to the nearest designated site or to ground above the maximum tsunami height, and to climb to a safe floor. Wakayama plans with a start 5 minutes after the shaking and a walk of 0.5 m/s."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): inhabited buildings inside the 2026 maximum-class maps"
+check = { rk = "ev_buildings", fmt = "each of the {:,} inhabited" }
+
+[[claim]]
+id = "ev-wakayama-rule"
+match = ["For each of the 5,838 inhabited buildings inside that inundation, the margin is the water’s arrival minus the time to set off, to walk the road network to the nearest designated site or to ground above the maximum tsunami height, and to climb to a safe floor. Wakayama plans with a start 5 minutes after the shaking and a walk of 0.5 m/s."]
+status = "verified"
+source = "和歌山県津波避難計画策定指針 (November 2015) pp. 41–43: start 5 minutes after the shaking, walk 30 m per minute (0.5 m/s), stairs 21 cm/s; the same in 津波から「逃げ切る！」支援対策プログラム"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/guide/index_d/fil/hinankeikaku27.pdf"
+
+[[claim]]
+id = "ev-table-head"
+exact = ["Short of time, leaving at 5 min", "at 0.5 m/s", "at 1 m/s", "with water by 15 min", "5 min", "10 min", "0.5 m/s", "1 m/s"]
+status = "method"
+source = "evac.py scenarios: departure 5 (Wakayama, Cabinet Office daytime) or 10 minutes (Cabinet Office at night); 0.5 m/s (Wakayama) or 1 m/s (FDMA guideline); 'with water by 15 min' caps the arrival at 15 minutes, the upper end Shingū plans with for 王子・熊野地"
+
+[[claim]]
+id = "ev-table-miwasaki"
+exact = ["Miwasaki and Sano, water at 6–10 min", "Kihō beyond the animation, 6–10 min"]
+status = "verified"
+source = "新宮市津波防災地域づくり推進計画 (October 2025) p. 27: 「三輪崎・佐野・木ノ川・蜂伏地区では、津波が6 分～10 分で到達する」; the same 6 and 10 minutes bound Kihō beyond the animation's frame (Mie gives 6 minutes to +1 m at 井田)"
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/suisinkeikaku/suisinkeikaku.pdf"
+
+[[claim]]
+id = "ev-caption"
+match = ["Arrival: the water’s first touch (about 1 cm) in Wakayama’s 2026 animation of Shingū, frames 10 s apart, registered to the map; beyond its frame, 6 and 10 minutes, the range Shingū gives for Miwasaki. Kihō’s extent is Mie’s 2026 map, its arrival Wakayama’s animation of the same water. Walk: GSI road centre lines and OpenStreetMap footpaths; Wakayama’s rule is 0.5 m/s on roads and 0.35 m/s off them, the national guideline 1 m/s; stairs and the climb at 0.21 m/s. Refuges: GSI’s designated tsunami sites (January 2025) with the floor heights in Shingū’s 2017 list, and ground at 13 m (Shingū) or 11 m (Kihō) outside the inundation. Map: buildings by minutes to spare under the chosen start and pace; ▲ open-ground sites, ■ buildings, filled where the 2026 inundation reaches them."]
+status = "method"
+source = "evac.py, sites.py, walknet.py: arrival from Wakayama's 2026 animation (frames 10 s apart; tools/tsunami2026 vid_*.py); walking rules from Wakayama (0.5 m/s on roads, 21 m/min = 0.35 m/s off them, stairs 0.21 m/s) and FDMA (1.0 m/s); refuges: GSI 指定緊急避難場所 with 津波 (updated 2025-01-23) and Shingū's 津波一時避難施設・場所 (2017-02-03) floor heights, plus ground ≥ 13 m (Shingū) / ≥ 11 m (Kihō, Mie's maximum height) outside the inundation"
+
+[[claim]]
+id = "ev-kiho-lsd"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): median over Kihō's inhabited buildings in the frame of (arrival − walk), Wakayama's rule, sites and high ground"
+check = { rk = "ev_kiho_lsd_q.2", fmt = "comes {} minutes after" }
+
+[[claim]]
+id = "ev-kiho-f5"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev.F_DH_5.Kiho_anim.0", fmt = "at 1 m/s {:,} residents fall short" }
+
+[[claim]]
+id = "ev-kiho-10-lo"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share of Kihō's residents in the frame short of time when leaving at 10 minutes, 1 m/s"
+check = { rk = "ev_share.kiho_F_DH_10", fmt = "leaves {:.0f}–" }
+
+[[claim]]
+id = "ev-kiho-10-hi"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same at 0.5 m/s"
+check = { rk = "ev_share.kiho_W_DH_10", fmt = "–{:.0f}% short" }
+
+[[claim]]
+id = "ev-cao-night"
+match = ["leaving at 10 minutes, as the Cabinet Office assumes at night"]
+status = "verified"
+source = "Cabinet Office, 南海トラフ巨大地震の被害想定項目及び手法の概要 (March 2025) pp. 24–26: departure 5 minutes after the quake in the daytime, 5 minutes later at night"
+url = "https://www.bousai.go.jp/jishin/nankai/taisaku_wg_02/pdf/sanko_gaiyo.pdf"
+
+[[claim]]
+id = "ev-miwasaki-600"
+match = ["Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map"]
+status = "verified"
+source = "新宮市津波防災地域づくり推進計画 (October 2025) p. 26: 区域内津波避難困難地域人口 600人 「※三輪崎地区南海トラフ地震津波対策検討協議会におけるまち歩き及び避難マップの作成・配布等により解消」"
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/suisinkeikaku/suisinkeikaku.pdf"
+
+[[claim]]
+id = "ev-miwasaki-lo"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): Shingū beyond the animation's frame, arrival at 10 minutes"
+check = { rk = "ev.W_DH_5.Shingu_noanim.0.0", fmt = "rule {:,} to" }
+
+[[claim]]
+id = "ev-miwasaki-hi"
+match = ["The table holds different problems. In Kihō time is the limit: the median building’s latest safe start comes 2.2 minutes after the shaking, so even at 1 m/s 439 residents fall short, and leaving at 10 minutes, as the Cabinet Office assumes at night, leaves 86–90% short at either pace. In Miwasaki the arrival lies beyond the animation: Shingū’s 2025 plan counts its 600-resident difficult area as resolved by town walks and an evacuation map, while at the plan’s own walking rule 876 to 1,066 residents fall short."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same with arrival at 6 minutes"
+check = { rk = "ev.W_DH_5.Shingu_noanim.0.1", fmt = "to {:,} residents fall short" }
+
+[[claim]]
+id = "ev-r8-embankments"
+match = ["The 2026 simulation keeps road and rail embankments as ground that does not fail"]
+status = "verified"
+source = "Wakayama, 地震動予測及び津波浸水想定 report (2026), computation conditions: 道路・鉄道 「地形データとして取り扱う（破壊しない）」"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui_d/fil/03_jishindoutsunami.pdf"
+
+[[claim]]
+id = "ev-ouji-185"
+match = ["which the city still plans for as a 185-resident difficult area with water at 7–15 minutes"]
+status = "verified"
+source = "新宮市津波防災地域づくり推進計画 (October 2025) p. 20, 表3-3: 新宮地区（王子、熊野地等）避難困難地域の人口 185人, 1cm津波到達時間 7～15分; p. 21: 「王子、熊野地などの津波避難困難地域では、津波が7 分～15 分で到達する」"
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/suisinkeikaku/suisinkeikaku.pdf"
+
+[[claim]]
+id = "ev-ouji-model"
+match = ["Inside central Shingū the margin hangs on the model. The 2026 simulation keeps road and rail embankments as ground that does not fail, and the water reaches the lowland late. In Ōji and Kumanoji, which the city still plans for as a 185-resident difficult area with water at 7–15 minutes, 41 residents fall short in the model and 837 with water by 15 minutes; across central Shingū that timing leaves 2,404 short at 0.5 m/s and 64 at 1 m/s."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of the small areas 王子町… and 熊野地… inside the 2026 maximum map"
+check = { rk = "ev_ouji.fail_W_DH_5", fmt = "minutes, {:,} residents fall short in the model" }
+
+[[claim]]
+id = "ev-ouji-15"
+match = ["Inside central Shingū the margin hangs on the model. The 2026 simulation keeps road and rail embankments as ground that does not fail, and the water reaches the lowland late. In Ōji and Kumanoji, which the city still plans for as a 185-resident difficult area with water at 7–15 minutes, 41 residents fall short in the model and 837 with water by 15 minutes; across central Shingū that timing leaves 2,404 short at 0.5 m/s and 64 at 1 m/s."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev_ouji.fail_W_DH_5_cityTiming15", fmt = "and {:,} with water by 15 minutes" }
+
+[[claim]]
+id = "ev-central-15-w"
+match = ["Inside central Shingū the margin hangs on the model. The 2026 simulation keeps road and rail embankments as ground that does not fail, and the water reaches the lowland late. In Ōji and Kumanoji, which the city still plans for as a 185-resident difficult area with water at 7–15 minutes, 41 residents fall short in the model and 837 with water by 15 minutes; across central Shingū that timing leaves 2,404 short at 0.5 m/s and 64 at 1 m/s."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev.W_DH_5.Shingu_anim_cityTiming15.0", fmt = "leaves {:,} short at 0.5 m/s" }
+
+[[claim]]
+id = "ev-central-15-f"
+match = ["Inside central Shingū the margin hangs on the model. The 2026 simulation keeps road and rail embankments as ground that does not fail, and the water reaches the lowland late. In Ōji and Kumanoji, which the city still plans for as a 185-resident difficult area with water at 7–15 minutes, 41 residents fall short in the model and 837 with water by 15 minutes; across central Shingū that timing leaves 2,404 short at 0.5 m/s and 64 at 1 m/s."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev.F_DH_5.Shingu_anim_cityTiming15.0", fmt = "and {:,} at 1 m/s" }
+
+[[claim]]
+id = "ipss-shingu-2020"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 日本の地域別将来推計人口（令和5年推計）, 結果表1 (kansai/tools/risk/shrink.py)"
+url = "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/2gaiyo_hyo/gaiyo.asp"
+check = { rk = "shrink.ipss.30207.total.2020", fmt = "from {:,} residents in 2020" }
+
+[[claim]]
+id = "ipss-shingu-2050"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 日本の地域別将来推計人口（令和5年推計）, 結果表1 (kansai/tools/risk/shrink.py)"
+url = "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/2gaiyo_hyo/gaiyo.asp"
+check = { rk = "shrink.ipss.30207.total.2050", fmt = "to {:,} by 2050" }
+
+[[claim]]
+id = "ipss-kiho-2020"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 日本の地域別将来推計人口（令和5年推計）, 結果表1 (kansai/tools/risk/shrink.py)"
+url = "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/2gaiyo_hyo/gaiyo.asp"
+check = { rk = "shrink.ipss.24562.total.2020", fmt = "Kihō from {:,} to" }
+
+[[claim]]
+id = "ipss-kiho-2050"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 日本の地域別将来推計人口（令和5年推計）, 結果表1 (kansai/tools/risk/shrink.py)"
+url = "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/2gaiyo_hyo/gaiyo.asp"
+check = { rk = "shrink.ipss.24562.total.2050", fmt = "to {:,}, while" }
+
+[[claim]]
+id = "ipss-75-shingu"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 2023, 結果表2-4 (75+): Shingū 5,726 → 5,216"
+check = { rk = "shrink_decline75.Shingu", fmt = "fall by {:.0f}% and" }
+
+[[claim]]
+id = "ipss-75-kiho"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "IPSS 2023, 結果表2-4 (75+): Kihō 2,026 → 1,945"
+check = { rk = "shrink_decline75.Kiho", fmt = "and {:.0f}%. In the part" }
+
+[[claim]]
+id = "shrink-75-2020"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share aged 75+ among Kihō's residents in the animation's frame"
+check = { rk = "shrink.Kiho.2020.share75", fmt = "rises from {:.0f}% to" }
+
+[[claim]]
+id = "shrink-75-2050"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same with 2050 residents"
+check = { rk = "shrink.Kiho.2050.share75", fmt = "to {:.0f}%, and the share" }
+
+[[claim]]
+id = "shrink-fail-2020"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share short of time, under 75 at the Cabinet Office's pace for all walkers, 75+ at its pace with a person who needs help; leaving at 5 minutes"
+check = { rk = "shrink.Kiho.2020.share", fmt = "in time from {:.0f}% to" }
+
+[[claim]]
+id = "shrink-fail-2050"
+match = ["The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "shrink.Kiho.2050.share", fmt = "to {:.0f}%." }
+
+[[claim]]
+id = "shrink-caption"
+match = ["Projection: IPSS, 2023 municipal projections; each building keeps its 2020 residents, scaled by its town’s projected change for those under and over 75. Walking at the Cabinet Office’s 2025 speeds: 0.70 m/s on gentle ground and 0.44 m/s on slopes of 5% or more, 0.53 and 0.33 m/s for those 75 and over (the pace of walking with someone who needs help); leaving at 5 minutes."]
+status = "method"
+source = "shrink.py; speeds from the Cabinet Office (March 2025) pp. 24–26: all walkers 2.51 / 1.59 km/h (0.70 / 0.44 m/s) below / at or above 5% grade; with a person who needs help 1.89 / 1.20 km/h (0.53 / 0.33 m/s)"
+url = "https://www.bousai.go.jp/jishin/nankai/taisaku_wg_02/pdf/sanko_gaiyo.pdf"
+
+[[claim]]
+id = "net-spof"
+match = ["56 main-road links that are the only way out for 10 or more residents"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): graph bridges on main roads (motorway to unclassified, or numbered) whose loss separates 10 or more residents from the medical centre, one per OSM way"
+check = { rk = "net.spof_count_ge10", fmt = "{} main-road links" }
+
+[[claim]]
+id = "net-kiho-flood"
+match = ["98% of Kihō’s residents outside the flood’s 0.5 m line lose every road to an emergency hospital in the maximum flood"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): Kihō residents whose buildings lie outside the A31b-25 maximum flood's 0.5 m class and who have no open road to any of the three emergency hospitals, as a share of all such residents"
+check = { rk = "net_share.floodL2_cut_of_not_direct.Kiho", fmt = "{:.0f}% of Kihō’s" }
+
+[[claim]]
+id = "net-replay"
+match = ["26 min more to the medical centre from Kumanogawa with Route 168 cut as in 2011"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): mean drive time of Kumanogawa-chō's residents to 新宮市立医療センター with Route 168 宮井–city removed, minus the mean without"
+check = { rk = "net_replay_delta_min", fmt = "{:.0f} min more to the medical centre" }
+
+[[claim]]
+id = "net-caption"
+match = ["Network: OpenStreetMap drivable roads, 1 October 2026; a road closes where any point on it lies in the hazard (flood 0.5 m, tsunami 0.3 m, or a landslide red zone), bridges and tunnels excepted. Emergency hospitals: the three in reach that 国土数値情報 P04 lists (Shingū, Mihama, Nachikatsuura). Map: services from 国土数値情報 (hospitals and clinics P04, 2020; town offices P05, 2022; schools P29, 2023; care homes with residents P14, 2023; fire and police P17/P18, 2012, the police station at its 2017 site), numbered roads, road stretches inside landslide zones (red), the eight links with the most residents behind them (red dots) and the debris-flow warning zone around the medical centre."]
+status = "method"
+source = "crit.py: OSM drivable ways (Overpass, base 2026-10-01T08:35Z), closure rule as stated; emergency hospitals = P04 (2020) 救急告示 in the network's area: 新宮市立医療センター, 紀南病院 (御浜町), 那智勝浦町立温泉病院; facilities: 17_round3.py (P04 2020, P05 2022, P29 2023, P14 2023, P17/P18 2012, 新宮警察署 moved in 2017); the eight largest single links drawn"
+
+[[claim]]
+id = "net-shingu-flood"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "net_share.floodL2_cut_of_not_direct.Shingu", fmt = "cuts off {:.0f}% of such" }
+
+[[claim]]
+id = "net-nankai-shingu"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): 2026 maximum tsunami 0.3 m or deeper plus A33 red zones close roads; residents not reached at home"
+check = { rk = "net.scen.nankai.any_hospital.Shingu.cut_off", fmt = "and {:,} residents of Shingū" }
+
+[[claim]]
+id = "net-nankai-kiho"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "net.scen.nankai.any_hospital.Kiho.cut_off", fmt = "and {:,} of Kihō, none" }
+
+[[claim]]
+id = "net-kumanogawa-base"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "net.replay2011.kumanogawa.base_mean_min", fmt = "from {:.0f} to" }
+
+[[claim]]
+id = "net-kumanogawa-replay"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "net.replay2011.kumanogawa.replay_mean_min_reachable", fmt = "to {:.0f} minutes and leaves" }
+
+[[claim]]
+id = "net-kumanogawa-cut"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "net.replay2011.kumanogawa.cut_off", fmt = "leaves {:,} of its" }
+
+[[claim]]
+id = "net-kumanogawa-people"
+match = ["In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of the small areas 熊野川町…"
+check = { rk = "net.replay2011.kumanogawa.people", fmt = "of its {:,} residents with no road" }
+
+[[claim]]
+id = "net-r168-2011"
+match = ["Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city"]
+status = "verified"
+source = "紀伊半島大水害新宮市記録集 ch. 2: Route 168 reopened 宮井–本宮 on 11 September and 宮井–city on 14 October 2011, the last stretch"
+url = "https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf"
+
+[[claim]]
+id = "net-centre-zone"
+match = ["stands inside a debris-flow warning zone, and no road reaches it without crossing one"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): 新宮市立医療センター (P04 point) lies inside A33-25 土砂災害警戒区域 8-207-1-007 (土石流, 荒木川右支渓, designated 2016-06-17); with every warning-zone road closed (bridges and tunnels open) the centre reaches no other vertex"
+check = { rk = "net.centre_reach.slideY.vertices", expect = 1, tol = 0 }
+
+[[claim]]
+id = "net-centre-hospitals"
+match = ["lose every road to the three emergency hospitals"]
+status = "verified"
+source = "国土数値情報 P04 (2020): three hospitals with 救急告示 within the network's area"
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html"
+
+[[claim]]
+id = "services-valleys"
+match = ["Most services sit on the coastal lowland. Kumanogawa keeps a branch office, clinics, a fire post, a police box and two schools; Takata a branch office and two schools."]
+status = "verified"
+source = "国土数値情報: P05 (熊野川行政局, 高田支所), P04 (熊野川診療所 and its 小口 and 玉置口 branches), P17 (熊野川消防出張所), P18 (日足駐在所), P29 (熊野川小・中学校, 高田小・中学校)"
+
+[[claim]]
+id = "riz-compliance"
+match = ["The residential-inducement zone avoids the landslide red zones: 0.4% of its area overlaps them, slivers where two datasets meet. That is compliance rather than a planning result. Shingū’s Location Optimization Plan (立地適正化計画) excluded red zones from the start and removed those designated in July 2018 in a September 2021 revision, as a national order making the exclusion mandatory came into force on 1 October 2021."]
+status = "verified"
+source = "Shingū City, 「新宮市立地適正化計画の改訂・公表について」: the 2017 plan held no red zones; Wakayama designated new ones in July 2018 (平成30年7月), removed in the September 2021 revision; MLIT press release of 20 October 2020: 土砂災害特別警戒区域 added to the areas where residential-inducement areas may not be set (都市再生特別措置法施行令 第30条), 施行 令和3年10月1日"
+url = "https://www.mlit.go.jp/report/press/toshi07_hh_000163.html"
+
+[[claim]]
+id = "riz-exclusions"
+match = ["What the plan chose shows in what it kept. Its exclusion list names red and yellow landslide zones (the zone as drawn still holds 5.7% yellow-zone land), landslide danger spots and the prefecture’s tsunami-difficult areas, but no depth of flood or tsunami: 47% of the zone’s area lies in the maximum river flood and 20% in the 2026 maximum tsunami. Since 2020 the law asks such plans for a disaster-prevention guideline (防災指針) that reconciles the two; MLIT’s list of March 2026 shows Shingū’s plan without one."]
+status = "verified"
+source = "新宮市立地適正化計画 (revised September 2021) p. 75, 居住誘導区域から除外する地域: 土砂災害特別警戒区域, 土砂災害警戒区域, 土砂災害危険箇所, 津波避難困難地域 (no flood or tsunami depth); 都市再生特別措置法 第81条第2項第5号 (防災指針, added 2020); MLIT 「立地適正化計画の作成状況」 as of 31 March 2026: 新宮市 printed without ◎ (no 防災指針)"
+url = "https://www.mlit.go.jp/en/toshi/city_plan/content/002011503.pdf"
+
+[[claim]]
+id = "riz-yellow"
+match = ["What the plan chose shows in what it kept. Its exclusion list names red and yellow landslide zones (the zone as drawn still holds 5.7% yellow-zone land), landslide danger spots and the prefecture’s tsunami-difficult areas, but no depth of flood or tsunami: 47% of the zone’s area lies in the maximum river flood and 20% in the 2026 maximum tsunami. Since 2020 the law asks such plans for a disaster-prevention guideline (防災指針) that reconciles the two; MLIT’s list of March 2026 shows Shingū’s plan without one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residential-inducement zone (A55 FY2024) area inside A33-25 warning zones, 2 m grid"
+check = { rk = "cve.area.residential (RIZ).landslide_yellow", fmt = "holds {:.1f}% yellow-zone land" }
+
+[[claim]]
+id = "riz-flood-area"
+match = ["What the plan chose shows in what it kept. Its exclusion list names red and yellow landslide zones (the zone as drawn still holds 5.7% yellow-zone land), landslide danger spots and the prefecture’s tsunami-difficult areas, but no depth of flood or tsunami: 47% of the zone’s area lies in the maximum river flood and 20% in the 2026 maximum tsunami. Since 2020 the law asks such plans for a disaster-prevention guideline (防災指針) that reconciles the two; MLIT’s list of March 2026 shows Shingū’s plan without one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the zone's area inside the A31b-25 maximum flood"
+check = { rk = "cve.area.residential (RIZ).flood_L2_any", fmt = ": {:.0f}% of the zone’s area" }
+
+[[claim]]
+id = "riz-tsunami-area"
+match = ["What the plan chose shows in what it kept. Its exclusion list names red and yellow landslide zones (the zone as drawn still holds 5.7% yellow-zone land), landslide danger spots and the prefecture’s tsunami-difficult areas, but no depth of flood or tsunami: 47% of the zone’s area lies in the maximum river flood and 20% in the 2026 maximum tsunami. Since 2020 the law asks such plans for a disaster-prevention guideline (防災指針) that reconciles the two; MLIT’s list of March 2026 shows Shingū’s plan without one."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the zone's area inside the 2026 maximum tsunami"
+check = { rk = "cve.area.residential (RIZ).tsunami_max_any", fmt = "and {:.0f}% in the 2026 maximum tsunami" }
+
+[[claim]]
+id = "zones-chart-title"
+match = ["residents inside the maximum flood or the 2026 tsunami", "Share of each planning zone’s residents inside the maximum river flood or the 2026 maximum tsunami", "Residents 2020 by building; flood: MLIT A31b-25, maximum, every river mapped; tsunami: Wakayama 2026; zones: MLIT A55 (FY2024)."]
+status = "method"
+source = "cve.py: residents (2020, by building) inside the A31b-25 maximum flood or the 2026 maximum tsunami, per A55 zone"
+
+[[claim]]
+id = "zone-res-centre"
+exact = ["89%"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): function: centre"
+check = { rk = "cve.people.function: centre.L2_union.1", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-res-riz"
+exact = ["58%"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residential (RIZ)"
+check = { rk = "cve.people.residential (RIZ).L2_union.1", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-res-miwasaki"
+exact = ["35%"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): function: miwasaki"
+check = { rk = "cve.people.function: miwasaki.L2_union.1", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-res-koyo"
+exact = ["0%"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): function: koyo_medical"
+check = { rk = "cve.people.function: koyo_medical.L2_union.1", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "zone-riz-share"
+match = ["Inside the residential zone the conflict is vertical before it is temporal. Of its 18,941 residents, 58% live in the maximum flood or tsunami, yet in the 2026 animation none of those it covers falls short of a refuge at Wakayama’s walking rule; with water by 15 minutes, 2,040 would. The time conflict sits where the plan does not concentrate: across the river in Kihō, and in the Miwasaki function zone, where 35% of residents live inside the 2026 maximum tsunami and the water is expected within 6–10 minutes. Kōyō, the dry hub, trades water for slope: none of its residents lives in the flood or tsunami, but 11% of its area lies in landslide warning zones, the medical centre among them."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "cve.people.residential (RIZ).L2_union.1", fmt = "residents, {:.0f}% live in" }
+
+[[claim]]
+id = "zone-riz-people"
+match = ["Inside the residential zone the conflict is vertical before it is temporal. Of its 18,941 residents, 58% live in the maximum flood or tsunami, yet in the 2026 animation none of those it covers falls short of a refuge at Wakayama’s walking rule; with water by 15 minutes, 2,040 would. The time conflict sits where the plan does not concentrate: across the river in Kihō, and in the Miwasaki function zone, where 35% of residents live inside the 2026 maximum tsunami and the water is expected within 6–10 minutes. Kōyō, the dry hub, trades water for slope: none of its residents lives in the flood or tsunami, but 11% of its area lies in landslide warning zones, the medical centre among them."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "cve.people.residential (RIZ).people", fmt = "Of its {:,} residents" }
+
+[[claim]]
+id = "zone-riz-none"
+match = ["none of those it covers falls short of a refuge at Wakayama’s walking rule"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of the zone in the animation's frame short of time at Wakayama's rule (5 min, 0.5 m/s)"
+check = { rk = "cve.people.residential (RIZ).tsunami_margin_negative_anim.0", expect = 0, tol = 0 }
+
+[[claim]]
+id = "zone-riz-15"
+match = ["Inside the residential zone the conflict is vertical before it is temporal. Of its 18,941 residents, 58% live in the maximum flood or tsunami, yet in the 2026 animation none of those it covers falls short of a refuge at Wakayama’s walking rule; with water by 15 minutes, 2,040 would. The time conflict sits where the plan does not concentrate: across the river in Kihō, and in the Miwasaki function zone, where 35% of residents live inside the 2026 maximum tsunami and the water is expected within 6–10 minutes. Kōyō, the dry hub, trades water for slope: none of its residents lives in the flood or tsunami, but 11% of its area lies in landslide warning zones, the medical centre among them."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same with the arrival capped at 15 minutes"
+check = { rk = "cve.people.residential (RIZ).tsunami_margin_negative_city15.0", fmt = "15 minutes, {:,} would" }
+
+[[claim]]
+id = "zone-miwasaki-ts"
+match = ["Inside the residential zone the conflict is vertical before it is temporal. Of its 18,941 residents, 58% live in the maximum flood or tsunami, yet in the 2026 animation none of those it covers falls short of a refuge at Wakayama’s walking rule; with water by 15 minutes, 2,040 would. The time conflict sits where the plan does not concentrate: across the river in Kihō, and in the Miwasaki function zone, where 35% of residents live inside the 2026 maximum tsunami and the water is expected within 6–10 minutes. Kōyō, the dry hub, trades water for slope: none of its residents lives in the flood or tsunami, but 11% of its area lies in landslide warning zones, the medical centre among them."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "cve.people.function: miwasaki.tsunami_max_any.1", fmt = "where {:.0f}% of residents live inside" }
+
+[[claim]]
+id = "zone-miwasaki-time"
+match = ["the water is expected within 6–10 minutes"]
+status = "verified"
+source = "新宮市津波防災地域づくり推進計画 (October 2025) p. 27: 6～10 minutes in 三輪崎・佐野・木ノ川・蜂伏"
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/suisinkeikaku/suisinkeikaku.pdf"
+
+[[claim]]
+id = "zone-koyo-none"
+match = ["none of its residents lives in the flood or tsunami"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of the Kōyō zone inside the maximum flood or the 2026 maximum tsunami"
+check = { rk = "cve.people.function: koyo_medical.L2_union.0", expect = 0, tol = 0 }
+
+[[claim]]
+id = "zone-koyo-slope"
+match = ["Inside the residential zone the conflict is vertical before it is temporal. Of its 18,941 residents, 58% live in the maximum flood or tsunami, yet in the 2026 animation none of those it covers falls short of a refuge at Wakayama’s walking rule; with water by 15 minutes, 2,040 would. The time conflict sits where the plan does not concentrate: across the river in Kihō, and in the Miwasaki function zone, where 35% of residents live inside the 2026 maximum tsunami and the water is expected within 6–10 minutes. Kōyō, the dry hub, trades water for slope: none of its residents lives in the flood or tsunami, but 11% of its area lies in landslide warning zones, the medical centre among them."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the Kōyō zone's area inside A33-25 warning zones"
+check = { rk = "cve.area.function: koyo_medical.landslide_yellow", fmt = "but {:.0f}% of its area" }
+
+[[claim]]
+id = "station-class"
+match = ["A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): Shingū Station (135.9941 E, 33.7251 N) in class 1 (0.01–0.3 m) of Wakayama's 2026 maximum map"
+check = { rk = "ev_places.Shingu_station.cls_max", expect = 1, tol = 0 }
+
+[[claim]]
+id = "station-arrival"
+match = ["A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev_places.Shingu_station.arrival_min", fmt = "after {:.0f} minutes" }
+
+[[claim]]
+id = "station-walk"
+match = ["A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation."]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): walk to the first site or high ground at Wakayama's rule"
+check = { rk = "ev_places.Shingu_station.walk_W", fmt = "lies {} minutes away" }
+
+[[claim]]
+id = "hayatama-dry"
+match = ["Hayatama Taisha and the city hall stand outside the inundation"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev_places.Hayatama.cls_max", expect = 0, tol = 0 }
+
+[[claim]]
+id = "cityhall-dry"
+match = ["Hayatama Taisha and the city hall stand outside the inundation"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js)"
+check = { rk = "ev_places.Shingu_cityhall.cls_max", expect = 0, tol = 0 }
+
+[[claim]]
+id = "facet-ts26"
+match = ["2026 maximum-class depth: under 0.5 m · 0.5–3 m · 3 m or more; dots = designated tsunami refuges"]
+status = "method"
+source = "07_build.py: ts26 tiers from the 2026 maximum-class maps (classes 1–2, 3–4, 5 and over)"
+
+[[claim]]
+id = "legend-tsunami"
+exact = ["tsunami, maximum class (2026 in Shingū and Kihō; 2013/2015 elsewhere)", "tsunami, frequent class (Shingū, 2026)"]
+status = "verified"
+source = "07_build.py: Wakayama 2026 (Shingū) and Mie 2026 (Kihō) digitised; elsewhere A40-16 (Wakayama's 2013 and Mie's 2015 assumptions); frequent class: Wakayama 2026 (3連動)"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
+
+[[claim]]
+id = "legend-ts26"
+exact = ["2026 tsunami depth < 0.5 m", "0.5–3 m", "3 m or more", "filled: inside the 2026 maximum inundation"]
+status = "method"
+source = "the 2026 maps' depth classes grouped: 0.01–0.5, 0.5–3, 3 m and over"
+
+[[claim]]
+id = "legend-margins"
+exact = ["0–5 min to spare", "5–15 min", "15 min or more"]
+status = "method"
+source = "the page's margin classes: arrival − departure − walk − climb, in minutes"
+
+[[claim]]
+id = "src-tsunami2026"
+match = ["Tsunami 2026: Wakayama’s maps of Shingū, maximum class (南海トラフ巨大地震) and frequent class (東海・東南海・南海3連動地震), its animation of the maximum class and the report on its model; Mie Prefecture’s 2026 assumption, sheet 22 for Kihō. The maps are digitised and registered to GSI building outlines, and the animation’s frames to GSI aerial photographs, by kansai/tools/tsunami2026/."]
+status = "verified"
+source = "Wakayama R8 maps (kyodaishinngu.pdf, 3rendoushinngu.pdf), animation (16_shinguu_nk_2D_k.mp4), report (03_jishindoutsunami.pdf); Mie 2026 (page 845440078610001, sheet 22 = 001249288.pdf); tools/tsunami2026"
+
+[[claim]]
+id = "src-residents"
+match = ["Residents: 2020 census, 250 m cells and small areas with ages (Statistics Bureau, e-Stat), fitted to GSI building outlines; OpenStreetMap sites that are not homes take no residents. Projection to 2050: IPSS (2023)."]
+status = "verified"
+source = "e-Stat 2020 census T001142 (250 m mesh) and T001082 (small areas); IPSS 2023"
+
+[[claim]]
+id = "src-evacuation"
+match = ["Evacuation: GSI 指定緊急避難場所データ (tsunami sites, updated 23 January 2025); Shingū’s 津波一時避難施設・場所 (floor heights, 2017); walking rules from Wakayama’s 津波避難計画策定指針 (2015) and 津波から「逃げ切る！」支援対策プログラム, the Cabinet Office’s 2025 damage method and the FDMA’s evacuation manual; the frequent and maximum classes as set by the Central Disaster Management Council (2011). Roads and paths: GSI road centre lines and OpenStreetMap, 1 October 2026."]
+status = "verified"
+source = "GSI 指定緊急避難場所 (Shingū and Kihō updated 2025-01-23); Shingū 津波一時避難施設・場所 (page updated 2017-02-03); Wakayama 指針 (November 2015); Cabinet Office (March 2025); FDMA manual (2013, amended 2026); Central Disaster Management Council (2011); OSM 2026-10-01"
+
+[[claim]]
+id = "src-rules"
+match = ["Rules: MLIT, red zones out of residential-inducement areas (cabinet order of 20 October 2020, in force 1 October 2021); location optimisation plans and their disaster-prevention guidelines (MLIT, as of 31 March 2026); the difficult areas and their status in Shingū’s 2025 tsunami plan (新宮市津波防災地域づくり推進計画, Tsunami Disaster-Resilient Community Development Promotion Plan, PDF, pp. 20 and 26)."]
+status = "verified"
+source = "MLIT press release 2020-10-20 (公布 2020-10-23, 施行 2021-10-01); MLIT list as of 2026-03-31; Shingū 2025 plan pp. 20 and 26"
+
+[[claim]]
+id = "src-ksj"
+match = ["MLIT 国土数値情報 (processed): N03 administrative areas (2026); A55 urban-planning decisions, Shingū (FY2024); A40 tsunami inundation (2016), outside Shingū and Kihō; A31b flood meshes of every mapped river (2025) and the A31a map of the Ichida-gawa; A33 sediment-disaster zones (Aug 2025); A38 medical areas (2020); public facilities P04, P05, P14, P17, P18 and P29."]
+status = "verified"
+source = "国土数値情報 editions as used: N03 (2026), A55 (FY2024), A40 (2016 release), A31b (2025), A31a (2025), A33 (2025), A38 (2020), P04 (2020), P05 (2022), P14 (2023), P17 and P18 (2012), P29 (2023) — the latest of each on 2026-10-01"
+
+[[claim]]
+id = "src-floodmesh"
+match = ["Flood meshes: 国土数値情報 洪水浸水想定区域（1次メッシュ単位）"]
+status = "verified"
+source = "the dataset's title on the KSJ page (A31b, 2025 edition, the latest on 2026-10-01); 1次メッシュ = the first-order (about 80 km) grid cells it is distributed in"
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A31b-2025.html"
+
+[[claim]]
+id = "src-risk-method"
+match = ["Method: kansai/tools/risk/ — residents per building, exposure by tier, evacuation margins per building, the plan’s zones against both, road closures and single links, the 2050 projection"]
+status = "method"
+source = "kansai/tools/risk/run.sh: pop_bld, expo, evac, cve, crit, shrink, export"
+
+[[claim]]
+id = "buildings-total"
+title = "17,785 building footprints in the coastal lowland (GSI)"
+match = ["Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both."]
+status = "derived"
+source = "GSI optimised vector tiles, building layer (z16), inside Shingū City within lon 135.955–136.020, lat 33.655–33.760; re-counted by run.py"
+check = { bld = "total", expect = 17785, tol = 0 }
+
+[[claim]]
+id = "buildings-tsunami"
+match = ["Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both."]
+status = "derived"
+source = "one point inside each GSI footprint tested against the page's tsunami layer (2026 maps in Shingū and Kihō, A40 elsewhere)"
+check = { bld = "tsunami", expect = 4743, tol = 0 }
+
+[[claim]]
+id = "buildings-flood"
+match = ["Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both."]
+status = "derived"
+source = "one point inside each GSI footprint tested against the page's river-flood layers (A31b-25 maximum, every river mapped; A31a Ichida)"
+check = { bld = "flood", expect = 9495, tol = 0 }
+
+[[claim]]
+id = "buildings-either"
+match = ["Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both."]
+status = "derived"
+source = "11,098 of 17,785 buildings"
+check = { bld = "either_pct", expect = 62.4, tol = 0.5 }
+
 # ================================================================ limitations (not claims; listed in CAVEATS.md)
 [[limitation]]
 topic = "Data vintage"
-title = "Tsunami map ≠ tsunami text"
-text = "The text quotes Wakayama's 2026 scenario (13 m, 5 min). The map shows the 2016 national dataset (A40, based on the prefecture's 2013 assumption), because the 2026 revision is published only as PDF maps. Extents differ in detail."
+title = "Tsunami maps digitised from PDFs"
+text = "Wakayama and Mie publish their 2026 tsunami maps only as PDF sheets. In Shingū and Kihō the page draws them digitised: registered to GSI building outlines (median residual about 0.4 m for Wakayama's sheets), classified by the legend's colours, gaps under printed lines filled from neighbouring pixels. The digitised Kihō area is 175 ha against Mie's official 198 ha (water under road and rail symbols and the beach seaward of the town boundary are missed). Elsewhere the map shows the 2016 national dataset (A40), based on the prefectures' 2013 and 2015 assumptions."
 
 [[limitation]]
 topic = "Data vintage"
 title = "River flood layers"
-text = "“L2 river flood (max. assumed)” is MLIT A31a (2025 release) for the Kumano. The Ichida flood is A31a's separate maximum-assumed map for the Ichida-gawa itself (市田川, river code 8606010002). Both are river-flood models; neither is a street-level rainfall (pluvial) model."
+text = "The river flood is MLIT A31b (2025), the 10 m flood meshes of every national and prefectural river with a published map, merged by taking the deeper class. The Ichida flood is A31a's separate maximum-assumed map for the Ichida-gawa itself (市田川, river code 8606010002). All are river-flood models; none is a street-level rainfall (pluvial) model."
 
 [[limitation]]
 topic = "Models"
-title = "Walking distance to dry ground"
-text = "Distances are shortest walks over land on a 10 m grid to any dry patch of at least 1 ha. They are not routes to designated evacuation sites and ignore stairs, fences, bridges closed by the quake, crowding and mobility limits. The 1 m/s conversion to minutes is a planning convention."
+title = "Evacuation margins"
+text = "Arrival times come from Wakayama's 2026 animation (the water's first touch, frames 10 s apart, registered to GSI photographs within about one 9 m pixel). The animation does not cover Miwasaki, Sano or northern Kihō; there the page gives bounds for arrivals at 6 and 10 minutes. Kihō's extent is Mie's map but its arrival is Wakayama's model of the same water. Walks follow GSI road centre lines and OpenStreetMap paths to the refuge reached first in time; they ignore collapsed buildings, blocked lanes, crowding and the choice of a refuge further away. Floor heights are the city's 2017 list; where none is given, people climb above the 2026 depth class. The 2026 model keeps road and rail embankments standing, which delays the water in central Shingū; the 15-minute row shows what earlier water would mean."
 
 [[limitation]]
 topic = "Models"
@@ -582,6 +1215,21 @@ text = "The long profile follows a D8 flow path on 3″ SRTM with meanders short
 topic = "Drawings"
 title = "Sea lanes and flows"
 text = "The timber and charcoal flows follow the Kitayama and Kumano rivers; the sea lanes to Ōsaka and Edo are schematic lines, not historical routes."
+
+[[limitation]]
+topic = "Models"
+title = "Residents per building"
+text = "Residents are the 2020 census spread over GSI building footprints by area (15–2,500 m²; sheds and buildings on OSM sites that are not homes take none), fitted so every 250 m cell and every small area keeps its census totals by age. Cells the census suppresses pass their ages to a neighbouring cell. Individual buildings can be wrong; sums over areas hold. The 2025 census found 10% fewer people in Shingū; its small-area tables are not yet published."
+
+[[limitation]]
+topic = "Models"
+title = "Roads under hazard"
+text = "A road closes in a scenario where any point on it, every 10 m, lies in the hazard; bridges and tunnels stay open. Roads that stay dry can still be blocked by debris or damage, and flooded roads can be passable at shallow depths: the scenarios bound access, they do not forecast it. Residents attach to the nearest drivable road; the network is OpenStreetMap of 1 October 2026."
+
+[[limitation]]
+topic = "Models"
+title = "2050 projection"
+text = "The 2050 figures keep every building's 2020 residents and scale them by the town's projected change for people under and over 75 (IPSS 2023). Real decline will be uneven between districts."
 
 # ================================================================ errors the QA gate caught and fixed (listed in CAVEATS.md)
 [[fix]]
@@ -877,38 +1525,6 @@ source = "Mie Prefecture to MLIT (海岸管理のあり方 第3回): 「最大�
 url = "https://www.mlit.go.jp/river/shinngikai_blog/kaigankanrinoarikata/dai03kai/dai03kai_siryou2.pdf"
 
 # ================================================================ round 3: buildings, forest, peaks
-[[claim]]
-id = "buildings-total"
-title = "17,785 building footprints in the coastal lowland (GSI)"
-match = ["17,785 buildings in Shingū’s coastal lowland"]
-status = "derived"
-source = "GSI optimised vector tiles, building layer (z16), inside Shingū City within lon 135.955–136.020, lat 33.655–33.760; re-counted by run.py"
-check = { bld = "total", expect = 17785, tol = 0 }
-
-[[claim]]
-id = "buildings-tsunami"
-title = "5,566 buildings inside the L2 tsunami area"
-match = ["5,566 inside the L2 tsunami area", "5,566 stand inside the L2 inundation area"]
-status = "derived"
-source = "one point inside each GSI footprint tested against the page's L2 tsunami layer (A40, 2016)"
-check = { bld = "tsunami", expect = 5566, tol = 0 }
-
-[[claim]]
-id = "buildings-flood"
-title = "9,303 buildings inside the maximum-assumed river flood"
-match = ["9,303 inside the maximum-assumed river flood"]
-status = "derived"
-source = "one point inside each GSI footprint tested against the page's river-flood layers (A31a Kumano + Ichida, maximum assumed)"
-check = { bld = "flood", expect = 9303, tol = 0 }
-
-[[claim]]
-id = "buildings-either"
-title = "62% inside at least one hazard area"
-match = ["62% inside at least one of the two"]
-status = "derived"
-source = "10,964 of 17,785 buildings"
-check = { bld = "either_pct", expect = 62, tol = 0.5 }
-
 [[claim]]
 id = "buildings-source"
 title = "GSI optimised vector tiles (2026)"

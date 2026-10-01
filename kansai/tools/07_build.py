@@ -1,11 +1,12 @@
 """Project and simplify all layers into compact SVG path data for kansai/index.html.
 
 CRS: JGD2011 / Japan Plane Rectangular CS VI (EPSG:6674). 1 SVG unit = 100 m.
-Run from the scratch work directory after 01-06 (see README.md). Inputs: osm/*.json, ksj/*, land.geojson,
-basin.geojson, munis.geojson, prefs.geojson, dem1.npy.
+Run from the scratch work directory after 01-06 (see README.md). Inputs: osm/*.json, ksj/* (A31b-25 flood mesh included),
+land.geojson, basin.geojson, munis.geojson, prefs.geojson, dem1.npy, and tsunami2026/*.geojson (tools/tsunami2026, or set
+TSUNAMI2026 to their directory).
 Output: geo.json  {frame, views, layers, points, stats}
 """
-import json, math, re
+import json, math, re, os, glob
 import numpy as np
 from shapely.geometry import (shape, mapping, box, Polygon, MultiPolygon, LineString,
                               MultiLineString, Point, GeometryCollection)
@@ -343,8 +344,13 @@ def union_features(fn, filt, clip_ll, simp, clip_p, min_area):
     u = unary_union(gs)
     u = proj(u).intersection(clip_p)
     return drop_small(polys_only(u.simplify(simp)), min_area)
-# tsunami L2 (Wakayama geojson + Mie shapefile)
+# tsunami, maximum class. Shingū and Kihō: the 2026 assumptions, digitised from the prefectures' PDF maps
+# (tools/tsunami2026: Wakayama 令和8年 南海トラフ巨大地震; Mie 2026 図面番号22). Elsewhere: MLIT A40, which still holds
+# Wakayama's 2013 and Mie's 2015 assumptions. Each source is clipped to the territory it was made for.
 import shapefile
+TS26 = os.environ.get("TSUNAMI2026", "tsunami2026")
+def load_ts26(fn, classes=None):
+    return [g.buffer(0) for p, g in load_features(os.path.join(TS26, fn), lambda p: classes is None or p["class"] in classes)]
 def load_mie_tsunami(clip_ll):
     sf = shapefile.Reader("ksj/A40-16_24_GML/A40-16_24.shp", encoding="cp932")
     out = []
@@ -357,17 +363,43 @@ def load_mie_tsunami(clip_ll):
 FRAME_SOUTH = box(135.25, 33.38, 136.42, 34.12)
 ts_w = [g.buffer(0) for p, g in load_features("ksj/A40-16_30_GML/A40-16_30.geojson", clip=FRAME_SOUTH)]
 ts_m = load_mie_tsunami(FRAME_SOUTH)
-TS_W = proj(unary_union(ts_w).buffer(0)).intersection(proj(prefs["和歌山県"]).buffer(0))
-TS_M = proj(unary_union(ts_m).buffer(0)).intersection(proj(prefs["三重県"]).buffer(0))
+SHINGU_P = proj(muni("新宮市", "和歌山県")).buffer(0); KIHO_P = proj(muni("紀宝町", "三重県")).buffer(0)
+TS26_S = proj(unary_union(load_ts26("shingu_r8_max.geojson"))).buffer(0)
+TS26_K = proj(unary_union(load_ts26("kiho_mie2026_max.geojson"))).buffer(0)
+TS_W = proj(unary_union(ts_w).buffer(0)).intersection(proj(prefs["和歌山県"]).buffer(0)).difference(SHINGU_P).union(TS26_S.intersection(SHINGU_P))
+TS_M = proj(unary_union(ts_m).buffer(0)).intersection(proj(prefs["三重県"]).buffer(0)).difference(KIHO_P).union(TS26_K.intersection(KIHO_P))
 TS = TS_W.union(TS_M)
+stats["tsunami_sources"] = {"2026": ["新宮市 (Wakayama 令和8年, 南海トラフ巨大地震)", "紀宝町 (Mie 2026, 図面番号22)"],
+                            "A40": "elsewhere (Wakayama 2013, Mie 2015 assumptions)"}
+stats["tsunami2026_ha"] = {"shingu_max": round(TS26_S.intersection(SHINGU_P).area / 1e4, 1), "kiho_max": round(TS26_K.intersection(KIHO_P).area / 1e4, 1)}
 TS_region = drop_small(polys_only(TS.difference(HAZ_P).buffer(40).buffer(-40).simplify(70)), 20000)
 TS_fine = drop_small(polys_only(TS.intersection(HAZ_P).buffer(6).buffer(-6).simplify(8)), 800)
 layers["tsunami"] = to_d(TS_region, 1) + to_d(TS_fine, 1)
-# river flood L2 (Kumano, Ichida, Aidani)
-FL = unary_union([g.buffer(0) for fn in ("8606010001", "8606010002", "8606010006")
-                  for p, g in load_features(f"ksj/20_想定最大規模/A31a-20-25_86_{fn}_10.geojson")])
+# 2026 depth tiers (Shingū + Kihō, maximum class) and Shingū's frequent-earthquake (3連動) inundation, fine window only
+def ts26_tier(classes):
+    g = unary_union([unary_union([proj(x) for x in load_ts26("shingu_r8_max.geojson", classes)]).intersection(SHINGU_P),
+                     unary_union([proj(x) for x in load_ts26("kiho_mie2026_max.geojson", classes)]).intersection(KIHO_P)])
+    return drop_small(polys_only(g.buffer(4).buffer(-4).simplify(6)), 300)
+layers["ts26_shallow"] = to_d(ts26_tier({1, 2}), 1)          # under 0.5 m
+layers["ts26_mid"] = to_d(ts26_tier({3, 4}), 1)              # 0.5–3 m
+layers["ts26_deep"] = to_d(ts26_tier({5, 6, 7, 8}), 1)       # 3 m and more
+TSF = unary_union([proj(x) for x in load_ts26("shingu_r8_freq.geojson")]).intersection(SHINGU_P)
+layers["ts26_freq"] = to_d(drop_small(polys_only(TSF.buffer(4).buffer(-4).simplify(6)), 300), 1)
+# river flood: MLIT A31b-25 (10 m mesh; every river with a published map, national and prefectural, merged) —
+# maximum assumed (想定最大規模, L2) and planned scale (計画規模, L1)
+def a31b(folder, clip_ll=CITY):
+    out = []
+    for fn in sorted(glob.glob(f"ksj/A31b-25/{folder}/*.shp")):
+        for sr in shapefile.Reader(fn[:-4], encoding="cp932").iterShapeRecords():
+            b = sr.shape.bbox
+            if b[2] < clip_ll[0] or b[0] > clip_ll[2] or b[3] < clip_ll[1] or b[1] > clip_ll[3]: continue
+            out.append(shape(sr.shape.__geo_interface__))
+    return unary_union(out)
+FL = a31b("20_想定最大規模")
 FL_p = proj(FL).buffer(0)
-layers["flood"] = to_d(drop_small(polys_only(FL_p.intersection(CITY_P).simplify(5)), 300), 1)
+layers["flood"] = to_d(drop_small(polys_only(FL_p.intersection(CITY_P).buffer(8).buffer(-8).simplify(9)), 1500), 1)
+FL1_p = proj(a31b("10_計画規模")).buffer(0)
+layers["flood_l1"] = to_d(drop_small(polys_only(FL1_p.intersection(CITY_P).buffer(8).buffer(-8).simplify(9)), 1500), 1)
 # landslide zones (Wakayama + Mie) in the city window
 LS_WIN = (135.925, 33.655, 136.045, 33.765)          # yellow zones: urban core only
 RED_WIN = (135.865, 33.56, 136.045, 33.765)          # red zones: the whole Shingu-Taiji coast view

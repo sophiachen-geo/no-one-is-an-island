@@ -559,3 +559,91 @@ checked = "2026-10-01"
 url = "https://www.city.shingu.lg.jp/info/565"
 kind = "source"
 checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui_d/fil/03_jishindoutsunami.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.mlit.go.jp/report/press/toshi07_hh_000163.html"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.mlit.go.jp/en/toshi/city_plan/content/002011503.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/d00221942_d/fil/kyodaishinngu.pdf"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/d00221941_d/fil/3rendoushinngu.pdf"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/trough/d00222025_d/fil/16_shinguu_nk_2D_k.mp4"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.mie.lg.jp/common/content/001249288.pdf"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://hinanmap.gsi.go.jp/index.html"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/guide/index_d/fil/hinankeikaku27.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/h26nigekiru.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.bousai.go.jp/jishin/nankai/taisaku_wg_02/pdf/sanko_gaiyo.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.fdma.go.jp/singi_kento/kento/items/kento106_01_p0.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.bousai.go.jp/kaigirep/chousakai/tohokukyokun/pdf/Report.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A31b-2025.html"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P29-2023.html"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/suisinkeikaku/suisinkeikaku.pdf"
+kind = "plan"
+ja = "新宮市津波防災地域づくり推進計画"
+en = "Tsunami Disaster-Resilient Community Development Promotion Plan"
+publisher = "Shingū City"
+checked = "2026-10-01"

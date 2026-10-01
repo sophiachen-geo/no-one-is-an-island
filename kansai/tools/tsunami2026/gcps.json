@@ -1,0 +1,16 @@
+{
+ "_about": "Control points for the first, rough placement of each sheet: the centre of a facility symbol the map prints (pixel of the raster from raster.py) and the facility's position (lon/lat, JGD2011). The fine fit is register.py and poly.py. Positions: 新宮市役所, 新宮市消防本部, 新宮警察署, 和歌山県東牟婁振興局, 新宮市立医療センター from OSM/GSI; 紀宝町役場, 紀宝警察署, 熊野市消防署紀宝分署, JR 鵜殿駅 from GSI 注記 (optimal_bvmap Anno).",
+ "k2": {"kind": "affine", "points": [
+   {"name": "新宮市役所", "px": [2178.5, 636.0], "ll": [135.992493, 33.724121]},
+   {"name": "新宮市消防本部", "px": [2654.5, 1354.0], "ll": [135.999132, 33.715678]},
+   {"name": "新宮警察署", "px": [2017.0, 2321.5], "ll": [135.9902975, 33.7041666]},
+   {"name": "東牟婁振興局", "px": [1950.0, 1046.0], "ll": [135.9890112, 33.7193183]}]},
+ "k1": {"kind": "translate", "linear_from": "aff_k2_full.npy", "points": [
+   {"name": "新宮警察署", "px": [1923.0, 749.0], "ll": [135.9902975, 33.7041666]},
+   {"name": "新宮市立医療センター", "px": [89.0, 2235.0], "ll": [135.964094, 33.68681]}]},
+ "mie22": {"kind": "similarity", "points": [
+   {"name": "紀宝町役場", "px": [1744.3, 2293.3], "ll": [136.00973, 33.73384]},
+   {"name": "紀宝警察署", "px": [1915.7, 2193.7], "ll": [136.01679, 33.73729]},
+   {"name": "熊野市消防署紀宝分署", "px": [1880.5, 1944.5], "ll": [136.01535, 33.74592]},
+   {"name": "鵜殿駅", "px": [1884.7, 2210.3], "ll": [136.0156, 33.73661]}]}
+}

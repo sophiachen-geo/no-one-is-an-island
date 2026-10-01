@@ -220,21 +220,51 @@ if os.path.exists("morph/buildings.geojson"):
     json.dump(out, open("buildings_page.json", "w"), separators=(",", ":"))
     print("buildings:", counts, round(os.path.getsize("buildings_page.json") / 1024), "KB")
 
-# ---------------------------------------------------------------- facilities and road names (fetch_facilities.py → fac/)
-if os.path.exists("fac/facilities_osm.json"):
-    CAT = {"hospital": "med", "clinic": "med", "doctors": "med", "townhall": "admin", "fire_station": "safety", "police": "safety",
-           "school": "school", "supermarket": "food"}
+# ---------------------------------------------------------------- services (国土数値情報) and road names (OSM, fac/)
+# Shingū City's services from MLIT's national layers rather than OpenStreetMap: hospitals and clinics (P04, 2020; dental
+# clinics left out), the city hall, branch offices and the Kumanogawa administrative bureau (P05, 2022), schools from
+# primary to high school (P29, 2023), care homes and other facilities where people stay overnight (P14, 2023), fire and
+# police stations (P17, P18, 2012, non-commercial). 新宮警察署 moved in March 2017 to 新宮2330-9 (Wakayama Prefectural
+# Police); its 2012 point is replaced by the new site.
+import zipfile, io
+def ksj_points(zf, shp_hint=None):
+    z = zipfile.ZipFile(zf); names = z.namelist(); gj = [n for n in names if n.endswith(".geojson")]
+    if gj:
+        for ft in json.loads(z.read(gj[0]).decode("utf-8"))["features"]:
+            yield ft["properties"], ft["geometry"]["coordinates"]
+        return
+    import shapefile
+    shp = [n for n in names if n.endswith(".shp") and (shp_hint is None or shp_hint in n)][0][:-4]
+    r = shapefile.Reader(shp=io.BytesIO(z.read(shp + ".shp")), dbf=io.BytesIO(z.read(shp + ".dbf")), shx=io.BytesIO(z.read(shp + ".shx")), encoding="cp932")
+    flds = [f[0] for f in r.fields[1:]]
+    for sr in r.iterShapeRecords():
+        yield dict(zip(flds, sr.record)), sr.shape.points[0]
+if os.path.exists("ksj/P04-20_30_GML.zip"):
+    from shapely.geometry import Point as _Pt
+    from shapely.prepared import prep as _prep
+    CITY_LL = _prep(shape(json.load(open("munis.geojson"))["和歌山県|新宮市|30207"]).buffer(0))
+    CARE = {"0201", "0202", "0205", "0301", "0502", "0507", "0508", "0511", "9907", "9910"}
+    MOVED = {"新宮警察署": (135.9902975, 33.7041666)}          # 新宮市新宮2330-9 since March 2017
+    rows = []
+    for p, (lo, la) in ksj_points("ksj/P04-20_30_GML.zip"):
+        if p["P04_001"] in (1, 2): rows.append(("med", p["P04_002"], lo, la, "国土数値情報 P04 (2020)"))
+    for p, (lo, la) in ksj_points("ksj/P05-22_30_GML.zip"):
+        if str(p["P05_002"]) in ("1", "2", "3"): rows.append(("admin", p["P05_003"], lo, la, "国土数値情報 P05 (2022)"))
+    for p, (lo, la) in ksj_points("ksj/P29-23_30_GML.zip"):
+        if str(p["P29_003"]) in ("16001", "16002", "16003", "16004", "16012", "16013") and str(p.get("P29_007")) != "2":   # 2 = 休校中
+            rows.append(("school", p["P29_004"], lo, la, "国土数値情報 P29 (2023)"))
+    for p, (lo, la) in ksj_points("ksj/P14-23_30_GML.zip"):
+        if str(p["P14_006"]) in CARE: rows.append(("care", p["P14_008"], lo, la, "国土数値情報 P14 (2023)"))
+    for zf, hint, key in (("ksj/P17-12_30_GML.zip", "FireStation.", "P17_001"), ("ksj/P18-12_30_GML.zip", "PoliceStation.", "P18_001")):
+        for p, (lo, la) in ksj_points(zf, hint):
+            nm = p[key]; lo, la = MOVED.get(nm, (lo, la))
+            rows.append(("safety", nm, lo, la, "国土数値情報 " + zf[4:7] + " (2012)" + (", moved 2017" if nm in MOVED else "")))
     fac, seen = [], set()
-    for e in json.load(open("fac/facilities_osm.json"))["elements"]:
-        t = e.get("tags", {}); c = e.get("center") or {"lat": e.get("lat"), "lon": e.get("lon")}
-        kind = t.get("amenity") or t.get("shop") or t.get("office")
-        name = t.get("name") or ""
-        cat = CAT.get(kind)
-        if kind == "government" and ("市役所" in name or "支所" in name or "行政局" in name): cat = "admin"
-        if not cat or not name: continue
-        X, Y = TF(c["lon"], c["lat"]); key = (cat, round(X / 30), round(Y / 30))
-        if key in seen: continue                     # the same facility mapped twice (node + building)
-        seen.add(key); fac.append([round(sx(X), 2), round(sy(Y), 2), cat, name])
+    for cat, name, lo, la, src in rows:
+        if not CITY_LL.contains(_Pt(lo, la)): continue
+        X, Y = TF(lo, la); key = (cat, round(X / 30), round(Y / 30))
+        if key in seen: continue                     # two records at one place (a fire HQ and its station)
+        seen.add(key); fac.append([round(sx(X), 2), round(sy(Y), 2), cat, name, src])
     g["fac"] = fac
     print("facilities:", {k: sum(1 for f in fac if f[2] == k) for k in sorted(set(f[2] for f in fac))})
 if os.path.exists("fac/roads_osm.json"):
