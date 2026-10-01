@@ -1,4 +1,4 @@
-"""Add the second-round layers to geo.json: precise/rebuilt Kumano Kodo, tsunami walking-distance bands,
+"""Add the second-round layers to geo.json: precise/rebuilt Kumano Kodo,
 landslide-exposed roads, timber flows + sea lanes, Ichida river/flood, old-town micro-relief, extra points."""
 import json, os
 from shapely.geometry import shape, mapping, LineString, MultiLineString, Polygon, MultiPolygon, Point
@@ -39,12 +39,10 @@ L["kodo_iseji"] = to_d(linemerge(iseji).simplify(25), 1)
 rebuilt = [P(kr[k]["geometry"]).simplify(25) for k in ("okugake", "ohechi") if k in kr]
 L["kodo_routed"] = to_d(MultiLineString([l for l in rebuilt]), 1) if rebuilt else ""
 S["kodo_routed"] = sorted(kr)
-# --- tsunami walking distance bands + landslide-exposed roads
+# --- landslide-exposed roads
 l2 = json.load(open("layers2.json"))
-for k in ("ts_d300", "ts_d600", "ts_dfar"): L[k] = to_d(P(l2[k]).simplify(4), 2)
 L["ls_roads"] = to_d(P(l2["ls_roads"]).simplify(6), 1)
-S["ts_pt_dist"] = l2.get("pt_dist", {})
-S.update(l2.get("stats", {}))   # ts_walk (walking-distance shares) + ls_roads (road km inside landslide zones)
+S.update(l2.get("stats", {}))   # ls_roads (road km inside landslide zones)
 # --- flows
 fl = json.load(open("flows.json"))
 for k, v in fl.items(): L[k] = to_d(P(v), 1)
@@ -61,7 +59,7 @@ micro = ic["micro"]
 L["micro_low"] = to_d(unary_union([P(micro[str(k)]) for k in (3, 5, 7) if micro.get(str(k))]), 2)
 L["micro_high"] = to_d(unary_union([P(micro[str(k)]) for k in (10, 20, 40) if micro.get(str(k))]), 2)
 json.dump(g, open("geo.json", "w"), ensure_ascii=False)
-for k in ("kodo_iseji", "kodo_routed", "ts_d300", "ts_d600", "ts_dfar", "ls_roads", "flow_kitayama", "flow_kumano", "sea_osaka", "sea_edo", "ichida_line", "flood_ichida", "micro_low", "micro_high"):
+for k in ("kodo_iseji", "kodo_routed", "ls_roads", "flow_kitayama", "flow_kumano", "sea_osaka", "sea_edo", "ichida_line", "flood_ichida", "micro_low", "micro_high"):
     print(f"{k:14s} {len(L.get(k, ''))/1024:7.1f} KB")
 
 # ---------------- extra camera views + named points for the second-round page -----------------

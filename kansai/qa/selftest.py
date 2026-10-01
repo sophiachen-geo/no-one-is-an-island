@@ -64,8 +64,8 @@ def main():
     rep = json.loads(json.dumps(base_rep))
     rep["inventory"] = [dict(it, text=it["text"].replace("2,968", "2,964")) for it in rep["inventory"]]
     results.append(case("a claim edited on the page (2,968→2,964) is caught", "stale-claim", rep=rep))
-    html = with_geo(base_html, lambda g: g["stats"]["overlap"]["centre"].__setitem__("either", 79.0))
-    results.append(case("data no longer matching the text (86%→79%) is caught", "derived", html=html))
+    html = with_geo(base_html, lambda g: g["stats"]["ls_roads"]["NR168"].__setitem__("pct", 27.0))
+    results.append(case("data no longer matching the text (20%→27%) is caught", "derived", html=html))
     html = with_geo(base_html, lambda g: g["pts"].__setitem__("hayatama", [g["pts"]["hayatama"][0] + 5, g["pts"]["hayatama"][1]]))
     results.append(case("a map point moved 500 m is caught", "points", html=html))
     rep = json.loads(json.dumps(base_rep)); rep["usedPoints"].append("dam_sakamoto")
@@ -84,7 +84,7 @@ def main():
     # buildings: one footprint moved into the sea changes a count the text relies on
     def data_copy():
         d = Path(tempfile.mkdtemp())
-        for f in list((HERE.parent / "data").glob("kamikura*")) + [HERE.parent / "data" / "fieldnotes.js"]:
+        for f in list((HERE.parent / "data").glob("kamikura*")) + [HERE.parent / "data" / "fieldnotes.js", HERE.parent / "data" / "risk.js"]:
             shutil.copy(f, d / f.name)
         return d
     ddir = data_copy(); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
@@ -121,6 +121,15 @@ def main():
     results.append(fn_case("a photograph that still carries EXIF is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(src=str(exif))))
     results.append(fn_case("a route table out of step with its data is caught", "fieldnotes",
                            lambda D: D["region"]["options"]["hongu-hayatama"]["list"][0].update(up=D["region"]["options"]["hongu-hayatama"]["list"][0]["up"] + 5)))
+    # the risk analysis: a table cell and a sentence that drift from kansai/data/risk.js
+    def rk_case(name, expect, edit):
+        d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js")
+        raw = (d / "risk.js").read_text(encoding="utf-8").strip(); R = json.loads(raw[raw.index("=") + 1:].rstrip(";")); edit(R)
+        (d / "risk.js").write_text("window.__RISK = " + json.dumps(R, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
+        os.environ["KANSAI_DATA"] = str(d)
+        return case(name, expect)
+    results.append(rk_case("a risk table cell out of step with its data is caught", "risk", lambda R: R["stats"]["tiers"]["Kiho"]["fl_l2"].update(people=3500)))
+    results.append(rk_case("risk data that drifts from the text is caught", "derived", lambda R: R["stats"]["ev_ouji"].update(fail_W_DH_5=44)))
     del os.environ["KANSAI_DATA"]
     # pictures: a picture whose file does not exist
     html = base_html.replace('<script type="application/json" id="media-data">', '<script type="application/json" id="media-data">', 1)

@@ -82,7 +82,7 @@ if (hasQA) {
       words(s.getAttribute('data-on')).forEach((n) => { if (!layers.has(n) && !(Q.ALIASES && Q.ALIASES[n]) && !(Q.pseudo || []).includes(n)) out.push(['layer', `step ${i}: data-on "${n}" has no layer`]); });
       words(s.getAttribute('data-edge')).forEach((n) => { if (!Q.ptOf(n)) out.push(['point', `step ${i}: data-edge "${n}" is not a point`]); });
       words(s.getAttribute('data-overlay')).forEach((n) => { if (!groups.has(n)) out.push(['overlay', `step ${i}: data-overlay "${n}" has no labels/markers`]); });
-      words(s.getAttribute('data-legend')).forEach((n) => { if (n !== 'tsd' && !Q.LEG[n]) out.push(['legend', `step ${i}: data-legend "${n}" not in LEG`]); });
+      words(s.getAttribute('data-legend')).forEach((n) => { if (!Q.LEG[n] && !(Q.GROUPLEG && Q.GROUPLEG[n])) out.push(['legend', `step ${i}: data-legend "${n}" not in LEG`]); });
       if (!s.getAttribute('data-name')) out.push(['view', `step ${i}: missing data-name`]);
     });
     Q.LABELS.forEach((l) => { if (!Q.ptOf(l[0])) out.push(['point', `label "${l[1]}" → unknown point "${l[0]}"`]); });
@@ -151,7 +151,7 @@ async function stepChecks(pg, tag) {
       const legText = document.getElementById('legend').textContent;
       const onLayers = [...document.querySelectorAll('#world .L.on')].map((g) => [...g.classList].find((c) => c !== 'L' && c !== 'on'));
       const missingLeg = onLayers.filter((n) => Q.LAYER_LEG[n] && !Q.BASE.includes(n)).filter((n) => {
-        const k = Q.LAYER_LEG[n]; const items = k === 'tsd' ? Q.TSD : [Q.LEG[k]];
+        const k = Q.LAYER_LEG[n]; const items = Q.GROUPLEG[k] || [Q.LEG[k]];
         return items.some((it) => it && !legText.includes(it[3]));
       });
       // places a step names but cannot show get an arrow at the frame edge
@@ -461,7 +461,10 @@ const inv = await page.evaluate(() => {
   const BLOCK = 'p, li, h1, h2, h3, h4, h5, h6, figcaption, .cap, td, th, dt, dd, blockquote, .stats > div, .chain .i, .mini figcaption > span, svg text, button, .viewname, .zhint, .attrib';
   const blocks = [...document.body.querySelectorAll(BLOCK)].filter((e) => !skip(e) && !e.querySelector(BLOCK));
   const inBlock = new Set(blocks);
-  blocks.forEach((e) => add(e.tagName.toLowerCase() + (e.closest('[id]') ? '#' + e.closest('[id]').id : ''), e instanceof SVGElement ? e.textContent : (e.innerText || e.textContent)));
+  // a block that carries data-rk shows numbers of the risk analysis: run.py recomputes it from kansai/data/risk.js
+  const srcOf = (e) => e.hasAttribute('data-rk') ? 'rk:' + e.getAttribute('data-rk') + '|' + (e.getAttribute('data-rkf') || '{:,}')
+    : e.tagName.toLowerCase() + (e.closest('[id]') ? '#' + e.closest('[id]').id : '');
+  blocks.forEach((e) => add(srcOf(e), e instanceof SVGElement ? e.textContent : (e.innerText || e.textContent)));
   // anything outside those blocks (loose text in divs) is collected per parent so nothing escapes the check
   const loose = new Map(), walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
@@ -476,7 +479,7 @@ const inv = await page.evaluate(() => {
   add('title-tag', document.title);
   if (Q) {
     Q.LABELS.forEach((l) => { add('map-label', l[1]); if (l[7]) add('map-tooltip', l[7]); });
-    Object.values(Q.LEG).forEach((l) => l && add('legend', l[3])); Q.TSD.forEach((l) => add('legend', l[3]));
+    Object.values(Q.LEG).forEach((l) => l && add('legend', l[3])); Object.values(Q.GROUPLEG).forEach((g) => g.forEach((l) => add('legend', l[3])));
     Q.FACETS.forEach((f) => { add('facet', f.q); add('facet', f.r); add('facet', f.m); });
     Q.MEDIA.forEach((m) => { add('media', m.title.replace(/<[^>]+>/g, '')); if (m.text) add('media', m.text.replace(/<[^>]+>/g, ''));
       m.images.forEach((im) => { add('media', im.caption.replace(/<[^>]+>/g, '')); add('media-credit', im.credit.replace(/<[^>]+>/g, '')); add('media-alt', im.alt); }); });

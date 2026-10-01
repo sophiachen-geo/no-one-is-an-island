@@ -197,6 +197,25 @@ def fn_data():
     return _FN
 
 
+_RK = {}
+
+
+def rk_data():
+    """The risk analysis (kansai/data/risk.js, built by kansai/tools/risk)."""
+    if not _RK:
+        import os
+        raw = (Path(os.environ.get("KANSAI_DATA", KANSAI / "data")) / "risk.js").read_text(encoding="utf-8").strip()
+        _RK.update(json.loads(raw[raw.index("=") + 1:].rstrip(";")))
+    return _RK
+
+
+def rk_value(dotted):
+    v = rk_data()["stats"]
+    for k in dotted.split("."):
+        v = v[int(k)] if isinstance(v, list) else v[k]
+    return v
+
+
 def fn_value(dotted):
     v = fn_data()
     for k in dotted.split("."):
@@ -250,9 +269,11 @@ def check_derived(gate, g, claim):
     cid = claim["id"]
     L = g["layers"]
     try:
-        if "stat" in c or ("kmk" in c and "fmt" in c) or ("fn" in c and "fmt" in c):
-            v = stat(g, c["stat"]) if "stat" in c else kmk_value(c["kmk"]) if "kmk" in c else fn_value(c["fn"]); shown = c.get("fmt", "{}").format(v)
-            src = c["stat"] if "stat" in c else ("kamikura." + c["kmk"]) if "kmk" in c else ("fieldnotes." + c["fn"])
+        if "stat" in c or ("kmk" in c and "fmt" in c) or ("fn" in c and "fmt" in c) or ("rk" in c and "fmt" in c):
+            v = (stat(g, c["stat"]) if "stat" in c else kmk_value(c["kmk"]) if "kmk" in c else fn_value(c["fn"]) if "fn" in c
+                 else rk_value(c["rk"])); shown = c.get("fmt", "{}").format(v)
+            src = (c["stat"] if "stat" in c else ("kamikura." + c["kmk"]) if "kmk" in c else ("fieldnotes." + c["fn"]) if "fn" in c
+                   else ("risk." + c["rk"]))
             if not any(shown in m for m in claim.get("match", []) + claim.get("exact", [])):
                 gate.err("derived", f"data says {src} = {v} → “{shown}”, but the text says {claim.get('match') or claim.get('exact')}", cid)
             else:
@@ -276,6 +297,8 @@ def check_derived(gate, g, claim):
             got = float(kmk_value(c["kmk"])); what = f"kamikura.{c['kmk']}"
         elif "fn" in c:
             got = float(fn_value(c["fn"])); what = f"fieldnotes.{c['fn']}"
+        elif "rk" in c:
+            got = float(rk_value(c["rk"])); what = f"risk.{c['rk']}"
         elif "bld" in c:
             got = bld_counts(g)[c["bld"]]; what = f"buildings: {c['bld']} (re-counted from kansai/data/buildings.js)"
         elif "valley_ve" in c:
@@ -331,6 +354,8 @@ def check_register(gate, reg, inventory, g):
     seen_uncovered = set()
     for it in inventory:
         if it["src"] in FN_VERIFIED:      # every cell recomputed from kansai/data/fieldnotes.js by check_fn
+            continue
+        if it["src"].startswith("rk:"):   # recomputed from kansai/data/risk.js by check_rk_cells
             continue
         t = it["text"]; cov = []
         for c in reg.get("claim", []):
@@ -412,6 +437,25 @@ def jpeg_metadata(path):
             found.append("IPTC")
         i += 2 + n
     return found
+
+
+def check_rk_cells(gate, inventory):
+    """Table cells marked data-rk="<path> [<path> …]" (data-rkf = Python format, default "{:,}") must show exactly
+    what kansai/data/risk.js holds at those paths."""
+    n = bad = 0
+    for it in inventory:
+        if not it["src"].startswith("rk:"):
+            continue
+        paths, fmt = it["src"][3:].split("|", 1)
+        try:
+            shown = fmt.format(*[rk_value(p) for p in paths.split()])
+        except Exception as e:
+            gate.err("risk", f"cell {paths} could not be recomputed: {e}"); bad += 1; continue
+        n += 1
+        if shown != it["text"]:
+            gate.err("risk", f"cell {paths}: the page shows “{it['text']}”, kansai/data/risk.js gives “{shown}”"); bad += 1
+    if n and not bad:
+        gate.ok("risk", f"{n} table cells recomputed from kansai/data/risk.js")
 
 
 def check_fn(gate, rep, pts_ref, mreg):
@@ -782,6 +826,7 @@ def main():
         gate.ok("render", "no JS errors; refs, land fill, cameras, labels, charts, zoom, mini-maps and mobile layout pass")
 
     check_register(gate, reg, rep["inventory"], g)
+    check_rk_cells(gate, rep["inventory"])
     check_points(gate, pts_ref, g, rep["usedPoints"])
     check_kmk(gate, pts_ref, g, html)
     mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}

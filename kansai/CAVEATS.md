@@ -49,13 +49,16 @@ These come from the author's text. No source was found or checked for them yet.
 ## Data and method limitations
 
 ### Data vintage
-- **Tsunami map ≠ tsunami text** — The text quotes Wakayama's 2026 scenario (13 m, 5 min). The map shows the 2016 national dataset (A40, based on the prefecture's 2013 assumption), because the 2026 revision is published only as PDF maps. Extents differ in detail.
-- **River flood layers** — “L2 river flood (max. assumed)” is MLIT A31a (2025 release) for the Kumano. The Ichida flood is A31a's separate maximum-assumed map for the Ichida-gawa itself (市田川, river code 8606010002). Both are river-flood models; neither is a street-level rainfall (pluvial) model.
+- **Tsunami maps digitised from PDFs** — Wakayama and Mie publish their 2026 tsunami maps only as PDF sheets. In Shingū and Kihō the page draws them digitised: registered to GSI building outlines (median residual about 0.4 m for Wakayama's sheets), classified by the legend's colours, gaps under printed lines filled from neighbouring pixels. The digitised Kihō area is 175 ha against Mie's official 198 ha (water under road and rail symbols and the beach seaward of the town boundary are missed). Elsewhere the map shows the 2016 national dataset (A40), based on the prefectures' 2013 and 2015 assumptions.
+- **River flood layers** — The river flood is MLIT A31b (2025), the 10 m flood meshes of every national and prefectural river with a published map, merged by taking the deeper class. The Ichida flood is A31a's separate maximum-assumed map for the Ichida-gawa itself (市田川, river code 8606010002). All are river-flood models; none is a street-level rainfall (pluvial) model.
 
 ### Models
-- **Walking distance to dry ground** — Distances are shortest walks over land on a 10 m grid to any dry patch of at least 1 ha. They are not routes to designated evacuation sites and ignore stairs, fences, bridges closed by the quake, crowding and mobility limits. The 1 m/s conversion to minutes is a planning convention.
+- **Evacuation margins** — Arrival times come from Wakayama's 2026 animation (the water's first touch, frames 10 s apart, registered to GSI photographs within about one 9 m pixel). The animation does not cover Miwasaki, Sano or northern Kihō; there the page gives bounds for arrivals at 6 and 10 minutes. Kihō's extent is Mie's map but its arrival is Wakayama's model of the same water. Walks follow GSI road centre lines and OpenStreetMap paths to the refuge reached first in time; they ignore collapsed buildings, blocked lanes, crowding and the choice of a refuge further away. Floor heights are the city's 2017 list; where none is given, people climb above the 2026 depth class. The 2026 model keeps road and rail embankments standing, which delays the water in central Shingū; the 15-minute row shows what earlier water would mean.
 - **60-minute drive area** — Drive times start at the Shingū Medical Center and use OSM roads with assumed speeds (expressway 70, trunk 45, primary 35, secondary 30, tertiary 25 km/h), no traffic and no closures, rasterised at 250 m. They show reach in normal conditions, not after a landslide or flood.
 - **Landslide exposure of roads** — Road stretches are counted as exposed where they cross an A33 sediment-disaster zone polygon (red or yellow). That shows designated exposure, not the probability of a closure.
+- **Residents per building** — Residents are the 2020 census spread over GSI building footprints by area (15–2,500 m²; sheds and buildings on OSM sites that are not homes take none), fitted so every 250 m cell and every small area keeps its census totals by age. Cells the census suppresses pass their ages to a neighbouring cell. Individual buildings can be wrong; sums over areas hold. The 2025 census found 10% fewer people in Shingū; its small-area tables are not yet published.
+- **Roads under hazard** — A road closes in a scenario where any point on it, every 10 m, lies in the hazard; bridges and tunnels stay open. Roads that stay dry can still be blocked by debris or damage, and flooded roads can be passable at shallow depths: the scenarios bound access, they do not forecast it. Residents attach to the nearest drivable road; the network is OpenStreetMap of 1 October 2026.
+- **2050 projection** — The 2050 figures keep every building's 2020 residents and scale them by the town's projected change for people under and over 75 (IPSS 2023). Real decline will be uneven between districts.
 
 ### Geometry
 - **Ichida-gawa basin outline** — The dashed outline was digitised from MLIT's printed basin map (図-1.2). It covers 5.85 km², 9% more than the official 5.36 km², so the page quotes the official figure.
@@ -69,4 +72,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 7 · author: 1 · corrected: 6 · derived: 259 · method: 30 · verified: 113 · map points: 105
+approximate: 7 · author: 1 · corrected: 6 · derived: 315 · method: 41 · verified: 133 · map points: 105
