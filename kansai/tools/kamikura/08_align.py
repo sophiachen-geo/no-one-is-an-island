@@ -29,7 +29,8 @@ footprint area). Chance = circular shift: the foot's sequence of local direction
 offset of at least 50 m (wrapping round at the ends) and the statistic recomputed, so that the foot's bends meet
 features they did not shape while both keep their own spatial pattern; one-sided p. Pieces of one line or one
 neighbourhood are not independent, and shuffling single pieces (kept as p_perm for the record) makes p far too
-small. As a check, p_100 repeats the shift test with a minimum offset of 100 m. n_units counts the distinct lines
+small. As a check, p_100 repeats the shift test with a minimum offset of 100 m; a run counts as significant on the
+page only when it passes both (robust.significant_both). n_units counts the distinct lines
 (or buildings) among the counted pieces. For the long single lines (channel, banks, legal water) a second measure is
 whether they copy the foot's bends: correlation of their east–west wiggles with the foot's over the stretch where
 they run within 40 m.
@@ -492,6 +493,7 @@ def main():
             runs = [bb] + [x for x in rob_band.get((cls, bb["from"]), []) if x.get("p") is not None]
             bb["robust"] = {"runs": len(runs), "significant": sum(1 for x in runs if x["p"] < 0.05),
                             "significant_100": sum(1 for x in runs if x["p_100"] < 0.05),
+                            "significant_both": sum(1 for x in runs if x["p"] < 0.05 and x["p_100"] < 0.05),
                             "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
     for cls, v in res["classes"].items():
         b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
@@ -499,6 +501,7 @@ def main():
         runs = [b] + [x for x in rob.get(cls, []) if x.get("p") is not None]
         v["robust"] = {"runs": len(runs), "significant": sum(1 for x in runs if x["p"] < 0.05),
                        "significant_100": sum(1 for x in runs if x["p_100"] < 0.05),
+                       "significant_both": sum(1 for x in runs if x["p"] < 0.05 and x["p_100"] < 0.05),
                        "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
     res["sensitivity"] = rob
     json.dump(res, open("align.json", "w"), ensure_ascii=False, indent=1)

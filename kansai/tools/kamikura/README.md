@@ -71,7 +71,8 @@ neighbouring pieces, which are not independent, move together; `p_100` repeats i
 long lines, and uninformative ones for clustered short edges. It is kept as `p_perm` for the record.) `n_units`
 counts the distinct lines behind a result. The test runs six times: the consensus foot, each single definition A–D,
 and the similarity registration of the parcel map; these check that a result does not hang on those choices and are
-not independent samples. A result holds when it is significant in at least 4 of the 6 runs. Classes: channel centre
+not independent samples. A run counts as significant only when p < 0.05 with both minimum offsets (50 m and 100 m);
+a result holds when that is so in at least 4 of the 6 runs. Classes: channel centre
 line and banks, the parcel map's waterway parcels, back boundaries and frontages of numbered parcels, temple and
 shrine property, OSM lanes, steep steps (DEM steps ≥ 1 m at ≥ 45° outside buildings and the channel: walls, cut faces
 or rock), building long axes. Row offsets measure, every 2 m, how far from the foot the numbered parcels end and the

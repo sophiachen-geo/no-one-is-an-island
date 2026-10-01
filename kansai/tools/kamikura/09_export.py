@@ -203,7 +203,8 @@ def ground_data(z, x0, y1, frame):
     beyond = max(ex)
     # beyond 25 m: every band significant in at least 3 of the six runs (either shift), with how many lines carry it
     beyond_hits = [{"class": k, "band": [b["from"], b["to"]], "significant": b["robust"]["significant"],
-                    "significant_100": b["robust"]["significant_100"], "n": b["n_disc"], "units": b["n_units"], "units_follow": b["n_units_follow"]}
+                    "significant_100": b["robust"]["significant_100"], "significant_both": b["robust"]["significant_both"],
+                    "n": b["n_disc"], "units": b["n_units"], "units_follow": b["n_units_follow"]}
                    for k, v in scores.items() for b in v["beyond"] if b.get("robust") and max(b["robust"]["significant"], b["robust"]["significant_100"]) >= 3]
     others = [max(b["robust"]["significant"], b["robust"]["significant_100"]) for k, v in scores.items() for b in v["beyond"]
               if b.get("robust") and max(b["robust"]["significant"], b["robust"]["significant_100"]) < 3]

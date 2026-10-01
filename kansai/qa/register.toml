@@ -1624,76 +1624,48 @@ check = { kmk = "ground.grid.town", fmt = "N {:.0f}° E" }
 
 [[claim]]
 id = "kmk-test-method"
-match = ["lines are cut into pieces of at most 10 m, and a boundary shared by two parcels counts once. Chance comes from sliding the foot’s sequence of directions along the foot by every offset of at least 50 m and recomputing the share each time, so that neighbouring pieces, which are not independent, move together; a minimum offset of 100 m is the check.",
+match = ["lines are cut into pieces of at most 10 m, and a boundary shared by two parcels counts once. Chance comes from sliding the foot’s sequence of directions along the foot by every offset of at least 50 m and recomputing the share each time, so that neighbouring pieces, which are not independent, move together; a run counts only if the result also holds with a minimum offset of 100 m.",
          "Within 25 m, the channel and the lanes bend with the mountain.", "Wherever its local direction differs from the town grid by 10° or more, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square",
-         "Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. Every test is rerun with each of the four foot definitions and with a second registration of the parcel map: six runs, which check that a result does not hang on those choices (they are not independent samples).",
-         "Within 25 m of the foot (steep steps: the 15 m above it), the share of the counted length that follows the foot (dot; buildings weighted by footprint area) against chance (tick: the same features with the foot’s directions slid along it by 50 m or more), and the number of the six runs in which the excess is significant (p < 0.05). Orange: significant in at least 4 of the 6 runs.",
+         "Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. A run counts as significant only if the result also holds when the slide is at least 100 m. Every test is rerun with each of the four foot definitions and with a second registration of the parcel map: six runs, which check that a result does not hang on those choices (they are not independent samples).",
+         "Within 25 m of the foot (steep steps: the 15 m above it), the share of the counted length that follows the foot (dot; buildings weighted by footprint area) against chance (tick: the same features with the foot’s directions slid along it by 50 m or more), and the number of the six runs in which the excess is significant (p < 0.05) with both minimum slides, 50 m and 100 m. Orange: significant in at least 4 of the 6 runs.",
          "Which features follow the mountain foot within 25 m, against chance, with the number of runs in which the result holds"]
 exact = ["0%", "25%", "50%", "75%", "100%", "share that follows the foot", "significant in at least 4 of 6 runs", "chance", "runs significant"]
 status = "method"
-source = "08_align.py: pieces ≤ 10 m (shared parcel boundaries once); local foot direction over ±10 m of the consensus foot; counted only where it differs from the town grid by ≥ 10° (axial, mod 90°); statistic = length-weighted share closer to the foot than to the grid (buildings: footprint area); chance = circular shift of the foot's direction sequence by every offset ≥ 25 profiles (50 m), one-sided p (check: ≥ 50 profiles, 100 m); six runs = consensus foot + each single definition A–D + the similarity registration of the parcel map. The earlier piece-by-piece shuffle (kept as p_perm) treated neighbouring pieces as independent"
+source = "08_align.py: pieces ≤ 10 m (shared parcel boundaries once); local foot direction over ±10 m of the consensus foot; counted only where it differs from the town grid by ≥ 10° (axial, mod 90°); statistic = length-weighted share closer to the foot than to the grid (buildings: footprint area); chance = circular shift of the foot's direction sequence by every offset ≥ 25 profiles (50 m), one-sided p; a run counts as significant only when p < 0.05 with offsets ≥ 25 and ≥ 50 profiles (50 m and 100 m) alike; six runs = consensus foot + each single definition A–D + the similarity registration of the parcel map. The earlier piece-by-piece shuffle (kept as p_perm) treated neighbouring pieces as independent"
 
 [[claim]]
 id = "kmk-score-runs"
 exact = ["6 of 6", "4 of 6", "3 of 6", "0 of 6"]
 status = "derived"
-source = "08_align.py, 0–25 m band (steep steps: the 15 m upslope of the foot): runs with p < 0.05 under the 50 m shift — channel 6, lanes 4, banks 4, back boundaries 3, buildings 3, frontages 0, temple and shrine property 0, waterway parcels 0, steep steps 0 (100 m shift: 6, 4, 3, 4, 3, 0, 0, 0, 0)"
+source = "08_align.py, 0–25 m band (steep steps: the 15 m upslope of the foot): runs with p < 0.05 under both the 50 m and the 100 m shift — channel 6, lanes 4, banks 3, back boundaries 3, buildings 3, frontages 0, temple and shrine property 0, waterway parcels 0, steep steps 0 (50 m alone: 6, 4, 4, 3, 3, 0, 0, 0, 0; 100 m alone: 6, 4, 3, 4, 3, 0, 0, 0, 0)"
 
 [[claim]]
 id = "kmk-score-banks"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 of the six runs"]
 status = "derived"
 source = "GSI water edges (5201/5203), 0–25 m: 37.2% against 17.0% (p = 0.099), significant in 4 of 6 runs (50 m shift) and 3 of 6 (100 m)"
-check = { kmk = "ground.scores.banks.robust.significant", expect = 3.5, tol = 0.5 }
-
-[[claim]]
-id = "kmk-score-banks-100"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
-status = "derived"
-source = "the banks under the 100 m shift"
-check = { kmk = "ground.scores.banks.robust.significant_100", expect = 3.5, tol = 0.5 }
+check = { kmk = "ground.scores.banks.robust.significant_both", fmt = "in only {} of the six runs" }
 
 [[claim]]
 id = "kmk-score-lanes"
 match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
 status = "derived"
 source = "OSM lanes, paths, steps and residential streets, 0–25 m: 50.1% against 25.1% (p = 0.004), 12 lines of which 6 follow; 4 of 6 runs under both shifts"
-check = { kmk = "ground.scores.lanes.robust.significant", fmt = "the lanes in {}." }
-
-[[claim]]
-id = "kmk-score-lanes-100"
-match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
-status = "derived"
-source = "the lanes under the 100 m shift"
-check = { kmk = "ground.scores.lanes.robust.significant_100", fmt = "the lanes in {}." }
-
-[[claim]]
-id = "kmk-score-channel-100"
-match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
-status = "derived"
-source = "the channel under the 100 m shift"
-check = { kmk = "ground.scores.channel.robust.significant_100", fmt = "bends in {} of the 6 runs" }
+check = { kmk = "ground.scores.lanes.robust.significant_both", fmt = "the lanes in {}." }
 
 [[claim]]
 id = "kmk-score-channel"
 match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
 status = "derived"
 source = "channel centre line, 0–25 m: 50.0% against 16.0% by chance (p = 0.023; 100 m shift p = 0.028), significant in all six runs under both shifts"
-check = { kmk = "ground.scores.channel.robust.significant", fmt = "bends in {} of the 6 runs" }
+check = { kmk = "ground.scores.channel.robust.significant_both", fmt = "bends in {} of the 6 runs" }
 
 [[claim]]
 id = "kmk-score-bld"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 of the six runs"]
 status = "derived"
 source = "GSI building long axes weighted by footprint area, 0–25 m: 48.7% against 18.1% (p = 0.011), 33 buildings of which 17 follow; 3 of 6 runs under both shifts"
-check = { kmk = "ground.scores.buildings.robust.significant", expect = 3.5, tol = 0.5 }
-
-[[claim]]
-id = "kmk-score-bld-100"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
-status = "derived"
-source = "the buildings under the 100 m shift"
-check = { kmk = "ground.scores.buildings.robust.significant_100", expect = 3.5, tol = 0.5 }
+check = { kmk = "ground.scores.buildings.robust.significant_both", fmt = "in only {} of the six runs" }
 
 [[claim]]
 id = "kmk-wiggle"
@@ -1725,17 +1697,10 @@ check = { kmk = "ground.wiggle.channel.amp_ratio", expect = 0.5, tol = 0.1 }
 
 [[claim]]
 id = "kmk-score-backs"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 of the six runs"]
 status = "derived"
 source = "back edges of numbered parcels (the edges beyond 60% of the depth from the street frontage, each boundary once), 0–25 m: 83.9% against 40.7% (p = 0.042), 10 pieces from 9 lines of which 8 follow; 3 of 6 runs (50 m shift), 4 of 6 (100 m). The earlier piece shuffle gave 0 of 6: it kept each piece's neighbours' directions and so could not tell"
-check = { kmk = "ground.scores.backs.robust.significant", expect = 3.5, tol = 0.5 }
-
-[[claim]]
-id = "kmk-score-backs-100"
-match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
-status = "derived"
-source = "the back boundaries under the 100 m shift"
-check = { kmk = "ground.scores.backs.robust.significant_100", expect = 3.5, tol = 0.5 }
+check = { kmk = "ground.scores.backs.robust.significant_both", fmt = "in only {} of the six runs" }
 
 [[claim]]
 id = "kmk-score-backs-lines"
@@ -1763,7 +1728,7 @@ id = "kmk-beyond"
 match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
 status = "derived"
 source = "every class in the 25–50, 50–100 and 100–200 m bands: the only one significant in more than 2 runs under either shift is frontages 50–100 m out (5 of 6 under both; 37.7% against 15.6%), 12 pieces from 9 lines, of which the 2 that follow lie together at y −252,137 to −252,146, 60–64 m from the foot, north of the study area (its north edge y −252,203)"
-check = { kmk = "ground.beyond_hits.0.significant", fmt = "({} of 6 runs)" }
+check = { kmk = "ground.beyond_hits.0.significant_both", fmt = "({} of 6 runs)" }
 
 [[claim]]
 id = "kmk-beyond-lines"
