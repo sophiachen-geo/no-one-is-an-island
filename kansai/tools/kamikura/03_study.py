@@ -421,7 +421,7 @@ def main():
              "stream_min_to_break": round(float(np.min(sd)), 1) if sd else None,
              "robust_in": [round(b["g"].area) for b in bin_ if b["code"] in (3102, 3103, 3112)],
              "robust_in_school": sum(1 for b in bin_ if b["code"] in (3102, 3103, 3112) and school.contains(b["g"].centroid)),
-             "riz_in_mountain_pct": round(100 * RIZ.intersection(poly).intersection(unary_union([Polygon(q) for q in []]) if False else RIZ.intersection(poly)).area / area, 1),
+             # (whether the residential-inducement area reaches upslope of the foot is measured in 09_export.py: ground.riz)
              "ukishima_bed": round(float(min(h for d, h, c in zip(dd, zz, cls) if c == "water" and d > d_entr + 40)), 1),
              "mountain_run_m": round(max(b for a, b, c in runs if c == "mountain")),
              "channel_cut_m": round(float(np.median(z[inP & ~mountain & ~np.isnan(z)])) - float(np.nanmin(zin)), 1)}

@@ -13,19 +13,26 @@ Feature classes (all in JGD2011 / CS VI metres)
   channel     centre line of the drainage channel (GSI water area, step 3)
   banks       its banks: GSI water edges (5201/5203)
   legal_water the cadastre's waterway parcels (水), registered in step 7
-  backs       back boundaries of private parcels: the edges farthest from each parcel's street frontage
+  backs       back boundaries of numbered parcels (kind "private" in parcels.json: a lot with a 地番, whoever owns it):
+              the edges farthest from each parcel's street frontage
   temple      the property of 妙心寺 and 宗応寺 (the parcels under each temple) and the shrine's lower precinct (OSM)
   lanes       OSM lanes, paths, steps and residential streets (not the national or prefectural roads)
   walls       retaining walls and cut faces found in DEM1A: ground stepping ≥ 1 m at ≥ 45° over 1 m, outside
               buildings (GSI outlines + 1.5 m) and the channel (+ 2 m), at least 4 m long
   buildings   long axis of each GSI building (minimum rotated rectangle)
 
-Test (as for the buildings in step 3): every feature is cut into pieces of at most 10 m. A piece is counted only
-where the local foot direction and the grid differ by at least 10° (elsewhere the two cannot be told apart); it
+Test: every feature is cut into pieces of at most 10 m (shared parcel boundaries counted once). A piece is counted
+only where the local foot direction and the grid differ by at least 10° (elsewhere the two cannot be told apart); it
 "follows the foot" when its direction is closer to the foot's than to the grid's (axial, period 90°: parallel or
-square to either). Chance = the same pieces with foot directions shuffled within each distance band (5,000 times);
-one-sided p. For the long single lines (channel, banks, legal water) the decisive measure is whether they copy the
-foot's bends: correlation of their east–west wiggles with the foot's over the stretch where they run within 40 m.
+square to either). Statistic: the length-weighted share of such pieces that follow the foot (buildings: weighted by
+footprint area). Chance = circular shift: the foot's sequence of local directions is slid along the foot by every
+offset of at least 50 m (wrapping round at the ends) and the statistic recomputed, so that the foot's bends meet
+features they did not shape while both keep their own spatial pattern; one-sided p. Pieces of one line or one
+neighbourhood are not independent, and shuffling single pieces (kept as p_perm for the record) makes p far too
+small. As a check, p_100 repeats the shift test with a minimum offset of 100 m. n_units counts the distinct lines
+(or buildings) among the counted pieces. For the long single lines (channel, banks, legal water) a second measure is
+whether they copy the foot's bends: correlation of their east–west wiggles with the foot's over the stretch where
+they run within 40 m.
 """
 import json, math, os, sys
 import numpy as np
@@ -44,9 +51,14 @@ LL2P = Transformer.from_crs("EPSG:4326", "EPSG:6674", always_xy=True)
 BANDS = [(0, 25), (25, 50), (50, 100), (100, 200)]
 WALL_BANDS = [(-15, 0)] + BANDS
 TEMPLES = {"妙心寺": (135.984329, 33.724781), "宗応寺": (135.984268, 33.725773)}
+ANCHOR_PARCEL = ("千穂", "１丁目", "715-3")                     # the school's parcel, step 7's anchor
+
+
+def is_school(p): return (p["oaza"], p["chome"], p["chiban"]) == ANCHOR_PARCEL
 SHRINE_WAYS = [500803106, 500803107]
 LANE_KINDS = {"residential", "unclassified", "service", "living_street", "path", "footway", "steps", "pedestrian", "track"}
 PIECE = 10.0
+SHIFT_MIN, SHIFT_CHECK = 25, 50                                 # profiles (2 m apart): 50 m, and 100 m as a check
 rng = np.random.default_rng(6674)
 
 
@@ -93,8 +105,8 @@ class Foot:
         return d, self.dir[i], inside
 
 
-def pieces(line, maxlen=PIECE):
-    """Split a line into pieces ≤ maxlen; each piece → (midpoint, direction, length)."""
+def pieces(line, maxlen=PIECE, unit=0):
+    """Split a line into pieces ≤ maxlen; each piece → (midpoint x, y, direction, length, unit: the source line)."""
     out = []
     for L in getattr(line, "geoms", [line]):
         if L.geom_type != "LineString" or L.length < 0.5: continue
@@ -107,7 +119,7 @@ def pieces(line, maxlen=PIECE):
             c = np.asarray(sub.coords); dxy = np.diff(c, axis=0); ln = np.hypot(dxy[:, 0], dxy[:, 1]); ok = ln > 1e-6
             if not ok.any(): continue
             th, _ = axial_mean([bearing(dx, dy) for dx, dy in dxy[ok]], ln[ok], 180)
-            out.append((m.x, m.y, th, float(ln[ok].sum())))
+            out.append((m.x, m.y, th, float(ln[ok].sum()), unit))
     return out
 
 
@@ -117,23 +129,34 @@ def substring(L, a, b):
 
 
 def classify(rows, foot, grid, band):
-    """rows: (x, y, θ, w, unit). Returns the share following the foot among discriminating pieces + chance."""
+    """rows: (x, y, θ, w, unit). Share following the foot among discriminating pieces, against the circular-shift null."""
     if not rows: return None
-    A = np.array([(r[0], r[1], r[2], r[3]) for r in rows])
-    d, fdir, inside = foot.at(A[:, :2])
+    A = np.array([(r[0], r[1], r[2], r[3]) for r in rows]); unit = np.array([r[4] for r in rows])
+    d, fdir, inside = foot.at(A[:, :2]); _, idx = foot.tree.query(A[:, :2])
     sel = inside & (d >= band[0]) & (d < band[1])
+    th, w = A[:, 2], A[:, 3]
+    def stat(fd):
+        disc = sel & (adiff(fd, grid) >= 10)
+        if disc.sum() < 3: return np.nan
+        return float((w[disc] * (adiff(th[disc], fd[disc]) < adiff(th[disc], grid))).sum() / w[disc].sum())
     disc = sel & (adiff(fdir, grid) >= 10)
-    tot_len = float(A[sel, 3].sum())
+    tot_len = float(w[sel].sum())
     if disc.sum() < 3: return {"from": band[0], "to": band[1], "length_m": round(tot_len), "n_disc": int(disc.sum())}
-    th, fd, w = A[disc, 2], fdir[disc], A[disc, 3]
-    obs_foot = float((w * (adiff(th, fd) < adiff(th, grid))).sum() / w.sum())
-    obs_al_foot = float((w * (adiff(th, fd) <= 10)).sum() / w.sum())
-    obs_al_grid = float((w * (adiff(th, grid) <= 10)).sum() / w.sum())
-    sims = np.array([(w * (adiff(th, p) < adiff(th, grid))).sum() / w.sum() for p in (rng.permutation(fd) for _ in range(5000))])
-    return {"from": band[0], "to": band[1], "length_m": round(tot_len), "n_disc": int(disc.sum()), "disc_len_m": round(float(w.sum())),
-            "follow_foot_pct": round(100 * obs_foot, 1), "chance_pct": round(100 * float(sims.mean()), 1),
-            "p": round(float((np.sum(sims >= obs_foot - 1e-12) + 1) / (len(sims) + 1)), 4),
-            "within10_foot_pct": round(100 * obs_al_foot, 1), "within10_grid_pct": round(100 * obs_al_grid, 1)}
+    fol = disc & (adiff(th, fdir) < adiff(th, grid))
+    obs = stat(fdir); N = len(foot.dir)
+    def shifted(kmin):
+        T = np.array([stat(foot.dir[(idx + k) % N]) for k in range(kmin, N - kmin + 1)]); return T[~np.isnan(T)]
+    def pval(T): return round(float((np.sum(T >= obs - 1e-12) + 1) / (len(T) + 1)), 4)
+    T, T100 = shifted(SHIFT_MIN), shifted(SHIFT_CHECK)
+    # for the record: the earlier null, foot directions shuffled among the pieces (ignores that pieces cluster)
+    fd, wd, thd = fdir[disc], w[disc], th[disc]
+    perm = np.array([(wd * (adiff(thd, q) < adiff(thd, grid))).sum() / wd.sum() for q in (rng.permutation(fd) for _ in range(2000))])
+    return {"from": band[0], "to": band[1], "length_m": round(tot_len), "n_disc": int(disc.sum()), "disc_len_m": round(float(wd.sum())),
+            "n_units": int(len(set(unit[disc]))), "n_units_follow": int(len(set(unit[fol]))),
+            "follow_foot_pct": round(100 * obs, 1), "chance_pct": round(100 * float(T.mean()), 1), "p": pval(T), "n_shifts": int(len(T)),
+            "p_100": pval(T100), "p_perm": round(float((np.sum(perm >= obs - 1e-12) + 1) / (len(perm) + 1)), 4),
+            "within10_foot_pct": round(100 * float((wd * (adiff(thd, fd) <= 10)).sum() / wd.sum()), 1),
+            "within10_grid_pct": round(100 * float((wd * (adiff(thd, grid) <= 10)).sum() / wd.sum()), 1)}
 
 
 def wiggle(line, foot, maxd=40.0, step=2.0):
@@ -196,13 +219,17 @@ def summarise_offsets(rows):
 def channel_courses(st, parcels, key):
     """Today's channel against the cadastre, in 4 m pieces: the longest unbroken run of pieces bearing 25–65° is the
     diagonal reach that crosses from the grid to the foot; north and south of it are the other two. For each reach
-    the share of length inside road/waterway parcels, inside private parcels, and within 3 m of a waterway parcel."""
+    the share of length inside the unnumbered road and waterway strips (道, 水, 長狭物), inside numbered parcels (地番:
+    the drawing records lots, not owners) and more than 3 m inside them (beyond the registration's error), inside the
+    school's parcel (715-3), and within 3 m of a waterway parcel."""
     ch = LineString(st["ichida"])
     def U(kinds): return unary_union([Polygon(p[key][0]).buffer(0) for p in parcels if p["kind"] in kinds and p[key]])
-    pub, water, priv = U(("road", "water", "strip")), U(("water",)), U(("private",))
+    pub, water = U(("road", "water", "strip")), U(("water",))
+    num = [Polygon(p[key][0]).buffer(0) for p in parcels if p["kind"] == "private" and p[key]]
+    school = unary_union([Polygon(p[key][0]).buffer(0) for p in parcels if is_school(p) and p[key]])
     cover = U(("private", "road", "water", "strip", "other"))
     # measure on the line itself: cut it at the first and last diagonal piece
-    P = [(x, y, th, w) for x, y, th, w in pieces(ch.intersection(cover.buffer(2)), 4.0)]
+    P = [(x, y, th, w) for x, y, th, w, _ in pieces(ch.intersection(cover.buffer(2)), 4.0)]
     flag = [25 <= q[2] <= 65 for q in P]
     out = {}
     runs, start = [], None                                     # the longest unbroken diagonal run is the crossing reach
@@ -216,15 +243,21 @@ def channel_courses(st, parcels, key):
         L_ = sum(q[3] for q in ps)
         if not L_: continue
         pts = [Point(q[0], q[1]) for q in ps]; w = np.array([q[3] for q in ps])
-        def share(g, buf=0.0):
-            gb = g.buffer(buf) if buf else g
-            return round(100 * float(sum(wi for wi, pt in zip(w, pts) if gb.contains(pt)) / L_), 1)
-        out[k] = {"length_m": round(L_), "public_pct": share(pub), "private_pct": share(priv), "near_water_pct": share(water, 3.0)}
+        def share(test):
+            return round(100 * float(sum(wi for wi, pt in zip(w, pts) if test(pt)) / L_), 1)
+        def depth(pt):                                      # how far inside the numbered parcel that holds it
+            return next((g.exterior.distance(pt) for g in num if g.contains(pt)), None)
+        wb = water.buffer(3.0)
+        out[k] = {"length_m": round(L_), "public_pct": share(pub.contains),
+                  "numbered_pct": share(lambda pt: depth(pt) is not None),
+                  "numbered_deep_pct": share(lambda pt: (depth(pt) or 0) > 3.0),
+                  "school_pct": share(school.contains), "school_deep_m": round(max([school.exterior.distance(pt) for pt in pts if school.contains(pt)], default=0.0), 1),
+                  "near_water_pct": share(wb.contains)}
     return out
 
 
 def back_edges(parcels, foot):
-    """Back boundaries: for each private parcel with a street frontage — an edge facing a road or waterway parcel
+    """Back boundaries: for each numbered parcel with a street frontage — an edge facing a road or waterway parcel
     (道, 水, 長狭物; the cadastre maps them as parcels of their own) — the edges whose midpoints lie beyond 60 % of
     the parcel's depth measured from that frontage. Edges on the sheet's outer limit (the mountain side, where the
     drawings end) count as backs, never as frontage."""
@@ -250,7 +283,14 @@ def back_edges(parcels, foot):
         for e in other:
             m = e.interpolate(0.5, normalized=True)
             if m.distance(f) >= 0.6 * depth and e.length >= 2.0: out.append(e)
-    return out, fronts
+    # a boundary shared by two parcels (back to back, or one's back the other's side) is one line on the ground
+    def dedupe(E):
+        seen, keep = set(), []
+        for e in E:
+            k = tuple(sorted(tuple(round(v, 1) for v in c) for c in e.coords))
+            if k not in seen: seen.add(k); keep.append(e)
+        return keep
+    return dedupe(out), dedupe(fronts)
 
 
 def dem_walls(z, x0, y1, W, H, exclude, foot, ys):
@@ -281,7 +321,7 @@ def dem_walls(z, x0, y1, W, H, exclude, foot, ys):
             if sel.sum() < 3: continue
             Q = P[sel]; mq = Q.mean(0); _, _, v2 = np.linalg.svd(Q - mq, full_matrices=False)
             th = bearing(v2[0][0], v2[0][1])
-            walls.append({"x": float(mq[0]), "y": float(mq[1]), "th": th, "len": float(sel.sum()), "h": round(h, 2),
+            walls.append({"x": float(mq[0]), "y": float(mq[1]), "th": th, "len": float(sel.sum()), "h": round(h, 2), "unit": int(reg.label),
                           "line": [[round(float(Q[0][0]), 2), round(float(Q[0][1]), 2)], [round(float(Q[-1][0]), 2), round(float(Q[-1][1]), 2)]]})
     return walls
 
@@ -311,7 +351,7 @@ def analyse(sim=False, foot_def="consensus", aux=True):
     segs = []
     for c, l in L["road_edge"]:
         if c != 2201: continue
-        for x, y, th, w in pieces(l.intersection(box(x0, ys[0] - 300, x0 + W, ys[1] + 300)), 10):
+        for x, y, th, w, _ in pieces(l.intersection(box(x0, ys[0] - 300, x0 + W, ys[1] + 300)), 10):
             d, _, _ = foot.at([(x, y)])
             if d[0] > 100: segs.append((th, w))
     grid, gridR = axial_mean([s[0] for s in segs], [s[1] for s in segs], 90)
@@ -345,12 +385,12 @@ def analyse(sim=False, foot_def="consensus", aux=True):
         cand = [c for c in priv if c[1].contains(q)]
         if not cand: temple_parcels[name] = None; continue
         c = cand[0]
-        # how firmly the point sits in it: distance to the parcel's edge, and to the nearest other private parcel
+        # how firmly the point sits in it: distance to the parcel's edge, and to the nearest other numbered parcel
         edge = round(c[1].exterior.distance(q), 1)
         other = round(min(g.distance(q) for pp, g in priv if g is not c[1]), 1)
         rec = {"chiban": c[0]["chiban"], "area_m2": round(c[1].area), "edge_m": edge, "next_private_m": other}
         # a point inside the 1 ha school parcel, or too close to an edge to tell, identifies nothing: leave it out
-        rec["used"] = c[0]["chiban"] != "715-3" and edge >= 2.0
+        rec["used"] = not is_school(c[0]) and edge >= 2.0
         temple_parcels[name] = rec
         if rec["used"]: feats["temple"].append(LineString(c[1].exterior.coords))
     osm = json.load(open("osm.json"))["elements"]
@@ -385,15 +425,15 @@ def analyse(sim=False, foot_def="consensus", aux=True):
             r = np.asarray(p.minimum_rotated_rectangle.exterior.coords)
             e1, e2 = r[1] - r[0], r[2] - r[1]
             e = e1 if np.hypot(*e1) >= np.hypot(*e2) else e2
-            m = p.centroid; brows.append((m.x, m.y, bearing(e[0], e[1]), p.area))
+            m = p.centroid; brows.append((m.x, m.y, bearing(e[0], e[1]), p.area, len(brows)))
 
     res = {"grid_deg": round(grid, 1), "grid_R": round(gridR, 2), "regional_front_deg": round(regional, 1),
            "near_front_deg": round(near_front, 1), "classes": {}}
     for name in ("channel", "banks", "legal_water", "backs", "fronts", "temple", "lanes"):
-        rows = [p for g in feats[name] for p in pieces(g)]
+        rows = [p for u, g in enumerate(feats[name]) for p in pieces(g, unit=u)]
         res["classes"][name] = {"pieces": len(rows), "length_m": round(sum(r[3] for r in rows)),
                                 "bands": [b for b in (classify(rows, foot, grid, bd) for bd in BANDS) if b]}
-    wrows = [(w["x"], w["y"], w["th"], w["len"]) for w in walls]
+    wrows = [(w["x"], w["y"], w["th"], w["len"], w["unit"]) for w in walls]
     res["classes"]["walls"] = {"pieces": len(wrows), "length_m": round(sum(r[3] for r in wrows)),
                                "bands": [b for b in (classify(wrows, foot, grid, bd) for bd in WALL_BANDS) if b]}
     res["classes"]["buildings"] = {"pieces": len(brows), "bands": [b for b in (classify(brows, foot, grid, bd) for bd in BANDS) if b]}
@@ -438,7 +478,7 @@ def main():
         r = analyse(aux=False, **kw)
         for cls, v in r["classes"].items():
             b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
-            rob.setdefault(cls, []).append({"variant": name, **({k: b.get(k) for k in ("follow_foot_pct", "chance_pct", "p", "n_disc")} if b else {})})
+            rob.setdefault(cls, []).append({"variant": name, **({k: b.get(k) for k in ("follow_foot_pct", "chance_pct", "p", "p_100", "n_disc", "n_units")} if b else {})})
             for bb in v["bands"]:
                 rob_band.setdefault((cls, bb["from"]), []).append(bb)
         if kw.get("sim"): res["courses_sim"] = r["courses"]
@@ -451,12 +491,14 @@ def main():
             if bb.get("p") is None: continue
             runs = [bb] + [x for x in rob_band.get((cls, bb["from"]), []) if x.get("p") is not None]
             bb["robust"] = {"runs": len(runs), "significant": sum(1 for x in runs if x["p"] < 0.05),
+                            "significant_100": sum(1 for x in runs if x["p_100"] < 0.05),
                             "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
     for cls, v in res["classes"].items():
         b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
         if not b or b.get("p") is None: continue
         runs = [b] + [x for x in rob.get(cls, []) if x.get("p") is not None]
         v["robust"] = {"runs": len(runs), "significant": sum(1 for x in runs if x["p"] < 0.05),
+                       "significant_100": sum(1 for x in runs if x["p_100"] < 0.05),
                        "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
     res["sensitivity"] = rob
     json.dump(res, open("align.json", "w"), ensure_ascii=False, indent=1)

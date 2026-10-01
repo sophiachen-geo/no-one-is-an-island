@@ -13,7 +13,7 @@ python3 $T/03_study.py         # study polygon, transect, statistics (→ study.
 python3 $T/05_terrain_plus.py  # which DEM the ground can bear (coverage, benchmarks, DEM5A), local relief, curvature
 python3 $T/06_foot.py          # the mountain foot, four ways, on cross-profiles every 2 m (→ foot.json)
 python3 $T/07_parcels.py       # the MoJ parcel map (任意座標系) registered to GSI road edges (→ parcels.json)
-python3 $T/08_align.py         # what follows the foot: eight feature classes, six runs (→ align.json, walls.json, …)
+python3 $T/08_align.py         # what follows the foot: nine feature classes, six runs (→ align.json, walls.json, …)
 python3 $T/09_export.py /path/to/no-one-is-an-island/kansai   # page data, ground layers, GeoJSON/KML
 python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-checks every number and label
 ```
@@ -43,26 +43,40 @@ Break of slope: the edge of ground at least 1 m above the plain (median of near-
   smoothed with σ 2.5 m; negative profile curvature = concave (a foot).
 - The foot is found on 310 cross-profiles (every 2 m, perpendicular to the front smoothed over 41 m, 40 m upslope to
   60 m out) as (A) the mask edge, (B) the first point 1 m above the profile's own plain, (C) the most concave point
-  between the plain and 10 m above it, (D) the knee of a two-segment fit. The consensus is their median.
+  between the plain and 10 m above it, (D) the knee of a two-segment fit. The consensus is their median. A and B both
+  use a 1 m threshold (A over the whole frame's plain, 6.05 m; B on each profile) and agree most closely.
+- Steepness at the foot is the steepest 1 m step in the 7 m window ending 1 m past the foot; the same statistic 9–16 m
+  up the face is as steep or steeper (≥ 45° on 66% of profiles against 46%), so it shows the face running steep almost
+  to the foot, not a separate cut.
 
 ## The parcel map (07)
 
 The sheet 「新宮・千穂一丁目・神倉一丁目他」 is in arbitrary coordinates, digitised from cadastral drawings. Its roads
-(道) and waterways (水) are parcels. The fragment holding 千穂一丁目 is placed by matching the school parcel
+(道) and waterways (水) are unnumbered parcels of their own; every other parcel is a numbered lot (地番), whoever owns it
+(the code's kind "private" means numbered; the page and the download say "numbered"). The fragment holding 千穂一丁目
+is placed by matching the school parcel
 (715-3) to the school's OSM outline, then by fitting its road parcels to GSI road edges (truncated chamfer distance;
 similarity, then affine). The drawing must be enlarged 13–16% (縄伸び) and turned about 14°; road parcels then sit a
 median 1.2 m from the road edges. Parcel numbers are not published in the download.
 
 ## What follows the foot (08)
 
-Each feature is cut into pieces of at most 10 m. Only pieces where the local foot direction (±10 m) and the town
-grid (GSI road edges > 100 m from the foot, axial mod 90°) differ by ≥ 10° can discriminate. Each counts for the
-reference its direction is closer to. Chance = 5,000 shuffles of foot directions within each distance band. The
-test runs six times: the consensus foot, each single definition A–D, and the similarity registration of the parcel
-map. Classes: channel centre line and banks, the parcel map's waterway parcels, back boundaries and frontages of
-private parcels, temple and shrine property, OSM lanes, walls (DEM steps ≥ 1 m at ≥ 45° outside buildings and the
-channel), building long axes. Row offsets measure, every 2 m, how far from the foot private land ends and the
-nearest lane, waterway parcel and channel lie. `channel_courses` reads today's channel against the parcel map.
+Each feature is cut into pieces of at most 10 m; a boundary shared by two parcels counts once. Only pieces where the
+local foot direction (±10 m) and the town grid (GSI road edges > 100 m from the foot, axial mod 90°) differ by ≥ 10°
+can discriminate. Each counts for the reference its direction is closer to (statistic: the length-weighted share
+that follows the foot; buildings by footprint area). Chance is a circular shift: the foot's sequence of local
+directions is slid along the foot by every offset of at least 50 m (25 profiles) and the share recomputed, so that
+neighbouring pieces, which are not independent, move together; `p_100` repeats it with offsets of at least 100 m.
+(The first version shuffled single pieces; that treats neighbours as independent and gave p-values far too small for
+long lines, and uninformative ones for clustered short edges. It is kept as `p_perm` for the record.) `n_units`
+counts the distinct lines behind a result. The test runs six times: the consensus foot, each single definition A–D,
+and the similarity registration of the parcel map; these check that a result does not hang on those choices and are
+not independent samples. A result holds when it is significant in at least 4 of the 6 runs. Classes: channel centre
+line and banks, the parcel map's waterway parcels, back boundaries and frontages of numbered parcels, temple and
+shrine property, OSM lanes, steep steps (DEM steps ≥ 1 m at ≥ 45° outside buildings and the channel: walls, cut faces
+or rock), building long axes. Row offsets measure, every 2 m, how far from the foot the numbered parcels end and the
+nearest lane, waterway parcel and channel lie. `channel_courses` reads today's channel against the parcel map:
+shares in the unnumbered strips, in numbered parcels and more than 3 m inside them, in the school's parcel.
 
 ## Choices worth knowing
 

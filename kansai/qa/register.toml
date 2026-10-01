@@ -1010,9 +1010,16 @@ url = "https://maps.gsi.go.jp/development/ichiran.html"
 [[claim]]
 id = "kmk-rules"
 match = ["West: 25 m upslope of the break of slope", "slope break + 25 m", "Across the 25 m strip inside the west edge",
-         "at least 1 m above the plain and steeper than 12° (or 3 m above it), connected to the slopes above 40 m"]
+         "at least 1 m above the plain of the whole frame (6.05 m, the median of near-flat ground) and steeper than 12° (or 3 m above it), connected to the slopes above 40 m"]
 status = "method"
-source = "kansai/tools/kamikura/02_terrain.py: break of slope = edge of ground ≥ 1 m above the plain and steeper than 12° (or ≥ 3 m above it), connected to the slopes above 40 m, on GSI DEM1A; west edge = the line 25 m (horizontal) inside it"
+source = "kansai/tools/kamikura/02_terrain.py: break of slope = edge of ground ≥ 1 m above the plain (median of near-flat ground over the whole 1.3 × 0.9 km frame) and steeper than 12° (or ≥ 3 m above it), connected to the slopes above 40 m, on GSI DEM1A; west edge = the line 25 m (horizontal) inside it"
+
+[[claim]]
+id = "kmk-plain-frame"
+match = ["the plain of the whole frame (6.05 m, the median of near-flat ground)"]
+status = "derived"
+source = "terrain.json plain_m (02_terrain.py): median ground height of near-flat cells over the whole frame; the study area's own plain (stats.z_plain_med, 6.6 m) is the median of its non-slope part"
+check = { kmk = "ground.plain_frame_m", fmt = "({:.2f} m" }
 
 [[claim]]
 id = "kmk-area"
@@ -1137,8 +1144,15 @@ check = { kmk = "stats.ts_pct", expect = 0.0, tol = 0.0 }
 id = "kmk-riz"
 match = ["covers 32.9% and stops short of the slope"]
 status = "derived"
-source = "share of the polygon inside the 居住誘導区域 (A55, FY2024); no slope cell inside it (03_study.py)"
+source = "share of the polygon inside the 居住誘導区域 (A55, FY2024)"
 check = { kmk = "stats.riz_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-riz-slope"
+match = ["covers 32.9% and stops short of the slope"]
+status = "derived"
+source = "09_export.py: of the study area's 1 m cells upslope of the consensus foot (6,769), none lies in the 居住誘導区域; at its closest the zone begins 44.2 m below the foot"
+check = { kmk = "ground.riz.cells_upslope", expect = 0, tol = 0 }
 
 [[claim]]
 id = "kmk-strip"
@@ -1192,10 +1206,11 @@ url = "https://kumanohayatama.jp/gotobiki/"
 [[claim]]
 id = "kmk-cadastre"
 match = ["The Ministry of Justice map for 千穂 and 神倉 (登記所備付地図データ, sheet 「新宮・千穂一丁目・神倉一丁目他」) is a digitised cadastral drawing in arbitrary coordinates (任意座標系).",
-         "The Ministry of Justice parcel map here is a digitised cadastral drawing in local coordinates", "Its roads (道) and waterways (水) are parcels of their own",
+         "The Ministry of Justice parcel map here is a digitised cadastral drawing in arbitrary coordinates (任意座標系)",
+         "Its roads (道) and waterways (水) are unnumbered strips of their own; every other parcel carries a lot number (地番), whoever owns it.",
          "cadastral map data, Shingū (Ministry of Justice, 2026 edition)"]
 status = "verified"
-source = "登記所備付地図データ 新宮市 (2026 edition, output 3 Feb 2026): file 「新宮・千穂一丁目・神倉一丁目他」 and its neighbours are 任意座標系, 座標値種別 図上測量 (digitised 旧土地台帳附属地図); the nearest 公共座標 parcels lie about 300 m east"
+source = "登記所備付地図データ 新宮市 (2026 edition, output 3 Feb 2026): file 「新宮・千穂一丁目・神倉一丁目他」 and its neighbours are 任意座標系, 座標値種別 図上測量 (digitised 旧土地台帳附属地図); the nearest 公共座標 parcels lie about 300 m east. Roads and waterways carry 地番 「道-…」「水-…」 or 長狭物; every other parcel has a numeric 地番. The 地図XML records no owners: the school's parcel 715-3 is numbered like any other"
 url = "https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430"
 
 [[claim]]
@@ -1207,9 +1222,10 @@ check = { kmk = "stats.precinct_m2", fmt = "{:,} m²" }
 
 [[claim]]
 id = "kmk-myoshinji"
-match = ["妙心寺, once the 神倉本願 temple that led the Kumano bikuni, the nuns who raised funds for the shrine"]
+match = ["妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the shrine",
+         "Myōshin-ji, thought to have become the head temple of the 神倉本願"]
 status = "verified"
-source = "日本歴史地名大系 (Kotobank): 「神倉山登り口にある。…勧進比丘尼を統率する神倉本願本寺になったと考えられる」; 熊野三山協議会: 「神倉山を所管した妙心寺などの本願寺院」"
+source = "熊野三山協議会: 「神倉山を所管した妙心寺などの本願寺院」; 日本歴史地名大系 (Kotobank): 「神倉山登り口にある。…勧進比丘尼を統率する神倉本願本寺になったと考えられる」 (hence 'thought to')"
 url = "https://kotobank.jp/word/%E5%A6%99%E5%BF%83%E5%AF%BA-139779"
 
 [[claim]]
@@ -1305,21 +1321,21 @@ check = { kmk = "stats.mountain_run_m", fmt = "first {} m" }
 
 [[claim]]
 id = "kmk-town-min"
-match = ["The town part lies between 3.7 m and 8.6 m"]
+match = ["Outside the channels, the town part lies between 3.7 m and 8.6 m"]
 status = "derived"
-source = "lowest ground on the town part of the transect, channels excluded (GSI DEM1A)"
+source = "lowest ground on the town part of the transect (from 40 m past the entrance), channels excluded (GSI DEM1A)"
 check = { kmk = "stats.town_min", fmt = "between {:.1f} m" }
 
 [[claim]]
 id = "kmk-town-max"
-match = ["The town part lies between 3.7 m and 8.6 m"]
+match = ["Outside the channels, the town part lies between 3.7 m and 8.6 m"]
 status = "derived"
 source = "highest ground on the town part of the transect"
 check = { kmk = "stats.town_max", fmt = "and {:.1f} m" }
 
 [[claim]]
 id = "kmk-ukishima"
-match = ["dipping to 2.1 m at the Ukishima-gawa channel", "Ukishima-gawa · 2.1 m"]
+match = ["it dips to 2.1 m in the Ukishima-gawa channel", "Ukishima-gawa · 2.1 m"]
 status = "derived"
 source = "lowest ground where the transect crosses 浮島川 (GSI DEM1A)"
 check = { kmk = "stats.ukishima_bed", fmt = "{:.1f} m" }
@@ -1382,23 +1398,23 @@ source = "05_terrain_plus.py on GSI DEM1A: local relief = ground minus its Gauss
 
 [[claim]]
 id = "kmk-foot-up"
-match = ["40° above the foot, 1° below it", "above it the ground rises at 40°, below it at 1°"]
+match = ["40° above the foot, 1° below it", "above it the ground rises at a median 40°, below it at 1°"]
 status = "derived"
 source = "median slopes of the two-segment fit (definition D) over the 310 cross-profiles: 39.8° upslope, 0.8° downslope (06_foot.py)"
 check = { kmk = "ground.foot.up_deg", fmt = "{:.0f}°" }
 
 [[claim]]
 id = "kmk-foot-dn"
-match = ["40° above the foot, 1° below it", "above it the ground rises at 40°, below it at 1°"]
+match = ["40° above the foot, 1° below it", "above it the ground rises at a median 40°, below it at 1°"]
 status = "derived"
 source = "median downslope gradient of the two-segment fit"
 check = { kmk = "ground.foot.dn_deg", fmt = "{:.0f}° below" }
 
 [[claim]]
 id = "kmk-walls-town"
-match = ["In the town the bare-earth model finds no step of 1 m or more outside the buildings and the channel: the walls and cut faces all stand on the foot itself"]
+match = ["In the town the bare-earth model finds no step of 1 m or more outside the buildings and the channel; every such step lies on the mountain face above the foot"]
 status = "derived"
-source = "08_align.py: cells of GSI DEM1A stepping ≥ 1 m at ≥ 45° over 1 m (3×3 range ≥ 1 m), outside GSI building outlines (+1.5 m) and the channel (+2 m), from 15 m upslope of the foot eastwards within 420 m; all lie upslope of the foot (none in the 0–200 m bands; with no building buffer 11 cells within 25 m)"
+source = "08_align.py: cells of GSI DEM1A stepping ≥ 1 m at ≥ 45° over 1 m (3×3 range ≥ 1 m), outside GSI building outlines (+1.5 m) and the channel (+2 m), from 15 m upslope of the foot eastwards within 420 m; all lie in the 15 m above the foot (none in the 0–200 m bands; with no building buffer 11 cells within 25 m). They may be walls, cut faces or rock: the model cannot tell"
 check = { kmk = "ground.walls_town_m", expect = 0, tol = 0 }
 
 [[claim]]
@@ -1521,13 +1537,27 @@ check = { kmk = "ground.foot.length_m", fmt = "{} m" }
 
 [[claim]]
 id = "kmk-foot-defs"
-match = ["Four ways to find the foot", "the foot is located independently as the edge of the mountain mask (A), the first point 1 m above the profile’s own plain (B), the most concave point (C) and the knee of a two-segment line fitted to the profile (D)",
+match = ["Four ways to find the foot", "the foot is located four ways: as the edge of the mountain mask (A), the first point 1 m above the profile’s own plain (B), the most concave point (C) and the knee of a two-segment line fitted to the profile (D)",
          "Their median is the foot on the map; their spread is the band around it", "mountain foot: median of four definitions", "where the four definitions fall",
          "Four cross-profiles through the mountain foot with the four definitions of the foot",
          "Four cross-profiles in the study area, north to south: bare ground every metre from 40 m upslope to 60 m out, heights ×2. Under each profile, one row per definition (A–D) marks where it puts the foot; the black line is their median."]
 exact = ["profile 1 · north", "profile 2", "profile 3", "profile 4 · south", "−40 m", "+60 m", "0", "A mask edge", "B plain + 1 m", "C most concave", "D two-segment knee"]
 status = "method"
-source = "06_foot.py: A edge of the mountain mask of step 2; B last point ≥ 1 m above the profile's own plain (median of 20–60 m out), walking downslope; C most concave point (profile curvature, σ 2.5 m) between the plain and 10 m above it; D knee of a continuous two-segment least-squares fit; channel cells left out of B–D; the four sample profiles lie nearest y = −252,240 / −252,300 / −252,370 / −252,440 (CS VI)"
+source = "06_foot.py: A edge of the mountain mask of step 2 (ground ≥ 1 m above the frame's plain and steep, connected to the slopes above); B last point ≥ 1 m above the profile's own plain (median of 20–60 m out), walking downslope; C most concave point (profile curvature, σ 2.5 m) between the plain and 10 m above it; D knee of a continuous two-segment least-squares fit; channel cells left out of B–D; the four sample profiles lie nearest y = −252,240 / −252,300 / −252,370 / −252,440 (CS VI)"
+
+[[claim]]
+id = "kmk-foot-ab"
+match = ["A and B both rest on a threshold 1 m above a plain, and they agree most closely (a median 1.5 m apart)"]
+status = "derived"
+source = "06_foot.py summary: median absolute distance between definitions, AB 1.5 m (AC 1.75, CD 2.5, BC 2.75, AD 3.25, BD 4.25)"
+check = { kmk = "ground.foot.pair.AB", fmt = "a median {:.1f} m apart" }
+
+[[claim]]
+id = "kmk-foot-p90"
+match = ["but on a tenth of the profiles it exceeds 31 m"]
+status = "derived"
+source = "90th percentile of the spread of the four definitions over the 310 profiles: 31.1 m"
+check = { kmk = "ground.foot.range_p90_m", fmt = "exceeds {:.0f} m" }
 
 [[claim]]
 id = "kmk-foot-agree"
@@ -1559,17 +1589,17 @@ check = { kmk = "ground.foot.dev.D", fmt = "–{:.1f} m" }
 
 [[claim]]
 id = "kmk-foot-step45"
-match = ["On 46% of the profiles the last metres before the foot climb at 45° or more"]
+match = ["The face stays steep almost to the foot: on 46% of the profiles the steepest metre of the last six climbs at 45° or more"]
 status = "derived"
-source = "steepest 1 m step within 6 m upslope of the foot, per profile (06_foot.py): ≥ 45° on 45.8% of profiles"
-check = { kmk = "ground.foot.step45_pct", fmt = "On {:.0f}%" }
+source = "steepest 1 m step in the window from 6 m upslope of the foot to 1 m beyond it, per profile (06_foot.py step_deg): ≥ 45° on 45.8% of profiles (median 43.3°)"
+check = { kmk = "ground.foot.step45_pct", fmt = "on {:.0f}%" }
 
 [[claim]]
-id = "kmk-foot-step60"
-match = ["on 12% at 60° or more"]
+id = "kmk-foot-face"
+match = ["(on 66% ten metres higher up), and then the ground flattens"]
 status = "derived"
-source = "the same, ≥ 60° (11.6%)"
-check = { kmk = "ground.foot.step60_pct", fmt = "on {:.0f}%" }
+source = "the same statistic in the 7 m window 9–16 m upslope of the foot (09_export.py): ≥ 45° on 65.8% of profiles, median 48.2°; the foot's window is the steeper on only 39% of profiles, so the steep metres near the foot are the face's own steepness, not a distinct cut"
+check = { kmk = "ground.foot.face_step45_pct", fmt = "(on {:.0f}% ten" }
 
 [[claim]]
 id = "kmk-front"
@@ -1594,112 +1624,218 @@ check = { kmk = "ground.grid.town", fmt = "N {:.0f}° E" }
 
 [[claim]]
 id = "kmk-test-method"
-match = ["lines are cut into pieces of at most 10 m; chance levels come from 5,000 random pairings within each distance band", "Within 25 m, the town bends with the mountain.", "Wherever its local direction differs from the town grid by 10° or more, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square",
-         "Chance is the same pieces with the foot directions shuffled (5,000 times). Every test is rerun with each of the four foot definitions and with a second registration of the parcel map: six runs.",
-         "Within 25 m of the foot (walls: the 15 m above it), the share of discriminating length that follows the foot (dot) against chance (tick), and the number of the six runs in which the excess is significant (p < 0.05).",
+match = ["lines are cut into pieces of at most 10 m, and a boundary shared by two parcels counts once. Chance comes from sliding the foot’s sequence of directions along the foot by every offset of at least 50 m and recomputing the share each time, so that neighbouring pieces, which are not independent, move together; a minimum offset of 100 m is the check.",
+         "Within 25 m, the channel and the lanes bend with the mountain.", "Wherever its local direction differs from the town grid by 10° or more, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square",
+         "Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. Every test is rerun with each of the four foot definitions and with a second registration of the parcel map: six runs, which check that a result does not hang on those choices (they are not independent samples).",
+         "Within 25 m of the foot (steep steps: the 15 m above it), the share of the counted length that follows the foot (dot; buildings weighted by footprint area) against chance (tick: the same features with the foot’s directions slid along it by 50 m or more), and the number of the six runs in which the excess is significant (p < 0.05). Orange: significant in at least 4 of the 6 runs.",
          "Which features follow the mountain foot within 25 m, against chance, with the number of runs in which the result holds"]
-exact = ["0%", "25%", "50%", "75%", "100%"]
+exact = ["0%", "25%", "50%", "75%", "100%", "share that follows the foot", "significant in at least 4 of 6 runs", "chance", "runs significant"]
 status = "method"
-source = "08_align.py: pieces ≤ 10 m; local foot direction over ±10 m of the consensus foot; counted only where it differs from the town grid by ≥ 10° (axial, mod 90°); chance = mean of 5,000 shuffles of foot directions within the band; one-sided p; six runs = consensus foot + each single definition A–D + the similarity registration of the parcel map"
+source = "08_align.py: pieces ≤ 10 m (shared parcel boundaries once); local foot direction over ±10 m of the consensus foot; counted only where it differs from the town grid by ≥ 10° (axial, mod 90°); statistic = length-weighted share closer to the foot than to the grid (buildings: footprint area); chance = circular shift of the foot's direction sequence by every offset ≥ 25 profiles (50 m), one-sided p (check: ≥ 50 profiles, 100 m); six runs = consensus foot + each single definition A–D + the similarity registration of the parcel map. The earlier piece-by-piece shuffle (kept as p_perm) treated neighbouring pieces as independent"
 
 [[claim]]
 id = "kmk-score-runs"
-exact = ["6 of 6", "5 of 6", "4 of 6", "1 of 6", "0 of 6"]
+exact = ["6 of 6", "4 of 6", "3 of 6", "0 of 6"]
 status = "derived"
-source = "08_align.py, 0–25 m band (walls: the 15 m upslope of the foot): runs with p < 0.05 — banks 6, lanes 5, channel 5, buildings 4, temple and shrine property 1, frontages 0, back boundaries 0, walls 0, waterway parcels 0"
+source = "08_align.py, 0–25 m band (steep steps: the 15 m upslope of the foot): runs with p < 0.05 under the 50 m shift — channel 6, lanes 4, banks 4, back boundaries 3, buildings 3, frontages 0, temple and shrine property 0, waterway parcels 0, steep steps 0 (100 m shift: 6, 4, 3, 4, 3, 0, 0, 0, 0)"
 
 [[claim]]
 id = "kmk-score-banks"
-match = ["The channel’s banks (significant in 6 of 6 runs)"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
 status = "derived"
-source = "GSI water edges (5201/5203), 0–25 m: 37.2% follow the foot against 25.8% by chance (p = 0.010), significant in all six runs"
-check = { kmk = "ground.scores.banks.robust.significant", fmt = "in {} of 6 runs" }
+source = "GSI water edges (5201/5203), 0–25 m: 37.2% against 17.0% (p = 0.099), significant in 4 of 6 runs (50 m shift) and 3 of 6 (100 m)"
+check = { kmk = "ground.scores.banks.robust.significant", expect = 3.5, tol = 0.5 }
+
+[[claim]]
+id = "kmk-score-banks-100"
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+status = "derived"
+source = "the banks under the 100 m shift"
+check = { kmk = "ground.scores.banks.robust.significant_100", expect = 3.5, tol = 0.5 }
 
 [[claim]]
 id = "kmk-score-lanes"
-match = ["the lanes (5 of 6)"]
+match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
 status = "derived"
-source = "OSM lanes, paths, steps and residential streets, 0–25 m: 50.1% against 28.0% (p = 0.0002)"
-check = { kmk = "ground.scores.lanes.robust.significant", fmt = "lanes ({} of 6)" }
+source = "OSM lanes, paths, steps and residential streets, 0–25 m: 50.1% against 25.1% (p = 0.004), 12 lines of which 6 follow; 4 of 6 runs under both shifts"
+check = { kmk = "ground.scores.lanes.robust.significant", fmt = "the lanes in {}." }
+
+[[claim]]
+id = "kmk-score-lanes-100"
+match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
+status = "derived"
+source = "the lanes under the 100 m shift"
+check = { kmk = "ground.scores.lanes.robust.significant_100", fmt = "the lanes in {}." }
+
+[[claim]]
+id = "kmk-score-channel-100"
+match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
+status = "derived"
+source = "the channel under the 100 m shift"
+check = { kmk = "ground.scores.channel.robust.significant_100", fmt = "bends in {} of the 6 runs" }
 
 [[claim]]
 id = "kmk-score-channel"
-match = ["the channel’s centre line (5 of 6)"]
+match = ["The channel’s centre line follows the foot’s bends in 6 of the 6 runs, the lanes in 4."]
 status = "derived"
-source = "channel centre line, 0–25 m: 50.0% against 30.7% (p = 0.015)"
-check = { kmk = "ground.scores.channel.robust.significant", fmt = "centre line ({} of 6)" }
+source = "channel centre line, 0–25 m: 50.0% against 16.0% by chance (p = 0.023; 100 m shift p = 0.028), significant in all six runs under both shifts"
+check = { kmk = "ground.scores.channel.robust.significant", fmt = "bends in {} of the 6 runs" }
 
 [[claim]]
 id = "kmk-score-bld"
-match = ["the buildings (4 of 6)"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
 status = "derived"
-source = "GSI building long axes, 0–25 m: 48.7% against 19.6% (p = 0.0002)"
-check = { kmk = "ground.scores.buildings.robust.significant", fmt = "buildings ({} of 6)" }
+source = "GSI building long axes weighted by footprint area, 0–25 m: 48.7% against 18.1% (p = 0.011), 33 buildings of which 17 follow; 3 of 6 runs under both shifts"
+check = { kmk = "ground.scores.buildings.robust.significant", expect = 3.5, tol = 0.5 }
+
+[[claim]]
+id = "kmk-score-bld-100"
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+status = "derived"
+source = "the buildings under the 100 m shift"
+check = { kmk = "ground.scores.buildings.robust.significant_100", expect = 3.5, tol = 0.5 }
 
 [[claim]]
 id = "kmk-wiggle"
-match = ["where the channel runs along the foot it copies them (correlation 0.82 over 250 m)"]
+match = ["Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude"]
 status = "derived"
-source = "08_align.py: east–west position of the channel centre line and of the foot every 2 m where the channel runs within 40 m of the foot, each detrended; Pearson r (0.81–0.87 across the four definitions)"
-check = { kmk = "ground.wiggle.channel.wiggle_r", fmt = "correlation {:.2f}" }
+source = "08_align.py: east–west position of the channel centre line and of the foot every 2 m where the channel runs within 40 m of the foot, each detrended; Pearson r (0.81–0.87 across the four definitions); the stretch runs from y −252,395 (33 m north of the shrine entrance) to −252,645"
+check = { kmk = "ground.wiggle.channel.wiggle_r", fmt = "(correlation {:.2f})" }
 
 [[claim]]
 id = "kmk-wiggle-len"
-match = ["where the channel runs along the foot it copies them (correlation 0.82 over 250 m)"]
+match = ["Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude"]
 status = "derived"
-source = "length of that stretch"
-check = { kmk = "ground.wiggle.channel.stretch_m", fmt = "over {:.0f} m" }
+source = "length of that stretch, and the part of it inside the study area's north–south extent"
+check = { kmk = "ground.wiggle.channel.stretch_m", fmt = "({:.0f} m," }
+
+[[claim]]
+id = "kmk-wiggle-in"
+match = ["Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude"]
+status = "derived"
+source = "the part of the stretch within the study area's north–south extent"
+check = { kmk = "ground.wiggle.channel.in_study_m", fmt = "{:.0f} m of them inside" }
+
+[[claim]]
+id = "kmk-wiggle-amp"
+match = ["Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude"]
+status = "derived"
+source = "standard deviation of the channel's detrended wiggles (5.2 m) against the foot's (11.1 m)"
+check = { kmk = "ground.wiggle.channel.amp_ratio", expect = 0.5, tol = 0.1 }
 
 [[claim]]
 id = "kmk-score-backs"
-match = ["Back property boundaries (only 11 edges discriminate)"]
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
 status = "derived"
-source = "back edges of private parcels (the edges beyond 60% of the depth from the street frontage), 0–25 m: 85.0% against 86.4% by chance (p = 0.59)"
-check = { kmk = "ground.scores.backs.n", fmt = "only {} edges" }
+source = "back edges of numbered parcels (the edges beyond 60% of the depth from the street frontage, each boundary once), 0–25 m: 83.9% against 40.7% (p = 0.042), 10 pieces from 9 lines of which 8 follow; 3 of 6 runs (50 m shift), 4 of 6 (100 m). The earlier piece shuffle gave 0 of 6: it kept each piece's neighbours' directions and so could not tell"
+check = { kmk = "ground.scores.backs.robust.significant", expect = 3.5, tol = 0.5 }
+
+[[claim]]
+id = "kmk-score-backs-100"
+match = ["Other lines lean the same way without holding:", "the channel’s banks, the back boundaries of the plots (8 of the 9 lines that can be tested) and the buildings are significant in only 3 or 4 of the six runs"]
+status = "derived"
+source = "the back boundaries under the 100 m shift"
+check = { kmk = "ground.scores.backs.robust.significant_100", expect = 3.5, tol = 0.5 }
+
+[[claim]]
+id = "kmk-score-backs-lines"
+match = ["(8 of the 9 lines that can be tested)"]
+status = "derived"
+source = "distinct back-boundary lines among the counted pieces (n_units), and those that follow the foot"
+check = { kmk = "ground.scores.backs.units", fmt = "of the {} lines" }
+
+[[claim]]
+id = "kmk-score-backs-follow"
+match = ["(8 of the 9 lines that can be tested)"]
+status = "derived"
+source = "the lines that follow"
+check = { kmk = "ground.scores.backs.units_follow", fmt = "({} of the" }
 
 [[claim]]
 id = "kmk-score-weak"
-match = ["show no robust excess (at most 1 of 6 runs)"]
+match = ["Frontages, temple and shrine property, the drawn waterway and the steep steps on the foot face show nothing (0 of 6)."]
 status = "derived"
-source = "the most runs significant among back boundaries (0), frontages (0), temple and shrine property (1), walls on the foot face (0) and the waterway parcels (0)"
-check = { kmk = "ground.weak_max_sig", fmt = "at most {} of 6 runs" }
+source = "the most runs significant, under either shift, among frontages, temple and shrine property, the waterway parcels and the steep steps (0–25 m; steps −15–0 m)"
+check = { kmk = "ground.weak_max_sig", fmt = "nothing ({} of 6)" }
 
 [[claim]]
 id = "kmk-beyond"
-match = ["the largest excess over chance is 7 points (back boundaries 50–100 m out)"]
+match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
 status = "derived"
-source = "largest excess over chance in the 25–50, 50–100 and 100–200 m bands over all classes: back boundaries, 50–100 m, 28.9% against 22.0% (p = 0.004 in the consensus run, significant in 2 of 6 runs)"
-check = { kmk = "ground.beyond_max.excess", fmt = "{:.0f} points" }
+source = "every class in the 25–50, 50–100 and 100–200 m bands: the only one significant in more than 2 runs under either shift is frontages 50–100 m out (5 of 6 under both; 37.7% against 15.6%), 12 pieces from 9 lines, of which the 2 that follow lie together at y −252,137 to −252,146, 60–64 m from the foot, north of the study area (its north edge y −252,203)"
+check = { kmk = "ground.beyond_hits.0.significant", fmt = "({} of 6 runs)" }
 
 [[claim]]
-id = "kmk-beyond-runs"
-match = ["Beyond 25 m, nothing holds", "no class is significant in more than 2 of the 6 runs"]
+id = "kmk-beyond-lines"
+match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
 status = "derived"
-source = "the most runs (of six) in which any class is significant in the 25–50, 50–100 or 100–200 m band: 2, for back boundaries 50–100 m out (p = 0.004 in the consensus run) and buildings 100–200 m out (2.9 points, p = 0.003); within 25 m the robust classes hold in 4–6 runs"
-check = { kmk = "ground.beyond_max_sig", fmt = "more than {} of the 6 runs" }
+source = "the frontage lines that follow"
+check = { kmk = "ground.beyond_hits.0.units_follow", expect = 2, tol = 0 }
 
 [[claim]]
-id = "kmk-beyond-band"
-match = ["the largest excess over chance is 7 points (back boundaries 50–100 m out)"]
+id = "kmk-beyond-band-lo"
+match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
 status = "derived"
-source = "the band of that excess"
-check = { kmk = "ground.beyond_max.band.0", fmt = "{}–" }
+source = "the band"
+check = { kmk = "ground.beyond_hits.0.band.0", fmt = "{}–" }
+
+[[claim]]
+id = "kmk-beyond-band-hi"
+match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
+status = "derived"
+source = "the band"
+check = { kmk = "ground.beyond_hits.0.band.1", fmt = "–{} m out" }
+
+[[claim]]
+id = "kmk-beyond-rest"
+match = ["Beyond 25 m, nothing holds but two frontages in one place, 50–100 m out from the foot just north of the study area (5 of 6 runs); every other class reaches at most 2 of 6."]
+status = "derived"
+source = "the most runs significant, under either shift, for every other class and band beyond 25 m (back boundaries 25–50 m: 1 and 2)"
+check = { kmk = "ground.beyond_rest_max_sig", fmt = "at most {} of 6" }
 
 [[claim]]
 id = "kmk-offsets-method"
-match = ["Row by row, every 2 m along the front: distance from the foot to the western edge of private land in the parcel map, to the nearest lane, to the waterway parcels of the parcel map and to today’s channel. Dot: median; bar: the middle half of the rows.",
-         "Distance from the mountain foot to the edge of private land, the nearest lane, the cadastral waterway and the channel"]
+match = ["Row by row, every 2 m along the front: distance from the foot to the western edge of the numbered parcels in the parcel map, to the nearest lane, to the waterway parcels of the parcel map and to today’s channel, each over the rows where it is found (the lanes on 305 rows, the waterway parcels on 139). Dot: median; bar: the middle half of the rows.",
+         "Distance from the mountain foot to the edge of the numbered parcels, the nearest lane, the cadastral waterway and the channel"]
 exact = ["−20 m", "0 m", "20 m", "40 m", "60 m", "80 m", "100 m", "120 m"]
 status = "method"
 source = "08_align.py row_offsets: rows every 2 m along the consensus foot; axis ticks of the chart"
 
 [[claim]]
+id = "kmk-off-rows-lane"
+match = ["(the lanes on 305 rows, the waterway parcels on 139)"]
+status = "derived"
+source = "rows with a lane at least 3 m east of the foot"
+check = { kmk = "ground.offsets.lane.rows", fmt = "the lanes on {} rows" }
+
+[[claim]]
+id = "kmk-off-rows-water"
+match = ["(the lanes on 305 rows, the waterway parcels on 139)"]
+status = "derived"
+source = "rows that cross a waterway parcel within 60 m of the foot"
+check = { kmk = "ground.offsets.legal_water.rows", fmt = "waterway parcels on {})" }
+
+[[claim]]
 id = "kmk-off-west"
 exact = ["0.3 m"]
-match = ["the western edge of the parcels lies a median 0.3 m from it"]
+match = ["their western edge lies a median 0.3 m from it", "On the median, the numbered parcels end at the foot", "On the median its numbered parcels stop at the foot of the mountain; row by row the edge wanders"]
 status = "derived"
-source = "western limit of the registered private parcels against the consensus foot, 182 rows: median 0.3 m (quartiles −10.0 and 12.0 m)"
+source = "western limit of the registered numbered parcels against the consensus foot, 182 rows: median 0.3 m (quartiles −10.0 and 12.0 m; within 3 m on 29% of rows)"
 check = { kmk = "ground.offsets.cadastre_west.median_m", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-off-west-p25"
+match = ["the middle half of the rows between 10 m upslope and 12 m out", "(the middle half of the rows from 10 m upslope to 12 m out)"]
+status = "derived"
+source = "lower quartile of the rows (negative = upslope of the foot)"
+check = { kmk = "ground.offsets.cadastre_west.p25_m", expect = -10, tol = 0.5 }
+
+[[claim]]
+id = "kmk-off-west-p75"
+match = ["the middle half of the rows between 10 m upslope and 12 m out", "(the middle half of the rows from 10 m upslope to 12 m out)"]
+status = "derived"
+source = "upper quartile of the rows"
+check = { kmk = "ground.offsets.cadastre_west.p75_m", expect = 12, tol = 0.5 }
 
 [[claim]]
 id = "kmk-off-west-range-lo"
@@ -1718,17 +1854,9 @@ check = { kmk = "ground.cad_west_range.1", expect = 0.9, tol = 0.05 }
 [[claim]]
 id = "kmk-off-lane"
 exact = ["23.2 m"]
-match = ["with the nearest lane at 23 m"]
 status = "derived"
-source = "nearest OSM lane at least 3 m east of the foot, 305 rows: median 23.2 m (quartiles 14.9 and 45.4 m)"
+source = "nearest OSM lane at least 3 m east of the foot, 305 rows: median 23.2 m (quartiles 14.9 and 45.4 m); on the 139 rows that cross a waterway parcel the lane's median is 37.1 m, so the two are not compared in the text"
 check = { kmk = "ground.offsets.lane.median_m", fmt = "{:.1f} m" }
-
-[[claim]]
-id = "kmk-off-lane-txt"
-match = ["with the nearest lane at 23 m"]
-status = "derived"
-source = "the same, rounded"
-check = { kmk = "ground.offsets.lane.median_m", fmt = "lane at {:.0f} m" }
 
 [[claim]]
 id = "kmk-off-water"
@@ -1761,15 +1889,22 @@ check = { kmk = "ground.offsets.channel.median_m", fmt = "{:.1f} m" }
 
 [[claim]]
 id = "kmk-first-row"
-match = ["The terrain draws the edge of the town and its first plot depth; the grid draws the rest.", "the first row of lots lies between the mountain and that line",
-         "Two results do not depend on those details."]
+match = ["The terrain draws the edge of the town and, within 25 m of it, the channel and the lanes; the grid draws the rest.", "Two results do not depend on those details."]
 status = "derived"
-source = "summary of the alignment test (follows the foot within 25 m, not beyond) and the row offsets (private land ends at the foot; lane and waterway parcels 23–36 m out)"
+source = "summary of the alignment test (the channel and the lanes hold within 25 m; nothing beyond but one place) and the row offsets"
+
+[[claim]]
+id = "kmk-lots-between"
+match = ["numbered parcels fill the strip between the mountain and that line, a single parcel deep on half the rows"]
+status = "derived"
+source = "on the 139 rows that reach a waterway parcel: numbered parcels (≥ 2 m on the row) cover a median 92.5% of the span from the foot; exactly one parcel on 53.2% of rows, none on 6.5%"
+check = { kmk = "ground.lots_between.one_parcel_pct", expect = 50, tol = 5 }
 
 # ---------------------------------------------------------------- 中部構造 · lots: the registered parcel map
+
 [[claim]]
 id = "kmk-cad-place"
-match = ["The school parcel (715-3) matched to the school’s outline gives a first position; the road parcels fitted to GSI’s 1:2,500 road edges give the final one."]
+match = ["The strips make it possible to place the drawing: the school parcel (715-3) matched to the school’s outline gives a first position; the road parcels fitted to GSI’s 1:2,500 road edges give the final one."]
 status = "method"
 source = "07_parcels.py: parcel 千穂一丁目 715-3 (9,755 m² as drawn) shape-matched to the school's OSM outline (way 1333972521) as a similarity transform; then the fragment's road parcels (道) fitted to GSI 1:2,500 road edges (ftCodes 2201/2203/2204/2221) by truncated chamfer matching, similarity then affine"
 
@@ -1803,9 +1938,9 @@ check = { kmk = "ground.cadastre.aff.area_factor", expect = 1.313, tol = 0.005 }
 
 [[claim]]
 id = "kmk-nawanobi"
-match = ["Drawings descended from the Meiji land-tax surveys, which villagers measured themselves, are known to run short: MLIT puts the average excess of surveyed over registered area (縄伸び) at 26% in the cadastral surveys certified from 1970 to 2011."]
+match = ["Records descended from the Meiji land-tax surveys, in which residents measured their own land and drew the village maps, are said to run short (縄伸び): in the cadastral surveys certified from FY1970 to FY2011, MLIT finds surveyed areas 26% larger than registered ones on average, roads and waterways excluded. That compares registers, not drawings, but it points the same way."]
 status = "verified"
-source = "MLIT 地籍整備課『ご存じですか？地籍のこと』p. 24: 「「縄伸び」とは…登記簿に記載された面積より実際の土地の実測面積が多いことをいいます」, p. 22 (PDF p. 25): 「左の表は、昭和４５年度から平成２３年度までに認証された成果を集計した結果です。平均で２６％の縄伸びが見られています」 (roads and waterways excluded); p. 21: the Meiji survey was 「住民において土地丈量を行い…実際の面積より狭く測量しようとされた」; MLIT「明治以降の地籍と地図の歴史」p. 6: 「改租事業における土地の測量や地図…の作成は、原則として村民自身の手で行いました」"
+source = "MLIT 地籍整備課『ご存じですか？地籍のこと』p. 21 (PDF p. 24): 「「縄伸び」とは…登記簿に記載された面積より実際の土地の実測面積が多いことをいいます。…明治政府が地租改正事業を行った際、住民において土地丈量を行い字限図等を作成するという方法採ったため、…実際の面積より狭く測量しようとされたことと、当時の測量技術が低かったことによるといわれています」; p. 22 (PDF p. 25): 「昭和４５年度から平成２３年度までに認証された成果を集計した結果です。平均で２６％の縄伸びが見られています」, 注2 「調査前後とも長狭物（用悪水路、井溝、公衆用道路等）を除いて集計している」"
 url = "https://www.chiseki.go.jp/about/images/naze_A4.pdf"
 
 [[claim]]
@@ -1824,41 +1959,42 @@ check = { kmk = "ground.cadastre.aff.road_within1_5_pct", fmt = "{:.0f}%" }
 
 [[claim]]
 id = "kmk-soo-parcel"
-match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next numbered parcel 7.5 m away, so the test counts that parcel as temple property"]
 status = "derived"
-source = "the registered private parcel containing 宗応寺's reference point (points.toml kmk_soo, its address 千穂1-3-34); distance to that parcel's edge and to the nearest other private parcel (affine registration; similarity: 3.5 m and 7.3 m)"
+source = "the registered numbered parcel containing 宗応寺's reference point (points.toml kmk_soo, its address 千穂1-3-34); distance to that parcel's edge and to the nearest other numbered parcel (affine registration; similarity: 3.5 m and 7.3 m)"
 check = { kmk = "ground.temple_parcels.宗応寺.chiban", fmt = "parcel {}" }
 
 [[claim]]
 id = "kmk-soo-edge"
-match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next numbered parcel 7.5 m away, so the test counts that parcel as temple property"]
 status = "derived"
 source = "distance from the reference point (points.toml kmk_soo, GSI address search) to the edge of parcel 708-1; corroborated by OSM node 6849428099 (宗応寺), which falls 11.3 m inside the same parcel (8.6 m in the similarity registration)"
 check = { kmk = "ground.temple_parcels.宗応寺.edge_m", fmt = "{:.1f} m inside" }
 
 [[claim]]
 id = "kmk-soo-next"
-match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next private parcel 7.5 m away, so the test counts that parcel as temple property"]
+match = ["宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next numbered parcel 7.5 m away, so the test counts that parcel as temple property"]
 status = "derived"
-source = "distance from the reference point to the nearest other private parcel (707-2)"
+source = "distance from the reference point to the nearest other numbered parcel (707-2)"
 check = { kmk = "ground.temple_parcels.宗応寺.next_private_m", fmt = "{:.1f} m away" }
 
 [[claim]]
 id = "kmk-myoshin-edge"
-match = ["妙心寺’s lies 0.8 m from the edge of the school parcel, among small parcels, so its plot cannot be identified at this accuracy and is left out"]
+match = ["妙心寺’s lies inside the school parcel, 0.8 m from its edge, among small parcels, so its plot cannot be identified at this accuracy and is left out"]
 status = "derived"
-source = "妙心寺's reference point (points.toml kmk_myoshin) falls in parcel 715-3, 0.8 m from its edge (similarity registration 2.4 m); waterway 水-39 and private parcels 711-11 and 711-1 (146 and 166 m²) lie within 3 m; points closer than 2 m to an edge, or in the school parcel, are not used"
-check = { kmk = "ground.temple_parcels.妙心寺.edge_m", fmt = "{:.1f} m from the edge" }
+source = "妙心寺's reference point (points.toml kmk_myoshin) falls in parcel 715-3, 0.8 m from its edge (similarity registration 2.4 m); waterway 水-39 and numbered parcels 711-11 and 711-1 (146 and 166 m²) lie within 3 m; points in the school parcel, or closer than 2 m to an edge, are not used"
+check = { kmk = "ground.temple_parcels.妙心寺.edge_m", fmt = "{:.1f} m from its edge" }
 
 # ---------------------------------------------------------------- 流れ · flows: the channel's names, width and history
+
 [[claim]]
 id = "kmk-horibata-name"
 match = ["神倉堀端都市下水路, the Kamikura Horibata Urban Drainage Channel: a municipal drainage channel in the upper Ichida-gawa system",
          "The channel through the study area is 神倉堀端都市下水路, the Kamikura Horibata Urban Drainage Channel: a municipal drainage channel in the upper Ichida-gawa system.",
          "Shingū’s master plan lists it among the city’s urban drainage channels (都市下水路), apart from its entry for the river Ichida-gawa (河川).",
-         "神倉堀端都市下水路 (GSI water area) and the Kamikura-yama stream"]
+         "water (GSI): 神倉堀端都市下水路, the Kamikura-yama stream and other watercourses"]
 status = "verified"
-source = "新宮市都市計画マスタープラン (2012), p. 23: 【都市下水路】 table lists 神倉堀端都市下水路; 市田川 is listed separately under 【河川】; the city's FY2025 budget and 2025 tender use 神倉堀端下水路 for the same channel in 千穂"
+source = "新宮市都市計画マスタープラン (2012), p. 23: 【都市下水路】 table lists 神倉堀端都市下水路; 市田川 is listed separately under 【河川】; the city's FY2025 budget and 2025 tender use 神倉堀端下水路 for the same channel in 千穂. The map's water layer also carries about 580 m of other GSI watercourses in the frame"
 url = "https://www.city.shingu.lg.jp/div/tosiken-1/pdf/keikaku/toshimas.pdf"
 
 [[claim]]
@@ -1890,10 +2026,10 @@ url = "https://www.kkr.mlit.go.jp/kinan/river/kumano_kondan/PDF/kt_08/02_2_haifu
 
 [[claim]]
 id = "kmk-ichida-class"
-match = ["Ichida-gawa: a Class A river since 1970, 4.8 km; MLIT’s name for the whole basin (市田川流域)",
-         "1970–1975 The Ichida-gawa becomes a Class A river (1970); its lowest 2 km pass to direct national control (1972); the prefecture fixes its river area (1975, the maps not published online)."]
+match = ["Ichida-gawa: a Class A river since 1970; MLIT describes it as rising on 千穂ヶ峰 and running 4.8 km to the Kumano (basin 5.36 km²)",
+         "1970–1975 The Ichida-gawa becomes a Class A river (1970); its lowest 2 km pass to direct national control (1972); the prefecture designates further land as river area along it and the Ukishima-gawa (1975, under River Act art. 6(1)(iii); the maps are not published online)."]
 status = "verified"
-source = "MLIT 紀南河川国道事務所『市田川流域大規模浸水対策計画』(25 Mar 2019), p. 5: 「流路延長4.8kmの河川である。…昭和45年4月に一級河川に指定され、その後、昭和47年5月に市田川の河口から約2kmが直轄区間に指定された」; Wakayama Prefecture notice 昭和50年3月8日 告示第157号 (river area of 市田川 and 浮島川; 「図面省略」 online)"
+source = "MLIT 紀南河川国道事務所『市田川流域大規模浸水対策計画』(25 Mar 2019), p. 5: 「熊野川の支川である市田川は、千穂ヶ峰に源を発し、途中、新宮市街で浮島川と合流して、熊野川の合流部に流入する流域面積5.36km2、流路延長4.8kmの河川である。…昭和45年4月に一級河川に指定され、その後、昭和47年5月に市田川の河口から約2kmが直轄区間に指定された」; Wakayama Prefecture 告示第157号 (昭和50年3月8日): 「一級河川市田川及び浮島川について、河川法…第6条第1項第3号の区域を次のように指定する」 (第1号図から第4号図, 「図面省略」 online)"
 url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/shiryou.pdf"
 
 [[claim]]
@@ -1912,9 +2048,9 @@ url = "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/sh
 
 [[claim]]
 id = "kmk-fy1999"
-match = ["FY1999 MLIT’s national sewerage project archive records landscape works on 神倉堀端都市下水路 completed in FY1999 (平成11), including 740 m² of stone facing, scenic safety railings and 124 m of planting, under the 水循環・再生下水道モデル事業."]
+match = ["FY1999 MLIT’s national sewerage project archive records landscape works on 神倉堀端都市下水路 completed in FY1999 (平成11), including 740 m² of stone facing, scenic safety railings and 124 m of planting, listed under two model programmes (水循環・再生下水道モデル事業 and 水環境保全共同事業)."]
 status = "verified"
-source = "MLIT『日本の下水道 資料編』(2016), table 4-14 新世代下水道支援事業制度実施箇所 / 水環境創造事業 / 水循環再生型, PDF p. 3: 「和歌山県｜新宮市｜神倉堀端都市下水路｜石張（740㎡），景観防護柵，植栽（124m）｜平成11｜水循環・再生下水道モデル事業」 (column 完了（予定）年度)"
+source = "MLIT『日本の下水道 資料編』(2016), table 4-14 新世代下水道支援事業制度実施箇所 / 水環境創造事業 / 水循環再生型, PDF p. 3: two identical rows 「和歌山県｜新宮市｜神倉堀端都市下水路｜石張（740㎡），景観防護柵，植栽（124m）｜平成11」, one under 水循環・再生下水道モデル事業 and one under 水環境保全共同事業 (column 従来実施してきたモデル事業名; 完了（予定）年度 平成11)"
 url = "https://www.mlit.go.jp/common/001154321.pdf"
 
 [[claim]]
@@ -1925,60 +2061,137 @@ source = "新宮市 令和7年度当初予算書（一般会計）, PDF p. 106: 
 url = "https://www.city.shingu.lg.jp/div/zaisei-1/pdf/nyusatsu-koukoku/7k39.pdf"
 
 [[claim]]
-id = "kmk-courses-north"
-match = ["Read against the map, today’s channel takes three courses. In the north (135 m) it runs in the map’s public strips of road and waterway (59–71%; none of it through private parcels)"]
+id = "kmk-courses-extent"
+match = ["Where the map covers it (from 64 m north of the study area to 34 m before the channel leaves it), today’s channel takes three courses."]
 status = "derived"
-source = "08_align.py channel_courses: centre line in 4 m pieces; the longest unbroken run bearing 25–65° is the diagonal reach; north of it 135 m, in road/waterway parcels 70.6% (affine) / 58.8% (similarity), in private parcels 0%"
+source = "the channel-course reading uses the channel where it lies within 2 m of the drawing: 318 m, of which 64 m north of the study area; the last 34 m of the channel inside the study area lie outside the drawing"
+check = { kmk = "ground.courses_extent.outside_study_m", fmt = "(from {} m north" }
+
+[[claim]]
+id = "kmk-courses-uncovered"
+match = ["Where the map covers it (from 64 m north of the study area to 34 m before the channel leaves it), today’s channel takes three courses."]
+status = "derived"
+source = "length of the channel inside the study area that lies more than 2 m outside the drawing (its south end, toward the shrine entrance)"
+check = { kmk = "ground.courses_extent.uncovered_in_study_m", fmt = "to {} m before" }
+
+[[claim]]
+id = "kmk-courses-north"
+match = ["In the north (135 m) it runs in the map’s strips of road and waterway (59–71%; none of it inside a numbered parcel)."]
+status = "derived"
+source = "08_align.py channel_courses: centre line in 4 m pieces; the longest unbroken run bearing 25–65° is the diagonal reach; north of it 135 m, in road/waterway strips 70.6% (affine) / 58.8% (similarity), in numbered parcels 0%; the rest lies in gaps of the drawing or just outside it"
 check = { kmk = "ground.courses.north.length_m", fmt = "north ({} m)" }
 
 [[claim]]
 id = "kmk-courses-north-lo"
-match = ["(59–71%; none of it through private parcels)"]
+match = ["(59–71%; none of it inside a numbered parcel)"]
 status = "derived"
 source = "similarity registration"
 check = { kmk = "ground.courses_sim.north.public_pct", fmt = "({:.0f}–" }
 
 [[claim]]
 id = "kmk-courses-north-hi"
-match = ["(59–71%; none of it through private parcels)"]
+match = ["(59–71%; none of it inside a numbered parcel)"]
 status = "derived"
 source = "affine registration"
 check = { kmk = "ground.courses.north.public_pct", fmt = "–{:.0f}%;" }
 
 [[claim]]
 id = "kmk-courses-north-priv"
-match = ["(59–71%; none of it through private parcels)"]
+match = ["(59–71%; none of it inside a numbered parcel)"]
 status = "derived"
-source = "share in private parcels, affine (0%; similarity also 0%)"
-check = { kmk = "ground.courses.north.private_pct", expect = 0, tol = 0 }
+source = "share in numbered parcels, affine (0%)"
+check = { kmk = "ground.courses.north.numbered_pct", expect = 0, tol = 0 }
+
+[[claim]]
+id = "kmk-courses-north-priv-sim"
+match = ["(59–71%; none of it inside a numbered parcel)"]
+status = "derived"
+source = "share in numbered parcels, similarity (0%)"
+check = { kmk = "ground.courses_sim.north.numbered_pct", expect = 0, tol = 0 }
 
 [[claim]]
 id = "kmk-courses-diag"
-match = ["then for 79 m it cuts diagonally across what the drawing records as private lots (90–95%)"]
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
 status = "derived"
-source = "the diagonal reach: 79 m; in private parcels 90.0% (affine) / 95.0% (similarity)"
+source = "the diagonal reach: 79 m (both registrations); numbered parcels 90.0% (affine) / 95.0% (similarity), of which more than 3 m inside 65.0% / 70.0%; the school's parcel 50.0% / 55.0%, at most 11.3 / 12.8 m from its edge; the rest in parcels 718-2 and 718-3, up to 7–8 m inside. The road fit's 75th percentile is 2.4 m"
 check = { kmk = "ground.courses.diagonal.length_m", fmt = "for {} m it cuts" }
 
 [[claim]]
-id = "kmk-courses-diag-lo"
-match = ["then for 79 m it cuts diagonally across what the drawing records as private lots (90–95%)"]
+id = "kmk-courses-diag-deep-lo"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
 status = "derived"
 source = "affine registration"
-check = { kmk = "ground.courses.diagonal.private_pct", fmt = "({:.0f}–" }
+check = { kmk = "ground.courses.diagonal.numbered_deep_pct", fmt = "), {:.0f}–" }
+
+[[claim]]
+id = "kmk-courses-diag-deep-hi"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "similarity registration"
+check = { kmk = "ground.courses_sim.diagonal.numbered_deep_pct", fmt = "–{:.0f}% of it more" }
+
+[[claim]]
+id = "kmk-courses-diag-school"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "share in the school's parcel, affine (50%; similarity 55%)"
+check = { kmk = "ground.courses.diagonal.school_pct", expect = 52.5, tol = 5 }
+
+[[claim]]
+id = "kmk-courses-diag-school-sim"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "share in the school's parcel, similarity"
+check = { kmk = "ground.courses_sim.diagonal.school_pct", expect = 52.5, tol = 5 }
+
+[[claim]]
+id = "kmk-courses-diag-depth-lo"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "deepest point inside the school's parcel, affine"
+check = { kmk = "ground.courses.diagonal.school_deep_m", fmt = "up to {:.0f}–" }
+
+[[claim]]
+id = "kmk-courses-diag-depth-hi"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "deepest point inside the school's parcel, similarity"
+check = { kmk = "ground.courses_sim.diagonal.school_deep_m", fmt = "–{:.0f} m from its edge" }
+
+[[claim]]
+id = "kmk-courses-diag-lo"
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
+status = "derived"
+source = "affine registration"
+check = { kmk = "ground.courses.diagonal.numbered_pct", fmt = "({:.0f}–" }
 
 [[claim]]
 id = "kmk-courses-diag-hi"
-match = ["then for 79 m it cuts diagonally across what the drawing records as private lots (90–95%)"]
+match = ["Then for 79 m it cuts diagonally through numbered parcels (90–95%), 65–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others."]
 status = "derived"
 source = "similarity registration"
-check = { kmk = "ground.courses_sim.diagonal.private_pct", fmt = "–{:.0f}%)" }
+check = { kmk = "ground.courses_sim.diagonal.numbered_pct", fmt = "–{:.0f}%)" }
 
 [[claim]]
 id = "kmk-courses-south"
-match = ["in the south (about 100 m) it runs within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, then breaks through the lots to reach the old water line along the foot."]
+match = ["In the south (about 100 m) it runs along the edge of the school parcel, at most 3–5 m inside it, and within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, cuts through the parcels, then returns towards the drawn waterway along the foot."]
 status = "derived"
-source = "south of the diagonal: 103 m (affine) / 99 m (similarity); within 3 m of a waterway parcel 65.4% / 40.0%"
+source = "south of the diagonal: 103 m (affine) / 99 m (similarity); in the school's parcel 61.5% / 84.0%, at most 3.1 / 4.7 m inside it; other numbered parcels 19.2% / 4.0%; within 3 m of a waterway parcel 65.4% / 40.0%"
 check = { kmk = "ground.courses.south.length_m", expect = 100, tol = 5 }
+
+[[claim]]
+id = "kmk-courses-south-depth-lo"
+match = ["In the south (about 100 m) it runs along the edge of the school parcel, at most 3–5 m inside it, and within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, cuts through the parcels, then returns towards the drawn waterway along the foot."]
+status = "derived"
+source = "deepest point inside the school's parcel, affine"
+check = { kmk = "ground.courses.south.school_deep_m", fmt = "at most {:.0f}–" }
+
+[[claim]]
+id = "kmk-courses-south-depth-hi"
+match = ["In the south (about 100 m) it runs along the edge of the school parcel, at most 3–5 m inside it, and within 3 m of the map’s waterway for 40–65% of its length. The ranges are the two registrations. The drainage channel follows the grid, cuts through the parcels, then returns towards the drawn waterway along the foot."]
+status = "derived"
+source = "deepest point inside the school's parcel, similarity"
+check = { kmk = "ground.courses_sim.south.school_deep_m", fmt = "–{:.0f} m inside it" }
 
 [[claim]]
 id = "kmk-courses-south-lo"
@@ -2000,6 +2213,8 @@ match = ["(「登記所備付地図データ 新宮市」（法務省）を加�
          "(Shingū City, 2012; urban drainage channels, p. 23)", "national list of sewerage model projects (MLIT, 2016)", "令和7年度 当初予算書（一般会計） — FY2025 budget",
          "tender notice, 13 August 2025, and its 再公告 — re-tender, 10 September 2025", "平成９年１２月 和歌山県議会定例会会議録 第５号 — prefectural assembly minutes, 12 December 1997",
          "(MLIT Kinan office, Wakayama Prefecture, Shingū City, March 2019)", "Shingū River system improvement plan (MLIT, March 2022)",
-         "river areas of the Class A rivers, notice 157 of 1975", "(清水・宮城・田畑, 造園雑誌, 1990)", "The three layers of urban form"]
+         "river areas of the Class A rivers, notice 157 of 1975", "(清水・宮城・田畑, 造園雑誌, 1990)", "The three layers of urban form",
+         "Shingū regional disaster plan, annex (Shingū City, as of August 2014)", "Sōō-ji (宗応寺, in the older form of its second character)"]
 status = "verified"
-source = "bibliographic details read from each document on 2026-10-01: master plan 2012 (p. 23 = PDF p. 28); 日本の下水道 資料編 (file 16日本の下水道資料編, 2016); 令和7年度当初予算書; 入札公告 新財工第30号 (令和7年8月13日) and 第39号 (令和7年9月10日); 平成9年12月定例会 第5号 (平成9年12月12日); 市田川流域大規模浸水対策計画 (平成31年3月25日); 新宮川水系河川整備計画 (令和4年3月); 告示第157号 (昭和50年3月8日); 造園雑誌 54(5), 1990; the MoJ licence asks for the source and a note that the data were processed"
+source = "bibliographic details read from each document on 2026-10-01: master plan 2012 (p. 23 = PDF p. 28); 日本の下水道 資料編 (file 16日本の下水道資料編, 2016); 令和7年度当初予算書; 入札公告 新財工第30号 (令和7年8月13日) and 第39号 (令和7年9月10日); 平成9年12月定例会 第5号 (平成9年12月12日); 市田川流域大規模浸水対策計画 (平成31年3月25日); 新宮川水系河川整備計画 (令和4年3月); 告示第157号 (昭和50年3月8日); 造園雑誌 54(5), 1990; 新宮市地域防災計画 資料編 (file 26.8shiryou1.pdf, its tables 「平成26年8月現在」); the Sōtō Zen portal titles the temple 宗應寺 (應, the older form of 応); the MoJ licence asks for the source and a note that the data were processed"
+

@@ -84,6 +84,8 @@ def load_sheet(zpath):
 
 
 def kind_of(chiban):
+    # "private" here means a numbered lot (地番): the drawing records lots, not owners (the school's parcel is one);
+    # the page and the downloads call them "numbered"
     if chiban.startswith("道"): return "road"
     if chiban.startswith("水"): return "water"
     if chiban.startswith("長狭物"): return "strip"
