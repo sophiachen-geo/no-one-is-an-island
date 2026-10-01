@@ -833,3 +833,36 @@ lat = 33.728068
 source = "GSI 注記 「千穂ヶ峯」 (the figure draws OSM node 4355134042, natural=peak, ele=253)"
 confidence = "high"
 tol_m = 60
+
+# ---------------------------------------------------------------- field notes: town labels (checked by run.py check_fn)
+[points.fn_asuka]
+name = "阿須賀神社"
+lon = 135.997292
+lat = 33.728475
+source = "Wikidata Q11658011 (P625); GSI 注記 「阿須賀王子跡」 at 33.728545, 135.997275 (same reference as kmc_asuka)"
+confidence = "high"
+tol_m = 60
+
+[points.fn_hayatama]
+name = "熊野速玉大社"
+lon = 135.983542
+lat = 33.732175
+source = "GSI 注記 「熊野速玉大社」 (same reference as kmc_hayatama)"
+confidence = "high"
+tol_m = 60
+
+[points.fn_kamikura]
+name = "神倉神社の石段の下 (foot of the steps)"
+lon = 135.984192
+lat = 33.724297
+source = "GSI address search: 新宮市神倉一丁目13番8号, the shrine's address at the foot (same reference as kmc_foot)"
+confidence = "high"
+tol_m = 40
+
+[points.fn_station]
+name = "新宮駅"
+lon = 135.99408
+lat = 33.72508
+source = "OSM node 4355134041 (railway=station) (same reference as station)"
+confidence = "high"
+tol_m = 150

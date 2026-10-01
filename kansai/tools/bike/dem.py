@@ -4,7 +4,7 @@ h = (R*2^16 + G*2^8 + B) * 0.01 m; (128,0,0) = no data. Bilinear sampling inside
 Tiles are cached in ./dem_tiles/ so every run is reproducible offline."""
 import math, os, io, time, urllib.request, numpy as np
 from PIL import Image
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dem_tiles")
+CACHE = os.path.join(os.getcwd(), "dem_tiles")
 os.makedirs(CACHE, exist_ok=True)
 LAYERS = [("dem5a_png", 15), ("dem5b_png", 15), ("dem5c_png", 15), ("dem_png", 14)]
 UA = {"User-Agent": "no-one-is-an-island kansai research (github sophiachen-geo)"}

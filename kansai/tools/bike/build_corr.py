@@ -1,9 +1,9 @@
-import json, collections, sys, math
+import json, collections, sys, math, os
 from route import Graph, hav
 import metrics as M
 roads = json.load(open("roads.json")); G = Graph(roads)
 C = json.load(open("chains.json"))
-P = json.load(open("/tmp/claude-0/-home-user-no-one-is-an-island/12597f4f-a471-563e-939e-90ea1b9703e1/scratchpad/geo/osm/places.json"))
+P = json.load(open(os.path.join(os.getcwd(), "..", "geo", "osm", "places.json")))
 places = []
 for e in P.get("elements", []):
     t = e.get("tags", {}); pl = t.get("place")

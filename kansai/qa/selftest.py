@@ -84,7 +84,7 @@ def main():
     # buildings: one footprint moved into the sea changes a count the text relies on
     def data_copy():
         d = Path(tempfile.mkdtemp())
-        for f in (HERE.parent / "data").glob("kamikura*"):
+        for f in list((HERE.parent / "data").glob("kamikura*")) + [HERE.parent / "data" / "fieldnotes.js"]:
             shutil.copy(f, d / f.name)
         return d
     ddir = data_copy(); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
@@ -107,6 +107,17 @@ def main():
     d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js"); (d / "kamikura_lrm.jpg").unlink()
     os.environ["KANSAI_DATA"] = str(d)
     results.append(case("a missing ground layer is caught", "kamikura"))
+    # field notes: a statistic that drifts from the text, a photograph shown at the wrong time, a route table out of step
+    def fn_case(name, expect, edit):
+        d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js")
+        raw = (d / "fieldnotes.js").read_text(encoding="utf-8").strip(); D = json.loads(raw[raw.index("=") + 1:].rstrip(";")); edit(D)
+        (d / "fieldnotes.js").write_text("window.__FN=" + json.dumps(D, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
+        os.environ["KANSAI_DATA"] = str(d)
+        return case(name, expect)
+    results.append(fn_case("field-notes data that drifts from the text is caught", "derived", lambda D: D["stats"]["ride"].update(leg2_channel_m=360)))
+    results.append(fn_case("a field photograph shown at the wrong time is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(time="10:38")))
+    results.append(fn_case("a route table out of step with its data is caught", "fieldnotes",
+                           lambda D: D["region"]["options"]["hongu-hayatama"]["list"][0].update(up=D["region"]["options"]["hongu-hayatama"]["list"][0]["up"] + 5)))
     del os.environ["KANSAI_DATA"]
     # pictures: a picture whose file does not exist
     html = base_html.replace('<script type="application/json" id="media-data">', '<script type="application/json" id="media-data">', 1)

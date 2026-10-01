@@ -504,3 +504,58 @@ checked = "2026-10-01"
 url = "https://kotobank.jp/word/%E7%8C%BF%E7%94%B0%E5%BD%A6%E7%A5%9E-512504"
 kind = "source"
 checked = "2026-10-01"
+
+[[link]]
+url = "https://www.shinguu.jp/itineraries/detail/6"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.ncei.noaa.gov/products/world-magnetic-model"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.mie.lg.jp/DOROKI/HP/06655006251.htm"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/douro/closure/index.html"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/road/pcr/map/"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A40-2024.html"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.mie.lg.jp/D1BOUSAI/845440078610001.htm"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://online.bunka.go.jp/special_content/component/75"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/565"
+kind = "source"
+checked = "2026-10-01"

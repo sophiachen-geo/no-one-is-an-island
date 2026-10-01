@@ -1,7 +1,7 @@
 """GSI optimal vector tiles (experimental_bvmap z16) along given lines: levelling benchmarks (7103),
 triangulation points (7102) and spot heights (7201) with their heights. Tiles cached in ./bvmap/."""
 import os, math, glob, time, urllib.request, mapbox_vector_tile
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bvmap"); os.makedirs(CACHE, exist_ok=True)
+CACHE = os.path.join(os.getcwd(), "bvmap"); os.makedirs(CACHE, exist_ok=True)
 UA = {"User-Agent": "no-one-is-an-island kansai research (github sophiachen-geo)"}
 Z = 16
 def tile_of(lon, lat, z=Z):

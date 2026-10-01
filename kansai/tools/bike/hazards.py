@@ -8,7 +8,7 @@ from shapely.strtree import STRtree
 from shapely.ops import transform
 from pyproj import Transformer
 TR = Transformer.from_crs(4326, 6674, always_xy=True).transform
-KSJ = "/tmp/claude-0/-home-user-no-one-is-an-island/12597f4f-a471-563e-939e-90ea1b9703e1/scratchpad/geo/ksj"
+KSJ = os.environ.get("KANSAI_KSJ", os.path.join(os.getcwd(), "..", "geo", "ksj"))
 BB = (135.70, 33.60, 136.06, 33.92)
 def _in_bb(g):
     x0, y0, x1, y1 = g.bounds
