@@ -173,6 +173,31 @@ def inside(d, x, y):
 
 
 _BLD = {}
+_KMK = {}
+
+
+def kmk_data():
+    """The Kamikura micro-study (kansai/data/kamikura.js, built by kansai/tools/kamikura)."""
+    if not _KMK:
+        import os
+        raw = (Path(os.environ.get("KANSAI_DATA", KANSAI / "data")) / "kamikura.js").read_text(encoding="utf-8").strip()
+        _KMK.update(json.loads(raw[raw.index("=") + 1:].rstrip(";")))
+    return _KMK
+
+
+def kmk_value(dotted):
+    v = kmk_data()
+    for k in dotted.split("."):
+        v = v[int(k)] if isinstance(v, list) else v[k]
+    return v
+
+
+def shoelace_m2(d):
+    """Area of an SVG path (page units, even–odd rings) in square metres."""
+    tot = 0.0
+    for r in rings(d):
+        tot += sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(r, r[1:] + r[:1])) / 2
+    return abs(tot) * 1e4
 
 
 def bld_counts(g):
@@ -206,12 +231,13 @@ def check_derived(gate, g, claim):
     cid = claim["id"]
     L = g["layers"]
     try:
-        if "stat" in c:
-            v = stat(g, c["stat"]); shown = c.get("fmt", "{}").format(v)
+        if "stat" in c or ("kmk" in c and "fmt" in c):
+            v = stat(g, c["stat"]) if "stat" in c else kmk_value(c["kmk"]); shown = c.get("fmt", "{}").format(v)
+            src = c["stat"] if "stat" in c else "kamikura." + c["kmk"]
             if not any(shown in m for m in claim.get("match", []) + claim.get("exact", [])):
-                gate.err("derived", f"data says {c['stat']} = {v} → “{shown}”, but the text says {claim['match']}", cid)
+                gate.err("derived", f"data says {src} = {v} → “{shown}”, but the text says {claim.get('match') or claim.get('exact')}", cid)
             else:
-                gate.ok("derived", f"{cid}: {c['stat']} = {v} ↔ “{shown}”")
+                gate.ok("derived", f"{cid}: {src} = {v} ↔ “{shown}”")
             return
         if "area" in c:
             got = area_km2(L[c["area"]]); what = f"area of {c['area']}"
@@ -227,6 +253,8 @@ def check_derived(gate, g, claim):
             if not re.fullmatch(r"[\d\s.+\-*/()]+", c["calc"]):
                 raise ValueError("calc may only contain numbers and + - * / ( )")
             got = eval(c["calc"], {"__builtins__": {}}); what = c["calc"]
+        elif "kmk" in c:
+            got = float(kmk_value(c["kmk"])); what = f"kamikura.{c['kmk']}"
         elif "bld" in c:
             got = bld_counts(g)[c["bld"]]; what = f"buildings: {c['bld']} (re-counted from kansai/data/buildings.js)"
         elif "valley_ve" in c:
@@ -308,6 +336,8 @@ def check_points(gate, pts_ref, g, used):
         if key not in P:
             gate.err("points", "map point has no sourced reference in points.toml", key); continue
     for key, p in P.items():
+        if key.startswith("kmk_"):
+            continue
         if key not in g["pts"]:
             gate.err("points", "reference point missing from the page data", key); continue
         if key not in used:
@@ -324,6 +354,42 @@ def check_points(gate, pts_ref, g, used):
             gate.err("points", f"{off:.0f} m from its reference ({p['source']}); tolerance {p['tol_m']} m", key)
     if not any(e[0] == "points" for e in gate.errors):
         gate.ok("points", f"{len(P)} map points within tolerance of sourced coordinates")
+
+
+def check_kmk(gate, pts_ref, g, html):
+    """Kamikura micro-study: every label sits at its sourced place, the drawn study area and building count match the
+    statistics the text quotes, and every file the section loads or offers exists."""
+    import os
+    try:
+        K = kmk_data()
+    except Exception as e:
+        gate.err("kamikura", f"kansai/data/kamikura.js could not be read: {e}"); return
+    P = pts_ref.get("points", {}); n0 = len(gate.errors)
+    for lab in K["pts"]:
+        key, x, y = "kmk_" + lab[0], lab[2], lab[3]
+        if key not in P:
+            gate.err("kamikura", f"map label “{lab[1]}” has no sourced reference ({key}) in points.toml", key); continue
+        ref = P[key]
+        if not ref.get("source"):
+            gate.err("kamikura", "no source", key); continue
+        off = math.dist(tm.to_svg(ref["lon"], ref["lat"], g["origin"]), (x, y)) * 100
+        if off > ref["tol_m"]:
+            gate.err("kamikura", f"label “{lab[1]}” is {off:.0f} m from its reference ({ref['source']}); tolerance {ref['tol_m']} m", key)
+    for key in P:
+        if key.startswith("kmk_") and key[4:] not in {lab[0] for lab in K["pts"]}:
+            gate.warn("kamikura", "reference point not used by the micro-study (stale entry?)", key)
+    area = shoelace_m2(K["layers"]["poly"]) / 1e4
+    if abs(area - K["stats"]["area_ha"]) > 0.01:
+        gate.err("kamikura", f"the drawn study area is {area:.3f} ha but the statistics say {K['stats']['area_ha']} ha")
+    nb = len(rings(K["layers"]["b_in"]))
+    if nb != K["stats"]["bld_n"]:
+        gate.err("kamikura", f"{nb} building outlines are drawn inside the study area but the statistics say {K['stats']['bld_n']}")
+    data_dir = Path(os.environ.get("KANSAI_DATA", KANSAI / "data"))
+    for f in sorted(set(re.findall(r'(?:href|src)="(data/kamikura[^"]+)"', html)) | {"data/kamikura.js", K["img"]["href"]}):
+        if not (data_dir / f.split("/", 1)[1]).exists():
+            gate.err("kamikura", f"{f} is referenced by the page but missing")
+    if len(gate.errors) == n0:
+        gate.ok("kamikura", f"{len(K['pts'])} labels at their sourced places; drawn area {area:.2f} ha and {nb} buildings match the text; data files present")
 
 
 def check_geo(gate, g):
@@ -541,6 +607,7 @@ def main():
 
     check_register(gate, reg, rep["inventory"], g)
     check_points(gate, pts_ref, g, rep["usedPoints"])
+    check_kmk(gate, pts_ref, g, html)
     mreg = tomllib.loads((HERE / "media.toml").read_text(encoding="utf-8")) if (HERE / "media.toml").exists() else {}
     check_links(gate, tomllib.loads((HERE / "links.toml").read_text(encoding="utf-8")), rep.get("links", []), [m["source"] for m in mreg.get("media", [])])
     check_media(gate, mreg, page_media(html))

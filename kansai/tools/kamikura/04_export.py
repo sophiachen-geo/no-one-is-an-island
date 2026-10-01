@@ -1,0 +1,288 @@
+"""Kamikura micro-study, step 4: write the page's data and the GIS downloads.
+
+Reads (work dir): study.json (03), terrain.npz / terrain.json (02), osm.json, ../ksj hazard layers.
+Writes into the repository (pass its kansai/ folder as the only argument):
+  data/kamikura.js            window.__KMK = {...}: layers as SVG paths in page units (1 unit = 100 m, the page's
+                              JGD2011 / CS VI frame), labels, the profile, statistics, the alignment test
+  data/kamikura_relief.jpg    1 m relief (multi-directional hill shading over a height tint), one pixel per metre
+  data/kamikura_study.geojson study area, its four edges with their rules, the slope break, the transect (WGS84)
+  data/kamikura_study.kml     the same for Google Earth / My Maps
+"""
+import json, math, sys, os
+import numpy as np
+from PIL import Image
+from pyproj import Transformer
+from scipy import ndimage as ndi
+from skimage import measure
+from shapely.geometry import shape, Polygon, LineString, MultiLineString, Point, box, mapping
+from shapely.ops import unary_union, transform
+
+O = (-69782.048, -171691.754)            # the page's origin (G.origin): page = ((E − O0)/100, (O1 − N)/100)
+LL2P = Transformer.from_crs("EPSG:4326", "EPSG:6674", always_xy=True)
+P2LL = Transformer.from_crs("EPSG:6674", "EPSG:4326", always_xy=True)
+KSJ = "../ksj"
+
+
+def pg(x, y): return ((x - O[0]) / 100.0, (O[1] - y) / 100.0)
+
+
+def path(lines, closed=False, nd=3):
+    """SVG path in page units; relative moves keep it short (3 decimals = 0.1 m)."""
+    out = []
+    for L in lines:
+        pts = [pg(x, y) for x, y in L]
+        if len(pts) < 2: continue
+        q = [(round(px, nd), round(py, nd)) for px, py in pts]
+        s = f"M{q[0][0]} {q[0][1]}"
+        for (ax, ay), (bx, by) in zip(q, q[1:]):
+            dx, dy = round(bx - ax, nd), round(by - ay, nd)
+            if dx == 0 and dy == 0: continue
+            s += f"l{dx:g} {dy:g}".replace(" -", "-")
+        out.append(s + ("z" if closed else ""))
+    return "".join(out)
+
+
+def geoms_lines(g):
+    if g.is_empty: return []
+    if g.geom_type == "LineString": return [list(g.coords)]
+    if g.geom_type in ("MultiLineString", "GeometryCollection"): return [l for x in g.geoms for l in geoms_lines(x)]
+    if g.geom_type == "Polygon": return [list(g.exterior.coords)] + [list(r.coords) for r in g.interiors]
+    if g.geom_type == "MultiPolygon": return [l for x in g.geoms for l in geoms_lines(x)]
+    return []
+
+
+def proj(g): return transform(lambda x, y, z=None: LL2P.transform(x, y), g)
+
+
+def relief(z, out):
+    """Multi-directional hill shading on a soft height tint — 1 px = 1 m."""
+    zz = np.where(np.isnan(z), np.nanmin(z), z).astype(np.float64)
+    zs = ndi.gaussian_filter(zz, 0.7)
+    gy, gx = np.gradient(zs)
+    gy = -gy                                                   # rows run south
+    slope = np.arctan(np.hypot(gx, gy) * 1.6)
+    aspect = np.arctan2(-gx, gy)
+    shade = np.zeros_like(zs)
+    for az, w in ((315, .5), (270, .2), (0, .2), (225, .1)):
+        a = math.radians(az); alt = math.radians(42)
+        shade += w * (math.sin(alt) * np.cos(slope) + math.cos(alt) * np.sin(slope) * np.cos(a - aspect))
+    shade = np.clip(shade, 0, 1)
+    t = np.clip((zs - 2) / 60, 0, 1) ** 0.6                    # height tint: plain cream → slope warm grey-green
+    lo, hi = np.array([243, 238, 228]), np.array([196, 200, 178])
+    base = lo[None, None, :] * (1 - t[..., None]) + hi[None, None, :] * t[..., None]
+    k = 0.42 + 0.68 * shade[..., None]
+    img = np.clip(base * k, 0, 255).astype(np.uint8)
+    img[np.isnan(z)] = (236, 233, 226)
+    Image.fromarray(img).save(out, quality=84, optimize=True, progressive=True)
+
+
+def contours(z, x0, y1, levels, clip, min_len=14, tol=0.35):
+    zs = ndi.gaussian_filter(np.where(np.isnan(z), np.nanmin(z), z), 1.4)
+    res = {}
+    for lv in levels:
+        ls = []
+        for c in measure.find_contours(zs, lv):
+            line = LineString([(x0 + 0.5 + col, y1 - 0.5 - row) for row, col in c])
+            if line.length < min_len: continue
+            line = line.simplify(tol).intersection(clip)
+            ls += [l for l in geoms_lines(line) if LineString(l).length >= min_len]
+        res[lv] = ls
+    return res
+
+
+def main():
+    repo = sys.argv[1]
+    st = json.load(open("study.json")); tj = json.load(open("terrain.json")); tz = np.load("terrain.npz")
+    z = tz["z"]; x0, y1, W, H = [float(v) for v in tz["frame"]]
+    osm_l = json.load(open("osm.json"))["elements"]
+    osm = {e["id"]: e for e in osm_l if e["type"] == "way" and e.get("geometry")}
+    nodes = {e["id"]: e for e in osm_l if e["type"] == "node"}
+    frame = box(x0, y1 - H, x0 + W, y1)
+    os.makedirs(f"{repo}/data", exist_ok=True)
+
+    relief(z, f"{repo}/data/kamikura_relief.jpg")
+    img = {"href": "data/kamikura_relief.jpg", "x": round(pg(x0, y1)[0], 4), "y": round(pg(x0, y1)[1], 4), "w": W / 100, "h": H / 100}
+
+    poly = Polygon(st["poly"][0])
+    near = poly.buffer(260).intersection(frame)               # fine contours only around the study area
+    cs1 = contours(z, x0, y1, [float(v) for v in range(3, 15)], near)
+    cs5 = contours(z, x0, y1, [float(v) for v in range(15, 255, 5)], frame, min_len=20, tol=0.6)
+    L = {}
+    L["c1"] = path([l for v in cs1.values() for l in v])
+    L["c5"] = path([l for v, ls in cs5.items() if v % 25 for l in ls])
+    L["c25"] = path([l for v, ls in cs5.items() if v % 25 == 0 for l in ls])
+    lab = []
+    for v, ls in cs5.items():                                 # height labels on the 25 m contours, mid-line
+        if v % 25 or not ls: continue
+        lng = max(ls, key=lambda l: LineString(l).length)
+        if LineString(lng).length < 120: continue
+        p = LineString(lng).interpolate(0.5, normalized=True); a = LineString(lng).interpolate(0.52, normalized=True)
+        ang = math.degrees(math.atan2(-(a.y - p.y), a.x - p.x))
+        if ang > 90: ang -= 180
+        if ang < -90: ang += 180
+        lab.append([*map(lambda q: round(q, 4), pg(p.x, p.y)), f"{int(v)} m", round(ang, 1)])
+
+    L["poly"] = path(st["poly"], closed=True)
+    L["break"] = path([l for l in geoms_lines(unary_union([LineString(q) for q in tj["break"]]).intersection(near))])
+    def way(w): return LineString([LL2P.transform(p["lon"], p["lat"]) for p in osm[w]["geometry"]])
+    # water: GSI's drawn water areas (the channel between its banks) and single-line streams; the last stretch of the
+    # Kamikura-yama stream, which GSI stops at the slope foot, from OSM
+    wa = unary_union([Polygon(r[0]) for r in st["water_area"]]).intersection(frame)
+    L["water_area"] = path(geoms_lines(wa.simplify(0.15)), closed=True)
+    L["water"] = path([l for l in st["water_lines"]] + geoms_lines(way(499568828).intersection(frame)))
+    roads, paths, steps, r42 = [], [], [], []
+    for e in osm.values():
+        t = e.get("tags", {}); h = t.get("highway")
+        if not h or h in ("traffic_signals",): continue
+        g = way(e["id"]).intersection(frame)
+        if g.is_empty: continue
+        if t.get("name") == "国道42号" or h in ("trunk", "primary", "secondary"): r42.append(g)
+        elif h == "steps": steps.append(g)
+        elif h in ("path", "footway", "track", "pedestrian"): paths.append(g)
+        else: roads.append(g)
+    L["roads"] = path([l for g in roads for l in geoms_lines(g)])
+    L["major"] = path([l for g in r42 for l in geoms_lines(g)])
+    L["paths"] = path([l for g in paths for l in geoms_lines(g)])
+    L["steps"] = path([l for g in steps for l in geoms_lines(g)])
+    school = Polygon([LL2P.transform(p["lon"], p["lat"]) for p in osm[1333972521]["geometry"]])
+    prec = [Polygon([LL2P.transform(p["lon"], p["lat"]) for p in osm[w]["geometry"]]) for w in (500803106, 500803107)]
+    L["school"] = path([list(school.exterior.coords)], closed=True)
+    L["precinct"] = path([list(p.exterior.coords) for p in prec], closed=True)
+    by = {"foot": [], "grid": [], "both": [], "far": []}
+    for b in st["bld"]:
+        if not frame.intersects(Polygon(b["ring"])): continue
+        by[b["cls"]].append(b["ring"])
+    for k, v in by.items(): L["b_" + k] = path(v, closed=True)
+    L["b_in"] = path([b["ring"] for b in st["bld"] if b["in"]], closed=True)
+    L["b_robust"] = path([b["ring"] for b in st["bld"] if b["code"] in (3102, 3103, 3112)], closed=True)
+
+    def feats(fn, filt=lambda p: True):
+        for ft in json.load(open(fn, encoding="utf-8"))["features"]:
+            if ft.get("geometry") and filt(ft["properties"]):
+                g = shape(ft["geometry"])
+                if g.intersects(box(135.97, 33.71, 136.0, 33.735)): yield g.buffer(0)
+    FL = proj(unary_union([g for fn in ("8606010001", "8606010002", "8606010006") for g in feats(f"{KSJ}/20_想定最大規模/A31a-20-25_86_{fn}_10.geojson")])).intersection(frame)
+    a33 = f"{KSJ}/A33-25_30Polygon.geojson"
+    RED = proj(unary_union(list(feats(a33, lambda p: p["A33_002"] in (2, 4))))).intersection(frame)
+    YEL = proj(unary_union(list(feats(a33, lambda p: p["A33_002"] not in (2, 4))))).intersection(frame).difference(RED)
+    TS = proj(unary_union(list(feats(f"{KSJ}/A40-16_30_GML/A40-16_30.geojson")))).intersection(frame)
+    rit = f"{KSJ}/A55-24_30207_GEOJSON/30207_ritteki.geojson"
+    RIZ = proj(unary_union(list(feats(rit, lambda p: p["AreaType"] == "居住誘導区域")))).intersection(frame)
+    for k, g in (("flood", FL), ("ls_red", RED), ("ls_yellow", YEL), ("tsunami", TS)):
+        L[k] = path(geoms_lines(g.simplify(0.8)), closed=True)
+    L["riz"] = path(geoms_lines(RIZ.boundary.intersection(frame).simplify(0.8)))
+    tr = LineString(st["transect"])
+    L["transect"] = path([list(tr.coords)])
+
+    def nd(i): return LL2P.transform(nodes[i]["lon"], nodes[i]["lat"])
+    def ll(lon, lat): return LL2P.transform(lon, lat)
+    # [key, text, x, y (page), anchor, dx, dy, class, systems]
+    ich = LineString(st["ichida"]); ich_lab = ich.interpolate(ich.project(Point(*ll(135.98520, 33.72610))))
+    raw = [   # every place here has an independent reference in kansai/qa/points.toml (kmk_*)
+        ["summit", "神倉神社 · Gotobiki-iwa", nd(2270139651), "start", 8, -6, "em", "bichikei keidai"],
+        ["steps", "538 stone steps", ll(135.98330, 33.72366), "end", -6, -4, "", "michi keidai bichikei"],
+        ["entrance", "entrance · 下馬 stone", nd(4908399279), "start", 8, 16, "", "keidai michi"],
+        ["ichida", "市田川 Ichida-gawa", (ich_lab.x, ich_lab.y), "start", 7, 4, "water", "suikei"],
+        ["mstream", "Kamikura-yama stream", ll(135.98330, 33.72446), "end", -4, -6, "water small", "suikei"],
+        ["school", "神倉小学校 Kamikura Elementary", ll(135.98503, 33.72506), "middle", 0, 4, "", "kokyo"],
+        ["myoshin", "妙心寺", ll(135.984329, 33.724781), "end", -7, 2, "small", "keidai seikatsu"],
+        ["engawa", "Youth Library えんがわ", ll(135.984299, 33.724689), "end", -7, 12, "small", "kokyo seikatsu"],
+        ["oishii", "おいしいパーク", ll(135.98417, 33.72512), "end", -7, 4, "small", "kokyo seikatsu"],
+        ["soo", "宗応寺", ll(135.984268, 33.725773), "end", -7, 4, "small", "keidai"],
+        ["gym", "gym · shelter", ll(135.98524, 33.72488), "start", 7, 4, "small only", "saigai"],
+        ["schoolhouse", "school building · tsunami refuge", ll(135.98517, 33.72553), "start", 7, -4, "small only", "saigai"],
+        ["r42", "国道42号", ll(135.98657, 33.72600), "start", 6, 0, "small", "michi"],
+        ["cityhall", "新宮市役所 city hall", nd(1423067948), "end", -8, -8, "em", "michi"],
+        ["chiho", "千穂ヶ峰 ↑", ll(135.98150, 33.72660), "middle", 0, 0, "small", "bichikei"],
+    ]
+    pts = [[k, t, *map(lambda q: round(q, 4), pg(*xy)), a, dx, dy, c, s] for k, t, xy, a, dx, dy, c, s in raw]
+
+    # the rule of each edge, written just outside the middle of that edge
+    ring = LineString(list(poly.exterior.coords))
+    offl = unary_union([LineString(q) for q in tj["offset"]])
+    edge_geo = {"west": ring.intersection(offl.buffer(0.6)), "north": ring.intersection(LineString(st["edges"]["north"]).buffer(0.6)),
+                "east": ring.intersection(LineString(st["edges"]["east"]).buffer(0.6)), "south": ring.intersection(LineString(st["edges"]["south"]).buffer(0.6))}
+    edge_txt = {"west": "slope break + 25 m", "north": "first full block", "east": "school compound edge", "south": "entrance street"}
+    cen = poly.centroid
+    elab = []
+    for k, g in edge_geo.items():
+        parts = [p for p in getattr(g, "geoms", [g]) if not p.is_empty and p.geom_type in ("LineString", "Polygon")]
+        if not parts: raise SystemExit(f"edge {k} not found on the polygon")
+        longest = max(parts, key=lambda p: p.length)
+        m = longest.boundary.centroid if longest.geom_type == "Polygon" else longest.interpolate(0.5, normalized=True)
+        dx, dy = m.x - cen.x, m.y - cen.y; nrm = math.hypot(dx, dy) or 1.0          # outward, in page axes (y down)
+        elab.append([*map(lambda q: round(q, 4), pg(m.x, m.y)), edge_txt[k], k, [round(dx / nrm, 3), round(-dy / nrm, 3)]])
+    def bearing(ax):
+        ax = ax % 180
+        return f"N {round(ax)}° E" if ax <= 90 else f"N {round(180 - ax)}° W"
+    A = st["align"]
+    align_txt = {"break": bearing(A["slope break"]["mean_axis"]), "river": bearing(A["市田川"]["mean_axis"]),
+                 "bld_grid": f"{A['building long axes']['mean_grid']:.0f}°", "street_grid": f"{A['streets']['mean_grid']:.0f}°",
+                 "town_grid": f"{st['grid_town']:.0f}°"}
+
+    hx0, hy0, hx1, hy1 = poly.buffer(70).bounds
+    home = [*pg(hx0, hy1), *pg(hx1, hy0)]
+    tr_b = tr.buffer(40).bounds
+    data = {"img": img, "layers": L, "pts": pts, "clab": lab, "home": [round(v, 4) for v in home],
+            "frame": [round(v, 4) for v in (*pg(x0, y1), *pg(x0 + W, y1 - H))],
+            "transect": [[round(v, 4) for v in pg(*p)] for p in st["transect"]], "tsplit": st["transect_split_m"],
+            "tcum": [round(LineString(st["transect"][:i + 1]).length, 1) if i else 0.0 for i in range(len(st["transect"]))],
+            "trbox": [round(v, 4) for v in (*pg(tr_b[0], tr_b[3]), *pg(tr_b[2], tr_b[1]))],
+            "profile": st["profile"], "runs": st["profile_runs"], "stats": st["stats"], "align": st["align"],
+            "decay": st["decay"], "disc": st["disc"], "grid_town": st["grid_town"], "grid_town_R": st["grid_town_R"],
+            "edges": elab, "align_txt": align_txt, "disc_excess_beyond_25": st["disc_excess_beyond_25"]}
+    js = "window.__KMK=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
+    open(f"{repo}/data/kamikura.js", "w", encoding="utf-8").write(js)
+
+    # ------------------------------------------------------------ GIS downloads (WGS84)
+    def tll(g): return transform(lambda x, y, z=None: P2LL.transform(x, y), g)
+    def r7(geom):
+        def rnd(c):
+            return [rnd(x) for x in c] if isinstance(c[0], (list, tuple)) else [round(c[0], 7), round(c[1], 7)]
+        g = mapping(geom); g = {"type": g["type"], "coordinates": rnd(g["coordinates"])}; return g
+    s = st["stats"]
+    feats_out = [
+        {"type": "Feature", "properties": {"name": "神倉山麓 study area · Kamikura mountain foot", "area_ha": s["area_ha"],
+                                           "ns_m": s["ns_m"], "ew_m": s["ew_m"], "buildings": s["bld_n"]}, "geometry": r7(tll(poly))},
+        {"type": "Feature", "properties": {"name": "west edge", "rule": "25 m (horizontal) upslope of the slope break on GSI DEM1A (1 m)"},
+         "geometry": r7(tll(poly.exterior.intersection(unary_union([LineString(q) for q in tj["offset"]]).buffer(0.5))))},
+        {"type": "Feature", "properties": {"name": "north edge", "rule": "lane closing the first full block north of the school and the temple row (OSM 266991552, 121369902)"},
+         "geometry": r7(tll(LineString(st["edges"]["north"]).intersection(poly.buffer(0.5))))},
+        {"type": "Feature", "properties": {"name": "east edge", "rule": "street bounding the 千穂小学校 compound on the east, continued south (OSM 121367848, 1031510641, 121367953)"},
+         "geometry": r7(tll(LineString(st["edges"]["east"]).intersection(poly.buffer(0.5))))},
+        {"type": "Feature", "properties": {"name": "south edge", "rule": "street just south of the shrine-entrance cluster, carried west across the foot of the steps (OSM 121367975, 121370515, 499568826)"},
+         "geometry": r7(tll(LineString(st["edges"]["south"]).intersection(poly.buffer(0.5))))},
+        {"type": "Feature", "properties": {"name": "slope break", "rule": "edge of ground ≥1 m above the plain and steeper than 12° (or ≥3 m above it), connected to the slopes above 40 m; GSI DEM1A"},
+         "geometry": r7(tll(unary_union([LineString(q) for q in tj["break"]]).intersection(near)))},
+        {"type": "Feature", "properties": {"name": "transect", "from": "神倉神社 (summit, at Gotobiki-iwa)", "via": "the path and the stone steps (OSM 121369321, 121366071) to the bridge over 市田川",
+                                           "to": "新宮市役所", "length_m": s["transect_m"]}, "geometry": r7(tll(tr))},
+    ]
+    gj = {"type": "FeatureCollection", "name": "kamikura_study", "crs_note": "WGS84 lon/lat; built in JGD2011 / Japan Plane Rectangular CS VI (EPSG:6674)",
+          "source": "no-one-is-an-island · Kansai page · kansai/tools/kamikura (GSI DEM1A, © OpenStreetMap contributors ODbL)", "features": feats_out}
+    json.dump(gj, open(f"{repo}/data/kamikura_study.geojson", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+    def kml_coords(g):
+        if g.geom_type == "LineString": return [" ".join(f"{x},{y},0" for x, y in g.coords)]
+        if g.geom_type == "MultiLineString": return [" ".join(f"{x},{y},0" for x, y in l.coords) for l in g.geoms]
+        return []
+    pm = []
+    for f in feats_out:
+        g = shape(f["geometry"]); nm = f["properties"]["name"]
+        desc = "; ".join(f"{k}: {v}" for k, v in f["properties"].items() if k != "name")
+        if g.geom_type == "Polygon":
+            ring = " ".join(f"{x},{y},0" for x, y in g.exterior.coords)
+            pm.append(f"<Placemark><name>{nm}</name><description>{desc}</description><styleUrl>#area</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>{ring}</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>")
+        else:
+            for c in kml_coords(g):
+                pm.append(f"<Placemark><name>{nm}</name><description>{desc}</description><styleUrl>#{'tr' if nm == 'transect' else 'edge'}</styleUrl><LineString><coordinates>{c}</coordinates></LineString></Placemark>")
+    kml = ('<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Kamikura mountain foot · study area</name>'
+           '<Style id="area"><LineStyle><color>ff2f5fd3</color><width>3</width></LineStyle><PolyStyle><color>332f5fd3</color></PolyStyle></Style>'
+           '<Style id="edge"><LineStyle><color>ff2f5fd3</color><width>2</width></LineStyle></Style>'
+           '<Style id="tr"><LineStyle><color>ff944f2f</color><width>3</width></LineStyle></Style>' + "".join(pm) + "</Document></kml>\n")
+    open(f"{repo}/data/kamikura_study.kml", "w", encoding="utf-8").write(kml)
+    sz = {f: os.path.getsize(f"{repo}/data/{f}") for f in ("kamikura.js", "kamikura_relief.jpg", "kamikura_study.geojson", "kamikura_study.kml")}
+    print(sz, {k: len(v) for k, v in L.items()})
+
+
+if __name__ == "__main__":
+    main()

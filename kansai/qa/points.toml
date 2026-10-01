@@ -583,3 +583,127 @@ lat = 33.515858
 source = "GSI address search 和歌山県串本町古座"
 confidence = "medium"
 tol_m = 1200
+
+# ---------------------------------------------------------------- Kamikura micro-study (labels in kansai/data/kamikura.js)
+# Checked by run.py (check_kmk) against the micro-study's own label anchors; tolerances suit a map read at plot scale.
+# GSI 注記 = annotation of GSI's optimal vector tiles (experimental_bvmap, z16); addresses geocoded with GSI's
+# address search (msearch.gsi.go.jp). Checked 2026-10-01.
+[points.kmk_summit]
+name = "神倉神社 (summit, at ゴトビキ岩)"
+lon = 135.982815
+lat = 33.722192
+source = "GSI 注記 「神倉神社」 (the label is drawn at OSM node 2270139651, 1 m away)"
+confidence = "high"
+tol_m = 15
+
+[points.kmk_steps]
+name = "神倉神社の石段 (538段, 男坂)"
+lon = 135.98328
+lat = 33.72370
+source = "OSM way 121366071 (highway=steps), vertex at the label"
+confidence = "high"
+tol_m = 15
+
+[points.kmk_entrance]
+name = "神倉神社 入口 (下馬標石)"
+lon = 135.984192
+lat = 33.724297
+source = "GSI address search: 新宮市神倉一丁目13番8号, the shrine's address, which geocodes to the foot precinct (label at the 下馬 stone, OSM node 4908399279)"
+confidence = "high"
+tol_m = 20
+
+[points.kmk_ichida]
+name = "市田川 (open channel north of the school)"
+lon = 135.98520
+lat = 33.72610
+source = "GSI 最適化ベクトルタイル waterarea (ftCode 5000): the channel between its banks"
+confidence = "high"
+tol_m = 10
+
+[points.kmk_mstream]
+name = "Kamikura-yama stream"
+lon = 135.98330
+lat = 33.72446
+source = "GSI 最適化ベクトルタイル river line (ftCode 5301, single-line stream)"
+confidence = "high"
+tol_m = 10
+
+[points.kmk_school]
+name = "新宮市立神倉小学校 (千穂1-2-40)"
+lon = 135.985373
+lat = 33.725487
+source = "GSI 注記 「市立神倉小学校」; school website s-shingu.com/kamikura (label centred on the compound)"
+confidence = "high"
+tol_m = 80
+
+[points.kmk_myoshin]
+name = "妙心寺 (千穂1-3-2)"
+lon = 135.984329
+lat = 33.724781
+source = "GSI address search: 新宮市千穂一丁目3番2号 (address per ja.wikipedia 妙心寺 (新宮市)); Wakayama Pref.: 「神倉山麓の社務所北隣に妙心寺があります」"
+confidence = "medium"
+tol_m = 25
+
+[points.kmk_engawa]
+name = "Youth Library えんがわ (千穂1-3-1)"
+lon = 135.984299
+lat = 33.724689
+source = "GSI address search: 新宮市千穂一丁目3番1号 (address per 新宮市観光協会, shinguu.jp/spots/detail/B0036)"
+confidence = "high"
+tol_m = 25
+
+[points.kmk_oishii]
+name = "おいしいパーク"
+lon = 135.98417
+lat = 33.72512
+source = "archello.com/project/oishii-park (block-level pin); designer: 「『Youth Library えんがわ』からお寺を挟んだ2軒隣。向かいに小学校があり」 (td-ms.com)"
+confidence = "low"
+tol_m = 60
+
+[points.kmk_soo]
+name = "宗応寺 (千穂1-3-34)"
+lon = 135.984268
+lat = 33.725773
+source = "GSI address search: 新宮市千穂一丁目3番34号 (address per the Sōtō Zen portal 曹洞禅ナビ, sotozen-navi.com/detail/index_300052.html, as 宗應寺); OSM node 6849428099 is 18 m away"
+confidence = "high"
+tol_m = 25
+
+[points.kmk_gym]
+name = "神倉小学校 体育館 (指定避難所, 洪水・土砂災害の指定緊急避難場所)"
+lon = 135.98524
+lat = 33.72488
+source = "GSI 指定緊急避難場所データ (skhb01–05)"
+confidence = "high"
+tol_m = 15
+
+[points.kmk_schoolhouse]
+name = "神倉小学校 校舎 (地震・津波の指定緊急避難場所)"
+lon = 135.98517
+lat = 33.72553
+source = "GSI 指定緊急避難場所データ (skhb01–05)"
+confidence = "high"
+tol_m = 15
+
+[points.kmk_r42]
+name = "国道42号"
+lon = 135.98657
+lat = 33.72600
+source = "OSM way 1271033008 (highway=trunk, ref 42)"
+confidence = "high"
+tol_m = 15
+
+[points.kmk_cityhall]
+name = "新宮市役所"
+lon = 135.992533
+lat = 33.724139
+source = "GSI 注記 「新宮市役所」 (label drawn at OSM node 1423067948, 4 m away)"
+confidence = "high"
+tol_m = 20
+
+[points.kmk_chiho]
+name = "千穂ヶ峯"
+lon = 135.979535
+lat = 33.728068
+source = "GSI 注記 「千穂ヶ峯」 (a ridge name; the label marks the slope below it, pointing up)"
+confidence = "high"
+tol_m = 500

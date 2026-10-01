@@ -82,12 +82,26 @@ def main():
     rep = json.loads(json.dumps(base_rep)); rep["tiles"][0]["m"][4] += 0.5
     results.append(case("a misplaced imagery tile is caught", "tiles", rep=rep))
     # buildings: one footprint moved into the sea changes a count the text relies on
-    ddir = Path(tempfile.mkdtemp()); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
+    def data_copy():
+        d = Path(tempfile.mkdtemp())
+        for f in (HERE.parent / "data").glob("kamikura*"):
+            shutil.copy(f, d / f.name)
+        return d
+    ddir = data_copy(); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
     B = json.loads(raw[raw.index("=") + 1:].rstrip(";")); B["counts"]["total"] -= 1
     (ddir / "buildings.js").write_text("window.__BLD=" + json.dumps(B, separators=(",", ":")) + ";", encoding="utf-8")
     import os
     os.environ["KANSAI_DATA"] = str(ddir)
     results.append(case("building data that no longer matches is caught", "derived"))
+    # Kamikura micro-study: a statistic that drifts from the text, and a label moved 50 m off its sourced place
+    def kmk_case(name, expect, edit):
+        d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js")
+        raw = (d / "kamikura.js").read_text(encoding="utf-8").strip(); K = json.loads(raw[raw.index("=") + 1:].rstrip(";")); edit(K)
+        (d / "kamikura.js").write_text("window.__KMK=" + json.dumps(K, ensure_ascii=False, separators=(",", ":")) + ";", encoding="utf-8")
+        os.environ["KANSAI_DATA"] = str(d)
+        return case(name, expect)
+    results.append(kmk_case("Kamikura data that drifts from the text is caught", "derived", lambda K: K["stats"].update(area_ha=K["stats"]["area_ha"] + 0.4)))
+    results.append(kmk_case("a Kamikura label moved off its place is caught", "kamikura", lambda K: K["pts"][6].__setitem__(2, K["pts"][6][2] + 0.5)))
     del os.environ["KANSAI_DATA"]
     # pictures: a picture whose file does not exist
     html = base_html.replace('<script type="application/json" id="media-data">', '<script type="application/json" id="media-data">', 1)
