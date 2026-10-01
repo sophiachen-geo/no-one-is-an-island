@@ -59,6 +59,7 @@ These come from the author's text. No source was found or checked for them yet.
 - **Residents per building** — Residents are the 2020 census spread over GSI building footprints by area (15–2,500 m²; sheds and buildings on OSM sites that are not homes take none), fitted so every 250 m cell and every small area keeps its census totals by age. Cells the census suppresses pass their ages to a neighbouring cell. Individual buildings can be wrong; sums over areas hold. The 2025 census found 10% fewer people in Shingū; its small-area tables are not yet published.
 - **Roads under hazard** — A road closes in a scenario where any point on it, every 10 m, lies in the hazard; bridges and tunnels stay open. Roads that stay dry can still be blocked by debris or damage, and flooded roads can be passable at shallow depths: the scenarios bound access, they do not forecast it. Residents attach to the nearest drivable road; the network is OpenStreetMap of 1 October 2026.
 - **2050 projection** — The 2050 figures keep every building's 2020 residents and scale them by the town's projected change for people under and over 75 (IPSS 2023). Real decline will be uneven between districts.
+- **Kamikura: the alignment test, the parcel map and the refuge** — The test of what follows the mountain foot can only use the stretches where the foot bends 10° or more off the town grid: a dozen bends, 64% of the measured front. Its 95% intervals are therefore wide, and which classes pass the false-discovery control depends on how chance is drawn: with slides of the foot's directions of at least 50 m only the lanes pass; with at least 100 m the back boundaries and the buildings pass too. The parcel map is registered to GSI road edges by an affine fit; on a third of the area left out, its road parcels lie a median 1.3–1.9 m from the road edges, so parcel positions are good to about 2 m. The refuge overlay places GSI's building outlines and site points on the hazard maps' depth classes (0.5–3 m); it does not assess the buildings' floor levels or structure.
 
 ### Geometry
 - **Ichida-gawa basin outline** — The dashed outline was digitised from MLIT's printed basin map (図-1.2). It covers 5.85 km², 9% more than the official 5.36 km², so the page quotes the official figure.
@@ -72,4 +73,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 7 · author: 1 · corrected: 6 · derived: 320 · method: 41 · verified: 140 · map points: 105
+approximate: 7 · author: 1 · corrected: 6 · derived: 390 · method: 43 · verified: 142 · map points: 105

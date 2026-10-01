@@ -9,11 +9,11 @@ Builds `kansai/data/kamikura.js` (the chapter's map, figures and statistics), th
 T=/path/to/no-one-is-an-island/kansai/tools/kamikura
 python3 $T/01_fetch.py         # GSI DEM1A (1 m) tiles for the frame (DEM5A where 1 m is missing) + every OSM feature in it
 python3 $T/02_terrain.py       # 1 m grid in JGD2011 / CS VI, slope, the break of slope and the line 25 m upslope of it
-python3 $T/03_study.py         # study polygon, transect, statistics (→ study.json)
+python3 $T/03_study.py         # study polygon, transect, statistics, the school refuge's hazards (→ study.json)
 python3 $T/05_terrain_plus.py  # which DEM the ground can bear (coverage, benchmarks, DEM5A), local relief, curvature
 python3 $T/06_foot.py          # the mountain foot, four ways, on cross-profiles every 2 m (→ foot.json)
-python3 $T/07_parcels.py       # the MoJ parcel map (任意座標系) registered to GSI road edges (→ parcels.json)
-python3 $T/08_align.py         # what follows the foot: nine feature classes, six runs (→ align.json, walls.json, …)
+python3 $T/07_parcels.py       # the MoJ parcel map (任意座標系) registered to GSI road edges; spline check (→ parcels.json)
+python3 $T/08_align.py         # what follows the foot: nine classes, effects, intervals, q (→ align.json, walls.json, …)
 python3 $T/09_export.py /path/to/no-one-is-an-island/kansai   # page data, ground layers, GeoJSON/KML
 python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-checks every number and label
 ```
@@ -63,6 +63,14 @@ is placed by matching the school parcel
 similarity, then affine). The drawing must be enlarged 13–16% (縄伸び) and turned about 14°; road parcels then sit a
 median 1.2 m from the road edges. Parcel numbers are not published in the download.
 
+A thin-plate spline (scipy `RBFInterpolator`, degree 1) tests whether the drawing is stretched unevenly. Its pairs are
+road-parcel outline points every 5 m and the nearest GSI road edge within 6 m, after the affine fit. The smoothing is
+chosen among 1, 10 … 10⁶ by leaving out each north–south third of the fragment in turn: the similarity and affine
+fits are refitted on the other two thirds, the spline is trained on their pairs, and all three are scored on the third
+left out (`tps.zones`). The stiffest setting wins, so the spline is practically the affine fit; on a third left out
+the road parcels lie a median 1.3–2.1 m from the road edges (affine 1.3–1.9 m, similarity 1.5–1.7 m). The page uses
+the affine fit; the spline (`rings_tps`) and the similarity fit are the two other registrations in step 8.
+
 ## What follows the foot (08)
 
 Each feature is cut into pieces of at most 10 m; a boundary shared by two parcels counts once. Only pieces where the
@@ -73,10 +81,14 @@ directions is slid along the foot by every offset of at least 50 m (25 profiles)
 neighbouring pieces, which are not independent, move together; `p_100` repeats it with offsets of at least 100 m.
 (The first version shuffled single pieces; that treats neighbours as independent and gave p-values far too small for
 long lines, and uninformative ones for clustered short edges. It is kept as `p_perm` for the record.) `n_units`
-counts the distinct lines behind a result. The test runs six times: the consensus foot, each single definition A–D,
-and the similarity registration of the parcel map; these check that a result does not hang on those choices and are
-not independent samples. A run counts as significant only when p < 0.05 with both minimum offsets (50 m and 100 m);
-a result holds when that is so in at least 4 of the 6 runs. Classes: channel centre
+counts the distinct lines behind a result. The effect is the observed share minus the mean shifted share (points),
+with a 95% interval from a moving-block bootstrap along the foot (blocks of 25 profiles = 50 m, 4,000 draws). The
+primary family is every class in its band next to the foot (0–25 m; steep steps −15–0 m); Benjamini–Hochberg q
+controls the false discovery rate over it (`q_primary`, `q_primary_100` with the 100 m offsets) and, for the other
+bands, over all 29 class × band tests (`q_all`, `q_all_100`), each from the unrounded p. `bends` says how much of the
+front the test can use (the foot ≥ 10° off the grid: 12 bends, 64% of it). The test is rerun with each single foot
+definition A–D and with the similarity and spline registrations of the parcel map; those runs are reported as
+effects (`sensitivity`), not counted as votes. Classes: channel centre
 line and banks, the parcel map's waterway parcels, back boundaries and frontages of numbered parcels, temple and
 shrine property, OSM lanes, steep steps (DEM steps ≥ 1 m at ≥ 45° outside buildings and the channel: walls, cut faces
 or rock), building long axes. Row offsets measure, every 2 m, how far from the foot the numbered parcels end and the
@@ -85,6 +97,11 @@ shares in the unnumbered strips, in numbered parcels and more than 3 m inside th
 
 ## Choices worth knowing
 
+- The school refuge (03, `stats.school`): GSI's 指定緊急避難場所 points for Shingū (`sites_30207.csv`, or `$GSI_SITES`)
+  are placed in the GSI building outlines that contain them; the gym and the school building are then measured
+  against the A33-25 debris-flow zones, the A31b-25 flood meshes (planned and maximum, by depth class) and
+  Wakayama's 2026 maximum tsunami (`$TSUNAMI2026`, default `../tsunami2026`, from `tools/tsunami2026`), the same
+  layers as the main page. The city's own safety ratings for the two sites come from its list (info/123).
 - The channel (神倉堀端都市下水路) comes from GSI's water areas (optimal vector tiles, ftCode 5000), not OSM, which
   maps only its southern half. Its centre line is the midpoint of each east–west chord.
 - The transect follows the pilgrims' route down the mountain (OSM path 121369321 and the steps 121366071) to the

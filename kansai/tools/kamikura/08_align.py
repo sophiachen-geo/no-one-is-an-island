@@ -30,8 +30,16 @@ footprint area). Chance = circular shift: the foot's sequence of local direction
 offset of at least 50 m (wrapping round at the ends) and the statistic recomputed, so that the foot's bends meet
 features they did not shape while both keep their own spatial pattern; one-sided p. Pieces of one line or one
 neighbourhood are not independent, and shuffling single pieces (kept as p_perm for the record) makes p far too
-small. As a check, p_100 repeats the shift test with a minimum offset of 100 m; a run counts as significant on the
-page only when it passes both (robust.significant_both). n_units counts the distinct lines
+small. As a check, p_100 repeats the shift test with a minimum offset of 100 m.
+Reporting: the effect is the observed share minus the mean of the shifted shares (percentage points), with a 95%
+interval from a moving-block bootstrap along the foot (blocks of 25 profiles = 50 m, 4,000 resamples) and the chance
+range (2.5–97.5% of the shifted shares). The primary family is every class measured, in the band next to the foot
+(0–25 m; walls −15–0 m), none left out for its result; Benjamini–Hochberg q-values control the false discovery rate
+over that family (q_primary) and, for the other bands, over all class × band tests (q_all); q_primary_100 and
+q_all_100 repeat both with the 100 m minimum shift. The sensitivity runs (each single
+foot definition, each other registration) are reported as effects, not counted as votes. The test can only use the
+foot where it bends at least 10° off the grid: bends.bend_len_m says how much of the measured front that is.
+n_units counts the distinct lines
 (or buildings) among the counted pieces. For the long single lines (channel, banks, legal water) a second measure is
 whether they copy the foot's bends: correlation of their east–west wiggles with the foot's over the stretch where
 they run within 40 m.
@@ -61,6 +69,7 @@ SHRINE_WAYS = [500803106, 500803107]          # the shrine's lower precinct and 
 LANE_KINDS = {"residential", "unclassified", "service", "living_street", "path", "footway", "steps", "pedestrian", "track"}
 PIECE = 10.0
 SHIFT_MIN, SHIFT_CHECK = 25, 50                                 # profiles (2 m apart): 50 m, and 100 m as a check
+BLOCK, N_BOOT = 25, 4000                                        # moving-block bootstrap: 50 m blocks along the foot
 rng = np.random.default_rng(6674)
 
 
@@ -150,12 +159,24 @@ def classify(rows, foot, grid, band):
         T = np.array([stat(foot.dir[(idx + k) % N]) for k in range(kmin, N - kmin + 1)]); return T[~np.isnan(T)]
     def pval(T): return round(float((np.sum(T >= obs - 1e-12) + 1) / (len(T) + 1)), 4)
     T, T100 = shifted(SHIFT_MIN), shifted(SHIFT_CHECK)
+    # effect and its interval: resample 50 m blocks of the foot (with the pieces that belong to them)
+    fol_w = w * (adiff(th, fdir) < adiff(th, grid))
+    nb = int(math.ceil(N / BLOCK)); blk = np.minimum(idx // BLOCK, nb - 1)
+    Wb = np.bincount(blk[disc], weights=w[disc], minlength=nb); Fb = np.bincount(blk[disc], weights=fol_w[disc], minlength=nb)
+    draws = rng.integers(0, nb, size=(N_BOOT, nb)); cnt = np.stack([np.bincount(d, minlength=nb) for d in draws])
+    den = cnt @ Wb; ok = den > 0; boot = (cnt @ Fb)[ok] / den[ok]
+    eff_lo, eff_hi = (100 * (np.percentile(boot, [2.5, 97.5]) - T.mean())).tolist()
     # for the record: the earlier null, foot directions shuffled among the pieces (ignores that pieces cluster)
     fd, wd, thd = fdir[disc], w[disc], th[disc]
     perm = np.array([(wd * (adiff(thd, q) < adiff(thd, grid))).sum() / wd.sum() for q in (rng.permutation(fd) for _ in range(2000))])
     return {"from": band[0], "to": band[1], "length_m": round(tot_len), "n_disc": int(disc.sum()), "disc_len_m": round(float(wd.sum())),
             "n_units": int(len(set(unit[disc]))), "n_units_follow": int(len(set(unit[fol]))),
             "follow_foot_pct": round(100 * obs, 1), "chance_pct": round(100 * float(T.mean()), 1), "p": pval(T), "n_shifts": int(len(T)),
+            "p_exact": float((np.sum(T >= obs - 1e-12) + 1) / (len(T) + 1)),          # unrounded, for the q-values
+            "p_100_exact": float((np.sum(T100 >= obs - 1e-12) + 1) / (len(T100) + 1)),
+            "effect_pp": round(100 * (obs - float(T.mean())), 1), "effect_lo": round(eff_lo, 1), "effect_hi": round(eff_hi, 1),
+            "chance_lo": round(100 * float(np.percentile(T, 2.5)), 1), "chance_hi": round(100 * float(np.percentile(T, 97.5)), 1),
+            "n_blocks": int(len(set(blk[disc].tolist()))),
             "p_100": pval(T100), "p_perm": round(float((np.sum(perm >= obs - 1e-12) + 1) / (len(perm) + 1)), 4),
             "within10_foot_pct": round(100 * float((wd * (adiff(thd, fd) <= 10)).sum() / wd.sum()), 1),
             "within10_grid_pct": round(100 * float((wd * (adiff(thd, grid) <= 10)).sum() / wd.sum()), 1)}
@@ -328,11 +349,11 @@ def dem_walls(z, x0, y1, W, H, exclude, foot, ys):
     return walls
 
 
-def analyse(sim=False, foot_def="consensus", aux=True):
+def analyse(sim=False, foot_def="consensus", aux=True, tps=False):
     """One run of the whole test. The main run (consensus foot, affine registration) also writes the auxiliary
     files; the sensitivity runs (each single foot definition, the similarity registration) only return results."""
     class A_: pass
-    args = A_(); args.sim = sim; args.foot = foot_def; args.out = "align.json" if aux else None
+    args = A_(); args.sim = sim; args.tps = tps; args.foot = foot_def; args.out = "align.json" if aux else None
     F = json.load(open("foot.json"))
     if args.foot != "consensus":
         for r in F["profiles"]:
@@ -341,8 +362,8 @@ def analyse(sim=False, foot_def="consensus", aux=True):
     foot = Foot(F)
     st = json.load(open("study.json")); poly = Polygon(st["poly"][0])
     par = json.load(open("parcels.json"))
-    if args.sim:
-        for p in par["parcels"]: p["rings"] = p["rings_sim"]
+    if args.sim or args.tps:
+        for p in par["parcels"]: p["rings"] = p["rings_sim" if args.sim else "rings_tps"]
     tz = np.load("terrain.npz"); z = tz["z"].astype(float); x0, y1, W, H = [float(v) for v in tz["frame"]]; W, H = int(W), int(H)
     frame = box(x0, y1 - H, x0 + W, y1)
     L = tiles_layers()
@@ -429,7 +450,13 @@ def analyse(sim=False, foot_def="consensus", aux=True):
             e = e1 if np.hypot(*e1) >= np.hypot(*e2) else e2
             m = p.centroid; brows.append((m.x, m.y, bearing(e[0], e[1]), p.area, len(brows)))
 
-    res = {"grid_deg": round(grid, 1), "grid_R": round(gridR, 2), "regional_front_deg": round(regional, 1),
+    bend = adiff(foot.dir, grid) >= 10; runs_m, k = [], 0
+    for b in list(bend) + [False]:
+        if b: k += 1
+        elif k: runs_m.append(2 * k); k = 0
+    bends = {"front_m": 2 * len(bend), "bend_len_m": int(2 * bend.sum()), "share_pct": round(100 * float(bend.mean()), 1),
+             "n_bends": len(runs_m), "min_m": min(runs_m), "max_m": max(runs_m), "bends_m": runs_m}
+    res = {"bends": bends, "grid_deg": round(grid, 1), "grid_R": round(gridR, 2), "regional_front_deg": round(regional, 1),
            "near_front_deg": round(near_front, 1), "classes": {}}
     for name in ("channel", "banks", "legal_water", "backs", "fronts", "temple", "lanes"):
         rows = [p for u, g in enumerate(feats[name]) for p in pieces(g, unit=u)]
@@ -473,21 +500,23 @@ def analyse(sim=False, foot_def="consensus", aux=True):
 
 def main():
     res = analyse()
-    variants = {"similarity registration": dict(sim=True), "foot A (mask edge)": dict(foot_def="A"), "foot B (plain + 1 m)": dict(foot_def="B"),
+    variants = {"similarity registration": dict(sim=True), "thin-plate spline registration": dict(tps=True), "foot A (mask edge)": dict(foot_def="A"), "foot B (plain + 1 m)": dict(foot_def="B"),
                 "foot C (concavity)": dict(foot_def="C"), "foot D (hinge)": dict(foot_def="D")}
     rob, rob_band = {}, {}
     for name, kw in variants.items():
         r = analyse(aux=False, **kw)
         for cls, v in r["classes"].items():
             b = next((b for b in v["bands"] if b["from"] == (-15 if cls == "walls" else 0)), None)
-            rob.setdefault(cls, []).append({"variant": name, **({k: b.get(k) for k in ("follow_foot_pct", "chance_pct", "p", "p_100", "n_disc", "n_units")} if b else {})})
+            rob.setdefault(cls, []).append({"variant": name, **({k: b.get(k) for k in ("follow_foot_pct", "chance_pct", "p", "p_100", "n_disc", "n_units",
+                                                                               "effect_pp", "effect_lo", "effect_hi") if k in b} if b else {})})
             for bb in v["bands"]:
                 rob_band.setdefault((cls, bb["from"]), []).append(bb)
         if kw.get("sim"): res["courses_sim"] = r["courses"]
+        if kw.get("tps"): res["courses_tps"] = r["courses"]
         rob.setdefault("_offsets", []).append({"variant": name, "cadastre_west": r["offsets"]["cadastre_west"]["median_m"],
                                                "legal_water": r["offsets"]["legal_water"]["median_m"], "lane": r["offsets"]["lane"]["median_m"],
                                                "together_rows": r["legal_vs_channel"]["together_rows"], "wiggle_r": r["wiggle"]["channel"].get("wiggle_r")})
-    # every band, not just the one next to the foot: in how many of the six runs does the excess hold?
+    # for the record (the page reports effects): in how many of the runs does each band's excess hold?
     for cls, v in res["classes"].items():
         for bb in v["bands"]:
             if bb.get("p") is None: continue
@@ -504,6 +533,18 @@ def main():
                        "significant_100": sum(1 for x in runs if x["p_100"] < 0.05),
                        "significant_both": sum(1 for x in runs if x["p"] < 0.05 and x["p_100"] < 0.05),
                        "above_chance": sum(1 for x in runs if x["follow_foot_pct"] > x["chance_pct"])}
+    # false discovery rate (Benjamini–Hochberg): the primary family (each class in the band next to the foot) and,
+    # for the record, every class × band test
+    def bh(ps):
+        ps = np.asarray(ps, float); m = len(ps); o = np.argsort(ps); q = np.empty(m)
+        q[o] = np.minimum.accumulate((ps[o] * m / np.arange(1, m + 1))[::-1])[::-1]; return np.minimum(q, 1.0)
+    prim = [(cls, b) for cls, v in res["classes"].items() for b in v["bands"] if b.get("p") is not None and b["from"] == (-15 if cls == "walls" else 0)]
+    for (cls, b), q in zip(prim, bh([b["p_exact"] for _, b in prim])): b["q_primary"] = round(float(q), 3)
+    for (cls, b), q in zip(prim, bh([b["p_100_exact"] for _, b in prim])): b["q_primary_100"] = round(float(q), 3)
+    allb = [b for v in res["classes"].values() for b in v["bands"] if b.get("p") is not None]
+    for b, q in zip(allb, bh([b["p_exact"] for b in allb])): b["q_all"] = round(float(q), 3)
+    for b, q in zip(allb, bh([b["p_100_exact"] for b in allb])): b["q_all_100"] = round(float(q), 3)
+    res["family"] = {"primary": [c for c, _ in prim], "n_primary": len(prim), "n_all": len(allb)}
     res["sensitivity"] = rob
     json.dump(res, open("align.json", "w"), ensure_ascii=False, indent=1)
     print(json.dumps({k: (v.get("robust"), v["bands"][0] if v["bands"] else None) for k, v in res["classes"].items()}, ensure_ascii=False, indent=1))
