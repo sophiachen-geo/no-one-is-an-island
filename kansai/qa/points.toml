@@ -612,8 +612,8 @@ source = "GSI address search: 新宮市神倉一丁目13番8号, the shrine's ad
 confidence = "high"
 tol_m = 20
 
-[points.kmk_ichida]
-name = "市田川 (open channel north of the school)"
+[points.kmk_horibata]
+name = "神倉堀端都市下水路 (open channel north of the school)"
 lon = 135.98520
 lat = 33.72610
 source = "GSI 最適化ベクトルタイル waterarea (ftCode 5000): the channel between its banks"

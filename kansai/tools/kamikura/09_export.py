@@ -1,10 +1,13 @@
-"""Kamikura micro-study, step 4: write the page's data and the GIS downloads.
+"""Kamikura micro-study, step 9 (last): write the page's data and the GIS downloads.
 
-Reads (work dir): study.json (03), terrain.npz / terrain.json (02), osm.json, ../ksj hazard layers.
+Reads (work dir): study.json (03), terrain.npz / terrain.json (02), terrain_plus.npz / terrain_audit.json (05),
+foot.json (06), parcels.json (07), align.json / walls.json / backs.json (08), osm.json, ../ksj hazard layers.
 Writes into the repository (pass its kansai/ folder as the only argument):
   data/kamikura.js            window.__KMK = {...}: layers as SVG paths in page units (1 unit = 100 m, the page's
                               JGD2011 / CS VI frame), labels, the profile, statistics, the alignment test
   data/kamikura_relief.jpg    1 m relief (multi-directional hill shading over a height tint), one pixel per metre
+  data/kamikura_{elev,slope,lrm,curv}.jpg   the other ground layers on the same 1 m grid: height, slope, local
+                              relief and profile curvature (each over a faint hill shading)
   data/kamikura_study.geojson study area, its four edges with their rules, the slope break, the transect (WGS84)
   data/kamikura_study.kml     the same for Google Earth / My Maps
 """
@@ -76,6 +79,135 @@ def relief(z, out):
     Image.fromarray(img).save(out, quality=84, optimize=True, progressive=True)
 
 
+def _shade(z):
+    zz = np.where(np.isnan(z), np.nanmin(z), z).astype(np.float64)
+    gy, gx = np.gradient(ndi.gaussian_filter(zz, 0.8)); gy = -gy
+    slope = np.arctan(np.hypot(gx, gy) * 1.6); aspect = np.arctan2(-gx, gy); sh = np.zeros_like(zz)
+    for az, w in ((315, .5), (270, .2), (0, .2), (225, .1)):
+        a = math.radians(az); alt = math.radians(42)
+        sh += w * (math.sin(alt) * np.cos(slope) + math.cos(alt) * np.sin(slope) * np.cos(a - aspect))
+    return np.clip(sh, 0, 1)
+
+
+def _ramp(v, stops):
+    vs = np.array([q[0] for q in stops], float); cs = np.array([q[1] for q in stops], float)
+    v = np.clip(np.nan_to_num(v, nan=vs[0]), vs[0], vs[-1]); out = np.empty(v.shape + (3,))
+    for k in range(3): out[..., k] = np.interp(v, vs, cs[:, k])
+    return out
+
+
+# value → colour stops for the ground layers (also sent to the page for their legends)
+GROUND = {
+    "elev": {"label": "height", "unit": "m", "ticks": [2, 6, 10, 25, 100, 250],
+             "stops": [(2, (36, 86, 117)), (4, (64, 133, 141)), (6, (124, 176, 150)), (8, (186, 206, 158)), (10, (229, 226, 178)),
+                       (15, (238, 212, 160)), (25, (224, 186, 136)), (50, (198, 152, 108)), (100, (160, 118, 88)), (250, (116, 90, 80))]},
+    "slope": {"label": "slope", "unit": "°", "ticks": [0, 3, 8, 15, 30, 45, 70],
+              "stops": [(0, (246, 241, 231)), (3, (241, 229, 200)), (8, (233, 201, 150)), (15, (215, 151, 100)), (30, (177, 84, 64)),
+                        (45, (120, 40, 50)), (70, (70, 22, 40))]},
+    "lrm": {"label": "local relief: ground above (+) or below (−) its 20 m surroundings", "unit": "m", "ticks": [-2.5, -1, 0, 1, 2.5],
+            "stops": [(-2.5, (33, 102, 172)), (-1, (146, 197, 222)), (0, (247, 247, 247)), (1, (244, 165, 130)), (2.5, (178, 24, 43))]},
+    "curv": {"label": "profile curvature: concave (foot) ← → convex (shoulder, wall top)", "unit": "1/m", "ticks": [-0.08, 0, 0.08],
+             "stops": [(-0.08, (1, 102, 94)), (-0.03, (128, 205, 193)), (0, (245, 245, 245)), (0.03, (223, 194, 125)), (0.08, (140, 81, 10))]},
+}
+
+
+def ground_images(z, tp, repo):
+    """The four extra ground layers as JPEGs on the relief's grid (1 px = 1 m)."""
+    sh = _shade(z)
+    src = {"elev": z, "slope": None, "lrm": tp["lrm"], "curv": tp["prof"]}
+    zz = np.where(np.isnan(z), np.nanmin(z), z)
+    gy, gx = np.gradient(ndi.gaussian_filter(zz, 1.0)); src["slope"] = np.degrees(np.arctan(np.hypot(gx, gy)))
+    lift = {"elev": (0.70, 0.36), "slope": (0.82, 0.22), "lrm": (0.78, 0.26), "curv": (0.84, 0.2)}
+    out = {}
+    for k, spec in GROUND.items():
+        col = _ramp(src[k], spec["stops"]) * (lift[k][0] + lift[k][1] * sh)[..., None]
+        img = np.clip(col, 0, 255).astype(np.uint8); img[np.isnan(z)] = (236, 233, 226)
+        Image.fromarray(img).save(f"{repo}/data/kamikura_{k}.jpg", quality=80, optimize=True, progressive=True)
+        out[k] = {"label": spec["label"], "unit": spec["unit"], "ticks": spec["ticks"],
+                  "stops": [[v, "#%02x%02x%02x" % c] for v, c in spec["stops"]]}
+    return out
+
+
+def _run_median(a, n):
+    p = n // 2; ap = np.pad(np.asarray(a, float), p, mode="edge"); return np.array([np.nanmedian(ap[i:i + n]) for i in range(len(a))])
+
+
+def _run_mean(a, n):
+    p = n // 2; return np.convolve(np.pad(np.asarray(a, float), p, mode="edge"), np.ones(n) / n, mode="valid")
+
+
+def _foot_xy():
+    R = json.load(open("foot.json"))["profiles"]
+    return (_run_mean(_run_median([r["foot_x"] for r in R], 5), 11), _run_mean(_run_median([r["foot_y"] for r in R], 5), 11))
+
+
+def ground_data(z, x0, y1, frame):
+    """Foot line and band, sample profiles, the audit, the alignment scores and the cadastre, for the page."""
+    F = json.load(open("foot.json")); R = F["profiles"]; FS = F["summary"]
+    fx = _run_mean(_run_median([r["foot_x"] for r in R], 5), 11); fy = _run_mean(_run_median([r["foot_y"] for r in R], 5), 11)
+    lo, hi = [], []
+    for r in R:
+        v = np.array([r[k] for k in "ABCD"], float); v = v[np.abs(v - r["foot"]) <= 12]
+        lo.append(v.min() if len(v) else r["foot"]); hi.append(v.max() if len(v) else r["foot"])
+    lo, hi = _run_median(lo, 5), _run_median(hi, 5)
+    left = [(r["fx"] + a * r["nx"], r["y"] + a * r["ny"]) for r, a in zip(R, lo)]
+    right = [(r["fx"] + b * r["nx"], r["y"] + b * r["ny"]) for r, b in zip(R, hi)]
+    band = Polygon(left + right[::-1]).buffer(0.5).buffer(-0.5)
+    L = {"foot": path([list(zip(fx, fy))]), "foot_band": path(geoms_lines(band.simplify(0.3)), closed=True)}
+    # four sample profiles inside the study area, 1 m steps, with the four definitions and the consensus
+    zf = np.where(np.isnan(z), np.nanmedian(z), z)
+    def zat(px, py): return ndi.map_coordinates(zf, [y1 - 0.5 - np.asarray(py), np.asarray(px) - x0 - 0.5], order=1)
+    prof = []
+    for yy in (-252240, -252300, -252370, -252440):
+        r = min(R, key=lambda q: abs(q["y"] - yy)); sv = np.arange(-40, 61, 1.0)
+        zv = zat(r["fx"] + sv * r["nx"], r["y"] + sv * r["ny"])
+        prof.append({"y": round(r["y"], 1), "plain": round(r["plain"], 2), "s": sv.tolist(), "z": [round(float(v), 2) for v in zv],
+                     **{k: round(r[k], 1) for k in "ABCD"}, "foot": round(r["foot"], 1), "step_deg": round(r["step_deg"], 1)})
+    foot = {"profiles": FS["profiles"], "length_m": round((len(R) - 1) * 2.0), "range_median_m": FS["range_median_m"],
+            "within5_pct": FS["within5_pct"], "dev": FS["dev_from_consensus_median_m"], "pair": FS["pair_median_abs_m"],
+            "up_deg": FS["D_up_deg_median"], "dn_deg": FS["D_dn_deg_median"], "step45_pct": FS["step_over45_pct"],
+            "step60_pct": round(100 * float(np.mean([r["step_deg"] >= 60 for r in R])), 1), "samples": prof}
+    # the cadastre and what the test used
+    P = json.load(open("parcels.json"))
+    rings = lambda kinds: [p["rings"][0] for p in P["parcels"] if p["kind"] in kinds and p["rings"]]
+    L["parcels"] = path(rings(("private", "other")), closed=True)
+    L["lwater"] = path(rings(("water",)), closed=True)
+    L["lroad"] = path(rings(("road", "strip")), closed=True)
+    B = json.load(open("backs.json"))
+    L["backs"] = path(B["backs"])
+    W = json.load(open("walls.json"))
+    L["walls"] = path([w["line"] for w in W])
+    A = json.load(open("align.json"))
+    scores = {}
+    for k, v in A["classes"].items():
+        b = next((b for b in v["bands"] if b["from"] == (-15 if k == "walls" else 0)), None)
+        scores[k] = {"band": [b["from"], b["to"]] if b else None, "follow": b.get("follow_foot_pct") if b else None,
+                     "chance": b.get("chance_pct") if b else None, "p": b.get("p") if b else None, "n": b.get("n_disc") if b else 0,
+                     "robust": v.get("robust"), "beyond": [{kk: bb.get(kk) for kk in ("from", "to", "follow_foot_pct", "chance_pct", "p", "n_disc")}
+                                                           for bb in v["bands"] if bb["from"] >= 25]}
+    audit = json.load(open("terrain_audit.json"))
+    ex = [(round(b["follow_foot_pct"] - b["chance_pct"], 1), k, b["from"], b["to"], b["p"]) for k, v in scores.items() for b in v["beyond"]
+          if b.get("follow_foot_pct") is not None]
+    beyond = max(ex)
+    runs_west = [A["offsets"]["cadastre_west"]["median_m"]] + [r["cadastre_west"] for r in A["sensitivity"]["_offsets"]]
+    weak = ("backs", "fronts", "temple", "walls", "legal_water")
+    out = {"foot": foot, "scores": scores, "beyond_max": {"excess": beyond[0], "class": beyond[1], "band": [beyond[2], beyond[3]], "p": beyond[4]},
+           "walls_town_m": sum(b["length_m"] for b in A["classes"]["walls"]["bands"] if b["from"] >= 0),
+           "weak_max_sig": max(scores[k]["robust"]["significant"] for k in weak if scores[k].get("robust")),
+           "cad_west_range": [min(runs_west), max(runs_west)], "offsets": A["offsets"], "wiggle": A["wiggle"], "lvc": A["legal_vs_channel"],
+           "grid": {"town": A["grid_deg"], "R": A["grid_R"], "front_near": A["near_front_deg"], "front_regional": A["regional_front_deg"]},
+           "walls": A["walls"], "temple_parcels": A["temple_parcels"], "sens_offsets": A["sensitivity"]["_offsets"],
+           "courses": A["courses"], "courses_sim": A["courses_sim"],
+           "audit": {"coverage": audit["coverage"], "dem5": audit["dem5_vs_1"], "buildings": audit["buildings"],
+                     "control": [c for c in audit["control"] if c["kind"] != "spot height (1:25,000)"], "sigma_lrm": audit["sigma_lrm_m"],
+                     "sigma_curv": audit["sigma_curv_m"]},
+           "cadastre": {k: P[k] for k in ("sheet", "name", "crs", "n_parcels")} | {"aff": {k: v for k, v in P["aff"].items() if k != "params"}
+                        | {"area_factor": round(abs(P["aff"]["params"][0] * P["aff"]["params"][3] - P["aff"]["params"][1] * P["aff"]["params"][2]), 3)},
+                        "sim": {k: v for k, v in P["sim"].items() if k != "params"}, "anchor": P["anchor"],
+                        "kinds": {k: sum(1 for p in P["parcels"] if p["kind"] == k) for k in ("private", "road", "water", "strip", "other")}}}
+    return L, out
+
+
 def contours(z, x0, y1, levels, clip, min_len=14, tol=0.35):
     zs = ndi.gaussian_filter(np.where(np.isnan(z), np.nanmin(z), z), 1.4)
     res = {}
@@ -102,6 +234,9 @@ def main():
 
     relief(z, f"{repo}/data/kamikura_relief.jpg")
     img = {"href": "data/kamikura_relief.jpg", "x": round(pg(x0, y1)[0], 4), "y": round(pg(x0, y1)[1], 4), "w": W / 100, "h": H / 100}
+    tp = np.load("terrain_plus.npz")
+    bases = ground_images(z, tp, repo)
+    for k in bases: bases[k]["href"] = f"data/kamikura_{k}.jpg"
 
     poly = Polygon(st["poly"][0])
     near = poly.buffer(260).intersection(frame)               # fine contours only around the study area
@@ -122,6 +257,8 @@ def main():
         if ang < -90: ang += 180
         lab.append([*map(lambda q: round(q, 4), pg(p.x, p.y)), f"{int(v)} m", round(ang, 1)])
 
+    GL, ground = ground_data(z, x0, y1, frame)
+    L.update(GL)
     L["poly"] = path(st["poly"], closed=True)
     L["break"] = path([l for l in geoms_lines(unary_union([LineString(q) for q in tj["break"]]).intersection(near))])
     def way(w): return LineString([LL2P.transform(p["lon"], p["lat"]) for p in osm[w]["geometry"]])
@@ -148,10 +285,22 @@ def main():
     prec = [Polygon([LL2P.transform(p["lon"], p["lat"]) for p in osm[w]["geometry"]]) for w in (500803106, 500803107)]
     L["school"] = path([list(school.exterior.coords)], closed=True)
     L["precinct"] = path([list(p.exterior.coords) for p in prec], closed=True)
+    # buildings coloured by the step-8 test: the consensus foot, the town grid of GSI road edges, the same rule
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("a8", os.path.join(os.path.dirname(os.path.abspath(__file__)), "08_align.py"))
+    a8 = importlib.util.module_from_spec(spec); spec.loader.exec_module(a8)
+    foot = a8.Foot(json.load(open("foot.json"))); grid = json.load(open("align.json"))["grid_deg"]
     by = {"foot": [], "grid": [], "both": [], "far": []}
     for b in st["bld"]:
-        if not frame.intersects(Polygon(b["ring"])): continue
-        by[b["cls"]].append(b["ring"])
+        P = Polygon(b["ring"])
+        if not frame.intersects(P): continue
+        r = np.asarray(P.minimum_rotated_rectangle.exterior.coords); e1, e2 = r[1] - r[0], r[2] - r[1]
+        e = e1 if np.hypot(*e1) >= np.hypot(*e2) else e2; th = a8.bearing(e[0], e[1])
+        d, fd, inside = foot.at([(P.centroid.x, P.centroid.y)])
+        if not inside[0] or d[0] > 400 or d[0] < -15: c = "far"
+        elif a8.adiff(fd[0], grid) < 10: c = "both"
+        else: c = "foot" if a8.adiff(th, fd[0]) < a8.adiff(th, grid) else "grid"
+        by[c].append(b["ring"])
     for k, v in by.items(): L["b_" + k] = path(v, closed=True)
     L["b_in"] = path([b["ring"] for b in st["bld"] if b["in"]], closed=True)
     L["b_robust"] = path([b["ring"] for b in st["bld"] if b["code"] in (3102, 3103, 3112)], closed=True)
@@ -182,7 +331,7 @@ def main():
         ["summit", "神倉神社 · Gotobiki-iwa", nd(2270139651), "start", 8, -6, "em", "bichikei keidai"],
         ["steps", "538 stone steps", ll(135.98330, 33.72366), "end", -6, -4, "", "michi keidai bichikei"],
         ["entrance", "entrance · 下馬 stone", nd(4908399279), "start", 8, 16, "", "keidai michi"],
-        ["ichida", "市田川 Ichida-gawa", (ich_lab.x, ich_lab.y), "start", 7, 4, "water", "suikei"],
+        ["horibata", "神倉堀端都市下水路", (ich_lab.x, ich_lab.y), "start", 7, 4, "water", "suikei"],
         ["mstream", "Kamikura-yama stream", ll(135.98330, 33.72446), "end", -4, -6, "water small", "suikei"],
         ["school", "神倉小学校 Kamikura Elementary", ll(135.98503, 33.72506), "middle", 0, 4, "", "kokyo"],
         ["myoshin", "妙心寺", ll(135.984329, 33.724781), "end", -7, 2, "small", "keidai seikatsu"],
@@ -230,7 +379,8 @@ def main():
             "trbox": [round(v, 4) for v in (*pg(tr_b[0], tr_b[3]), *pg(tr_b[2], tr_b[1]))],
             "profile": st["profile"], "runs": st["profile_runs"], "stats": st["stats"], "align": st["align"],
             "decay": st["decay"], "disc": st["disc"], "grid_town": st["grid_town"], "grid_town_R": st["grid_town_R"],
-            "edges": elab, "align_txt": align_txt, "disc_excess_beyond_25": st["disc_excess_beyond_25"]}
+            "edges": elab, "align_txt": align_txt, "disc_excess_beyond_25": st["disc_excess_beyond_25"],
+            "bases": bases, "ground": ground}
     js = "window.__KMK=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
     open(f"{repo}/data/kamikura.js", "w", encoding="utf-8").write(js)
 
@@ -254,6 +404,8 @@ def main():
          "geometry": r7(tll(LineString(st["edges"]["south"]).intersection(poly.buffer(0.5))))},
         {"type": "Feature", "properties": {"name": "slope break", "rule": "edge of ground ≥1 m above the plain and steeper than 12° (or ≥3 m above it), connected to the slopes above 40 m; GSI DEM1A"},
          "geometry": r7(tll(unary_union([LineString(q) for q in tj["break"]]).intersection(near)))},
+        {"type": "Feature", "properties": {"name": "mountain foot (consensus)", "rule": "per-profile median of four definitions (mask edge, plain + 1 m, greatest concavity, two-segment hinge) on cross-profiles every 2 m; GSI DEM1A"},
+         "geometry": r7(tll(LineString(list(zip(*_foot_xy())))))},
         {"type": "Feature", "properties": {"name": "transect", "from": "神倉神社 (summit, at Gotobiki-iwa)", "via": "the path and the stone steps (OSM 121369321, 121366071) to the bridge over 市田川",
                                            "to": "新宮市役所", "length_m": s["transect_m"]}, "geometry": r7(tll(tr))},
     ]
@@ -280,7 +432,18 @@ def main():
            '<Style id="edge"><LineStyle><color>ff2f5fd3</color><width>2</width></LineStyle></Style>'
            '<Style id="tr"><LineStyle><color>ff944f2f</color><width>3</width></LineStyle></Style>' + "".join(pm) + "</Document></kml>\n")
     open(f"{repo}/data/kamikura_study.kml", "w", encoding="utf-8").write(kml)
-    sz = {f: os.path.getsize(f"{repo}/data/{f}") for f in ("kamikura.js", "kamikura_relief.jpg", "kamikura_study.geojson", "kamikura_study.kml")}
+    # the registered cadastre (approximate; no parcel numbers)
+    P = json.load(open("parcels.json"))
+    cad = {"type": "FeatureCollection", "name": "kamikura_cadastre",
+           "source": "「登記所備付地図データ 新宮市」（法務省） https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430 を加工して作成 "
+                     "(sheet 30207-1704-59, arbitrary coordinates, registered to GSI road edges by an affine transform; "
+                     f"road-parcel fit median {P['aff']['road_median_m']} m) — no-one-is-an-island, kansai/tools/kamikura",
+           "features": [{"type": "Feature", "properties": {"kind": p["kind"]}, "geometry": r7(tll(Polygon(p["rings"][0])))}
+                        for p in P["parcels"] if p["rings"] and len(p["rings"][0]) > 3]}
+    json.dump(cad, open(f"{repo}/data/kamikura_cadastre.geojson", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    sz = {f: os.path.getsize(f"{repo}/data/{f}") for f in ("kamikura.js", "kamikura_relief.jpg", "kamikura_elev.jpg", "kamikura_slope.jpg",
+                                                         "kamikura_lrm.jpg", "kamikura_curv.jpg", "kamikura_study.geojson", "kamikura_study.kml",
+                                                         "kamikura_cadastre.geojson")}
     print(sz, {k: len(v) for k, v in L.items()})
 
 
