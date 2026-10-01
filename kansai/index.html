@@ -162,6 +162,10 @@
       .tiers td { white-space: nowrap; }
       .tiers td.na { text-align: center; color: var(--ink-soft); font-style: italic; }
       .tiers td.p, .tiers th.p { color: var(--ink-soft); }
+      .tiers.vsr td, .tiers.vsr thead th { white-space: normal; text-align: left; }
+      .tiers.cpl td, .tiers.cpl thead th { text-align: center; }
+      .tiers.cpl tbody th { white-space: nowrap; }
+      ul.ex.cpl-list { margin-top: 0.8rem; list-style: none; padding-left: 0; } .cpl-list b { display: inline-block; min-width: 1.1em; color: var(--accent); }
       .chart svg { width: 100%; height: auto; display: block; }
       .chart text { font-family: "Noto Serif JP", serif; font-size: 11px; fill: var(--ink); }
       .chart text.s { fill: var(--ink-soft); font-size: 10px; }
@@ -394,12 +398,6 @@
       .continuity li { display: grid; grid-template-columns: 52px 1fr; gap: 0.7rem; align-items: center; font-size: 0.98rem; }
       .continuity svg { width: 50px; height: 50px; }
       .closing { font-family: "Cormorant Garamond", "Noto Serif JP", serif; font-size: 1.35rem; line-height: 1.55; max-width: 48rem; margin: 1.4rem 0; }
-      .closing.final { font-style: italic; color: var(--accent); font-size: 1.5rem; }
-      .endboard { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 1rem; }
-      .endboard h3 { font-family: "Cormorant Garamond", serif; font-weight: 600; letter-spacing: 0.3em; font-size: 0.9rem; color: var(--accent); margin: 0 0 0.5rem; text-transform: uppercase; }
-      .endboard p { font-size: 0.95rem; margin: 0 0 0.8rem; }
-      .rc { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 2rem; margin-top: 2rem; align-items: start; }
-      .rc p { font-size: 0.97rem; }
       .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
       .trio-head { font-family: "Cormorant Garamond", serif; font-size: 1.3rem; letter-spacing: 0.06em; margin: 2.6rem 0 0.9rem; }
       .trio-head b { font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.92rem; color: var(--accent); display: block; }
@@ -663,7 +661,7 @@
       /* ---------- responsive ---------- */
       @media (max-width: 980px) {
         .board { grid-template-columns: 1fr; gap: 1.2rem; }
-        .endboard, .trio, .rc { grid-template-columns: 1fr; }
+        .trio { grid-template-columns: 1fr; }
         .continuity { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       @media (max-width: 900px) {
@@ -876,10 +874,10 @@
       </div>
     </section>
 
-    <section class="board" aria-label="Constraint, strategy, lesson">
+    <section class="board" aria-label="Finding, strategy, test">
       <div>
-        <h3>CONSTRAINT</h3>
-        <p>Shingū occupies the narrow meeting ground of the Kii Mountains, Kumano River and Pacific Ocean while carrying the functions of a regional centre for southern Kumano. The same convergence that generated its prosperity also concentrates its exposure: major-river flooding, urban drainage failure, landslides, transport isolation, earthquake and Nankai Trough tsunami all intersect within a relatively small inhabited landscape.</p>
+        <h3>FINDING</h3>
+        <p>Shingū’s location plan concentrates the town where the water goes: 58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami. Evacuation is meant to close that gap and does so only under conditions. In central Shingū the margin hangs on the 2026 model, which keeps road and rail embankments standing and brings the water late; with water by 15 minutes, 2,040 residents of the zone fall short at Wakayama’s rule of leaving at 5 minutes and walking at 0.5 m/s. In the part of Kihō the animation covers, 75% fall short at the same rule.</p>
       </div>
       <div>
         <h3>STRATEGY</h3>
@@ -894,8 +892,8 @@
         <p>Urban functions are gathered into a compact hierarchy of centres; mountain communities remain connected through transport and local service nodes; development is progressively steered away from severe hazard; buildings and infrastructure accommodate recurring inundation; evacuation converts nearby elevation into life-safety infrastructure; river governance expands to the scale of the entire Kumano watershed.</p>
       </div>
       <div class="lesson">
-        <h3>LESSON</h3>
-        <p>Resilience in Shingū is fundamentally spatial: each risk is addressed at the geographical scale that produces it, while those scales are coordinated into a single regional system.</p>
+        <h3>TEST</h3>
+        <p>Each strategy is held to what it has to deliver: time to leave before the water arrives, roads that stay open to the dry hub, a channel that carries the flood of record. By those tests the plan sorts risk by type more than it reduces it: water in the centre, slope at the hub, time at the edges.</p>
       </div>
     </section>
     <p class="scroll-hint">↓ scroll — the map follows the text; zoom it any time (＋ − or Ctrl/⌘ + wheel, drag to pan)</p>
@@ -933,7 +931,7 @@
 
         <article class="step" data-view="hinterland" data-name="Hinterland · river and sea" data-on="basin-faint river_main river_trib flow_kitayama flow_kumano sea_osaka sea_edo pref" data-overlay="base-region towns-flow flows-labels" data-legend="flows sealane pref">
           <div class="card">
-            <p>Shingū’s regional centrality is a direct expression of physical geography. The lower Kumano forms the outlet of a vast mountainous hinterland, while the Pacific opens the city toward maritime Japan. Goods, people, religious authority and political power accumulated precisely where these networks converged.</p>
+            <p>Shingū’s regional centrality is a direct expression of physical geography. The lower Kumano drains a mountainous hinterland, while the Pacific opens the city toward maritime Japan. Goods, people, religious authority and political power accumulated where these networks converged: timber, charcoal and other goods moved downstream from the Kii Mountains, then outward through Ikeda port at the river mouth toward Edo and other markets. The town is still called <span lang="ja">熊野の都</span>, the metropolis of Kumano, in the city’s <a class="doc" href="https://www.city.shingu.lg.jp/Info/402" target="_blank" rel="noopener">Urban Planning Master Plan (<span lang="ja">都市計画マスタープラン</span>)</a>.</p>
           </div>
         </article>
 
@@ -960,7 +958,7 @@
 
         <article class="step" data-view="oldtown" data-name="Castle, Mizunote, Kawaramachi" data-on="micro_low micro_high water river_main" data-overlay="oldtown-sites" data-legend="micro site">
           <div class="card">
-            <p>The castle itself embodied this relationship. Shingū Castle occupied Tankaku-yama (<span lang="ja">丹鶴山</span>) above the river, while its Mizunote precinct descended toward a landing place and a row of charcoal warehouses. Mountain resources entered the city by river and continued toward coastal markets. The riverside economy extended into Kawaramachi, where merchants, inns, blacksmiths, restaurants, fishmongers, bathhouses and other businesses formed an intensely active commercial landscape. Historical documentation records almost 300 Kawaraya structures at its peak around the late Meiji and early Taishō periods.</p>
+            <p>The castle itself embodied this relationship. Shingū Castle occupied Tankaku-yama (<span lang="ja">丹鶴山</span>) above the river, while its Mizunote precinct descended toward a landing place and a row of charcoal warehouses. Mountain resources entered the city by river and continued toward coastal markets. The riverside economy extended into Kawaramachi, where merchants, inns, blacksmiths, restaurants, fishmongers, bathhouses and other businesses formed a busy commercial quarter. Historical documentation records almost 300 Kawaraya structures at its peak around the late Meiji and early Taishō periods.</p>
           </div>
         </article>
 
@@ -983,7 +981,7 @@
 
         <article class="step" data-view="region" data-name="Kii Mountains · relief and forest" data-on="shade forest park park_sp river_main river_trib pref" data-overlay="base-region peaks" data-legend="shade forest park parksp peak river" data-ranges>
           <div class="card">
-            <p>Shingū’s physical form also reveals a distinctive relationship with environmental instability.</p>
+            <p>Shingū’s physical form also records how the town has lived with an unstable river and unstable slopes.</p>
             <figure class="fig">
               <div class="stats"><div><b>86%</b><span>of the land on this sheet is forest</span></div><div><b>1,915 m</b><span>Hakkyō, the highest summit on the sheet</span></div><div><b>253 m</b><span>Gongen-yama, the hill behind Shingū</span></div></div>
               <div class="cap">Map: GSI hill shading; forest from MLIT’s land-use mesh (L03-b, 2021); natural-park zones from MLIT A10 (2015), which covers national, quasi-national and prefectural parks without naming them, darker where specially protected; summits and heights from OpenStreetMap. Range names follow the line of their summits.</div>
@@ -1009,11 +1007,11 @@
         <article class="step" data-view="oldtown" data-name="Kawaramachi · on the riverbed" data-on="flood water river_main micro_high" data-overlay="oldtown-sites" data-legend="flood site">
           <div class="card">
             <h4><svg class="pg"><use href="#pg-kawaraya"/></svg> Kawaraya <span class="ja" lang="ja">川原家</span> — mobility</h4>
-            <p>The Kawaraya of Kawaramachi were assembled from interlocking members without nails. During frequent floods, residents could dismantle them, move the components onto safer ground and rebuild once water levels receded. The <a class="doc" href="https://www.city.shingu.lg.jp/Info/25" target="_blank" rel="noopener">city’s history of Kawaramachi</a> speaks of sudden floods said to come five or six times a year and presents this highly reversible building form as a distinctive local response.</p>
-            <p>Its spatial principle is remarkably sophisticated:</p>
+            <p>The Kawaraya of Kawaramachi were assembled from interlocking members without nails. During frequent floods, residents could dismantle them, move the components onto safer ground and rebuild once water levels receded. The <a class="doc" href="https://www.city.shingu.lg.jp/Info/25" target="_blank" rel="noopener">city’s history of Kawaramachi</a> speaks of sudden floods said to come five or six times a year and says houses built this way existed nowhere else in Japan.</p>
+            <p>Its spatial principle:</p>
             <p class="quote">retain economic access to the river by making architecture mobile.</p>
             <figure class="fig photo"><img src="img/kawaramachi_1934.jpg" alt="Kawaramachi in 1934: shop-houses on the gravel bar of the Kumano, built to be taken apart before a flood. The pulsing point on the map opens more." width="500" height="386" loading="lazy" decoding="async"><figcaption>Kawaramachi in 1934: shop-houses on the gravel bar of the Kumano, built to be taken apart before a flood. The pulsing point on the map opens more.<span class="cr">Photo: Unknown photographer, Public domain (PD-Japan-oldphoto) · <a href="https://commons.wikimedia.org/wiki/File:ShinguKawara1934.jpg" target="_blank" rel="noopener">source</a></span></figcaption></figure>
-            <p>The floodplain remained productive because permanence was transferred from the individual structure to the continuity of activity.</p>
+            <p>The floodplain remained productive because permanence was transferred from the individual structure to the continuity of activity. The town lived off the raftsmen and boatmen who brought timber and goods down the Kumano, and it ended with that traffic, not with a flood. The Kumano Ōhashi opened in 1935 and a bus ran from Shingū to Hongū from 1939; by 1943 three or four houses were left. In 1944 the propeller-boat landing moved upstream to Miyai, and in 1950 the last house, a smithy, closed.</p>
           </div>
         </article>
 
@@ -1029,21 +1027,26 @@
                 <svg><use href="#pg-agariya"/></svg><div><b>Agariya</b> → redundancy of space</div>
               </div>
             </figure>
-            <p>Both arose from an intimate reading of recurrent flood behaviour. Architecture absorbed hydrological variability directly into settlement practice.</p>
+            <p>Both arose from long experience of recurrent floods. Architecture absorbed hydrological variability directly into settlement practice.</p>
           </div>
         </article>
 
-        <article class="step" data-view="mouth" data-name="The same logic, at larger scales" data-on="flood flood_ichida tsunami water river_main pref" data-overlay="interventions-mouth" data-legend="flood tsunami ringlevee pump refuge">
+        <article class="step" data-view="mouth" data-name="Accommodation to resistance" data-on="flood flood_ichida tsunami water river_main pref" data-overlay="interventions-mouth" data-legend="flood tsunami ringlevee pump refuge">
           <div class="card">
-            <p>Modern interventions reproduce the same logic at larger scales. Ring levees concentrate protection around selected settlements; building controls regulate residual exposure beyond them; urban pumps relocate water mechanically; tsunami planning organizes rapid movement toward elevation. The technologies have changed dramatically, yet the recurring spatial principles remain legible:</p>
+            <p>Modern interventions change the logic rather than enlarge it. Kawaraya and agariya were accommodation: households carried the risk with little fixed capital, and what could move was moved. Ring levees, sluices and pumps are resistance: public capital fixed to a design level, with the residual risk gathered behind it.</p>
             <figure class="fig">
-              <div class="vs">
-                <svg><use href="#pg-move-water"/></svg><div>move what can move</div>
-                <svg><use href="#pg-accommodate"/></svg><div>elevate what must remain</div>
-                <svg><use href="#pg-concentrate"/></svg><div>concentrate protection where collective functions depend upon it</div>
-              </div>
-              <div class="cap">Map: the Onodani-gawa (相野谷川) ring levees at Takaoka and Funada (Kihō, Mie), the Ichida pumps and sluice, and designated tsunami refuges on high ground.</div>
+              <table class="tiers vsr">
+                <thead><tr><th scope="col"></th><th scope="col">accommodation</th><th scope="col">resistance</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">examples</th><td>Kawaraya, agariya</td><td>levees, ring levees, sluices, pumps</td></tr>
+                  <tr><th scope="row">who carries the risk</th><td>the household</td><td>everyone behind the works</td></tr>
+                  <tr><th scope="row">capital</th><td>small, movable</td><td>large, fixed</td></tr>
+                  <tr><th scope="row">when exceeded</th><td>a house to rebuild</td><td>a whole district at once</td></tr>
+                </tbody>
+              </table>
+              <div class="cap">Map: the Onodani-gawa (<span lang="ja">相野谷川</span>) ring levees at Takaoka and Funada (Kihō, Mie), the Ichida pumps and sluice, and designated tsunami refuges on high ground.</div>
             </figure>
+            <p>2011 showed what that residual risk looks like. At Ōga the Kumano peaked at about 24,000 m³/s against the 19,000 its works were designed for, and it overtopped the levees at Narukawa and Aisuji. On the Onodani-gawa the ring levees built from 2001 went under, and part of the Takaoka levee collapsed. Floods from the two rivers covered 426 ha and 3,322 houses.</p>
           </div>
         </article>
 
@@ -1052,7 +1055,7 @@
 
         <article class="step" data-view="pathways" data-name="Four directions of risk" data-on="flood flood_l1 flood_ichida ichida_basin tsunami ts26_freq ls_red ls_yellow water river_main pref" data-overlay="pathways" data-legend="flood floodl1 floodichida tsunami tsfreq red yellow bts bfl bboth bdry" data-bld>
           <div class="card">
-            <p>Shingū’s risk geography becomes clearest when read directionally.</p>
+            <p>Shingū’s risk geography is read here by direction.</p>
             <figure class="fig">
               <table class="pathways">
                 <thead><tr><th>Flow</th><th>Spatial system</th><th>Principal consequences</th></tr></thead>
@@ -1096,7 +1099,7 @@
           <div class="card">
             <h4><svg class="pg"><use href="#pg-from-mountains"/></svg> Kumano River: risk generated at regional scale</h4>
             <p>Shingū lies at the downstream end of a river system extending through Nara, Mie and Wakayama. Rainfall and slope processes occurring far beyond the municipality therefore materialize locally as river discharge, sediment and infrastructure pressure.</p>
-            <p>The 2011 Kii Peninsula disaster demonstrated this cascading geography with exceptional clarity. In Shingū, Typhoon Talas caused 13 deaths, one missing person and damage to 2,968 homes, including 81 destroyed or washed away. <a class="doc" href="https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf" target="_blank" rel="noopener">Municipal records</a> also document widespread failures of electricity, communications, water, roads and river infrastructure.</p>
+            <p>The 2011 Kii Peninsula disaster ran this cascade end to end. In Shingū, Typhoon Talas caused 13 deaths, one missing person and damage to 2,968 homes, including 81 destroyed or washed away. <a class="doc" href="https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf" target="_blank" rel="noopener">Municipal records</a> also document widespread failures of electricity, communications, water, roads and river infrastructure.</p>
             <figure class="fig">
               <div class="stats"><div><b>13</b><span>deaths</span></div><div><b>1</b><span>missing</span></div><div><b>2,968</b><span>homes damaged</span></div><div><b>81</b><span>destroyed or washed away</span></div></div>
               <div class="cap"><a class="doc" href="https://www.city.shingu.lg.jp/info/575" target="_blank" rel="noopener">Shingū City disaster record (<span lang="ja">紀伊半島大水害新宮市記録集</span>)</a> (2011 Kii Peninsula flood). Peak discharge at Ōga ≈ 24,000 m³/s, the largest on record (MLIT).</div>
@@ -1143,7 +1146,7 @@
               </svg>
               <figcaption>市田川排水機場 (MLIT). Typhoon 21 (Oct 2017) set the record for cumulative rainfall at the Shingū gauge; 1,124 homes flooded city-wide. Basin: 5.36 km² officially; the dashed outline is digitised from MLIT’s basin map (図-1.2).</figcaption>
             </figure>
-            <p>Ichida therefore turns a small urban tributary into an unusually clear illustration of hydraulic interdependence: local drainage performance depends on the state of a much larger river system.</p>
+            <p>In the Ichida, local drainage performance depends on the state of a much larger river system.</p>
           </div>
         </article>
 
@@ -1204,6 +1207,36 @@
               <li><b>Drought and wildfire.</b> No water restriction on the Kumano or on Shingū’s supply was found in the record, and no published wildfire statistics for the area.</li>
             </ul>
             <div class="cap">Sources: <a class="doc" href="https://www.data.jma.go.jp/stats/etrn/view/rank_a.php?prec_no=65&block_no=0649&year=&month=&day=&view=" target="_blank" rel="noopener">JMA, Shingū station records</a> and annual tables; J-SHIS (Y2024, average case); <a class="doc" href="https://www.pref.wakayama.lg.jp/chiji/press/07/20260325_d/fil/260325_1.pdf" target="_blank" rel="noopener">Wakayama, March 2026</a>; Wakayama Prefecture on 1946; <a class="doc" href="https://www.mlit.go.jp/river/shinngikai_blog/kaigankanrinoarikata/dai03kai/dai03kai_siryou2.pdf" target="_blank" rel="noopener">Mie Prefecture to MLIT</a>; <a class="doc" href="https://www.kkr.mlit.go.jp/river/iinkaikatsudou/ol9a8v0000057xi3-att/14_shiryou_3-2.pdf" target="_blank" rel="noopener">J-Power to MLIT, 2022</a>.</div>
+          </div>
+        </article>
+
+        <article class="step" data-view="pathways" data-name="Where the pathways meet" data-on="flood flood_ichida tsunami ls_red ls_yellow water river_main pref" data-overlay="couplings" data-legend="flood floodichida tsunami red yellow ringlevee pump">
+          <div class="card">
+            <h4>Where the pathways meet</h4>
+            <p>The four directions are not independent. Read as a matrix, each cell asks whether a hazard from one direction weakens the defences against another or adds to its damage.</p>
+            <figure class="fig">
+              <table class="tiers cpl">
+                <thead><tr><th scope="col">from ↓ · on →</th><th scope="col">mountains</th><th scope="col">city</th><th scope="col">sea</th><th scope="col">slopes</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">mountains</th><td class="na">·</td><td>a</td><td>b</td><td class="na">?</td></tr>
+                  <tr><th scope="row">city</th><td class="na">—</td><td class="na">·</td><td class="na">—</td><td class="na">—</td></tr>
+                  <tr><th scope="row">sea</th><td>c · d</td><td>e · f</td><td class="na">·</td><td class="na">?</td></tr>
+                  <tr><th scope="row">slopes</th><td>g</td><td>h</td><td class="na">—</td><td class="na">·</td></tr>
+                </tbody>
+              </table>
+              <ul class="ex cpl-list">
+                <li><b>a</b> A high Kumano shuts the Ichida sluice, so the city’s rain leaves only by pumping, and the basin’s river policy provides for cutting pumping back when the Kumano runs high (<span lang="ja">運転調整</span>), which is when the city needs it most.</li>
+                <li><b>b</b> Every dam in the basin was built for power; with the Udono port breakwater they hold back the sand that keeps the Shichiri-mihama beach wide enough to shield its sea walls from storm waves.</li>
+                <li><b>c</b> Earthquake retrofits of the levees and sluices along the Kumano and the Onodani, and of the Funada floodgate, are unfinished: a Nankai shock can weaken them before the next flood.</li>
+                <li><b>d</b> The sandbar at the mouth shifts with floods and sea waves; when it builds up, it raises flood levels behind it.</li>
+                <li><b>e</b> A tsunami would leave about 2.5 million m³ of water in the Ichida basin for the pumps to clear: the new station keeps its essential plant above the 8.2 m tsunami simulated at the site and stores diesel for the 25 hours that takes.</li>
+                <li><b>f</b> Timber and ships stored at the port would become tsunami debris, and the dense old wooden blocks can burn after the shaking, as in 1946.</li>
+                <li><b>g</b> Deep-seated failures upstream dam rivers that can burst, as those of 2011 threatened to, and slope sediment refills the dredged channel after each flood.</li>
+                <li><b>h</b> The medical centre, the hub kept dry, stands in a debris-flow warning zone that every road to it crosses.</li>
+              </ul>
+              <div class="cap">· the pathway itself; — none expected; ? plausible but not reported separately for Shingū (river erosion at the foot of slopes, slope failures set off by shaking). Sources: <a class="doc" href="https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/k1cog50000000bjf-att/220331seibikeikaku.pdf" target="_blank" rel="noopener">River Improvement Plan, Shingū River system (<span lang="ja">新宮川水系河川整備計画</span>, MLIT, 2022)</a> for a to d and g; the 2021 basic river policy for a; Mie Prefecture for b; <a class="doc" href="https://www.kkr.mlit.go.jp/plan/happyou/thesises/2020/ol9a8v000004c2iz-att/ino2-01.pdf" target="_blank" rel="noopener">MLIT Kinki on the design of the new Ichida pump station (2020)</a> for e; Shingū’s 2025 tsunami plan (pp. 25 and 27) for f; the road scenarios of this page for h.</div>
+            </figure>
+            <p>Two patterns follow. The city only receives: couplings run into it from every other direction and none run out. And the sea reaches furthest: one Nankai earthquake can weaken the river defences, fill the Ichida basin and start fires at once.</p>
           </div>
         </article>
 
@@ -1297,7 +1330,7 @@
         <article class="step" data-view="region" data-name="The visitor’s Kumano" data-on="kodo kodo_iseji kodo_routed river_route river_main pref rail" data-overlay="base-region shrines gateways kodo-names" data-legend="kodo kodorouted riverroute rail">
           <div class="card">
             <p>Shingū’s regional role also produces a mobile population of pilgrims, visitors and cruise passengers whose relationship to the landscape differs sharply from that of residents.</p>
-            <p>Kumano tourism is inseparable from the same river, mountains and sacred topography that structure hazard. The city’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> treats the World Heritage river pilgrimage, Kumano Kodō, urban heritage and mountain landscapes as interconnected resources; Shingū Port extends that network outward as a cruise and maritime gateway.</p>
+            <p>Kumano tourism draws on the same river, mountains and sacred topography that structure hazard. The city’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> treats the World Heritage river pilgrimage, Kumano Kodō, urban heritage and mountain landscapes as interconnected resources; Shingū Port extends that network outward as a cruise and maritime gateway.</p>
                       <figure class="fig">
               <div class="stats"><div><b>1.29 M</b><span>visitors to Shingū in 2025</span></div><div><b>187,788</b><span>overnight guests, +28% on 2019</span></div><div><b>22,040</b><span>foreign guest-nights, +76% on 2019</span></div><div><b>82</b><span>cruise calls at Shingū Port, 2010–2019</span></div></div>
               <div class="cap">Wakayama Prefecture tourism surveys (<a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R7houkokusho.pdf" target="_blank" rel="noopener">2025</a>, <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R01_doutaityousa.pdf" target="_blank" rel="noopener">2019</a>) and its <a class="doc" href="https://www.pref.wakayama.lg.jp/bcms/prefg/082400/cruise/port_call_results.html" target="_blank" rel="noopener">cruise-call record</a>. The river-boat descent, revived in 2005, carried 4,127 passengers in FY2016, 1,306 of them from abroad (city tourism plan).</div>
@@ -1307,7 +1340,7 @@
 
         <article class="step" data-view="core" data-name="Where visitors stand" data-on="ts26_shallow ts26_mid ts26_deep water river_main rail micro_high" data-overlay="visitors refuges" data-legend="ts26 refuge">
           <div class="card">
-            <p>This creates a distinctive resilience requirement: people with limited local spatial knowledge must be able to understand risk quickly.</p>
+            <p>This creates a second resilience requirement: people with limited local spatial knowledge must be able to understand risk quickly.</p>
             <p>A resident may recognize the nearest high ground, remember previous inundation or understand which road disappears during heavy rain. A newly arrived pilgrim operates from a different knowledge base. Hazard communication therefore becomes part of destination management.</p>
             <p>A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation.</p>
           </div>
@@ -1365,17 +1398,19 @@
 
         <article class="step" data-view="basin" data-name="Climate change · anticipatory hydrology" data-on="basin river_main river_trib pref" data-overlay="base-region" data-legend="basin river">
           <div class="card">
-            <p>This basin logic becomes particularly important under climate change.</p>
+            <p>Climate change enlarges the flood this basin logic has to carry.</p>
             <p>In 2021, the Shingū and Gokase river systems became Japan’s first <a class="doc" href="https://www.mlit.go.jp/river/basic_info/jigyo_keikaku/gaiyou/seibi/shingu_index.html" target="_blank" rel="noopener">basic river-policy revisions (<span lang="ja">河川整備基本方針</span>)</a> explicitly incorporating projected climate-driven increases in rainfall together with the emerging basin-wide flood-management framework. <a class="doc" href="https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html" target="_blank" rel="noopener">MLIT described the change</a> as a shift from planning based on historical rainfall toward planning that incorporates future climatic intensification.</p>
             <figure class="fig chart">
-              <svg viewBox="0 0 400 124" role="img" aria-label="Design flood peak at Ōga: 19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision; the 2011 flood peaked at about 24,000">
-                <text x="0" y="12" class="s">design flood peak at Ōga (基本高水), m³/s</text>
-                <text x="0" y="38">2008 policy</text><rect x="92" y="27" width="187" height="14" rx="2" fill="#4781c7" fill-opacity=".5"/><text x="285" y="38">19,000</text>
-                <text x="0" y="66">2021 revision</text><rect x="92" y="55" width="236" height="14" rx="2" fill="#2f5f94"/><text x="335" y="66">24,000</text>
-                <path d="M328 20 V78" stroke="#8a2b5f" stroke-width="1.4" stroke-dasharray="3 2"/><text x="328" y="92" text-anchor="end" class="s">2011 flood ≈ 24,000 (record) ↑</text>
-                <text x="0" y="114" class="s">1/100 rainfall × 1.1 for a +2 °C climate (MLIT, Oct 2021)</text>
+              <svg viewBox="0 0 400 176" role="img" aria-label="Design floods at Ōga: 19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision, of which 23,000 in the channel; 22,000 for the 2022 river plan's 30 years; the 2011 flood peaked at about 24,000">
+                <text x="0" y="12" class="s">design floods at Ōga, m³/s</text>
+                <text x="0" y="38">2008 policy</text><rect x="104" y="27" width="187" height="14" rx="2" fill="#4781c7" fill-opacity=".5"/><text x="396" y="38" text-anchor="end">19,000</text>
+                <text x="0" y="66">2021 policy</text><rect x="104" y="55" width="236" height="14" rx="2" fill="#2f5f94"/><text x="396" y="66" text-anchor="end">24,000</text>
+                <text x="0" y="94">… in the channel</text><rect x="104" y="83" width="226" height="14" rx="2" fill="#2f5f94" fill-opacity=".7"/><text x="396" y="94" text-anchor="end">23,000</text>
+                <text x="0" y="122">2022 plan</text><rect x="104" y="111" width="216" height="14" rx="2" fill="#4781c7" fill-opacity=".8"/><text x="396" y="122" text-anchor="end">22,000</text>
+                <path d="M340 20 V132" stroke="#8a2b5f" stroke-width="1.4" stroke-dasharray="3 2"/><text x="340" y="146" text-anchor="end" class="s">2011 flood ≈ 24,000 (record) ↑</text>
+                <text x="0" y="168" class="s">1/100 rainfall × 1.1 for a +2 °C climate (MLIT, Oct 2021)</text>
               </svg>
-              <figcaption>The revised design flood equals what 2011 already delivered.</figcaption>
+              <figcaption>The revised design flood (<span lang="ja">基本高水</span>) equals what 2011 already delivered. The channel is to carry 23,000 of it (<span lang="ja">計画高水流量</span>) and the basin’s dams 1,000; those dams were all built for power, so their share rests on releasing water before a storm, under an agreement of 2020. The 2022 river plan (<span lang="ja">河川整備計画</span>) aims lower: channel works to carry 22,000 within 30 years, 2,000 below 2011, with the dams lowering a 2011-sized flood as far as they can.</figcaption>
             </figure>
           </div>
         </article>
@@ -1394,41 +1429,23 @@
       <h2>Synthesis · one city, several geographies</h2>
       <p class="intro">Shingū becomes most legible when its overlapping spatial systems are placed side by side. Each map below is drawn at its own scale — zoom any of them.</p>
       <div class="facets" id="facets"></div>
-      <p class="closing">Each produces a different territorial logic. Resilience emerges from their coordination.</p>
+      <p class="closing">Laid side by side, these logics do not nest: the compact centre sits inside the flood and tsunami maps, and the hub kept dry depends on roads through slope hazard.</p>
 
-      <h2>The historical continuity</h2>
+      <h2>From accommodation to resistance</h2>
       <ul class="continuity">
-        <li><svg><use href="#pg-kawaraya"/></svg><span>Kawaraya moved architecture.</span></li>
-        <li><svg><use href="#pg-agariya"/></svg><span>Agariya displaced critical household functions uphill.</span></li>
-        <li><svg><use href="#pg-move-water"/></svg><span>Pumps move urban water.</span></li>
+        <li><svg><use href="#pg-kawaraya"/></svg><span>Kawaraya were taken apart before a flood.</span></li>
+        <li><svg><use href="#pg-agariya"/></svg><span>Agariya gave people and goods a house on higher ground.</span></li>
+        <li><svg><use href="#pg-move-water"/></svg><span>Levees and pumps hold the water out to a design level.</span></li>
         <li><svg><use href="#pg-evacuate"/></svg><span>Tsunami planning moves people toward elevation.</span></li>
-        <li><svg><use href="#pg-move-development"/></svg><span>Location planning shifts future development.</span></li>
-        <li><svg><use href="#pg-move-decision"/></svg><span>Watershed governance shifts decision-making upstream.</span></li>
+        <li><svg><use href="#pg-move-development"/></svg><span>Location planning steers where the town grows.</span></li>
+        <li><svg><use href="#pg-move-decision"/></svg><span>Watershed governance moves decisions upstream.</span></li>
       </ul>
-      <p class="closing">Across radically different technologies and institutions, the same underlying intelligence recurs: preserve function by allowing spatial relationships to adjust to environmental change.</p>
-      <p class="closing">That is the distinctive resilience logic of Shingū.</p>
-      <p class="closing final">A city whose prosperity, spirituality and danger arise from the same flows learns to endure by governing movement: of water, sediment, buildings, people, investment and authority, each at the scale where movement can actually be shaped.</p>
-
-      <h2>In brief</h2>
-      <div class="endboard">
-        <div><h3>Constraints</h3><p>The city has to remain the functional centre of a much larger region while occupying one of that region’s most constrained and exposed pieces of land. Its planning problem is therefore fundamentally contradictory: concentrate people and services enough to sustain a shrinking regional population, maintain connections with remote mountain communities, and preserve Shingū’s role as the service centre of southern Kumano, while progressively reducing exposure to river flooding, internal flooding, landslides and a future Nankai Trough tsunami.</p></div>
-        <div><h3>Strategy</h3><p>Nested spatial system:</p><p class="formula" style="font-size:1.08rem">regional centre + compact urban hubs + connected peripheral settlements + gradual hazard-sensitive land-use steering + basin-scale flood management beyond municipal boundaries.</p></div>
-        <div><h3>Lesson</h3><p class="closing" style="font-size:1.2rem;margin:0">Resilience depends on choosing the correct geographical scale for each problem and then connecting those scales together.</p></div>
-      </div>
-      <div class="rc">
-        <div>
-          <h3 class="trio-head" style="margin-top:0"><b>Regional Centre</b></h3>
-          <p>Shingū’s regional centrality emerged directly from its geography.</p>
-          <p>At the mouth of the Kumano River, it became the natural transfer point between the mountainous interior and maritime Japan: timber, charcoal and other goods moved downstream from the Kii Mountains, then outward through Ikeda port at the river mouth toward Edo and other markets. This river–sea junction supported early urban concentration around Kumano Hayatama Taisha, later reinforced by Shingū’s role as a castle town and administrative centre, still called <span lang="ja">熊野の都</span>, the metropolis of Kumano, in the city’s <a class="doc" href="https://www.city.shingu.lg.jp/Info/402" target="_blank" rel="noopener">Urban Planning Master Plan (<span lang="ja">都市計画マスタープラン</span>)</a>.</p>
-          <p>Its position also links three overlapping hinterlands across Wakayama, Mie and Nara, whose river-basin communities long shared economic and social networks beyond prefectural boundaries. Modern infrastructure consolidated this role. The Shingū Railway opened in 1913, the station reorganized the urban core, and Shingū Port remains the Kinan region’s principal foreign-trade port.</p>
-          <p>The result is a strong historical path dependence in which transport, administration, commerce, health care and other higher-order services continue to concentrate in Shingū. The same river mouth, coastal lowland and mountain interface that generated this centrality now concentrate its exposure to flooding, tsunami, landslides and transport disruption, making regional centrality and disaster vulnerability products of the same geography.</p>
-        </div>
-        <div id="rc-map"></div>
-      </div>
+      <p class="closing">Kawaraya and agariya left the risk with the household and kept the capital small. Levees and pumps fix public capital to a design level and gather the residual risk behind it; the last three manage that residual risk by moving people, development and decisions. What changed is who carries the risk: once the household that took its house apart, now everyone behind levees and a channel planned, for the next 30 years, to carry 2,000 m³/s less than the flood of 2011.</p>
+      <p class="closing">Exposure also has a social geography this page does not map. Nakagami Kenji set much of his fiction in the <span lang="ja">路地</span>, a fictional space modelled on the buraku district of Shingū where he was born. The Tokyo High Court held in 2023 that information showing where such districts lie infringes the private lives of the people connected to them, a ruling final since 2024, so the page leaves it unlocated.</p>
 
       <h3 class="trio-head"><b>Hazard Planning</b>Hub-and-Network System, Compact City, Land Use Steering</h3>
       <div class="trio" id="trio-plan"></div>
-      <h3 class="trio-head"><b>Three Waters Threatening the City</b>from the mountains, falling directly on the city, from the sea</h3>
+      <h3 class="trio-head"><b>Water from three of the four directions</b>from the mountains, falling directly on the city, from the sea; the slopes are the fourth</h3>
       <div class="trio" id="trio-water"></div>
 
       <h2 id="fieldnotes">Field notes · Shingū’s three shrines by bicycle</h2>
@@ -1861,13 +1878,13 @@
           ["kawaramachi", "heritage · Kawaramachi", "river-functions", "end", -8, 4, "small key"], ["@135.965,33.745", "hazard system", "river-functions", "middle", 0, 0, "em c-red key"],
           ["hitari", "Hitari · 日足", "agariya", "start", 9, 4, "em key", "Agariya documented (Kumanogawa-chō)."], ["kuju", "Kujū · 九重", "agariya", "start", 9, 4, "em key"],
           ["shitaki", "Shitaki · 四瀧", "agariya", "start", 9, 4, "em key"], ["shingu", "Shingū", "agariya", "start", 9, 4, "em key"],
-          ["ring_takaoka", "ring levee · Takaoka", "interventions-mouth", "start", 12, 4, "small c-basin key"], ["ring_funada", "ring levee · Funada", "interventions-mouth", "start", 12, 4, "small c-basin key"],
-          ["ichida_pump", "Ichida pumps · sluice", "interventions-mouth ichida", "start", 9, 14, "small c-basin key"],
+          ["ring_takaoka", "ring levee · Takaoka", "interventions-mouth couplings", "start", 12, 4, "small c-basin key"], ["ring_funada", "ring levee · Funada", "interventions-mouth couplings", "start", 12, 4, "small c-basin key"],
+          ["ichida_pump", "Ichida pumps · sluice", "interventions-mouth ichida couplings", "start", 9, 14, "small c-basin key"],
           ["ev_tankaku", "castle hill", "interventions-mouth refuges", "end", -9, -4, "small c-tsunami key"], ["ev_horai", "Hōrai mound", "refuges", "start", 9, 4, "small c-tsunami"],
           ["ev_miyaido", "Miyaido refuge", "refuges", "start", 9, -6, "small c-tsunami"], ["ev_matsuyama", "Matsuyama park", "refuges", "start", 9, 4, "small c-tsunami"],
           ["ev_koda", "Kōda park", "refuges", "end", -9, 4, "small c-tsunami"],
-          ["@135.95,33.758", "from the mountains", "pathways", "middle", 0, 30, "small c-basin key"], ["@135.99,33.708", "from the city", "pathways", "middle", 0, 30, "small c-basin key"],
-          ["@136.04,33.702", "from the sea", "pathways", "middle", 0, 30, "small c-tsunami key"], ["@135.935,33.712", "from the slopes", "pathways", "middle", 0, 30, "small c-red key"],
+          ["@135.95,33.758", "from the mountains", "pathways couplings", "middle", 0, 30, "small c-basin key"], ["@135.99,33.708", "from the city", "pathways couplings", "middle", 0, 30, "small c-basin key"],
+          ["@136.04,33.702", "from the sea", "pathways couplings", "middle", 0, 30, "small c-tsunami key"], ["@135.935,33.712", "from the slopes", "pathways couplings", "middle", 0, 30, "small c-red key"],
           ["dam_ikehara", "Ikehara dam", "dams", "start", 7, 4, "small c-basin"], ["dam_kazeya", "Kazeya dam", "dams", "end", -7, 4, "small c-basin"],
           ["dam_saruya", "Sarutani dam", "dams", "end", -7, 4, "small c-basin"],
           ["@135.80,34.13", "Nara 63%", "basin-labels", "middle", 0, 0, "em c-basin key"], ["@135.86,33.83", "Wakayama 22%", "basin-labels", "middle", 0, 0, "em c-basin key"],
@@ -1889,8 +1906,8 @@
           ["station", "Shingū Stn", "core-pois", "start", 9, 15, "small"], ["medical", "Medical Center", "core-pois", "end", -10, 20, "small"],
           ["hayatama", "Hayatama Taisha", "core-pois", "end", -8, -6, "small c-culture"], ["miwasaki", "Miwasaki Stn", "core-pois", "start", 8, 4, "small"],
           ["@136.012,33.705", "Kumano-nada", "core-pois refuges visitors ichida", "middle", 0, 0, "sea"], ["@135.966,33.7392", "Kumano River", "core-pois", "middle", 0, 0, "small c-basin"],
-          ["@135.972,33.748", "Kumano River", "interventions-mouth pathways", "middle", 0, 0, "small c-basin"],
-          ["@136.035,33.745", "MIE", "interventions-mouth pathways", "middle", 0, 0, "big"], ["@135.955,33.708", "WAKAYAMA", "interventions-mouth", "middle", 0, 0, "big"],
+          ["@135.972,33.748", "Kumano River", "interventions-mouth pathways couplings", "middle", 0, 0, "small c-basin"],
+          ["@136.035,33.745", "MIE", "interventions-mouth pathways couplings", "middle", 0, 0, "big"], ["@135.955,33.708", "WAKAYAMA", "interventions-mouth couplings", "middle", 0, 0, "big"],
           ["mifunejima", "Mifune-jima · 御船島", "heritage", "end", -9, -6, "small c-culture key", "The islet the Mifune Matsuri boats race around (16 October)."],
           ["mizunote", "Mizunote", "heritage", "start", 9, 14, "small"],
           ["takata", "Takata · cut off", "slopes-2011", "end", -10, 4, "small c-red key", "高田地区: isolated in September 2011 (city disaster record)."],
@@ -1936,11 +1953,11 @@
           ["station", "dot", "rail-port gateways ichida visitors core-pois"], ["ekimae_se", "dot-small", "rail-port"], ["ekimae_nw", "dot-small", "rail-port"],
           ["medical", "dot", "rail-port core-pois"], ["port", "dot-big", "rail-port gateways"], ["hongu", "shrine", "shrines"], ["nachi", "shrine", "shrines"],
           ["kawabune", "dot", "river-functions valley-sites"], ["hitari", "site", "agariya"], ["kuju", "site", "agariya"], ["shitaki", "site", "agariya"],
-          ["ring_takaoka", "ring", "interventions-mouth"], ["ring_funada", "ring", "interventions-mouth"], ["ichida_pump", "pump", "interventions-mouth ichida"],
+          ["ring_takaoka", "ring", "interventions-mouth couplings"], ["ring_funada", "ring", "interventions-mouth couplings"], ["ichida_pump", "pump", "interventions-mouth ichida couplings"],
           ["ichida_sluice", "dot-small", "ichida"], ["ukishima_pump", "pump", "ichida"],
           ["ev_tankaku", "refuge", "interventions-mouth refuges"], ["ev_horai", "refuge", "refuges"], ["ev_miyaido", "refuge", "refuges"], ["ev_matsuyama", "refuge", "refuges"],
           ["ev_koda", "refuge", "refuges"], ["ev_kindai", "refuge", "refuges"], ["ev_tankaku_hall", "refuge", "refuges"], ["ev_shingu_hs", "refuge", "refuges"],
-          ["@135.95,33.758", "pg:from-mountains", "pathways"], ["@135.99,33.708", "pg:from-city", "pathways"], ["@136.04,33.702", "pg:from-sea", "pathways"], ["@135.935,33.712", "pg:from-slopes", "pathways"],
+          ["@135.95,33.758", "pg:from-mountains", "pathways couplings"], ["@135.99,33.708", "pg:from-city", "pathways couplings"], ["@136.04,33.702", "pg:from-sea", "pathways couplings"], ["@135.935,33.712", "pg:from-slopes", "pathways couplings"],
           ["dam_ikehara", "dam", "dams"], ["dam_kazeya", "dam", "dams"], ["dam_saruya", "dam", "dams"], ["dam_futatsuno", "dam", "dams"], ["dam_nanairo", "dam", "dams"],
           ["dam_komori", "dam", "dams"], ["dam_asahi", "dam", "dams"], ["dam_seto", "dam", "dams"],
           ["gongen_gawara", "dot", "visitors"], ["ukishima", "dot", "visitors"],
@@ -2642,9 +2659,6 @@
         ];
         var facets = document.getElementById("facets");
         FACETS.forEach(function (f) { makeMini(facets, f); });
-        makeMini(document.getElementById("rc-map"), { q: "regional centre", r: "timber & charcoal down the rivers, out by sea", m: "rafting routes (Kitayama, Totsukawa–Kumano) and schematic sea lanes to Ōsaka and Edo", view: V.hinterland,
-          layers: [["basin", "fill:#4781c7;fill-opacity:.08;stroke:#4781c7;stroke-width:.8"], ["river_main", "stroke:#5f8db0;stroke-width:1"], ["flow_kitayama", "stroke:#b5761f;stroke-width:2.2;stroke-dasharray:6 4"], ["flow_kumano", "stroke:#b5761f;stroke-width:2.2;stroke-dasharray:6 4"], ["sea_osaka", "stroke:#b5761f;stroke-width:1.4;stroke-dasharray:2 4"], ["sea_edo", "stroke:#b5761f;stroke-width:1.4;stroke-dasharray:2 4"]],
-          pts: [["shingu", 0.8]] });
         var trioPlan = document.getElementById("trio-plan");
         makeMini(trioPlan, { r: "Hub-and-network system", m: "central, regional and living hubs linked across the municipality", view: V.city,
           layers: [["shingu", "stroke:#1d998c;stroke-width:1.1"], ["road_local", "stroke:#c8bda6;stroke-width:.5"], ["nr168", "stroke:#8a7a60;stroke-width:1"], ["nr42", "stroke:#8a7a60;stroke-width:1"], ["riz", ST.riz], ["uf", ST.uf]],

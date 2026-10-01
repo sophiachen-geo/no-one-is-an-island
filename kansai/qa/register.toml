@@ -64,10 +64,12 @@ why = "titles and idioms, not counts"
 [[claim]]
 id = "count-structure"
 match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS CONVERGE", "Four directions of risk",
-         "Together, the two forms", "intersection of two major transitions", "THREE WATERS THREATENING THE CITY",
+         "Together, the two forms", "intersection of two major transitions", "WATER FROM THREE OF THE FOUR DIRECTIONS", "the slopes are the fourth",
+         "This creates a second resilience requirement", "the last three manage that residual risk", "The four directions are not independent",
+         "a hazard from one direction weakens the defences against another", "Two patterns follow",
          "Beyond the four pathways", "Shingū sits where one river system meets the sea", "memory and refuge on one plot", "pick one in either and it lights up in both"]
 status = "verified"
-source = "counts of the items the page itself lists (7 functions, 6 river functions, 4 pathways, 2 forms, 2 transitions, 3 waters)"
+source = "counts of the items the page itself lists (7 functions, 6 river functions, 4 pathways, 2 forms, 2 transitions; water comes from 3 of the 4 directions; visitors are the second population after residents; the last 3 of the 6 forms in the summary list; 2 patterns read off the matrix)"
 
 [[claim]]
 id = "three-shrines"
@@ -77,7 +79,7 @@ source = "Kumano Sanzan: Hongū Taisha, Hayatama Taisha, Nachi Taisha (UNESCO Wo
 
 [[claim]]
 id = "three-prefecture-basin"
-match = ["three-prefecture Kumano watershed", "three overlapping hinterlands across Wakayama, Mie and Nara"]
+match = ["three-prefecture Kumano watershed"]
 status = "verified"
 source = "the basin polygon on the page spans Nara, Wakayama and Mie (see the basin-share checks)"
 
@@ -166,6 +168,14 @@ status = "corrected"
 source = "Shingū City, 川原町の川原家: 「年に5～6回あるといわれる不時の洪水」"
 url = "https://www.city.shingu.lg.jp/Info/25"
 note = "The draft said the historical record describes flooding five or six times in some years; the city's page gives it as a saying: sudden floods said to come five or six times a year."
+
+[[claim]]
+id = "kawaraya-only-here"
+match = ["and says houses built this way existed nowhere else in Japan"]
+status = "verified"
+source = "Shingū City, 川原町の川原家: 「全国でここだけにしかなかったもの」"
+url = "https://www.city.shingu.lg.jp/Info/25"
+
 [[claim]]
 id = "kawaramachi-gone"
 match = ["gone by 1950"]
@@ -211,7 +221,7 @@ note = "The line's first section (Katsuura–Miwasaki) opened in December 1912; 
 [[claim]]
 id = "port-only"
 match = ["Shingū Port today remains Kinan’s only foreign-trade port, serving hinterlands extending into Mie and Nara while functioning simultaneously as a maritime gateway for Kumano tourism and cruise traffic",
-         "Shingū Port remains the Kinan region’s principal foreign-trade port"]
+         ]
 status = "verified"
 source = "Wakayama Prefecture 新宮港: 「紀南地方唯一の外貿港湾である新宮港は、新宮地域のみならず三重県や奈良県をも含めた地域の拠点港」「熊野観光の海の玄関口…大型クルーズ客船の寄港が増加」"
 url = "https://www.pref.wakayama.lg.jp/prefg/080500/kowan/40shingu.html"
@@ -245,7 +255,7 @@ url = "https://www.city.shingu.lg.jp/div/kikaku/dload/kirokusyu/2syo.27-38.pdf"
 [[claim]]
 id = "oga-peak-2011"
 match = ["Peak discharge at Ōga ≈ 24,000 m³/s, the largest on record (MLIT)", "2011 flood ≈ 24,000 (record)", "the 2011 flood peaked at about 24,000",
-         "The revised design flood equals what 2011 already delivered."]
+         "The revised design flood (基本高水) equals what 2011 already delivered.", "At Ōga the Kumano peaked at about 24,000 m³/s"]
 status = "verified"
 source = "MLIT press attachment (Oct 2021): 2011 flood 「約24,000m3/s（観測史上最大）」 at 相賀"
 url = "https://www.mlit.go.jp/report/press/content/001427937.pdf"
@@ -445,7 +455,7 @@ url = "https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html"
 [[claim]]
 id = "design-flood"
 match = ["19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision"]
-exact = ["2008 policy", "19,000", "2021 revision", "24,000"]
+exact = ["2008 policy", "19,000", "2021 policy", "24,000"]
 status = "verified"
 source = "MLIT press attachment: 基本高水 at 相賀 「19,000m3/s ⇒ 24,000m3/sに変更」 (19,000 from the June 2008 policy)"
 url = "https://www.mlit.go.jp/report/press/content/001427937.pdf"
@@ -3878,3 +3888,94 @@ match = ["the authors’ phone photographs of 28 September 2025", "shops and sac
 status = "verified"
 source = "EXIF dates of our photographs; Overpass osm_base 2026-10-01; BODIK dataset 300004_080300_doro_ijoukisho (CC BY 4.0), re-downloaded 2026-10-01 13:16 UTC and identical; KSJ A40 2024年度版 (released 2025-05-30) and A33 2025; Wakayama 令和8年 assumption (知事メッセージ dated 令和８年３月２５日); Mie 「三重県南海トラフ地震被害想定について」 (令和08年03月31日)"
 url = "https://data.bodik.jp/dataset/300004_080300_doro_ijoukisho"
+
+
+# ================================================================ #40 (2026-10-01): finding first, coupled pathways, accommodation vs resistance
+[[claim]]
+id = "board-riz"
+match = ["58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents in the plan's residential-inducement zone (A55) whose building lies in the maximum river flood or the 2026 maximum tsunami"
+check = { rk = "cve.people.residential (RIZ).L2_union.1", fmt = "{:.0f}% of the residents of its residential" }
+
+[[claim]]
+id = "board-centre"
+match = ["58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): the same for the central urban-function zone"
+check = { rk = "cve.people.function: centre.L2_union.1", fmt = "and {:.0f}% of those in its central" }
+
+[[claim]]
+id = "board-riz-15"
+match = ["with water by 15 minutes, 2,040 residents of the zone fall short at Wakayama’s rule of leaving at 5 minutes and walking at 0.5 m/s"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): residents of the residential-inducement zone short of time with the first water capped at 15 minutes, leaving at 5 minutes, 0.5 m/s on roads (Wakayama's rule; README of tools/risk)"
+check = { rk = "cve.people.residential (RIZ).tsunami_margin_negative_city15.0", fmt = "15 minutes, {:,} residents of the zone" }
+
+[[claim]]
+id = "board-kiho-5"
+match = ["In the part of Kihō the animation covers, 75% fall short at the same rule"]
+status = "derived"
+source = "kansai/tools/risk (kansai/data/risk.js): share of Kihō's residents inside the animation's frame short of time leaving at 5 minutes at 0.5 m/s"
+check = { rk = "ev_share.kiho_W_DH_5", fmt = "covers, {:.0f}% fall short" }
+
+[[claim]]
+id = "board-model"
+match = ["In central Shingū the margin hangs on the 2026 model, which keeps road and rail embankments standing and brings the water late"]
+status = "verified"
+source = "Wakayama, 地震動予測及び津波浸水想定 report (2026), computation conditions: 道路・鉄道 「地形データとして取り扱う（破壊しない）」; in the animation the water first wets central Shingū after a median of 33 minutes (kansai/data/risk.js ev_groups)"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui_d/fil/03_jishindoutsunami.pdf"
+
+[[claim]]
+id = "kawaramachi-end"
+match = ["The town lived off the raftsmen and boatmen who brought timber and goods down the Kumano",
+         "The Kumano Ōhashi opened in 1935 and a bus ran from Shingū to Hongū from 1939; by 1943 three or four houses were left. In 1944 the propeller-boat landing moved upstream to Miyai, and in 1950 the last house, a smithy, closed."]
+status = "verified"
+source = "Shingū City, 川原町: 「熊野大橋が開通し（昭10）、新宮～本宮間の川丈バスが営業を開始し（昭14）、プロペラ船発着場も新宮川原から宮井に移って新宮～宮井間がバス連絡になる（昭19）など、交通・輸送路としての熊野川の役割が減ずるとともに、川原町の意味はなくなっていく。戦時中の18年にはもう3～4軒だけとなり、戦後の25年、最後の1軒（鍛冶屋）も家を閉じて」; MLIT 日本の川 熊野川: 「上流から筏を流してきた筏師や川舟の船頭たちで賑わっていた」"
+url = "https://www.city.shingu.lg.jp/Info/25"
+
+[[claim]]
+id = "onodani-2011"
+match = ["against the 19,000 its works were designed for, and it overtopped the levees at Narukawa and Aisuji. On the Onodani-gawa the ring levees built from 2001 went under, and part of the Takaoka levee collapsed. Floods from the two rivers covered 426 ha and 3,322 houses.",
+         "2011 showed what that residual risk looks like"]
+status = "verified"
+source = "River Improvement Plan 2022, pp. 15–16, 30: 2008 policy 「計画高水流量を19,000m3/s」; 2011 「熊野川本川および支川相野谷川の氾濫により426ha、3,322戸が浸水」; 「平成13年（2001年）から水防災対策特定河川事業により鮒田、高岡、大里地区にT.P.+9.5mの輪中堤を整備…平成23年（2011年）9月洪水により輪中堤を超えて浸水被害」. MLIT Kinki, 第10回熊野川懇談会 資料4 (2020): 「熊野川本川では堤防を越水、相野谷川では輪中堤が水没」「成川地区における堤防越水による浸水」「相筋地区における堤防越水等による浸水」「相野谷川高岡地区では輪中堤が倒壊」; Kihō town bulletin (Dec 2011): 「高岡地区の輪中堤は、洪水の影響により、一部が決壊した」"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/k1cog50000000bjf-att/220331seibikeikaku.pdf"
+
+[[claim]]
+id = "coupling-matrix"
+match = ["Read as a matrix, each cell asks whether a hazard from one direction weakens the defences against another or adds to its damage",
+         "e A tsunami would leave about 2.5 million m³ of water in the Ichida basin for the pumps to clear: the new station keeps its essential plant above the 8.2 m tsunami simulated at the site and stores diesel for the 25 hours that takes.",
+         "f Timber and ships stored at the port would become tsunami debris, and the dense old wooden blocks can burn after the shaking, as in 1946.",
+         "g Deep-seated failures upstream dam rivers that can burst, as those of 2011 threatened to, and slope sediment refills the dredged channel after each flood.",
+         "River Improvement Plan, Shingū River system (新宮川水系河川整備計画, MLIT, 2022) for a to d and g; the 2021 basic river policy for a; Mie Prefecture for b; MLIT Kinki on the design of the new Ichida pump station (2020) for e; Shingū’s 2025 tsunami plan (pp. 25 and 27) for f",
+         "And the sea reaches furthest: one Nankai earthquake can weaken the river defences, fill the Ichida basin and start fires at once."]
+status = "verified"
+source = "a: basic river policy (Oct 2021) p. 10 「内水排除の施設については、排水先の河川の出水状況等を把握し、排水ポンプの運転調整を行う」; b: River plan 2022 「流域内のダムは全てが発電を目的としており」, 「ダム群建設および砂利採取…と鵜殿港防波堤建設…による沿岸漂砂量の変化が影響し、左岸側の七里御浜で…汀線が…後退」, Mie Prefecture (MLIT coastal panel, 資料2): 「侵食から海浜を保全し高潮による被害を防止するため人工リーフを整備」; c: River plan 「熊野川や相野谷川沿川の堤防および樋門・樋管、鮒田水門等の耐震対策については未完了」; d: 「河口部では、洪水状況や海域の波高等により、河口砂州が絶えず変動しており、砂州が発達した場合には堰上げにより水位が上昇」 (and floods flush it: 「河口部が閉塞される状況にはない」); e: MLIT Kinki 2020, 市田川排水機場: 「予測される浸水全量は約250万m3」「地下燃料貯油槽の容量は浸水全量を排水できる25 hr運転分」「機場位置の津波高さT.P.+8.20 mを耐水化水位と設定」, fuel 軽油; f: Shingū 津波防災地域づくり推進計画 (2025) p. 27 「工業用地に集積している木材や船舶等が津波漂流物となり」, p. 25 「古い木造家屋が密集…延焼火災も懸念」, p. 4 (1946) 「火災が発生し、市内中心街の大半を焼失」; g: River plan 「河道閉塞箇所の決壊による二次災害のおそれ」「掘削後は都度、再堆積の発生が懸念される」; h: kansai/data/risk.js net.centre_zone (土石流 warning zone 荒木川右支渓) and net.centre_routes (92 of 92 sampled routes enter a warning zone)"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/k1cog50000000bjf-att/220331seibikeikaku.pdf"
+
+[[claim]]
+id = "design-flood-hierarchy"
+match = ["of which 23,000 in the channel; 22,000 for the 2022 river plan's 30 years",
+         "The channel is to carry 23,000 of it (計画高水流量) and the basin’s dams 1,000; those dams were all built for power, so their share rests on releasing water before a storm, under an agreement of 2020. The 2022 river plan (河川整備計画) aims lower: channel works to carry 22,000 within 30 years, 2,000 below 2011, with the dams lowering a 2011-sized flood as far as they can.",
+         "now everyone behind levees and a channel planned, for the next 30 years, to carry 2,000 m³/s less than the flood of 2011"]
+exact = ["23,000", "2022 plan", "22,000"]
+status = "verified"
+source = "basic river policy (Oct 2021) p. 15: 「そのピーク流量を基準地点相賀において24,000m3/sとし、このうち洪水調節施設等により1,000m3/sを調節し、河道への配分流量を23,000m3/sとする」; its 新旧対照表: 「利水ダム等による事前放流による容量確保は…洪水調節施設の調節流量と同等の扱いとし、従前の表現に「等」を追記」; River plan 2022: 「流域内のダムは全てが発電を目的」, 「令和2年（2020年）5月に…新宮川水系治水協定を締結」, p. 63 対象期間 「概ね30年間」, p. 64 「基準地点相賀において22,000m3/sの流量を安全に流下させる…洪水時の最大流量が平成23年（2011年）9月洪水と同程度である24,000m3/sの流量に対しても、できるだけ水位を低下させることに努める」"
+url = "https://www.mlit.go.jp/river/basic_info/jigyo_keikaku/gaiyou/seibi/pdf/shingu/1-01_shingu_honbun_R310.pdf"
+
+[[claim]]
+id = "design-flood-gap"
+match = ["2,000 below 2011", "to carry 2,000 m³/s less than the flood of 2011"]
+status = "derived"
+source = "24,000 (the 2011 flood at Ōga, MLIT) − 22,000 (the 2022 river plan's target at Ōga)"
+check = { calc = "24000 - 22000", expect = 2000, tol = 0.5 }
+
+[[claim]]
+id = "nakagami-roji"
+match = ["Nakagami Kenji set much of his fiction in the 路地, a fictional space modelled on the buraku district of Shingū where he was born.",
+         "The Tokyo High Court held in 2023 that information showing where such districts lie infringes the private lives of the people connected to them, a ruling final since 2024, so the page leaves it unlocated."]
+status = "verified"
+source = "渡邊英理『中上健次 路地のビジョン』(岩波書店), reviewed in 日刊ゲンダイ (26 Aug 2026): 「路地とは、氏の生地である和歌山県新宮市の被差別部落をモデルに仮構された虚構の空間である」; 部落解放同盟京都府連 (11 Dec 2024): 「2023年6月28日、東京高裁判決が出され…部落がどこにあるのかを示す情報は、私生活の平穏を侵害するもので…出版を差し止めるべき」「12月4日付けで、最高裁判所は上告棄却の決定を出しました」. The page names no district and draws none."
+url = "https://www.bll-kyoto.jp/topics/2024/3458/"
+
