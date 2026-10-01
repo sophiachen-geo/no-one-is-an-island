@@ -273,6 +273,15 @@ def check_derived(gate, g, claim):
         gate.ok("derived", f"{cid}: {what} = {got:.4g} ≈ {exp}")
 
 
+def literal_spans(m, t):
+    """Every occurrence of the literal text m in t. A plain search: with several hundred match strings, compiling
+    each as a regex on every text item outran re's pattern cache and made the gate minutes slower."""
+    i = t.find(m)
+    while i >= 0:
+        yield i, i + len(m)
+        i = t.find(m, i + 1)
+
+
 def check_register(gate, reg, inventory, g):
     texts = [it["text"] for it in inventory]
     ids = set()
@@ -303,8 +312,7 @@ def check_register(gate, reg, inventory, g):
         t = it["text"]; cov = []
         for c in reg.get("claim", []):
             for m in c.get("match", []):
-                for mm in re.finditer(re.escape(m), t):
-                    cov.append(mm.span())
+                cov.extend(literal_spans(m, t))
             if t in c.get("exact", []):   # short labels (“86%”, “2025”) only count when they are the whole item
                 cov.append((0, len(t)))
         for rx, _ in idents:
