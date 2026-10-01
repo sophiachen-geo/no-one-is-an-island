@@ -273,6 +273,15 @@ def check_derived(gate, g, claim):
         gate.ok("derived", f"{cid}: {what} = {got:.4g} ≈ {exp}")
 
 
+def literal_spans(m, t):
+    """Every occurrence of the literal text m in t. A plain search: with several hundred match strings, compiling
+    each as a regex on every text item outran re's pattern cache and made the gate minutes slower."""
+    i = t.find(m)
+    while i >= 0:
+        yield i, i + len(m)
+        i = t.find(m, i + 1)
+
+
 def check_register(gate, reg, inventory, g):
     texts = [it["text"] for it in inventory]
     ids = set()
@@ -303,8 +312,7 @@ def check_register(gate, reg, inventory, g):
         t = it["text"]; cov = []
         for c in reg.get("claim", []):
             for m in c.get("match", []):
-                for mm in re.finditer(re.escape(m), t):
-                    cov.append(mm.span())
+                cov.extend(literal_spans(m, t))
             if t in c.get("exact", []):   # short labels (“86%”, “2025”) only count when they are the whole item
                 cov.append((0, len(t)))
         for rx, _ in idents:
@@ -336,7 +344,7 @@ def check_points(gate, pts_ref, g, used):
         if key not in P:
             gate.err("points", "map point has no sourced reference in points.toml", key); continue
     for key, p in P.items():
-        if key.startswith("kmk_"):
+        if key.startswith(("kmk_", "kmc_")):
             continue
         if key not in g["pts"]:
             gate.err("points", "reference point missing from the page data", key); continue
@@ -378,6 +386,24 @@ def check_kmk(gate, pts_ref, g, html):
     for key in P:
         if key.startswith("kmk_") and key[4:] not in {lab[0] for lab in K["pts"]}:
             gate.warn("kamikura", "reference point not used by the micro-study (stale entry?)", key)
+    # the town figure of the religious flows: every place it draws sits at its sourced coordinate
+    T = K.get("ground", {}).get("sacred", {}).get("town")
+    if T:
+        X0, Y1 = T["origin"]
+        derived = {"confluence", "kumano_lab", "abreast_hay", "abreast_mif"}     # computed from the river's centre line
+        for key, (x, y) in T["places"].items():
+            if key in derived:
+                continue
+            ref = P.get("kmc_" + key)
+            if not ref or not ref.get("source"):
+                gate.err("kamikura", f"town figure place “{key}” has no sourced reference (kmc_{key}) in points.toml", key); continue
+            E, N = tm.forward(ref["lon"], ref["lat"])
+            off = math.dist((E - X0, Y1 - N), (x, y))
+            if off > ref["tol_m"]:
+                gate.err("kamikura", f"town figure place “{key}” is {off:.0f} m from its reference ({ref['source']}); tolerance {ref['tol_m']} m", key)
+        for key in P:
+            if key.startswith("kmc_") and key[4:] not in T["places"]:
+                gate.warn("kamikura", "reference point not used by the town figure (stale entry?)", key)
     area = shoelace_m2(K["layers"]["poly"]) / 1e4
     if abs(area - K["stats"]["area_ha"]) > 0.01:
         gate.err("kamikura", f"the drawn study area is {area:.3f} ha but the statistics say {K['stats']['area_ha']} ha")

@@ -1215,14 +1215,21 @@ url = "https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430"
 
 [[claim]]
 id = "kmk-precinct"
-match = ["the shrine’s lower precinct at the entrance (1,951 m² inside the line)"]
+match = ["the shrine’s lower precinct at the entrance (1,217 m² inside the line)"]
 status = "derived"
-source = "OSM ways 500803106 (神倉神社, landuse=religious) and 500803107 inside the polygon"
-check = { kmk = "stats.precinct_m2", fmt = "{:,} m²" }
+source = "OSM way 500803106 (神倉神社, landuse=religious) inside the polygon. Way 500803107 beside it holds the 出雲大社新宮教会 (its hall, way 499568822, its torii and its board) and is counted apart (kmk-izumo-area)"
+check = { kmk = "ground.sacred.grounds.precinct_m2", fmt = "{:,} m²" }
+
+[[claim]]
+id = "kmk-izumo-area"
+match = ["the grounds of the 出雲大社新宮教会 (734 m²), a separate body"]
+status = "derived"
+source = "OSM way 500803107 inside the polygon, wholly east of the channel's centre line (the town side; the transect crosses it at 386–394 m, past the channel at 365–370 m); the church's hall (way 499568822) and torii (node 4908399301) lie inside it, and the shrine's precinct (way 500803106) does not hold the hall (sacred.py grounds checks)"
+check = { kmk = "ground.sacred.grounds.izumo_m2", fmt = "{} m²" }
 
 [[claim]]
 id = "kmk-myoshinji"
-match = ["妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the shrine",
+match = ["妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the Kumano shrines",
          "Myōshin-ji, thought to have become the head temple of the 神倉本願"]
 status = "verified"
 source = "熊野三山協議会: 「神倉山を所管した妙心寺などの本願寺院」; 日本歴史地名大系 (Kotobank): 「神倉山登り口にある。…勧進比丘尼を統率する神倉本願本寺になったと考えられる」 (hence 'thought to')"
@@ -1718,9 +1725,9 @@ check = { kmk = "ground.scores.backs.units_follow", fmt = "({} of the" }
 
 [[claim]]
 id = "kmk-score-weak"
-match = ["Frontages, temple and shrine property, the drawn waterway and the steep steps on the foot face show nothing (0 of 6)."]
+match = ["Frontages, temple, shrine and church grounds, the drawn waterway and the steep steps on the foot face show nothing (0 of 6)."]
 status = "derived"
-source = "the most runs significant, under either shift, among frontages, temple and shrine property, the waterway parcels and the steep steps (0–25 m; steps −15–0 m)"
+source = "the most runs significant, under either shift, among frontages, temple, shrine and church grounds, the waterway parcels and the steep steps (0–25 m; steps −15–0 m)"
 check = { kmk = "ground.weak_max_sig", fmt = "nothing ({} of 6)" }
 
 [[claim]]
@@ -2183,3 +2190,413 @@ match = ["(「登記所備付地図データ 新宮市」（法務省）を加�
 status = "verified"
 source = "bibliographic details read from each document on 2026-10-01: master plan 2012 (p. 23 = PDF p. 28); 日本の下水道 資料編 (file 16日本の下水道資料編, 2016); 令和7年度当初予算書; 入札公告 新財工第30号 (令和7年8月13日) and 第39号 (令和7年9月10日); 平成9年12月定例会 第5号 (平成9年12月12日); 市田川流域大規模浸水対策計画 (平成31年3月25日); 新宮川水系河川整備計画 (令和4年3月); 告示第157号 (昭和50年3月8日); 造園雑誌 54(5), 1990; 新宮市地域防災計画 資料編 (file 26.8shiryou1.pdf, its tables 「平成26年8月現在」); the Sōtō Zen portal titles the temple 宗應寺 (應, the older form of 応); the MoJ licence asks for the source and a note that the data were processed"
 
+
+# ================================================================ Kamikura · 流れ · sacred (religious flow)
+# Sources read on 2026-10-01. Kumano Shimbun is cited on the page by name and date (its server sends an incomplete
+# certificate chain, which the link check cannot follow), so its URLs are kept here.
+[[identifier]]
+pattern = '\bOSM (?:way|ways|node|nodes) \d{6,}(?: and \d{6,})?'
+why = "OpenStreetMap element ids"
+
+[[identifier]]
+pattern = 'the Three Treasures|A living landscape is a remade one'
+why = "a name (三宝, Buddha, Dharma and Sangha) and an idiom, not counts"
+
+[[identifier]]
+pattern = 'WHC-\d+/\d+\.COM/\d+[A-Z]?'
+why = "UNESCO document symbol"
+
+[[claim]]
+id = "kmk-sacred-ptr-hayatama"
+match = ["熊野速玉大社 · 0.9 km", "熊野速玉大社 (0.9 km)"]
+status = "derived"
+source = "sacred.py: straight distance from the foot of the steps (lower end of OSM way 121366071) to 熊野速玉大社 (OSM way 211578006)"
+check = { kmk = "ground.sacred.pointers.hayatama.dist_m", expect = 900, tol = 50 }
+
+[[claim]]
+id = "kmk-sacred-ptr-asuka"
+match = ["阿須賀神社 · 1.3 km", "阿須賀神社 (1.3 km)"]
+status = "derived"
+source = "sacred.py: straight distance from the foot of the steps to 阿須賀神社 (OSM way 499565075)"
+check = { kmk = "ground.sacred.pointers.asuka.dist_m", expect = 1300, tol = 50 }
+
+[[claim]]
+id = "kmk-sacred-ptr-mouth"
+match = ["the mouth of the Kumano · 2.8 km", "the mouth of the Kumano (2.8 km)"]
+status = "derived"
+source = "sacred.py: straight distance from the foot of the steps to the river mouth, where OSM's Kumano centre line (way 59234786, MLIT 国土数値情報 W05) meets OSM's coastline"
+check = { kmk = "ground.sacred.pointers.river_end.dist_m", expect = 2800, tol = 50 }
+
+[[claim]]
+id = "kmk-sacred-330"
+match = ["lies outside the area, 330 m up the line"]
+status = "derived"
+source = "sacred.py section: the foot of the steps is 332.5 m from the rock along the transect (path and steps)"
+check = { kmk = "ground.sacred.section.stations.1.1", expect = 330, tol = 5 }
+
+[[claim]]
+id = "kmk-sacred-gods"
+match = ["Where the gods first came down. Kumano Hayatama Taisha places the first descent of the Kumano gods on Gotobiki-iwa",
+         "Gotobiki-iwa, where, by tradition, the Kumano gods first came down",
+         "first on Gotobiki-iwa, then 石淵 across the river, then the present site, the “new shrine” (新宮)",
+         "in the 58th year of Emperor Keikō", "only as one that “is also said” (ともいわれています)"]
+status = "verified"
+source = "熊野速玉大社, 熊野信仰のはじまり: 「『熊野権現御垂迹縁起』をはじめとする古文献には、熊野の神々は神代の昔、まず神倉山のゴトビキ岩に降臨されたと記されています」 and 「熊野の神々が最初に降り立ったと伝えられる聖地」 (hence “by tradition”, “in the shrine’s account”); 「神倉山に降臨せられた熊野の神々は、次に熊野川の対岸石淵（現貴祢谷）に遷り、さらに景行天皇58年、現在の熊野速玉大社の社地へとお遷りになったと伝えられています。…現在の神倉神社を元宮とし、熊野速玉大社を新宮と称される所以」. Shingū City (info/41): 「新宮と呼んだともいわれています」 (hence “is said”)"
+url = "https://kumanohayatama.jp/history/"
+
+[[claim]]
+id = "kmk-sacred-gongen"
+match = ["by around the 10th century the Kumano gods were worshipped as the twelve Kumano Gongen", "the gods’ descent, 石淵 and the name 新宮, the twelve Gongen"]
+status = "verified"
+source = "熊野速玉大社: 「熊野では神が仮に仏の姿をかりて現れるとする熊野権現信仰が流布し、十世紀頃には熊野十二社（所）大権現として…お祀りし」; Shingū City (info/41): 「権現山は、神の降臨する神体山で熊野速玉大社の神が権（かり）に現れる山という意味です。権現山の南端の峰を神倉山と呼びます」"
+url = "https://kumanohayatama.jp/history/"
+
+[[claim]]
+id = "kmk-sacred-unesco"
+match = ["with Shugendō, “influenced by the former two faiths”, as a third element; the nomination lists Gotobiki-iwa first among the most typical natural objects"]
+status = "verified"
+source = "UNESCO, Statement of Outstanding Universal Value (WHC-13/37.COM/8E, p.119): “the fusion of Shintoism, rooted in the ancient tradition of nature worship in Japan, and Buddhism” (synthesis); “Shintoism…, Buddhism…, and Shugen-dô (the Shugen sect) which was influenced by the former two faiths” (integrity); nomination dossier 1142, printed p.9 (PDF p.18): “Among such natural objects…, the most typical are: “Gotobikiiwa”, a gigantic rock…”; the statement reads “these sites, the connecting pilgrimage routes, and surrounding forests” as the cultural landscape"
+url = "https://whc.unesco.org/archive/2013/whc13-37com-8E-en.pdf"
+
+[[claim]]
+id = "kmk-sacred-finds"
+match = ["Fragments of a late-Yayoi bronze bell found around it have been a prefectural property since 2012", "Buddhist finds of late Heian to Muromachi and fragments of a late-Yayoi bronze bell, found around it",
+         "repairs to the stone walls when the shrine was rebuilt in 1956 turned up about 300 Buddhist objects from three spots around the rock",
+         "sutra stones written one character each", "the 神倉山銅鐸, designated 2012"]
+status = "verified"
+source = "Wakayama Prefecture, 県指定文化財一覧: 「考古資料 平成24年7月20日 神倉山銅鐸 一括 … 熊野速玉大社 弥生時代後期」; 日本歴史地名大系 (Kotobank, 神倉山): 「昭和三一年（一九五六）神倉神社社殿改築に伴う石垣補修を契機として、ごとびき岩の周辺三ヵ所から、平安末期の…瓦製経筒…鎌倉時代の金銅十一面観音像…室町時代の一字一石経石など総計三〇〇点の仏教関係遺物が出土」; 日本歴史地名大系 (神倉神社): 「平安朝以来神倉山を修行場とする修験の徒がごとびき岩の周辺に経塚を営み」. UNESCO nomination (printed p.28): “Around the gigantic rock, called Gotobikiiwa… pieces of a religious bronze bell of the 3rd century and many sutra mounds of around the 12th century have been found” (hence “fragments”, “around it”); the prefectural register lists the bell as 「一括」"
+url = "https://kotobank.jp/word/%E7%A5%9E%E5%80%89%E5%B1%B1-2024217"
+
+[[claim]]
+id = "kmk-sacred-geba"
+match = ["下馬 stone (1672)",
+         "the 下馬 stone (1672: a pillar telling riders to dismount here; a pilgrim from Ōshū gave it to mark his seven pilgrimages to the three Kumano shrines)",
+         "the 下馬 stone of 1672 and the stele of 1990 stand at the foot"]
+status = "verified"
+source = "Wakayama Prefecture (道路政策課, 神倉山): 「下馬標石はここで乗り物を降りるよう示した石柱で、神倉神社入口前の太鼓橋のそばにあります。標石には、寛文12年（1672年）、奥州の大銀与兵衛盛道が熊野三山に七度参詣した記念に寄進した旨が刻まれています」; わかやまの文化財: 神倉山附石段「下馬」標石. 1990: kmk-sacred-iwatate"
+url = "https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html"
+
+[[claim]]
+id = "kmk-sacred-iwatate"
+match = ["天磐盾 stele (1990)", "the 天磐盾 stele of 1990, for the 2,650th year of the imperial era", "the board beside the stele (1990)"]
+status = "verified"
+source = "the board beside the stele (photographed 2021): 「紀元二千六百五十年（平成二年）を奉祝して…顕彰碑を神倉神社奉賛会が奉献…平成二年二月十一日 建国記念の日」; the stone's text 「神武天皇紀 到熊野神邑 且登天磐盾」 (OSM node 4908399260)"
+url = "https://cdn-ak.f.st-hatena.com/images/fotolife/o/owari-nagoya55/20210402/20210402103906.jpg"
+
+[[claim]]
+id = "kmk-sacred-sarutahiko"
+match = ["猿田彦神社・神倉三宝荒神社 (1983; rebuilt 2024)", "猿田彦神社・神倉三宝荒神社, built in 1983 and rebuilt in 2024", "Kumano Shimbun, 9 May 2024 (the shrines)"]
+status = "verified"
+source = "Kumano Shimbun, 9 May 2024: 「神倉神社境内にある猿田彦神社・神倉三宝荒神社…の例祭が８日、営まれた」 (with the rebuilding's completion); 「元の社殿は１９８３年に建てられたが傷んでいた」; 「神倉山には明治時代まで「天狗様」として親しまれた猿田彦命の神社があった」"
+url = "https://kumanoshimbun.com/press/cgi-bin/userinterface/searchpage.cgi?target=202405090901"
+
+[[claim]]
+id = "kmk-sacred-renewed"
+match = ["満山社 (2024 donation)", "中ノ地蔵堂 · 火神社 (2024 donation)", "The donation that rebuilt them in 2024 also paid for renewing or repairing 満山社, 火神社 and 中ノ地蔵堂, for the 20th anniversary of the World Heritage listing"]
+status = "verified"
+source = "Kumano Shimbun, 9 May 2024: the donors of the rebuilding 「世界遺産登録２０周年に合わせ、同神社境内にある満山社社殿、火神社社殿、中ノ地蔵堂…の新調・修復費用も同様に捻出した」 (the article gives no completion date, hence “paid for”, “2024 donation”)"
+url = "https://kumanoshimbun.com/press/cgi-bin/userinterface/searchpage.cgi?target=202405090901"
+
+[[claim]]
+id = "kmk-sacred-steps-1193"
+match = ["laid, by tradition, as Minamoto no Yoritomo’s gift in 1193 (鎌倉積み)"]
+status = "verified"
+source = "熊野速玉大社, 聖地ゴトビキ岩: 「538段…「鎌倉積み」と呼ばれ、建久4年（1193年）に源頼朝公が寄進したと伝えられています」 (tradition: 「伝えられています」)"
+url = "https://kumanohayatama.jp/gotobiki/"
+
+[[claim]]
+id = "kmk-sacred-dem1"
+match = ["On the 1 m model the mapped steps"]
+status = "method"
+source = "GSI DEM1A, the 1 m bare-ground model used throughout the chapter"
+
+[[claim]]
+id = "kmk-climb-gain"
+match = ["the mapped steps rise 71.2 m"]
+status = "derived"
+source = "sacred.py: DEM1A every 1 m along OSM way 121366071 (steps), highest minus lowest"
+check = { kmk = "ground.sacred.climb.gain_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-climb-len"
+match = ["over 218.5 m on the map"]
+status = "derived"
+source = "sacred.py: plan length of OSM way 121366071"
+check = { kmk = "ground.sacred.climb.steps_len_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-climb-lower"
+match = ["26.1° on average from the foot to 中ノ地蔵堂"]
+status = "derived"
+source = "sacred.py: rise ÷ plan length from the foot of the steps to the point of the steps nearest 中ノ地蔵堂 (OSM node 4908399232)"
+check = { kmk = "ground.sacred.climb.lower.deg", fmt = "{}°" }
+
+[[claim]]
+id = "kmk-climb-upper"
+match = ["11.2° above it"]
+status = "derived"
+source = "sacred.py: rise ÷ plan length from 中ノ地蔵堂 to the top of the steps"
+check = { kmk = "ground.sacred.climb.upper.deg", fmt = "{}°" }
+
+[[claim]]
+id = "kmk-climb-steep"
+match = ["39.1° over the steepest 10 m"]
+status = "derived"
+source = "sacred.py: the steepest 10 m window along the steps (1 m samples)"
+check = { kmk = "ground.sacred.climb.steep10_deg", fmt = "{}°" }
+
+[[claim]]
+id = "kmk-climb-steep-at"
+match = ["44 m from the foot"]
+status = "derived"
+source = "sacred.py: start of the steepest 10 m window, metres along the steps from their foot"
+check = { kmk = "ground.sacred.climb.steep10_from_foot_m", fmt = "{} m from the foot" }
+
+[[claim]]
+id = "kmk-climb-path-len"
+match = ["over 110.6 m to the rock"]
+status = "derived"
+source = "sacred.py: plan length of OSM way 121369321 (the path from the top of the steps to the rock)"
+check = { kmk = "ground.sacred.climb.path_len_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-climb-path-gain"
+match = ["the path climbs about 11 m more"]
+status = "derived"
+source = "sacred.py: ground at the rock (on the transect) minus the top of the steps, DEM1A"
+check = { kmk = "ground.sacred.climb.path_gain_m", expect = 11, tol = 0.5 }
+
+[[claim]]
+id = "kmk-climb-rock"
+match = ["Gotobiki-iwa, ground 88 m", "the ground at the rock at 88 m"]
+status = "derived"
+source = "sacred.py: DEM1A at the start of the transect, at the rock"
+check = { kmk = "ground.sacred.sequence.0.3", expect = 88, tol = 0.5 }
+
+[[claim]]
+id = "kmk-sacred-poem"
+match = ["a poem by Fujiwara no Saneuji from the imperial anthology 続古今和歌集 (1265)", "the 1956 finds and the 1265 poem"]
+status = "verified"
+source = "精選版 日本国語大辞典 (Kotobank, 神倉山): 「三熊野の神くら山の石たたみのほりはてても猶祈るかな〈藤原実氏〉」(続古今和歌集（1265）神祇・七三六); the same poem on a stone at the foot of the steps (OSM node 4908399248, calligraphy 世耕弘一)"
+url = "https://kotobank.jp/word/%E7%A5%9E%E5%80%89%E5%B1%B1-2024217"
+
+[[claim]]
+id = "kmk-markers-total"
+match = ["of the 21 steles, boards and shrines", "15 of these 21 stand in the last 41 m of the climb"]
+status = "derived"
+source = "sacred.py: OSM nodes tagged historic=memorial, information=board, man_made=ceremonial_gate or amenity=place_of_worship within 12 m of the transect up to the 下馬 stone, plus the four small shrine buildings on the steps (OSM)"
+check = { kmk = "ground.sacred.climb.markers_n", fmt = "{}" }
+
+[[claim]]
+id = "kmk-markers-foot"
+match = ["15 stand in its last 41 m", "15 of these 21"]
+status = "derived"
+source = "sacred.py: those within the last stretch, from 5 m above the foot of the steps to 1 m past the 下馬 stone"
+check = { kmk = "ground.sacred.climb.foot_n", fmt = "{}" }
+
+[[claim]]
+id = "kmk-markers-span"
+match = ["in its last 41 m", "in the last 41 m of the climb"]
+status = "derived"
+source = "sacred.py: length of that stretch along the transect"
+check = { kmk = "ground.sacred.climb.foot_span_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-markers-radius"
+match = ["within 12 m of the line"]
+status = "method"
+source = "sacred.py: search radius for the markers along the transect"
+
+[[claim]]
+id = "kmk-climb-figure"
+match = ["the ground line coloured by its slope over each 2 m", "slope of the ground, every 2 m · heights true to scale"]
+exact = ["below 10°", "10–25°", "25–40°", "40° or more"]
+status = "method"
+source = "kmkClimb: slope classes of the drawn profile (2 m samples of the transect); the figure is drawn at true scale (data-ve 1.00, checked by check_render.mjs)"
+
+[[claim]]
+id = "kmk-oto-programme"
+match = ["6 February · the 2024 programme", "19:10 the sacred fire is kindled", "≈19:25 the great torch to 中ノ地蔵堂 and back; the gate shuts", "≈20:00 the gate opens: the torches run down",
+         "6 February, ≈20:00: the gate opens and the torches run down the steps",
+         "In the 2024 programme the priests and their attendants leave Hayatama at 17:50 and reach Kamikura at 18:20; the sacred fire is kindled at 19:10; at about 19:25 the great torch goes down to 中ノ地蔵堂 and back while the climbers (上り子) are shut inside the gate; at about 20:00 the gate opens and they run down the steps with the fire in their torches. Afterwards the priests go on to 阿須賀神社 (about 21:40) and back to Hayatama (about 22:10)",
+         "17:50 out · ≈22:10 back", "18:20 arrive · 19:10 fire · ≈20:00 the gate opens", "7 February 16:00: mochi on the school ground",
+         "every 6 February · Oto Matsuri: the priests’ times (2024 programme); ○ visited by the climbers by day (2026); ■ the next day’s mochi",
+         "Numbered: the 2024 programme of the Oto Matsuri (新宮市観光協会)", "the 2024 programme (新宮市観光協会)",
+         "the times are the 2024 programme (新宮市観光協会), the climbers’ visits Kumano Shimbun (8 February 2026)",
+         "the last 20 m of the steps the torches run down every 6 February", "the Oto Matsuri route: torches run down the steps from the shrine (6 February)",
+         "6 February: the fire comes down."]
+exact = ["≈21:40"]
+status = "verified"
+source = "新宮市観光協会, 2024年2月6日の日程: 「午後5時50分 神職、介釈一行同大社を出発し、神倉神社に向かう／午後6時20分 神倉神社到着／午後7時10分 御神火をおこし、神事開始／午後7時25分頃 大松明、中の地蔵へ向かう。上がり子山門内へ向かい閉門／午後8時頃 山門を開門。上がり子出立／午後9時頃 神職、介錯一行下山し、阿須賀神社へ向かう／午後9時40分頃 阿須賀神社到着／午後10時10分頃 熊野速玉大社到着」; 翌日 「午後4時 餅捲き（神倉小学校グラウンド）」. Agency for Cultural Affairs (286380): 「大松明はいったん下山し再び上ってくる」 (hence “and back”). Shingū City info/35: 「毎年、２月６日 夜に行われる」. Climbers' visits: Kumano Shimbun, 8 February 2026"
+url = "https://www.shinguu.jp/new-events/detail/208"
+
+[[claim]]
+id = "kmk-oto-people"
+match = ["The city speaks of about 2,000; the organisers counted 1,580 in 2026; women do not climb.",
+         "By day the climbers, in white with straw rope, visit Hayatama, 阿須賀神社, 妙心寺 and others."]
+status = "verified"
+source = "Shingū City info/41: 「２０００人ほどの男子が、５３８段の石段を駆け下りる修験の火祭り」; info/35: 「白装束に荒縄を締め」; Kumano Shimbun, 8 February 2026: 「今年は昨年を上回る１５８０人（主催者発表）が集まった」, 「女人禁制の祭り」, 「熊野速玉大社、阿須賀神社、妙心寺などを参拝した」"
+url = "https://kumanoshimbun.com/press/cgi-bin/userinterface/searchpage.cgi?target=202602080101"
+
+[[claim]]
+id = "kmk-oto-designation"
+match = ["it has been an Important Intangible Folk Cultural Property since March 2016"]
+status = "verified"
+source = "文化遺産オンライン: 新宮の速玉祭・御燈祭り, 重要無形民俗文化財, 指定年月日 20160302, 保護団体 熊野速玉大社祭事保存会"
+url = "https://bunka.nii.ac.jp/heritages/detail/286380"
+
+[[claim]]
+id = "kmk-sec-foot"
+match = ["the bridge at the foot of the steps at 6.6 m"]
+status = "derived"
+source = "03_study.py: DEM1A at the bridge at the foot of the steps, the same point as the transect's “foot of the steps · 6.6 m” (kmk-entrance)"
+check = { kmk = "stats.entrance_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-sec-hayatama"
+match = ["Hayatama on higher ground, about 12 m (on the 5 m model)"]
+status = "derived"
+source = "sacred.py: GSI DEM5A at 熊野速玉大社 (OSM way 211578006)"
+check = { kmk = "ground.sacred.section.hayatama_ground_m", expect = 12, tol = 0.5 }
+
+[[claim]]
+id = "kmk-sec-river"
+match = ["the river, near sea level, 294 m beyond it"]
+status = "derived"
+source = "sacred.py: distance from 熊野速玉大社 to the nearest edge of GSI's water area (ftCode 5000)"
+check = { kmk = "ground.sacred.section.hayatama_to_river_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-sec-mouth"
+match = ["3.0 km above its mouth", "3.0 km to its mouth", "The river to its mouth, 3.0 km along its centre line"]
+status = "derived"
+source = "sacred.py: along OSM's Kumano centre line (way 59234786, MLIT 国土数値情報 W05) from abreast of 熊野速玉大社 to the coastline"
+check = { kmk = "ground.sacred.section.river_to_mouth_m", expect = 3000, tol = 50 }
+
+[[claim]]
+id = "kmk-ichida-estuary"
+match = ["into the Kumano’s estuary, 0.4 km from the mouth", "the Kumano’s estuary, 0.4 km from its mouth"]
+status = "derived"
+source = "sacred.py: from the lower end of OSM's 市田川 (five ways; it ends in GSI's water area) to the river mouth"
+check = { kmk = "ground.sacred.town.m.conf_mouth", expect = 400, tol = 50 }
+
+[[claim]]
+id = "kmk-sec-length"
+match = ["One measured section, 1.6 km"]
+status = "derived"
+source = "sacred.py: rock → foot of the steps (transect) → 熊野速玉大社 (street walk) → river bank"
+check = { kmk = "ground.sacred.section.length_m", expect = 1600, tol = 50 }
+
+[[claim]]
+id = "kmk-sec-walk"
+match = ["the shortest walk on OpenStreetMap’s streets, 1.0 km"]
+status = "derived"
+source = "sacred.py: networkx shortest path on OSM highways (trunk roads excluded), foot of the steps → 熊野速玉大社"
+check = { kmk = "ground.sacred.section.walk_m", expect = 1000, tol = 50 }
+
+[[claim]]
+id = "kmk-sec-rows"
+match = ["Under it, three things that move from the mountain towards the river", "Measured on one line, the order falls from mountain to river"]
+status = "method"
+source = "kmkSection: one measured line (rock → foot → 熊野速玉大社 → river bank) and three rows under it: the gods' seats (dotted: not along the line), the fire, the water (dotted after the foot)"
+
+[[claim]]
+id = "kmk-sec-ve"
+match = ["no ground is measured over water; heights ×10"]
+status = "method"
+source = "kmkSection: vertical exaggeration 10 (data-ve, checked by check_render.mjs)"
+
+[[claim]]
+id = "kmk-town-figure"
+match = ["water areas, 40 m contours, roads and the railway"]
+exact = ["500 m"]
+status = "method"
+source = "sacred.py circuit(): GSI 最適化ベクトルタイル contours (ftCode 7351) every 40 m; scale bar of the town figure"
+
+[[claim]]
+id = "kmk-town-chihogamine"
+exact = ["権現山 · 千穂ヶ峯 253 m"]
+status = "verified"
+source = "日本歴史地名大系 (Kotobank, 神倉山): 「千穂ヶ峯（二五三メートル）を主峰とする権現山」; OSM node 4355134042 (ele=253)"
+url = "https://kotobank.jp/word/%E7%A5%9E%E5%80%89%E5%B1%B1-2024217"
+
+[[claim]]
+id = "kmk-mifune"
+match = ["every 16 October", "every 16 October · Mifune Matsuri: Hayatama’s god goes upriver by boat to 御船島"]
+status = "verified"
+source = "Shingū City info/41: 「御船島は、速玉大社の神の「泊まる」川中島で、１０月１６日の御船祭の舞台」; Agency for Cultural Affairs (286380): 「神霊は神輿から船に遷され川を遡上し，御船島へと向かう」"
+url = "https://www.city.shingu.lg.jp/info/41"
+
+[[claim]]
+id = "kmk-sacred-hongan"
+match = ["four hongan temples (本願), the fund-raisers for its upkeep. One of them, 妙心寺",
+         "in 1531 its nun 妙順尼 was granted the hongan title after a restoration funded by collections in the provinces",
+         "its deities, the sutra mounds and the four hongan temples"]
+status = "verified"
+source = "日本歴史地名大系 (Kotobank, 神倉神社): 「中世の神倉社は神倉聖とよばれる社僧…妙心尼寺（妙心寺）・華厳院・宝積院・三学院の神倉本願四ヵ寺によって運営されていた（続風土記）」; 熊野三山協議会: 「新宮庵主の配下で神倉山を所管した妙心寺」; Shingū City, 熊野学 年表 (from 『熊野歴史手帳』 1994): 「1531 享禄4.8 大永年間より諸国勧化奉加し、神倉再興成る。神倉本願妙心寺妙順尼本願号を免許される」"
+url = "https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/history/chronologicaltable2/index.html"
+
+[[claim]]
+id = "kmk-sacred-meiji"
+match = ["The decrees separating kami from Buddhas (1868) and abolishing Shugendō (1872)"]
+status = "verified"
+source = "UNESCO nomination 1142, p.56: “issued the Shintoism and Buddhism Separation Decree in 1868 and the Shugendô Annulment Decree in 1872”; Shingū City 年表: 「1868 神仏分離令により、熊野三山は仏式を改め神道唯一となる」; 熊野三山協議会: 「明治初年の神仏分離で、ほとんど廃寺となってしまいました」"
+url = "https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/history/chronologicaltable3/index.html"
+
+[[claim]]
+id = "kmk-sacred-sanbo"
+match = ["guardian of the Three Treasures, worshipped in Shugendō and kept in homes as the god of the hearth"]
+status = "verified"
+source = "精選版 日本国語大辞典 (Kotobank, 三宝荒神): 「仏・法・僧の三宝を守護し…修験道および日蓮宗などでまつる…近世以後、民間では竈の神として台所にまつる」; デジタル大辞泉 (猿田彦神): 「瓊瓊杵尊の降臨に際し道案内をした…日本書紀では衢の神とされ」"
+url = "https://kotobank.jp/word/%E4%B8%89%E5%AE%9D%E8%8D%92%E7%A5%9E-514834"
+
+[[claim]]
+id = "kmk-sacred-goma"
+match = ["the 32nd, in 2019, was the last there", "Kumano Shimbun, 9 February 2019, 9 May 2024 and 8 February 2026"]
+status = "verified"
+source = "Kumano Shimbun, 9 February 2019: 飛竜山「神州院」による御燈祭り奉祝翌日祭、大峯秘法「採燈大護摩供火生三昧（火渡り）」…「今年で３２回目。同神社での開催は最後となった」; 「昭和の終わりに護摩供を開始し平成の最後に終わる」"
+url = "https://kumanoshimbun.com/press/cgi-bin/userinterface/searchpage.cgi?target=201902090101"
+
+[[claim]]
+id = "kmk-sacred-nachi"
+match = ["revived Kumano Shugendō in 1988, rebuilt in 2023, on a new site, the Gyōjadō (行者堂) of Kumano Shugendō demolished in the early Meiji years, about 150 years before",
+         "closed it for three days of Shugendō practice (19–21 June 2026)", "紀伊民報 AGARA, 21 October 2023"]
+status = "verified"
+source = "紀伊民報 AGARA, 21 October 2023: 「明治初期の神仏分離に伴って取り壊された…「熊野修験那智山行者堂」を約１５０年ぶりに再建」, 「１９８８年、熊野修験を再興」; 「かつての行者堂は現在の熊野那智大社の境内にあったが、新たな行者堂は青岸渡寺境内から…熊野古道の出発地点のそばに再建」 (a new site); Kyodo gives the 修験道廃止令 as the cause; 那智山青岸渡寺, 那智山行者堂閉堂の御案内: 「熊野修験三千仏礼拝行厳修のため、終日閉堂…令和８年６月１９～２１日」"
+url = "https://www.agara.co.jp/article/316173"
+
+[[claim]]
+id = "kmk-sacred-steps-in"
+match = ["the last 20 m of the steps"]
+status = "derived"
+source = "sacred.py: length of OSM way 121366071 (the steps) inside the study polygon"
+check = { kmk = "ground.sacred.climb.steps_in_area_m", expect = 20, tol = 0.5 }
+
+[[claim]]
+id = "kmk-sacred-chronology"
+match = ["熊野学 略年表（中世） — 1531 and 略年表（近世） — 1868"]
+status = "verified"
+source = "Shingū City, 熊野学 略年表 (中世): 1531 享禄4.8 「神倉本願妙心寺妙順尼本願号を免許される」; 略年表 (近世): 1868 「神仏分離令により、熊野三山は仏式を改め神道唯一となる」 (both from 『熊野歴史手帳』, 1994)"
+url = "https://www.city.shingu.lg.jp/div/bunka-1/htm/kumanogaku/article/history/chronologicaltable3/index.html"
+
+[[claim]]
+id = "kmk-sacred-pilgrims"
+match = ["pilgrims on the Nakahechi mostly came down from Hongū by boat to Hayatama, then went from 阿須賀神社 to 浜王子 and over 高野坂 to Nachi",
+         "before the Edo period · the pilgrims: by boat from Hongū → 熊野速玉大社 → 阿須賀神社 → 浜王子 → 高野坂 → Nachi"]
+status = "verified"
+source = "Shingū City info/41: 「中辺路を通ってきた人は、本宮から新宮まで主に船で熊野川を下り、速玉大社にお参りしました。その後は、阿須賀神社から王子神社（浜王子）に詣で、高野坂を越え那智山に向かいました。江戸時代には、新宮の町中を南下し、南谷墓地の横から広角へ登り高野坂を越えました」 (hence “before the Edo period”)"
+url = "https://www.city.shingu.lg.jp/info/41"
+
+[[claim]]
+id = "kmk-sacred-gods-line"
+match = ["The gods’ path, in the shrine’s account, leaves the line: from the rock across the river to 石淵, then back to Hayatama’s riverside site."]
+status = "verified"
+source = "熊野速玉大社: 「神倉山に降臨せられた熊野の神々は、次に熊野川の対岸石淵（現貴祢谷）に遷り、さらに景行天皇58年、現在の熊野速玉大社の社地へとお遷りになったと伝えられています」; UNESCO nomination: the shrine's location “adjoins the riverbank of the Kumano River”"
+url = "https://kumanohayatama.jp/history/"
+
+[[claim]]
+id = "kmk-sacred-gongen-gloss"
+match = ["“gods appearing provisionally in the form of Buddhas” (神が仮に仏の姿をかりて現れる)"]
+status = "verified"
+source = "熊野速玉大社, 熊野信仰のはじまり: 「仏教が伝来すると神仏習合が進み、熊野では神が仮に仏の姿をかりて現れるとする熊野権現信仰が流布し」 (quoted as the shrine words it)"
+url = "https://kumanohayatama.jp/history/"

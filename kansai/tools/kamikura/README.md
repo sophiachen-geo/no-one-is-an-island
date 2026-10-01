@@ -20,6 +20,10 @@ python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-che
 
 `gsi.py` reads GSI's optimal vector tiles (road edges, water edges, buildings, benchmarks); `mojparse.py` reads the
 Ministry of Justice 地図XML.
+`sacred.py` (called by `09_export.py`) builds the religious flow: the climb and its markers, the vertical section and
+the town figure. It fetches two OpenStreetMap extracts from Overpass on first run and keeps them in the work
+directory: `osm_streets_hayatama.json` (highways between Kamikura and Hayatama, for the walk) and
+`osm_rivers_town.json` (waterways and coastline of the town).
 
 ## The study area: four rules
 
@@ -86,3 +90,19 @@ shares in the unnumbered strips, in numbered parcels and more than 3 m inside th
 - The transect follows the pilgrims' route down the mountain (OSM path 121369321 and the steps 121366071) to the
   bridge over the channel, then runs straight to the city hall. Heights are bare ground.
 - Labels on the map have independent references in `kansai/qa/points.toml` (`kmk_*`), checked by `run.py`.
+
+## The religious flow (sacred.py)
+
+- The climb: DEM1A every 1 m along OSM's steps (way 121366071) and the path to the rock (way 121369321); slope classes
+  over 2 m; the steepest 10 m window. Markers: every OSM stele, board, torii or place of worship within 12 m of the
+  transect up to the 下馬 stone, plus the four small shrine buildings on the steps.
+- The section: the transect from the rock to the foot of the steps, the shortest walk on OSM's streets to 熊野速玉大社
+  (trunk roads excluded), then straight to the nearest edge of GSI's water area. Heights from DEM1A inside the frame and
+  the main build's DEM5A beyond; none over water. The river to its mouth is measured along OSM's Kumano centre line
+  (way 59234786, from MLIT 国土数値情報 W05), whose meeting with OSM's coastline is the mouth.
+- The town figure: GSI water areas (5000), 1:25,000 contours every 40 m (7351), roads (27xx; national and prefectural
+  roads, others 3 m or wider) and the railway (8201); OSM's 市田川, the Kumano's centre line and the coastline. Places are
+  checked against independent coordinates in `kansai/qa/points.toml` (`kmc_*`); the flows join places in order, not
+  along routes.
+- Sources for the text (shrine, city, prefecture, Agency for Cultural Affairs, Kotobank, UNESCO, the press) are in
+  `kansai/qa/register.toml` under “Kamikura · 流れ · sacred”.
