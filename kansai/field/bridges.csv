@@ -1,0 +1,8 @@
+id,lat,lon,metres_along_channel_from_north,osm_way,osm_highway,osm_bridge_tag,seen_on_site (y/n),name_plate (橋名板),date_plate,width_m,deck_material,railing,public_or_private,serves (house / lane / street),photo_ids,notes
+B01,33.726901,135.985389,4.7,1479141761,residential,,,,,,,,,,,
+B02,33.726315,135.985114,93.0,121369902,residential,,,,,,,,,,,
+B03,33.726029,135.985085,124.9,405265599,service,,,,,,,,,,,
+B04,33.725689,135.98505,162.7,121366585,residential,,,,,,,,,,,
+B05,33.725181,135.984461,241.2,389506991,residential,,,,,,,,,,,
+B06,33.724337,135.984244,337.4,121366834,unclassified,yes,,,,,,,,,,
+B07,33.721324,135.98379,682.2,121366965,unclassified,yes,,,,,,,,,,

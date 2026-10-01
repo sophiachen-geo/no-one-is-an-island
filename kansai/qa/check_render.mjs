@@ -292,6 +292,31 @@ if (hasQA) {
         const mr = svgK.getBoundingClientRect();
         boxes.forEach((b) => { if (b.r.left < mr.left - 1 || b.r.right > mr.right + 1 || b.r.top < mr.top - 1 || b.r.bottom > mr.bottom + 1) out.push(['kamikura', `${key}: map label “${b.t}” leaves the map`]); });
       }
+      // the ground under the map: every button swaps the image to its own layer and shows its colour scale (relief: none)
+      const gimg = svgK.querySelector('image.k-relief'), D = window.__KMK;
+      for (const b of document.querySelectorAll('.kbase-b')) {
+        const key = b.getAttribute('data-kb'); K.setBase(key); await wait(30);
+        const want = key === 'relief' ? D.img.href : (D.bases[key] || {}).href;
+        if (!want || gimg.getAttribute('href') !== want) out.push(['kamikura', `ground “${key}” does not reach the map`]);
+        const rp = document.getElementById('kmkramp');
+        if ((key === 'relief') !== rp.hidden) out.push(['kamikura', `ground “${key}”: colour scale ${rp.hidden ? 'missing' : 'left over'}`]);
+        if (b.getAttribute('aria-pressed') !== 'true') out.push(['kamikura', `ground “${key}” button is not marked pressed`]);
+        if (key !== 'relief') {
+          const ok = await new Promise((res) => { const im = new Image(); im.onload = () => res(im.naturalWidth > 1000); im.onerror = () => res(false); im.src = want; });
+          if (!ok) out.push(['kamikura', `ground layer ${want} does not load`]);
+          const svgR = rp.querySelector('svg'), vb = svgR && svgR.viewBox.baseVal;
+          [...(svgR ? svgR.querySelectorAll('text') : [])].forEach((t) => { const bb = t.getBBox(); if (bb.x < -1 || bb.x + bb.width > vb.width + 1) out.push(['kamikura', `colour scale “${t.textContent}” leaves its box`]); });
+        }
+      }
+      K.setBase('relief');
+      // the three figures of the ground section are drawn from the data
+      [['kmkfoot', 'path'], ['kmkscore', 'circle'], ['kmkoff', 'circle']].forEach(([id, tag]) => { if (!document.querySelectorAll(`#${id} ${tag}`).length) out.push(['kamikura', `figure #${id} is empty`]); });
+      // the two ground profiles are drawn at the vertical exaggeration their captions state
+      for (const id of ['kmkfoot', 'kmkprof']) {
+        const sv = document.getElementById(id), cap = sv && sv.closest('figure') && sv.closest('figure').querySelector('figcaption');
+        const m = cap && cap.textContent.match(/heights ×(\d+(?:\.\d+)?)/), ve = sv ? parseFloat(sv.getAttribute('data-ve')) : NaN;
+        if (!m || !(Math.abs(ve - parseFloat(m[1])) < 0.05)) out.push(['kamikura', `figure #${id} is drawn with heights ×${ve} but its caption says ${m ? '×' + m[1] : 'nothing'}`]);
+      }
       K.setSys('all', true);
       K.setTr(400, false); await wait(20);
       const mk = document.querySelector('#kmkmap .ktrm'), cu = document.querySelector('#kmkprof .kpcur');

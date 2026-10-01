@@ -349,3 +349,77 @@ checked = "2026-10-01"
 url = "https://www.td-ms.com/works/oishiipark/index.html"
 kind = "source"
 checked = "2026-10-01"
+
+[[link]]
+url = "https://www.chiseki.go.jp/about/images/naze_A4.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.chiseki.go.jp/about/images/meiji_history.pdf"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/tosiken-1/pdf/keikaku/toshimas.pdf"
+kind = "plan"
+ja = "新宮市都市計画マスタープラン"
+en = "Urban Planning Master Plan (PDF, 2012)"
+publisher = "Shingū City"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.mlit.go.jp/common/001154321.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/zaisei-1/pdf/toushoyosan/ippannkaikei-R070321.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/zaisei-1/pdf/nyusatsu-koukoku/7k30.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/zaisei-1/pdf/nyusatsu-koukoku/7k39.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/gijiroku/p042824.html"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/div/bousai/pdf/program/26.8shiryou1.pdf"
+kind = "plan"
+ja = "新宮市地域防災計画 資料編"
+en = "Regional Disaster Management Plan, annex (PDF)"
+publisher = "Shingū City Disaster Prevention Council"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/k1cog50000000bjf-att/220331seibikeikaku.pdf"
+kind = "plan"
+ja = "新宮川水系河川整備計画（国管理区間）"
+en = "Shingū River system improvement plan (PDF, 2022)"
+publisher = "MLIT Kinki Regional Development Bureau"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/river/kumano_kondan/PDF/kt_08/02_2_haifu.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/010100/reiki/reiki_honbun/k501RG00000907.html"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.jstage.jst.go.jp/article/jila1934/54/5/54_5_359/_article/-char/ja/"
+kind = "source"
+checked = "2026-10-01"

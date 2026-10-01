@@ -385,7 +385,9 @@ def check_kmk(gate, pts_ref, g, html):
     if nb != K["stats"]["bld_n"]:
         gate.err("kamikura", f"{nb} building outlines are drawn inside the study area but the statistics say {K['stats']['bld_n']}")
     data_dir = Path(os.environ.get("KANSAI_DATA", KANSAI / "data"))
-    for f in sorted(set(re.findall(r'(?:href|src)="(data/kamikura[^"]+)"', html)) | {"data/kamikura.js", K["img"]["href"]}):
+    files = set(re.findall(r'(?:href|src)="(data/kamikura[^"]+)"', html)) | {"data/kamikura.js", K["img"]["href"]}
+    files |= {b["href"] for b in K.get("bases", {}).values()}               # the ground layers the switcher loads
+    for f in sorted(files):
         if not (data_dir / f.split("/", 1)[1]).exists():
             gate.err("kamikura", f"{f} is referenced by the page but missing")
     if len(gate.errors) == n0:
