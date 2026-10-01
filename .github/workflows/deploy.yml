@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Both pages are static (the Kansai map data is generated offline by kansai/tools and
+      # All pages are static (the Kansai map data is generated offline by kansai/tools and
       # inlined; building footprints and photographs sit beside the page), so there is no
       # build step — we just stage them into a folder.
       - name: Stage site
@@ -40,6 +40,10 @@ jobs:
           cp kansai/index.html _site/kansai/index.html
           if [ -d kansai/data ]; then cp -r kansai/data _site/kansai/data; fi
           if [ -d kansai/img ]; then cp -r kansai/img _site/kansai/img; fi
+          # Standalone map pages (self-contained HTML, screenshots beside them)
+          for d in kumano-kodo minabe-tanabe-ume; do
+            if [ -d "$d" ]; then cp -r "$d" "_site/$d"; fi
+          done
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
