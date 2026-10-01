@@ -66,10 +66,11 @@ number that reaches the page needs an entry in `kansai/qa/register.toml`; the ga
   Medical Center; reached roads rasterised at 250 m and grown by a 1.2 km catchment. A sketch of reach,
   not a service-area study.
 - Kumano Kodō: Nakahechi and Kohechi come from OSM relations. Iseji, Ōmine Okugake and Ohechi are rebuilt by
-  routing along OSM paths between documented waypoints (`11_routes_kodo.py`), with a straight leg where no path
-  connects. The Iseji's waypoints are the passes and villages GSI's base map names along the course (Mie Prefecture's
-  section names fix it; its route lines are All Rights Reserved and are not used), its 浜街道 the OSM coastline of
-  七里御浜 as far as 井田. Against a local copy of Mie's lines (`--check-mie`, not redistributed) the rebuilt Iseji lies a median
+  routing along OSM paths and roads between documented waypoints (`11_routes_kodo.py`), with a straight leg wherever no
+  path connects (none on OSM of 1 October 2026). The Okugake starts at Kinpusen-ji's Zaōdō (OSM way 179810887) and
+  leaves Yoshinoyama by its main street, which OSM tags primary. The Iseji's waypoints are the passes and villages
+  GSI's base map names along the course (Mie Prefecture's section names fix it; its route lines are All Rights Reserved
+  and are not used), its 浜街道 the OSM coastline of 七里御浜 as far as 井田. Against a local copy of Mie's lines (`--check-mie`, not redistributed) the rebuilt Iseji lies a median
   10 m away, 69% within 100 m and 98% within 500 m (1 October 2026); the 荷坂峠 variant is not drawn.
 - Map points that are not in `07_build.py` live in `pts2.json` (it overrides; e.g. the Nanairo dam and
   Kushimoto were corrected there after the QA points check).
