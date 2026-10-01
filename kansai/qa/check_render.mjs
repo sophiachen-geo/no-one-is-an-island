@@ -47,6 +47,8 @@ async function open(viewport, opts = {}) {
   page.on('console', (m) => { if (m.type() === 'error' && !/ERR_FAILED|net::|Failed to load resource/.test(m.text())) err('console-error', m.text(), viewport.width + 'px'); });
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  // the Kamikura micro-study loads when a reader scrolls near it; every pass checks it built
+  await page.evaluate(() => (window.__QA && window.__QA.kmkLoad ? window.__QA.kmkLoad() : null));
   await page.waitForTimeout(300);
   return { ctx, page };
 }
@@ -268,8 +270,42 @@ if (hasQA) {
     }
     Q.lightPlace(null);
     document.querySelectorAll('#valley .kp').forEach((g) => { if (!Q.KPLACES.some((p) => p[0] === g.getAttribute('data-place'))) out.push(['linked-maps', `profile place ${g.getAttribute('data-place')} is not on the flat map`]); });
+    // the Kamikura micro-study: built, every system switch restyles the map and its legend without colliding labels,
+    // the profile and the map light the same point, the camera stays inside the data frame
+    const K = Q.kmk;
+    if (!K || !K.ready) out.push(['kamikura', 'the micro-study did not build (data/kamikura.js)']);
+    else {
+      document.querySelectorAll('.kchip, .kcard, .kh').forEach((b) => { if (!Q.KSYS[b.getAttribute('data-ks')]) out.push(['kamikura', `“${b.textContent.trim().slice(0, 30)}” switches to an unknown system ${b.getAttribute('data-ks')}`]); });
+      if (document.querySelectorAll('.kchip').length !== Object.keys(Q.KSYS).length) out.push(['kamikura', 'not every system has a switch']);
+      const svgK = document.querySelector('#kmkmap svg.kmk-svg');
+      for (const key of Object.keys(Q.KSYS)) {
+        K.setSys(key, true); await document.fonts.ready; await wait(60);
+        if (svgK.getAttribute('data-sys') !== key) out.push(['kamikura', `switch ${key} does not reach the map`]);
+        const want = Q.KSYS[key].leg.split(' ').length, got = document.querySelectorAll('#kmkleg li').length;
+        if (got !== want) out.push(['kamikura', `legend for ${key} shows ${got} of ${want} entries`]);
+        const boxes = [...svgK.querySelectorAll('.kmk-ov text')].filter((t) => t.getClientRects().length && getComputedStyle(t).display !== 'none' && t.closest('g').style.display !== 'none')
+          .map((t) => ({ t: t.textContent, r: t.getBoundingClientRect() }));
+        for (let a = 0; a < boxes.length; a++) for (let b = a + 1; b < boxes.length; b++) {
+          const A = boxes[a].r, B = boxes[b].r, ox = Math.min(A.right, B.right) - Math.max(A.left, B.left), oy = Math.min(A.bottom, B.bottom) - Math.max(A.top, B.top);
+          if (ox > 2 && oy > 2) out.push(['kamikura', `${key}: map labels “${boxes[a].t}” and “${boxes[b].t}” overlap`]);
+        }
+        const mr = svgK.getBoundingClientRect();
+        boxes.forEach((b) => { if (b.r.left < mr.left - 1 || b.r.right > mr.right + 1 || b.r.top < mr.top - 1 || b.r.bottom > mr.bottom + 1) out.push(['kamikura', `${key}: map label “${b.t}” leaves the map`]); });
+      }
+      K.setSys('all', true);
+      K.setTr(400, false); await wait(20);
+      const mk = document.querySelector('#kmkmap .ktrm'), cu = document.querySelector('#kmkprof .kpcur');
+      if (!mk || mk.style.display === 'none' || !cu || cu.style.display === 'none') out.push(['kamikura', 'a point on the profile does not light on the map']);
+      K.setTr(null);
+      if ((mk && mk.style.display !== 'none') || (cu && cu.style.display !== 'none')) out.push(['kamikura', 'the transect marker does not clear']);
+      const c0 = K.cam(); K.zoom(4, c0.W / 2, c0.H / 2); const c1 = K.cam(); K.zoom(1 / 64, c0.W / 2, c0.H / 2); const c2 = K.cam(); K.home(); const c3 = K.cam();
+      if (!(c1.k > c0.k)) out.push(['kamikura', 'zoom in does nothing']);
+      if (c2.k < c2.kmin - 1e-6 || c2.cx - c2.W / 2 / c2.k < c2.F[0] - 1e-6 || c2.cx + c2.W / 2 / c2.k > c2.F[2] + 1e-6 || c2.cy - c2.H / 2 / c2.k < c2.F[1] - 1e-6 || c2.cy + c2.H / 2 / c2.k > c2.F[3] + 1e-6)
+        out.push(['kamikura', 'zooming out shows ground outside the data frame']);
+      if (Math.abs(c3.k - c0.k) > 1e-6) out.push(['kamikura', 'reset does not return to the study area']);
+    }
     // imagery: one switch drives every map; each map has one
-    const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km').length;
+    const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km, #kmkmap svg.kmk-svg').length;
     if (btns < maps) out.push(['satellite', `${maps} maps but ${btns} satellite switches`]);
     Q.satSet(true); await wait(50);
     if (!document.body.classList.contains('sat-on') || [...document.querySelectorAll('.satbtn')].some((b) => b.getAttribute('aria-pressed') !== 'true')) out.push(['satellite', 'the switch does not reach every map']);
@@ -301,7 +337,7 @@ async function chartChecks(pg, tag) {
   const out = await pg.evaluate(() => {
     const out = [];
     document.querySelectorAll('figure svg, #valley, .board svg, .pictos svg').forEach((svg, si) => {
-      if (svg.closest('.mini, #mapwrap, .legend, #ksmap') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
+      if (svg.closest('.mini, #mapwrap, .legend, #ksmap, #kmkmap, .klegend') || svg.classList.contains('msb') || svg.classList.contains('pg')) return;
       const vb = svg.viewBox && svg.viewBox.baseVal; if (!vb || !vb.width) return;
       const texts = [...svg.querySelectorAll('text')].filter((t) => t.textContent.trim() && t.getBBox().width > 0);
       const id = (svg.getAttribute('aria-label') || svg.closest('figure, section, div')?.id || 'svg#' + si).slice(0, 70);
@@ -374,6 +410,7 @@ const inv = await page.evaluate(() => {
     (Q.G.roadlabels || []).forEach((r) => add('road-label', r[3]));
     Object.values(Q.CLAB || {}).forEach((arr) => arr.forEach((c) => add('contour-label', c[3].toLocaleString('en') + ' m')));
     Q.KPLACES.forEach((p) => add('system-map', p[1]));
+    Object.values(Q.KLEG || {}).forEach((l) => add('legend', l[2]));
     document.querySelectorAll('.step').forEach((s) => add('view-name', s.getAttribute('data-name')));
   }
   return out;

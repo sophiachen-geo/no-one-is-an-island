@@ -34,6 +34,7 @@ These come from the author's text. No source was found or checked for them yet.
 - **gongen_gawara** (権現河原 (river-boat landing)) — the exact landing spot is not published; the point is the gravel bar where the boats land; drawn within 300 m.
 - **ichida_pump** (市田川排水機場 (国)) — the pump houses flank the gate; the point sits on the gate; drawn within 150 m.
 - **ukishima_pump** (浮島川排水機場 (県)) — position read from a PDF map, not surveyed; drawn within 250 m.
+- **kmk_oishii** (おいしいパーク) — archello.com/project/oishii-park (block-level pin); designer: 「『Youth Library えんがわ』からお寺を挟んだ2軒隣。向かいに小学校があり」 (td-ms.com); drawn within 60 m.
 
 ## Errors the QA gate caught and fixed
 
@@ -68,4 +69,4 @@ These come from the author's text. No source was found or checked for them yet.
 
 ## Register totals
 
-approximate: 7 · author: 1 · corrected: 6 · derived: 37 · method: 8 · verified: 45 · map points: 71
+approximate: 7 · author: 1 · corrected: 6 · derived: 89 · method: 12 · verified: 56 · map points: 86

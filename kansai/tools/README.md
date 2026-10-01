@@ -31,6 +31,7 @@ python3 $T/fetch_facilities.py  # OSM services and numbered roads in Shingū Cit
 python3 $T/17_round3.py         # per-level contours + height labels, forest/parks/peaks, building exposure
                                 #   (→ buildings_page.json, copy to ../data/buildings.js), services, road labels
 python3 $T/09_inject.py         # write geo.json + profile.json into ../index.html
+# kamikura/: the last chapter's micro-study (1 m relief, study area, transect, alignment test) — see kamikura/README.md
 python3 ../qa/run.py            # the QA/QC gate — must pass before anything is published
 ```
 

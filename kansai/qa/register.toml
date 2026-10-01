@@ -15,7 +15,7 @@
 #             method      a parameter of this repo's own analysis or drawing
 #             approximate verified, but the page rounds or simplifies (listed in CAVEATS.md)
 #             author      from the author's text, not independently verified (listed in CAVEATS.md)
-#   check   – stat (+fmt) | area | share | overlap | length | dist | calc | valley_ve, with expect/tol
+#   check   – stat (+fmt) | kmk (+fmt, or expect/tol; from kansai/data/kamikura.js) | area | share | overlap | length | dist | calc | valley_ve, with expect/tol
 #
 # Sources were read on 2026-09-30.
 
@@ -991,3 +991,480 @@ match = ["land-use mesh L03-b (2021, forest), natural-park zones A10 (2015)", "s
 status = "verified"
 source = "MLIT 国土数値情報 L03-b-21 (2021) and A10-15 (2015); Wakayama designations as of 2026-09-15; one GSI photograph (media.toml); method of 17_round3.py"
 url = "https://nlftp.mlit.go.jp/ksj/"
+
+# ================================================================ Kamikura mountain foot · a micro-morphology (last chapter)
+# Derived values are recomputed from kansai/data/kamikura.js (check kmk), which kansai/tools/kamikura builds from GSI
+# DEM1A, GSI optimal vector tiles, OpenStreetMap and 国土数値情報.
+[[identifier]]
+pattern = 'One small piece of ground|within a few hundred metres|One line runs through|Only one plot deep|the one large open ground|in a special one|Two hazards overlap|two private projects|its four rules|its four edges|first full block|first row of plots|one pixel per metre|DEM1A|国道\d+号|WGS84'
+why = "Kamikura chapter: idioms and self-evident counts, a GSI product name and a road name"
+
+[[claim]]
+id = "kmk-dem1a"
+match = ["GSI’s 1 m laser elevation model", "on the 1 m model", "on the 1 m relief", "break of slope (1 m model)", "Bare ground on GSI DEM1A, sampled every 2 m", "heights ×2",
+         "GSI 1 m laser elevation tiles (DEM1A", "resampled to a 1 m grid", "1 m contours on the plain", "5 m contours on the slope"]
+status = "method"
+source = "GSI 標高タイル DEM1A (基盤地図情報 数値標高モデル 1mメッシュ, airborne laser), z17 tiles resampled to a 1 m grid in JGD2011 / CS VI (kansai/tools/kamikura/02_terrain.py); the profile samples it every 2 m and draws heights twice the horizontal scale; contours at 1 m below 15 m and 5 m above"
+url = "https://maps.gsi.go.jp/development/ichiran.html"
+
+[[claim]]
+id = "kmk-rules"
+match = ["West: 25 m upslope of the break of slope", "slope break + 25 m", "Across the 25 m strip inside the west edge",
+         "at least 1 m above the plain and steeper than 12° (or 3 m above it), connected to the slopes above 40 m"]
+status = "method"
+source = "kansai/tools/kamikura/02_terrain.py: break of slope = edge of ground ≥ 1 m above the plain and steeper than 12° (or ≥ 3 m above it), connected to the slopes above 40 m, on GSI DEM1A; west edge = the line 25 m (horizontal) inside it"
+
+[[claim]]
+id = "kmk-area"
+match = ["5.23 ha"]
+status = "derived"
+source = "area of the study polygon (kansai/tools/kamikura/03_study.py); run.py also re-measures the drawn outline"
+check = { kmk = "stats.area_ha", fmt = "{:.2f} ha" }
+
+[[claim]]
+id = "kmk-ns"
+match = ["286 m north–south"]
+status = "derived"
+source = "north–south extent of the study polygon in JGD2011 / CS VI"
+check = { kmk = "stats.ns_m", fmt = "{} m north–south" }
+
+[[claim]]
+id = "kmk-ew"
+match = ["234 m east–west"]
+status = "derived"
+source = "east–west extent of the study polygon"
+check = { kmk = "stats.ew_m", fmt = "{} m east–west" }
+
+[[claim]]
+id = "kmk-bld"
+match = ["127 buildings"]
+status = "derived"
+source = "GSI building footprints (国土地理院最適化ベクトルタイル) whose centroid lies inside the study polygon; run.py re-counts the drawn outlines"
+check = { kmk = "stats.bld_n", fmt = "{} buildings" }
+
+[[claim]]
+id = "kmk-cover"
+match = ["28% of the ground is built over"]
+status = "derived"
+source = "footprint area inside the polygon ÷ polygon area"
+check = { kmk = "stats.bld_cover_pct", fmt = "{:.0f}% of the ground" }
+
+[[claim]]
+id = "kmk-zmin"
+match = ["3.4–40.2 m"]
+status = "derived"
+source = "lowest ground inside the polygon on GSI DEM1A (the channel bed)"
+check = { kmk = "stats.z_min", fmt = "{:.1f}–" }
+
+[[claim]]
+id = "kmk-zmax"
+match = ["3.4–40.2 m"]
+status = "derived"
+source = "highest ground inside the polygon on GSI DEM1A (the top of the 25 m slope strip)"
+check = { kmk = "stats.z_max", fmt = "–{:.1f} m" }
+
+[[claim]]
+id = "kmk-plain"
+match = ["the plain lies at 6.6 m", "the plain stays near 6.6 m"]
+status = "derived"
+source = "median ground height of the non-slope part of the polygon on GSI DEM1A"
+check = { kmk = "stats.z_plain_med", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-ichida-len"
+match = ["287 m of the Ichida-gawa inside the line"]
+status = "derived"
+source = "centre line of the channel's water area (GSI optimal vector tiles, waterarea ftCode 5000) inside the polygon"
+check = { kmk = "stats.ichida_m", fmt = "{} m" }
+
+[[claim]]
+id = "kmk-ichida-width"
+match = ["an open channel 3.5 m wide"]
+status = "derived"
+source = "channel water area inside the polygon ÷ its centre-line length (GSI water area)"
+check = { kmk = "stats.ch_width_mean", fmt = "{:.1f} m wide" }
+
+[[claim]]
+id = "kmk-ls-any"
+match = ["83% · 15%", "83.3% of the area lies in a sediment-disaster warning zone"]
+status = "derived"
+source = "share of the polygon inside any A33 sediment-disaster zone (Aug 2025)"
+check = { kmk = "stats.ls_any_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-ls-any-1"
+match = ["83.3% of the area lies in a sediment-disaster warning zone"]
+status = "derived"
+source = "as kmk-ls-any, one decimal"
+check = { kmk = "stats.ls_any_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-ls-red"
+match = ["83% · 15%"]
+status = "derived"
+source = "share of the polygon inside an A33 special warning zone (特別警戒区域)"
+check = { kmk = "stats.red_pct", fmt = "· {:.0f}%" }
+
+[[claim]]
+id = "kmk-ls-red-1"
+match = ["15.2% in a special one"]
+status = "derived"
+source = "as kmk-ls-red, one decimal"
+check = { kmk = "stats.red_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-ls-slope"
+match = ["slope failure on the 千穂ヶ峰 and 神倉 slopes (35.1%)"]
+status = "derived"
+source = "share of the polygon inside A33 zones of slope failure (急傾斜地の崩壊: 千穂ヶ峰, 神倉・左指の鼻)"
+check = { kmk = "stats.ls_slope_pct", fmt = "({:.1f}%)" }
+
+[[claim]]
+id = "kmk-ls-debris"
+match = ["debris flow from the gullies above the shrine entrance (神倉川右支渓, 59.3%)"]
+status = "derived"
+source = "share of the polygon inside A33 debris-flow zones (土石流: 神倉川右支渓)"
+check = { kmk = "stats.ls_debris_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-flood"
+match = ["85% inside the maximum assumed river flood", "84.7% is inside the maximum assumed river flood"]
+status = "derived"
+source = "share of the polygon inside the A31a maximum-assumed flood (Kumano, Ichida, Aidani)"
+check = { kmk = "stats.fl_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-flood-1"
+match = ["84.7% is inside the maximum assumed river flood"]
+status = "derived"
+source = "as kmk-flood, one decimal"
+check = { kmk = "stats.fl_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-tsunami"
+match = ["none inside the tsunami inundation"]
+status = "derived"
+source = "share of the polygon inside the A40 L2 tsunami inundation (2016)"
+check = { kmk = "stats.ts_pct", expect = 0.0, tol = 0.0 }
+
+[[claim]]
+id = "kmk-riz"
+match = ["covers 32.9% and stops short of the slope"]
+status = "derived"
+source = "share of the polygon inside the 居住誘導区域 (A55, FY2024); no slope cell inside it (03_study.py)"
+check = { kmk = "stats.riz_pct", fmt = "{:.1f}%" }
+
+[[claim]]
+id = "kmk-strip"
+match = ["the ground rises 22.6 m (median; at most 33.8 m)"]
+status = "derived"
+source = "height gained between the slope break and the west edge along east–west rows every 2 m (GSI DEM1A)"
+check = { kmk = "stats.strip_gain_med", fmt = "{:.1f} m (median" }
+
+[[claim]]
+id = "kmk-strip-max"
+match = ["the ground rises 22.6 m (median; at most 33.8 m)"]
+status = "derived"
+source = "as kmk-strip, maximum"
+check = { kmk = "stats.strip_gain_max", fmt = "at most {:.1f} m" }
+
+[[claim]]
+id = "kmk-ichida-mlit"
+match = ["The Ichida-gawa, which MLIT traces from 千穂ヶ峰 over 4.8 km"]
+status = "verified"
+source = "MLIT 新宮川水系市田川等に係る特定都市河川…の指定に関する説明資料 (25 Sep 2025), p. 2: 「市田川は、千穂ヶ峰に源を発し…流路延長4.8km の河川です」"
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/tokuteitoshi/k1cog50000000bnk-att/o6p6va000000168z.pdf"
+
+[[claim]]
+id = "kmk-cut"
+match = ["an open, walled channel 3.2 m below the plain"]
+status = "derived"
+source = "median plain height minus the channel bed inside the polygon (GSI DEM1A)"
+check = { kmk = "stats.channel_cut_m", fmt = "{:.1f} m below" }
+
+[[claim]]
+id = "kmk-mstream-top"
+match = ["after falling from 63.5 m to 4.7 m in 170 m"]
+status = "derived"
+source = "Kamikura-yama stream (OSM way 499568828) on GSI DEM1A: first mapped point to the junction with 市田川"
+check = { kmk = "stats.mstream_top", fmt = "from {:.1f} m" }
+
+[[claim]]
+id = "kmk-mstream-bot"
+match = ["after falling from 63.5 m to 4.7 m in 170 m"]
+status = "derived"
+source = "as kmk-mstream-top, the junction"
+check = { kmk = "stats.mstream_bot", fmt = "to {:.1f} m" }
+
+[[claim]]
+id = "kmk-mstream-len"
+match = ["after falling from 63.5 m to 4.7 m in 170 m"]
+status = "derived"
+source = "length of the mapped Kamikura-yama stream (OSM way 499568828)"
+check = { kmk = "stats.mstream_len", fmt = "in {} m" }
+
+[[claim]]
+id = "kmk-steps"
+match = ["the 538 steps of the steep 男坂 (Otoko-zaka)", "538 stone steps", "the 538 steps to the bridge"]
+status = "verified"
+source = "熊野速玉大社: 「538段の急峻な石段、通称『男坂』」; Wakayama Prefecture gives the same count"
+url = "https://kumanohayatama.jp/gotobiki/"
+
+[[claim]]
+id = "kmk-cadastre"
+match = ["the Ministry of Justice map for 千穂 and 神倉 is a digitised Meiji-era 公図 in local coordinates",
+         "cadastral map data, Shingū (Ministry of Justice, 2026 edition)"]
+status = "verified"
+source = "登記所備付地図データ 新宮市 (2026 edition, output 3 Feb 2026): file 「新宮・千穂一丁目・神倉一丁目他」 and its neighbours are 任意座標系, 座標値種別 図上測量 (digitised 旧土地台帳附属地図); the nearest 公共座標 parcels lie about 300 m east"
+url = "https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430"
+
+[[claim]]
+id = "kmk-bld-med"
+match = ["Footprints stand in for plots (median 69.9 m²)"]
+status = "derived"
+source = "median footprint area of the GSI buildings inside the polygon"
+check = { kmk = "stats.bld_median_m2", fmt = "median {:.1f} m²" }
+
+[[claim]]
+id = "kmk-precinct"
+match = ["the shrine’s lower precinct at the entrance (1,951 m² inside the line)"]
+status = "derived"
+source = "OSM ways 500803106 (神倉神社, landuse=religious) and 500803107 inside the polygon"
+check = { kmk = "stats.precinct_m2", fmt = "{:,} m²" }
+
+[[claim]]
+id = "kmk-myoshinji"
+match = ["妙心寺, once the 神倉本願 temple that led the Kumano bikuni, the nuns who raised funds for the shrine"]
+status = "verified"
+source = "日本歴史地名大系 (Kotobank): 「神倉山登り口にある。…勧進比丘尼を統率する神倉本願本寺になったと考えられる」; 熊野三山協議会: 「神倉山を所管した妙心寺などの本願寺院」"
+url = "https://kotobank.jp/word/%E5%A6%99%E5%BF%83%E5%AF%BA-139779"
+
+[[claim]]
+id = "kmk-robust"
+match = ["126 of the 127 footprints are mapped as ordinary buildings (普通建物); the one robust building (堅ろう) is the school’s"]
+status = "derived"
+source = "GSI building classes (ftCode 3101 普通建物 vs 3102/3103 堅ろう・高層) inside the polygon; the one robust footprint (2,909 m²) lies in the school compound"
+check = { kmk = "stats.bld_robust", expect = 1, tol = 0 }
+
+[[claim]]
+id = "kmk-school-ha"
+match = ["1.20 ha inside the line, nearly a quarter of it"]
+status = "derived"
+source = "OSM way 1333972521 (school compound) inside the polygon; 1.20 ÷ 5.23 = 23%"
+check = { kmk = "stats.school_ha", fmt = "{:.2f} ha" }
+
+[[claim]]
+id = "kmk-school-refuge"
+match = ["Its building is an emergency refuge for earthquake and tsunami (third floor, 14.3 m), its gym a core shelter"]
+status = "verified"
+source = "新宮市 避難所一覧 (updated 8 Apr 2024): 校舎 = 指定緊急避難場所 (地震・津波), 体育館 = 指定避難所 (中核避難所); 新宮市 津波避難ビル: 神倉小学校 「14.3ｍ（３階床部分）」"
+url = "https://www.city.shingu.lg.jp/info/762"
+
+[[claim]]
+id = "kmk-engawa"
+match = ["Youth Library えんがわ (2013), a library in an old house"]
+status = "verified"
+source = "Kii regional portal (2016 interview): 「2013年６月にオープンした図書館とゲストハウスです」; 新宮市観光協会: a renovated old house next to 神倉神社"
+url = "https://kii3.com/engawa/"
+
+[[claim]]
+id = "kmk-oishii"
+match = ["おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it"]
+status = "verified"
+source = "td-Atelier: 「小さな畑をパブリックスペース（公園、図書館）として開いていくプロジェクト」, Term 2020–2022, client Youth Library ENGAWA"
+url = "https://www.td-ms.com/works/oishiipark/index.html"
+
+[[claim]]
+id = "kmk-school-name"
+match = ["the school’s OSM name, 千穂小学校, predates the 2012 merger", "formed from 丹鶴 and 千穂 elementary schools in April 2012"]
+status = "verified"
+source = "神倉小学校 学校案内: 「平成２４年４月１日丹鶴小学校と千穂小学校が統合されて、神倉小学校として開校した」"
+url = "https://s-shingu.com/kamikura/guide.html"
+
+[[claim]]
+id = "kmk-hazard-editions"
+match = ["MLIT 国土数値情報 A33 (2025), A31a (2025), A40 (2016), A55 (FY2024)", "evacuation shelters and sites (Shingū City, updated April 2024)",
+         "(MLIT Kinan office, Wakayama Prefecture, Shingū City, September 2025)"]
+status = "verified"
+source = "editions used: A33 (Aug 2025), A31a (2025), A40 (2016), A55 (FY2024); 新宮市 避難所一覧 updated 8 Apr 2024; MLIT designation paper dated 25 Sep 2025"
+
+[[claim]]
+id = "kmk-summit"
+match = ["ground at 88.3 m on the 1 m model", "Gotobiki-iwa · 88.3 m"]
+status = "derived"
+source = "GSI DEM1A at the summit shrine (OSM node 2270139651; GSI's own elevation service gives 88.5 m)"
+check = { kmk = "stats.summit_ground_m", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-rock"
+match = ["the rock itself is about 11 m high"]
+status = "verified"
+source = "南紀熊野ジオパーク: ゴトビキ岩 「高さ約11m」"
+url = "https://nankikumanogeo.jp/enjoy/course06/"
+
+[[claim]]
+id = "kmk-entrance"
+match = ["the bridge at their foot (6.6 m)", "foot of the steps · 6.6 m"]
+status = "derived"
+source = "GSI DEM1A at the bridge over 市田川 at the foot of the steps"
+check = { kmk = "stats.entrance_m", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-cityhall"
+match = ["to the city hall (8.5 m)", "city hall · 8.5 m"]
+status = "derived"
+source = "GSI DEM1A at the city hall (OSM node 1423067948)"
+check = { kmk = "stats.cityhall_m", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-transect"
+match = ["1,132 m in all"]
+status = "derived"
+source = "length of the transect: path and steps (OSM 121369321, 121366071) to the bridge, then straight to the city hall"
+check = { kmk = "stats.transect_m", fmt = "{:,} m in all" }
+
+[[claim]]
+id = "kmk-mountain-run"
+match = ["The first 331 m are mountain"]
+status = "derived"
+source = "transect samples inside the mountain mask (02_terrain.py)"
+check = { kmk = "stats.mountain_run_m", fmt = "first {} m" }
+
+[[claim]]
+id = "kmk-town-min"
+match = ["The town part lies between 3.7 m and 8.6 m"]
+status = "derived"
+source = "lowest ground on the town part of the transect, channels excluded (GSI DEM1A)"
+check = { kmk = "stats.town_min", fmt = "between {:.1f} m" }
+
+[[claim]]
+id = "kmk-town-max"
+match = ["The town part lies between 3.7 m and 8.6 m"]
+status = "derived"
+source = "highest ground on the town part of the transect"
+check = { kmk = "stats.town_max", fmt = "and {:.1f} m" }
+
+[[claim]]
+id = "kmk-ukishima"
+match = ["dipping to 2.1 m at the Ukishima-gawa channel", "Ukishima-gawa · 2.1 m"]
+status = "derived"
+source = "lowest ground where the transect crosses 浮島川 (GSI DEM1A)"
+check = { kmk = "stats.ukishima_bed", fmt = "{:.1f} m" }
+
+[[claim]]
+id = "kmk-break-dir"
+match = ["Inside the line the break of slope runs N 7° W", "slope break N 7° W"]
+status = "derived"
+source = "length-weighted axial mean of the slope break inside the polygon (03_study.py)"
+check = { kmk = "align_txt.break", fmt = "{}" }
+
+[[claim]]
+id = "kmk-river-dir"
+match = ["(mean direction N 17° E)", "Ichida-gawa N 17° E"]
+status = "derived"
+source = "length-weighted axial mean of the channel centre line inside the polygon"
+check = { kmk = "align_txt.river", fmt = "{}" }
+
+[[claim]]
+id = "kmk-river-entry"
+match = ["it enters on the town grid 110 m from the slope"]
+status = "derived"
+source = "distance from the slope break to the channel where it enters the polygon (north edge)"
+check = { kmk = "stats.stream_start_to_break", fmt = "{:.0f} m from the slope" }
+
+[[claim]]
+id = "kmk-grid-bld"
+match = ["the town grid, 2° to 6° east of north", "buildings inside: grid at 2°"]
+status = "derived"
+source = "area-weighted axial mean (mod 90°) of building long axes inside the polygon"
+check = { kmk = "align_txt.bld_grid", fmt = "{}" }
+
+[[claim]]
+id = "kmk-grid-town"
+match = ["the town grid, 2° to 6° east of north", "town grid, 200–800 m out: 6°"]
+status = "derived"
+source = "area-weighted axial mean (mod 90°) of building long axes 200–800 m from the slope break"
+check = { kmk = "align_txt.town_grid", fmt = "{}" }
+
+[[claim]]
+id = "kmk-disc-method"
+match = ["Where the slope and the grid disagree by 10° or more", "differs from the town grid by at least 10°", "Buildings within 400 m of the break of slope",
+         "(5,000 shuffles)", "5,000 random pairings within each distance band", "town grid, 200–800 m out"]
+status = "method"
+source = "03_study.py: buildings within 400 m of the slope break where the local slope direction (break segments within 20 m of the nearest point) differs from the town grid by ≥ 10°; each counted for the reference its long axis is closer to; chance = mean over 5,000 random pairings of the same buildings and slope directions within the band"
+
+[[claim]]
+id = "kmk-disc-0"
+match = ["53% of the buildings within 25 m of the break of slope turn with the slope"]
+exact = ["53%"]
+status = "derived"
+source = "share following the slope, 0–25 m band (n = 34)"
+check = { kmk = "disc.0.follow_foot_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-disc-0-chance"
+match = ["against 29% by chance (p < 0.001)"]
+status = "derived"
+source = "chance level for the 0–25 m band (5,000 shuffles)"
+check = { kmk = "disc.0.chance_pct", fmt = "{:.0f}% by chance" }
+
+[[claim]]
+id = "kmk-disc-0-p"
+match = ["against 29% by chance (p < 0.001)"]
+status = "derived"
+source = "one-sided permutation p for the 0–25 m band: share of 5,000 shuffles at or above the observed share"
+check = { kmk = "disc.0.p_one_sided", expect = 0.0006, tol = 0.0004 }
+
+[[claim]]
+id = "kmk-disc-beyond"
+match = ["from 25 m outward it stays within five points of chance"]
+status = "derived"
+source = "largest excess over chance in the 25–50, 50–100, 100–200 and 200–400 m bands (4.5 points, 25–50 m, p = 0.30)"
+check = { kmk = "disc_excess_beyond_25", expect = 4.5, tol = 0.5 }
+
+[[claim]]
+id = "kmk-disc-bars"
+exact = ["29%", "22%", "3%", "18%", "0%", "20%", "40%", "60%", "0–25 m", "25–50 m", "50–100 m", "100–200 m", "200–400 m"]
+status = "derived"
+source = "decay chart: shares for the 25–50 (28.6%), 50–100 (21.7%), 100–200 (3.2%) and 200–400 m (18.2%) bands, axis ticks and band labels (03_study.py)"
+
+[[claim]]
+id = "kmk-disc-1"
+exact = ["29%"]
+status = "derived"
+source = "share following the slope, 25–50 m band"
+check = { kmk = "disc.1.follow_foot_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-disc-2"
+exact = ["22%"]
+status = "derived"
+source = "share following the slope, 50–100 m band"
+check = { kmk = "disc.2.follow_foot_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-disc-3"
+exact = ["3%"]
+status = "derived"
+source = "share following the slope, 100–200 m band"
+check = { kmk = "disc.3.follow_foot_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-disc-4"
+exact = ["18%"]
+status = "derived"
+source = "share following the slope, 200–400 m band"
+check = { kmk = "disc.4.follow_foot_pct", fmt = "{:.0f}%" }
+
+[[claim]]
+id = "kmk-axes"
+exact = ["0 m", "25 m", "50 m", "75 m", "100 m", "125 m", "150 m", "175 m", "200 m", "225 m"]
+status = "method"
+source = "profile height ticks and the heights written on the 25 m contours of the micro-study map"
+
+[[claim]]
+id = "kmk-hongan"
+match = ["the fund-raising temples of the three shrines"]
+status = "verified"
+source = "熊野三山協議会, 本願: the 本願 temples raised funds for the three Kumano shrines (本宮・速玉・那智); 「新宮庵主の配下で神倉山を所管した妙心寺などの本願寺院」"
+url = "https://www.kumano-sanzan.jp/sanzan/hongan.html"

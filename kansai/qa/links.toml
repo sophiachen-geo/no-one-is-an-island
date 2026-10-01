@@ -282,3 +282,70 @@ checked = "2026-09-30"
 url = "https://www.vill.kitayama.wakayama.jp/kanko/about/"
 kind = "source"
 checked = "2026-09-30"
+
+# ---------------------------------------------------------------- Kamikura micro-study
+
+[[link]]
+url = "https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430"
+kind = "data"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/123"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.city.shingu.lg.jp/info/762"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://s-shingu.com/kamikura/guide.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kkr.mlit.go.jp/kinan/kasen/tokuteitoshi/k1cog50000000bnk-att/o6p6va000000168z.pdf"
+kind = "record"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://kumanohayatama.jp/gotobiki/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://nankikumanogeo.jp/enjoy/course06/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://kotobank.jp/word/%E5%A6%99%E5%BF%83%E5%AF%BA-139779"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.kumano-sanzan.jp/sanzan/hongan.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://sotozen-navi.com/detail/index_300052.html"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://kii3.com/engawa/"
+kind = "source"
+checked = "2026-10-01"
+
+[[link]]
+url = "https://www.td-ms.com/works/oishiipark/index.html"
+kind = "source"
+checked = "2026-10-01"

@@ -451,7 +451,100 @@
       /* the valley section keeps a legible size on small screens: it scrolls sideways inside its own box */
       .vscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .vscroll-hint { display: none; font-size: 0.75rem; color: var(--ink-faint); margin: 0 0 0.3rem; }
-      @media (max-width: 760px) { .vscroll #valley { min-width: 720px; } .vscroll-hint { display: block; } }
+      @media (max-width: 760px) { .vscroll #valley { min-width: 720px; } .vscroll #kmkprof { min-width: 760px; } .vscroll-hint { display: block; } }
+      /* ---------- Kamikura mountain foot · a micro-morphology (last chapter) ---------- */
+      .kmk { margin-top: 0.4rem; }
+      .kmk .intro { max-width: 52rem; }
+      .kmk-top { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: clamp(1.2rem, 2.6vw, 2.4rem); align-items: start; }
+      .kmk-text p { margin: 0 0 1rem; }
+      .kmk .kstats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0.2rem 0 1rem; }
+      .kmk .kstats div { background: rgba(236,229,215,0.7); }
+      .kmk-fig { margin: 0; position: sticky; top: 0.8rem; }
+      .kmk .kmf { position: relative; height: min(76vh, 640px); min-height: 320px; }
+      .kmk svg.kmk-svg { position: absolute; inset: 0; width: 100%; height: 100%; background: var(--land); border-radius: 2px; touch-action: pan-y; cursor: grab; }
+      .kmk svg.kmk-svg path { vector-effect: non-scaling-stroke; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+      .kmk .zc { position: absolute; top: 6px; right: 6px; display: flex; flex-direction: column; gap: 3px; z-index: 3; }
+      .kmk .zc button { appearance: none; width: 26px; height: 26px; border-radius: 3px; border: 1px solid rgba(87,85,91,0.35); background: rgba(244,239,230,0.92); color: var(--ink); font: 500 15px/1 "Cormorant Garamond", serif; cursor: pointer; padding: 0; }
+      .kmk .satbtn { top: 6px; left: 6px; height: 26px; font-size: 0.72rem; padding: 0 0.45rem; }
+      .kmk .msb { position: absolute; left: 8px; bottom: 6px; pointer-events: none; }
+      .kmk-fail { display: grid; place-items: center; color: var(--ink-faint); font-size: 0.85rem; }
+      .kmk figcaption { font-size: 0.76rem; color: var(--ink-soft); margin-top: 0.45rem; line-height: 1.55; }
+      .klegend { list-style: none; margin: 0.45rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.4; }
+      .klegend li { display: inline-flex; align-items: center; gap: 0.35rem; }
+      .klegend svg { width: 22px; height: 12px; flex: none; }
+      .ksyschips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 1.1rem 0 0.6rem; }
+      .kchip { appearance: none; border: 1px solid rgba(87,85,91,0.3); border-radius: 999px; padding: 0.15rem 0.7rem; font: 400 0.84rem/1.5 "Noto Serif JP", serif; background: var(--paper); color: var(--ink); cursor: pointer; }
+      .kchip:hover, .kchip:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+      .kchip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+      .kcards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin: 0.4rem 0 0.6rem; }
+      .kcard { background: rgba(236,229,215,0.55); border-radius: 2px; padding: 0.7rem 0.8rem 0.75rem; border: 1px solid transparent; cursor: pointer; transition: border-color 0.15s ease, background-color 0.15s ease; }
+      .kcard:hover, .kcard:focus-visible, .kcard.on { border-color: var(--accent); background: rgba(236,229,215,0.9); outline: none; }
+      .kcard h4 { margin: 0 0 0.3rem; font-weight: 500; font-size: 0.92rem; letter-spacing: 0.03em; line-height: 1.45; }
+      .kcard h4 span { display: block; font-family: "Cormorant Garamond", serif; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+      .kcard p { margin: 0; font-size: 0.84rem; line-height: 1.65; color: var(--ink-soft); }
+      .kh { cursor: pointer; text-decoration: underline dotted rgba(42,42,44,0.45); text-underline-offset: 3px; }
+      .kh:hover, .kh:focus-visible, .kh.on { background: #fbe7a1; outline: none; }
+      .kmk-prof { margin: 0.4rem 0 0; }
+      .kmk-prof svg { width: 100%; height: auto; display: block; }
+      .kmk-prof .kpcur { pointer-events: none; }
+      .kmk-align { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 1.6rem; align-items: start; }
+      .kmk-align figure { margin: 0; }
+      .kmk-align svg { width: 100%; height: auto; display: block; }
+      .kmk-dl { font-size: 0.82rem; color: var(--ink-soft); }
+      .kmk-dl a { color: var(--ink); text-decoration-color: var(--accent); }
+      svg.kmk-svg .k-paper { fill: var(--land); }
+      body.sat-on svg.kmk-svg .k-relief { display: none; }
+      svg.kmk-svg .k-c1 path { stroke: #b48a5a; stroke-width: 0.5; opacity: 0.55; }
+      svg.kmk-svg .k-c5 path { stroke: #a07a52; stroke-width: 0.6; opacity: 0.5; }
+      svg.kmk-svg .k-c25 path { stroke: #8d6a43; stroke-width: 1; opacity: 0.75; }
+      svg.kmk-svg .k-b path { fill: #aaa398; stroke: #8f887d; stroke-width: 0.4; }
+      svg.kmk-svg .k-bfar path { fill: #bdb7ac; stroke: none; }
+      svg.kmk-svg .k-brob path { fill: none; stroke: none; }
+      svg.kmk-svg[data-sys="yashiki"] .k-bfoot path { fill: #c0612b; stroke: #8a3e16; }
+      svg.kmk-svg[data-sys="yashiki"] .k-bgrid path { fill: #6f6b66; stroke: #4b4741; }
+      svg.kmk-svg[data-sys="yashiki"] .k-bboth path { fill: #d2ccc1; stroke: #a9a296; }
+      svg.kmk-svg[data-sys="yashiki"] .k-bfar path { fill: #e3ded4; }
+      svg.kmk-svg[data-sys="seikatsu"] .k-b path, svg.kmk-svg[data-sys="kokyo"] .k-b path { fill: #b7b0a5; }
+      svg.kmk-svg[data-sys="seikatsu"] .k-bgrid path, svg.kmk-svg[data-sys="seikatsu"] .k-bboth path, svg.kmk-svg[data-sys="seikatsu"] .k-bfoot path { fill: #8c7a63; stroke: #5f5345; }
+      svg.kmk-svg[data-sys="seikatsu"] .k-brob path, svg.kmk-svg[data-sys="kokyo"] .k-brob path { fill: #4b4741; stroke: #2a2a2c; stroke-width: 0.6; }
+      svg.kmk-svg .k-school path { fill: rgba(118,56,144,0.08); stroke: #763890; stroke-width: 1; }
+      svg.kmk-svg[data-sys="kokyo"] .k-school path { fill: rgba(118,56,144,0.2); stroke-width: 2; }
+      svg.kmk-svg .k-prec path { fill: rgba(211,97,78,0.2); stroke: #d3614e; stroke-width: 1; }
+      svg.kmk-svg[data-sys="keidai"] .k-prec path { fill: rgba(211,97,78,0.42); stroke-width: 2; }
+      svg.kmk-svg .k-water path { stroke: #2f5f94; stroke-width: 1.6; }
+      svg.kmk-svg .k-warea path { fill: #6d97c2; stroke: #2f5f94; stroke-width: 0.8; }
+      svg.kmk-svg[data-sys="suikei"] .k-warea path { fill: #2f5f94; }
+      svg.kmk-svg[data-sys="suikei"] .k-water path { stroke-width: 2.6; }
+      svg.kmk-svg .k-roads path { stroke: #7c766c; stroke-width: 1.1; }
+      svg.kmk-svg .k-major path { stroke: #4f4a43; stroke-width: 2.4; }
+      svg.kmk-svg .k-paths path { stroke: #8b6f47; stroke-width: 1.1; stroke-dasharray: 3 2; }
+      svg.kmk-svg .k-steps path { stroke: #9e2a2b; stroke-width: 2.4; stroke-dasharray: 1.2 1.6; }
+      svg.kmk-svg[data-sys="michi"] .k-roads path { stroke: #2a2a2c; stroke-width: 2; }
+      svg.kmk-svg[data-sys="michi"] .k-paths path { stroke-width: 2; }
+      svg.kmk-svg[data-sys="michi"] .k-steps path, svg.kmk-svg[data-sys="keidai"] .k-steps path { stroke-width: 3.6; }
+      svg.kmk-svg .k-break path { stroke: #9e2a2b; stroke-width: 1.5; stroke-dasharray: 5 3; }
+      svg.kmk-svg .k-riz path { stroke: #1d998c; stroke-width: 2; stroke-dasharray: 6 3; }
+      svg.kmk-svg .k-fl path { fill: rgba(71,129,199,0.22); stroke: rgba(71,129,199,0.6); stroke-width: 0.6; }
+      svg.kmk-svg .k-ts path { fill: rgba(138,43,95,0.22); stroke: none; }
+      svg.kmk-svg .k-lsy path { fill: rgba(217,180,74,0.42); stroke: rgba(170,130,30,0.6); stroke-width: 0.6; }
+      svg.kmk-svg .k-lsr path { fill: rgba(158,42,43,0.38); stroke: #9e2a2b; stroke-width: 0.8; }
+      svg.kmk-svg .k-poly path { stroke: var(--accent); stroke-width: 2.6; fill: rgba(53,98,95,0.05); }
+      svg.kmk-svg .k-tr path { stroke: #2a2a2c; stroke-width: 1.6; stroke-dasharray: 7 3; }
+      svg.kmk-svg .kdim { opacity: 0.32; }
+      body.sat-on svg.kmk-svg .k-c1, body.sat-on svg.kmk-svg .k-c5 { display: none; }
+      body.sat-on svg.kmk-svg .k-b path { fill: rgba(255,255,255,0.18); stroke: rgba(255,255,255,0.7); }
+      body.sat-on svg.kmk-svg .k-roads path { stroke: rgba(255,255,255,0.85); }
+      .kmk-ov text { font-family: "Noto Serif JP", "Cormorant Garamond", serif; font-size: 11.5px; fill: var(--ink); paint-order: stroke; stroke: rgba(244,239,230,0.95); stroke-width: 3px; stroke-linejoin: round; }
+      .kmk-ov text.em { font-size: 12.5px; font-weight: 600; }
+      .kmk-ov text.small { font-size: 10.5px; }
+      .kmk-ov text.water { fill: #2f5f94; font-style: italic; }
+      .kmk-ov text.edge { fill: var(--accent); font-size: 10.5px; letter-spacing: 0.04em; }
+      .kmk-ov text.clab { fill: #7a5a37; font-size: 10px; }
+      .kmk-ov circle.kdot { fill: #2a2a2c; stroke: #f4efe6; stroke-width: 1.5; }
+      .kmk-ov .ktrm { fill: #fbe7a1; stroke: #1a1a1a; stroke-width: 2; }
+      @media (max-width: 1100px) { .kcards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 900px) { .kmk-top, .kmk-align { grid-template-columns: minmax(0, 1fr); } .kmk-fig { position: static; } .kmk .kmf { height: min(70vh, 560px); } }
+      @media (max-width: 520px) { .kcards { grid-template-columns: minmax(0, 1fr); } .kmk .kmf { height: 68vh; } }
       .sources h3 { font-weight: 500; font-size: 0.95rem; color: var(--ink); margin: 1.6rem 0 0.4rem; letter-spacing: 0.04em; }
       .sources ul { padding-left: 1.1rem; margin: 0; }
       .sources li { margin: 0.25rem 0; }
@@ -1186,6 +1279,65 @@
       <h3 class="trio-head"><b>Three Waters Threatening the City</b>from the mountains, falling directly on the city, from the sea</h3>
       <div class="trio" id="trio-water"></div>
 
+      <h2 id="kamikura">Kamikura mountain foot · a micro-morphology</h2>
+      <div class="kmk" id="kamikura-study">
+        <p class="intro">One small piece of ground holds every system in this essay at once. At the foot of Kamikura-yama the sacred mountain and its stone steps, the head of the Ichida-gawa, a row of temples and houses, a school compound and the town grid touch within a few hundred metres. This last chapter reads that ground plot by plot, on GSI’s 1 m laser elevation model.</p>
+        <div class="kmk-top">
+          <div class="kmk-text">
+            <p><b>Drawn by rules, not as a box.</b> <span class="kh" data-ks="bichikei" tabindex="0">West</span>: 25 m upslope of the break of slope, so the forest edge, the slope and the walls behind the plots are inside. <span class="kh" data-ks="kokyo" tabindex="0">East</span>: the street that bounds the compound of 神倉小学校 (Kamikura Elementary School). <span class="kh" data-ks="yashiki" tabindex="0">North</span>: the lane that closes the first full block above the school and the temple row. <span class="kh" data-ks="keidai" tabindex="0">South</span>: the street just south of the shrine entrance, so the entrance, the bridge and the foot of the steps are inside and the climb to Gotobiki-iwa is not.</p>
+            <div class="stats kstats">
+              <div><b>5.23 ha</b><span>study area, 286 m north–south × 234 m east–west</span></div>
+              <div><b>127</b><span>buildings; 28% of the ground is built over</span></div>
+              <div><b>3.4–40.2 m</b><span>ground height inside; the plain lies at 6.6 m</span></div>
+              <div><b>287 m</b><span>of the Ichida-gawa inside the line, an open channel 3.5 m wide</span></div>
+              <div><b>83% · 15%</b><span>in a sediment-disaster warning zone · in a special warning zone</span></div>
+              <div><b>85%</b><span>inside the maximum assumed river flood; none inside the tsunami inundation</span></div>
+            </div>
+            <p>Pick a system below, or hover its name: the map redraws the same ground for it.</p>
+          </div>
+          <figure class="kmk-fig">
+            <div class="kmf" id="kmkmap"></div>
+            <ul class="klegend" id="kmkleg"></ul>
+            <figcaption>Relief: GSI DEM1A, bare ground from airborne laser, one pixel per metre. Buildings and the channel: GSI 最適化ベクトルタイル. Streets, paths and precincts: © OpenStreetMap contributors (the school’s OSM name, 千穂小学校, predates the 2012 merger). Hazard and plan areas: MLIT 国土数値情報 A33 (2025), A31a (2025), A40 (2016), A55 (FY2024). Zoom with the buttons, ctrl-scroll or a double-click.</figcaption>
+          </figure>
+        </div>
+        <div class="ksyschips" role="group" aria-label="Spatial systems">
+          <button type="button" class="kchip" data-ks="all" aria-pressed="true">All systems</button>
+          <button type="button" class="kchip" data-ks="bichikei" aria-pressed="false">微地形 micro-relief</button>
+          <button type="button" class="kchip" data-ks="suikei" aria-pressed="false">水系 water</button>
+          <button type="button" class="kchip" data-ks="michi" aria-pressed="false">道 paths</button>
+          <button type="button" class="kchip" data-ks="yashiki" aria-pressed="false">町割・屋敷割 plots</button>
+          <button type="button" class="kchip" data-ks="keidai" aria-pressed="false">境内 precincts</button>
+          <button type="button" class="kchip" data-ks="seikatsu" aria-pressed="false">生活 everyday life</button>
+          <button type="button" class="kchip" data-ks="kokyo" aria-pressed="false">現代公共空間 public space</button>
+          <button type="button" class="kchip" data-ks="saigai" aria-pressed="false">災害 hazard</button>
+        </div>
+        <div class="kcards">
+          <article class="kcard" data-ks="bichikei" tabindex="0"><h4><span>micro-relief</span>微地形</h4><p>The mountain does not grade into the town; it stops. Across the 25 m strip inside the west edge the ground rises 22.6 m (median; at most 33.8 m), then the plain stays near 6.6 m. The bare-earth model also shows the plots: house platforms, garden walls and lane edges are small steps in the relief.</p></article>
+          <article class="kcard" data-ks="suikei" tabindex="0"><h4><span>water</span>水系</h4><p>The Ichida-gawa, which MLIT traces from 千穂ヶ峰 over 4.8 km, crosses the area as an open, walled channel 3.2 m below the plain. It comes in from the north on the town grid, bends along the school’s west edge and reaches the mountain only at the shrine entrance, where the stream from Kamikura-yama joins it after falling from 63.5 m to 4.7 m in 170 m.</p></article>
+          <article class="kcard" data-ks="michi" tabindex="0"><h4><span>paths</span>道</h4><p>The streets keep to the town grid. The pedestrian routes do not: the 538 steps of the steep 男坂 (Otoko-zaka) and the gentler 女坂 (Onna-zaka) climb from the entrance, and the bridge over the Ichida-gawa is the threshold between town and mountain.</p></article>
+          <article class="kcard" data-ks="yashiki" tabindex="0"><h4><span>plots</span>町割・屋敷割</h4><p>No surveyed parcel map exists here: the Ministry of Justice map for 千穂 and 神倉 is a digitised Meiji-era 公図 in local coordinates. Footprints stand in for plots (median 69.9 m²), coloured by the alignment test below.</p></article>
+          <article class="kcard" data-ks="keidai" tabindex="0"><h4><span>precincts</span>境内</h4><p>The sacred properties sit between the slope and the channel: the shrine’s lower precinct at the entrance (1,951 m² inside the line); beside it 妙心寺, once the 神倉本願 temple that led the Kumano bikuni, the nuns who raised funds for the shrine; and the Zen temple 宗応寺 further north.</p></article>
+          <article class="kcard" data-ks="seikatsu" tabindex="0"><h4><span>everyday life</span>生活</h4><p>Houses on small plots fill the blocks between precincts, school and streets: 126 of the 127 footprints are mapped as ordinary buildings (普通建物); the one robust building (堅ろう) is the school’s.</p></article>
+          <article class="kcard" data-ks="kokyo" tabindex="0"><h4><span>public space</span>現代公共空間</h4><p>The school compound is the one large open ground: 1.20 ha inside the line, nearly a quarter of it, along the east bank of the channel. Its building is an emergency refuge for earthquake and tsunami (third floor, 14.3 m), its gym a core shelter. Across the channel two private projects turn old plots into public space: Youth Library えんがわ (2013), a library in an old house, and おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it.</p></article>
+          <article class="kcard" data-ks="saigai" tabindex="0"><h4><span>hazard</span>災害</h4><p>83.3% of the area lies in a sediment-disaster warning zone, 15.2% in a special one. Two hazards overlap: slope failure on the 千穂ヶ峰 and 神倉 slopes (35.1%) and debris flow from the gullies above the shrine entrance (神倉川右支渓, 59.3%), a zone that fans out east across the school ground. 84.7% is inside the maximum assumed river flood. The residential-inducement area of the Location Optimization Plan covers 32.9% and stops short of the slope.</p></article>
+        </div>
+
+        <h3 class="trio-head"><b>Transect</b>Gotobiki-iwa → the steps → Ichida-gawa → houses → national road → city hall</h3>
+        <p class="kmk-p">One line runs through the area: from the summit shrine at Gotobiki-iwa (ground at 88.3 m on the 1 m model; the rock itself is about 11 m high) down the path and the 538 steps to the bridge at their foot (6.6 m), then due east across the town to the city hall (8.5 m), 1,132 m in all. The first 331 m are mountain. The town part lies between 3.7 m and 8.6 m, dipping to 2.1 m at the Ukishima-gawa channel and rising again towards the city hall.</p>
+        <figure class="kmk-prof"><p class="vscroll-hint">Scroll the profile sideways →</p><div class="vscroll"><svg id="kmkprof" role="img" aria-label="Ground profile along the transect, from Gotobiki-iwa to the city hall"></svg></div><figcaption>Bare ground on GSI DEM1A, sampled every 2 m along the path, the steps and the line to the city hall; heights ×2. Under the line: what it crosses. Hover the profile or the dashed line on the map and the same point lights in both.</figcaption></figure>
+
+        <h3 class="trio-head"><b>Alignment</b>are the watercourse, the plots, the sacred properties and the slope parallel?</h3>
+        <div class="kmk-align">
+          <div>
+            <p class="kmk-p">Only one plot deep. Inside the line the break of slope runs N 7° W. The Ichida-gawa belongs to each order in turn: it enters on the town grid 110 m from the slope, bends along the school’s west edge (mean direction N 17° E) and meets the mountain only at the shrine entrance. Streets and buildings keep the town grid, 2° to 6° east of north. Where the slope and the grid disagree by 10° or more, 53% of the buildings within 25 m of the break of slope turn with the slope, against 29% by chance (p &lt; 0.001); from 25 m outward it stays within five points of chance. The mountain shapes the first row of plots; the town grid shapes everything behind it.</p>
+            <figure><svg id="kmkdecay" role="img" aria-label="Share of buildings that turn with the mountain foot, by distance from the break of slope"></svg><figcaption>Buildings within 400 m of the break of slope where the local slope direction differs from the town grid by at least 10°, each counted for the direction its long axis is closer to. Dashed: the share expected if buildings and slope were paired at random (5,000 shuffles).</figcaption></figure>
+          </div>
+          <figure><svg id="kmkrose" role="img" aria-label="Mean directions of the break of slope, the Ichida-gawa and the building grid inside the study area"></svg><figcaption>Mean directions inside the study area, weighted by length (buildings by footprint area); the building grid is drawn both ways.</figcaption></figure>
+        </div>
+        <p class="kmk-dl">For GIS: <a href="data/kamikura_study.geojson" download>GeoJSON</a> · <a href="data/kamikura_study.kml" download>KML</a>: the study area, its four edges with their rules, the break of slope and the transect, in WGS84. Rebuilt by kansai/tools/kamikura.</p>
+      </div>
+
       <details class="srcbox" id="sources">
       <summary>Sources &amp; method <small>plans, data, method and known imperfections · click to open</small></summary>
       <div class="sources">
@@ -1228,6 +1380,17 @@
         <h3>Pictures</h3>
         <ul>
           <li>Photographs from Wikimedia Commons under CC BY, CC BY-SA, CC0 or public-domain terms, and one GSI aerial photograph; each is credited and linked in its own caption. The Shimohonmachi drawing was made for this page. Register: <code>kansai/qa/media.toml</code>.</li>
+        </ul>
+        <h3>Kamikura micro-study</h3>
+        <ul>
+          <li>Terrain from GSI 1 m laser elevation tiles (DEM1A, <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル</a>), resampled to a 1 m grid; buildings, the channel (water areas) and place annotations from <span lang="ja">国土地理院最適化ベクトルタイル</span>; evacuation sites from GSI <span lang="ja">指定緊急避難場所データ</span>; streets, paths, the steps and the shrine precinct from OpenStreetMap; hazard and plan areas from <span lang="ja">国土数値情報</span> A33, A31a, A40 and A55.</li>
+          <li>Parcels: <a class="doc" href="https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2026-1-1430" target="_blank" rel="noopener"><span lang="ja">登記所備付地図データ 新宮市</span></a> — cadastral map data, Shingū <span class="meta">(Ministry of Justice, 2026 edition)</span>. For 千穂 and 神倉 it is a digitised old 公図 in local coordinates (任意座標系), so it cannot be placed on the map.</li>
+          <li><a class="doc" href="https://www.city.shingu.lg.jp/info/123" target="_blank" rel="noopener"><span lang="ja">避難所・避難場所一覧</span></a> — evacuation shelters and sites <span class="meta">(Shingū City, updated April 2024)</span>; <a class="doc" href="https://www.city.shingu.lg.jp/info/762" target="_blank" rel="noopener"><span lang="ja">津波避難ビル</span></a> — tsunami evacuation buildings <span class="meta">(Shingū City)</span>; <a class="doc" href="https://s-shingu.com/kamikura/guide.html" target="_blank" rel="noopener"><span lang="ja">新宮市立神倉小学校 学校案内</span></a> — Kamikura Elementary School <span class="meta">(formed from 丹鶴 and 千穂 elementary schools in April 2012)</span>.</li>
+          <li><a class="doc" href="https://www.kkr.mlit.go.jp/kinan/kasen/tokuteitoshi/k1cog50000000bnk-att/o6p6va000000168z.pdf" target="_blank" rel="noopener"><span lang="ja">新宮川水系市田川等に係る特定都市河川及び特定都市河川流域の指定に関する説明資料</span></a> — designation of the Ichida-gawa as a Specified Urban River <span class="meta">(MLIT Kinan office, Wakayama Prefecture, Shingū City, September 2025)</span>.</li>
+          <li><a class="doc" href="https://kumanohayatama.jp/gotobiki/" target="_blank" rel="noopener"><span lang="ja">神倉神社・ゴトビキ岩</span></a> — Kamikura Shrine and its steps <span class="meta">(Kumano Hayatama Taisha)</span>; <a class="doc" href="https://nankikumanogeo.jp/enjoy/course06/" target="_blank" rel="noopener"><span lang="ja">南紀熊野ジオパーク</span></a> — Gotobiki-iwa <span class="meta">(Nanki Kumano Geopark)</span>; <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html" target="_blank" rel="noopener"><span lang="ja">神倉神社</span></a> — the shrine, its 下馬 stone and 妙心寺 <span class="meta">(Wakayama Prefecture)</span>.</li>
+          <li><a class="doc" href="https://kotobank.jp/word/%E5%A6%99%E5%BF%83%E5%AF%BA-139779" target="_blank" rel="noopener"><span lang="ja">妙心寺（日本歴史地名大系）</span></a> — Myōshin-ji, the 神倉本願 temple <span class="meta">(Heibonsha, via Kotobank)</span>; <a class="doc" href="https://www.kumano-sanzan.jp/sanzan/hongan.html" target="_blank" rel="noopener"><span lang="ja">熊野三山の本願</span></a> — the fund-raising temples of the three shrines <span class="meta">(熊野三山協議会)</span>; <a class="doc" href="https://sotozen-navi.com/detail/index_300052.html" target="_blank" rel="noopener"><span lang="ja">宗應寺</span></a> — Sōō-ji <span class="meta">(Sōtō Zen temple portal)</span>.</li>
+          <li><a class="doc" href="https://kii3.com/engawa/" target="_blank" rel="noopener"><span lang="ja">Youth Library えんがわ</span></a> — the library and its opening <span class="meta">(Kii regional portal, interview)</span>; <a class="doc" href="https://www.td-ms.com/works/oishiipark/index.html" target="_blank" rel="noopener"><span lang="ja">おいしいパーク</span></a> — oishii park <span class="meta">(td-Atelier)</span>.</li>
+          <li>Method: the edges, the break of slope, the transect and the alignment test are rebuilt by <code>kansai/tools/kamikura/</code>. The break of slope is the edge of ground at least 1 m above the plain and steeper than 12° (or 3 m above it), connected to the slopes above 40 m. A building’s direction is the long side of its smallest enclosing rectangle; chance levels come from 5,000 random pairings within each distance band.</li>
         </ul>
         <h3>Method and known imperfections</h3>
         <ul>
@@ -2292,6 +2455,7 @@
               var s0 = scr(n.w), vis = s0[0] > -10 && s0[1] > -10 && s0[0] < Wm + 10 && s0[1] < Hm + 10;
               n.g.style.display = vis ? "" : "none"; if (!vis) return;
               n.g.setAttribute("transform", "translate(" + s0[0].toFixed(1) + " " + s0[1].toFixed(1) + ")");
+              n.t.style.display = "";   // measure it shown: a label hidden on the last pass has no width
               var ok = false;
               [[n.r + 5, "start"], [-(n.r + 5), "end"]].some(function (cand) {
                 n.t.setAttribute("x", cand[0]); n.t.setAttribute("text-anchor", cand[1]);
@@ -2355,6 +2519,322 @@
           host.addEventListener("keydown", function (e) { var k = e.target.closest && e.target.closest(".kp"); if (k && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); k.dispatchEvent(new MouseEvent("click", { bubbles: true })); } });
         });
 
+        /* ================= Kamikura mountain foot · a micro-morphology ================= */
+        // Built by kansai/tools/kamikura (data/kamikura.js, fetched when the section comes near): the study area and its
+        // four edges, GSI's 1 m relief, building footprints classed by the alignment test, the transect. Same projection,
+        // camera, scale bar and imagery switch as the other maps; the system switches restyle one map.
+        var KSYS = {
+          all: { show: "c1 c5 c25 school precinct b_far b_grid b_both b_foot water_area water roads major paths steps poly transect", em: "", leg: "poly water steps transect bld c25" },
+          bichikei: { show: "c1 c5 c25 b_far b_grid b_both b_foot water_area water roads major break poly transect", em: "c1 c5 c25 break", leg: "c1 c25 break poly" },
+          suikei: { show: "c25 flood b_far b_grid b_both b_foot water_area water roads major poly", em: "water_area water flood", leg: "water flood poly" },
+          michi: { show: "b_far b_grid b_both b_foot water_area water roads major paths steps poly transect", em: "roads major paths steps transect", leg: "roads major paths steps poly" },
+          yashiki: { show: "b_far b_grid b_both b_foot roads major water_area water break poly", em: "b_far b_grid b_both b_foot break", leg: "bfoot bgrid bboth break poly" },
+          keidai: { show: "c25 precinct b_far b_grid b_both b_foot water_area water roads steps paths poly", em: "precinct steps paths", leg: "precinct steps poly" },
+          seikatsu: { show: "b_far b_grid b_both b_foot b_robust water_area water roads major poly", em: "b_far b_grid b_both b_foot b_robust", leg: "bld brobust poly" },
+          kokyo: { show: "school b_far b_grid b_both b_foot b_robust water_area water roads major poly", em: "school b_robust", leg: "school brobust poly" },
+          saigai: { show: "ls_yellow ls_red flood tsunami riz b_far b_grid b_both b_foot water_area water roads major break poly", em: "ls_yellow ls_red flood riz", leg: "lsy lsr flood riz poly" }
+        };
+        var KLEG = {   // [kind, colour, text]
+          poly: ["line", "#35625f", "study area (its four rules in the text)"], water: ["line", "#2f5f94", "Ichida-gawa (GSI water area) and the Kamikura-yama stream"],
+          steps: ["dots", "#9e2a2b", "the stone steps"], transect: ["dash", "#2a2a2c", "transect (profile below)"], bld: ["fill", "#aaa398", "buildings (GSI footprints)"],
+          c1: ["line", "#b48a5a", "1 m contours on the plain"], c25: ["line", "#8d6a43", "5 m contours on the slope"], break: ["dash", "#9e2a2b", "break of slope (1 m model)"],
+          flood: ["fill", "rgba(71,129,199,0.35)", "maximum assumed river flood"], roads: ["line", "#2a2a2c", "streets"], major: ["line", "#4f4a43", "National Route 42"],
+          paths: ["dash", "#8b6f47", "footpaths"], bfoot: ["fill", "#c0612b", "turns with the mountain foot"], bgrid: ["fill", "#6f6b66", "keeps the town grid"],
+          bboth: ["fill", "#d2ccc1", "foot and grid agree here"], precinct: ["fill", "rgba(211,97,78,0.42)", "shrine precinct at the entrance"],
+          brobust: ["fill", "#4b4741", "robust buildings (堅ろう)"], school: ["fill", "rgba(118,56,144,0.25)", "school compound"],
+          lsy: ["fill", "rgba(217,180,74,0.5)", "sediment-disaster warning zone"], lsr: ["fill", "rgba(158,42,43,0.45)", "special warning zone"],
+          riz: ["dash", "#1d998c", "edge of the residential-inducement area"]
+        };
+        var kmk = { ready: false, D: null, sys: "all", pin: "all", setSys: null, setTr: null, cam: null };
+        function kmkSwatch(k) {
+          var L = KLEG[k], s = '<svg viewBox="0 0 22 12" aria-hidden="true">';
+          if (L[0] === "fill") s += '<rect x="1" y="1.5" width="20" height="9" fill="' + L[1] + '" stroke="rgba(42,42,44,0.35)" stroke-width="0.6"/>';
+          else s += '<line x1="1" y1="6" x2="21" y2="6" stroke="' + L[1] + '" stroke-width="' + (L[0] === "dots" ? 2.6 : 2) + '"' + (L[0] === "dash" ? ' stroke-dasharray="5 3"' : L[0] === "dots" ? ' stroke-dasharray="1.2 1.8"' : "") + "/>";
+          return s + "</svg>";
+        }
+        var kmkLoad = (function () {
+          var sec = document.getElementById("kamikura-study"), host = document.getElementById("kmkmap"), waiting = [], started = false;
+          function done(ok) { waiting.splice(0).forEach(function (r) { r(ok); }); }
+          function fail() { host.classList.add("kmk-fail"); host.textContent = "The study map could not be loaded."; done(false); }
+          function load() {
+            return new Promise(function (res) {
+              if (!host) return res(false);
+              if (kmk.ready) return res(true);
+              waiting.push(res); if (started) return; started = true;
+              var go = function () { kmkBuild(window.__KMK); kmk.ready = true; done(true); };
+              if (window.__KMK) return go();
+              var s = document.createElement("script"); s.src = "data/kamikura.js"; s.async = true;
+              s.onload = function () { if (window.__KMK) go(); else fail(); };
+              s.onerror = fail;
+              document.head.appendChild(s);
+            });
+          }
+          if (sec && host) {
+            if ("IntersectionObserver" in window) {
+              var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); } }, { rootMargin: "900px 0px" });
+              io.observe(sec);
+            } else load();
+          }
+          return load;
+        })();
+        function kmkBuild(D) {
+          kmk.D = D;
+          var host = document.getElementById("kmkmap"), F = D.frame, S = D.stats, Ltot = S.transect_m;
+          var sv = el("svg", { class: "kmk-svg", role: "img", "aria-label": "Map of the Kamikura mountain-foot study area on the 1 m relief", "data-sys": "all" }); host.appendChild(sv);
+          var wg = el("g", {}, sv), ov = el("g", { class: "kmk-ov" }, sv);
+          el("rect", { class: "k-paper", x: F[0], y: F[1], width: F[2] - F[0], height: F[3] - F[1] }, wg);
+          el("image", { class: "k-relief", href: D.img.href, x: D.img.x, y: D.img.y, width: D.img.w, height: D.img.h, preserveAspectRatio: "none" }, wg);
+          var sl = new TileLayer("sat", wg, null); sl.on = function () { return satOn; }; satLayers.push(sl); watchTiles(host, sl);
+          var groups = {};
+          [["ls_yellow", "k-lsy"], ["ls_red", "k-lsr"], ["flood", "k-fl"], ["tsunami", "k-ts"], ["c1", "k-c1"], ["c5", "k-c5"], ["c25", "k-c25"], ["school", "k-school"],
+           ["precinct", "k-prec"], ["water_area", "k-warea"], ["b_far", "k-b k-bfar"], ["b_grid", "k-b k-bgrid"], ["b_both", "k-b k-bboth"], ["b_foot", "k-b k-bfoot"], ["b_robust", "k-brob"],
+           ["water", "k-water"], ["roads", "k-roads"], ["major", "k-major"], ["paths", "k-paths"], ["steps", "k-steps"], ["break", "k-break"], ["riz", "k-riz"],
+           ["poly", "k-poly"], ["transect", "k-tr"]].forEach(function (l) {
+            if (!D.layers[l[0]]) return; var g = el("g", { class: l[1] }, wg); el("path", { d: D.layers[l[0]] }, g); groups[l[0]] = g;
+          });
+          // labels live in screen space: places, the rule of each edge, heights on the 25 m contours
+          var nodes = [];
+          D.pts.forEach(function (p) {
+            var g = el("g", { class: "kl" }, ov); el("circle", { class: "kdot", r: 2.6 }, g);
+            var t = el("text", { x: p[5], y: p[6], "text-anchor": p[4], class: p[7] }, g); t.textContent = p[1];
+            nodes.push({ g: g, w: [p[2], p[3]], t: t, sys: p[8].split(/\s+/), prio: /em/.test(p[7]) ? 0 : 1, always: /em/.test(p[7]), only: /only/.test(p[7]) });
+          });
+          D.edges.forEach(function (e) {
+            var g = el("g", { class: "kl" }, ov), t = el("text", { class: "edge", "text-anchor": "middle", y: 4 }, g); t.textContent = e[2];
+            nodes.push({ g: g, w: [e[0], e[1]], t: t, sys: ["bichikei", "yashiki"], prio: 0, edge: e[3], off: e[4] });
+          });
+          (D.clab || []).forEach(function (c) {
+            var g = el("g", { class: "kl" }, ov), t = el("text", { class: "clab", "text-anchor": "middle", y: 3.5 }, g); t.textContent = c[2];
+            nodes.push({ g: g, w: [c[0], c[1]], t: t, sys: ["bichikei", "keidai"], prio: 2, rot: c[3] });
+          });
+          var trm = el("circle", { class: "ktrm", r: 6, style: "display:none" }, ov);
+          var zc = document.createElement("div"); zc.className = "zc";
+          zc.innerHTML = '<button type="button" aria-label="Zoom in">+</button><button type="button" aria-label="Zoom out">−</button><button type="button" aria-label="Reset view">⟲</button>';
+          host.appendChild(zc);
+          var sbtn = document.createElement("button"); sbtn.type = "button"; sbtn.className = "satbtn"; sbtn.setAttribute("aria-pressed", satOn ? "true" : "false");
+          sbtn.title = "Switch every map between the drawn basemap and aerial imagery (GSI)"; sbtn.innerHTML = SATICON + "<span>Satellite</span>"; host.appendChild(sbtn);
+          var msat = document.createElement("div"); msat.className = "msat"; msat.textContent = "地理院タイル"; host.appendChild(msat);
+          var sbar = el("svg", { class: "msb", width: 120, height: 20 }); host.appendChild(sbar);
+          var Wm = 600, Hm = 480, c = { cx: 0, cy: 0, k: 1 }, home = null, KMAXK = 1400, trD = null;
+          function measure() { var r = sv.getBoundingClientRect(); Wm = Math.max(200, r.width); Hm = Math.max(200, r.height); sv.setAttribute("viewBox", "0 0 " + Wm + " " + Hm); }
+          function kmin() { return Math.max(Wm / (F[2] - F[0]), Hm / (F[3] - F[1])); }
+          function clamp(q) { q.k = Math.max(kmin(), Math.min(KMAXK, q.k)); var hw = Wm / 2 / q.k, hh = Hm / 2 / q.k; q.cx = Math.max(F[0] + hw, Math.min(F[2] - hw, q.cx)); q.cy = Math.max(F[1] + hh, Math.min(F[3] - hh, q.cy)); return q; }
+          function fitHome() { var b = D.home, k = Math.min(Wm / (b[2] - b[0]), Hm / (b[3] - b[1])); return clamp({ cx: (b[0] + b[2]) / 2, cy: (b[1] + b[3]) / 2, k: k }); }
+          function scr(w) { return [(w[0] - c.cx) * c.k + Wm / 2, (w[1] - c.cy) * c.k + Hm / 2]; }
+          function wld(x, y) { return [c.cx + (x - Wm / 2) / c.k, c.cy + (y - Hm / 2) / c.k]; }
+          function place() {
+            // places first, then the edge rules, then contour heights; each tries its own side, then the other, else hides
+            var boxes = [], sys = kmk.sys;
+            nodes.slice().sort(function (a, b) { return a.prio - b.prio; }).forEach(function (n) {
+              var s0 = scr(n.w), on = n.always || (sys === "all" ? !n.only : n.sys.indexOf(sys) >= 0);
+              if (n.off) { n.t.style.display = ""; var t0 = n.t.getBBox(); s0 = [s0[0] + n.off[0] * (t0.width / 2 + 8), s0[1] + n.off[1] * (t0.height / 2 + 6)]; }   // just outside its edge
+              var vis = on && s0[0] > -20 && s0[1] > -20 && s0[0] < Wm + 20 && s0[1] < Hm + 20;
+              n.g.style.display = vis ? "" : "none"; if (!vis) return;
+              n.t.style.display = "";   // measure it shown: a label hidden on the last pass has no width
+              n.g.setAttribute("transform", "translate(" + s0[0].toFixed(1) + " " + s0[1].toFixed(1) + ")" + (n.rot ? " rotate(" + n.rot + ")" : ""));
+              var t = n.t, cand = n.rot || n.edge ? [null] : [[+t.getAttribute("x"), t.getAttribute("text-anchor")], [-(+t.getAttribute("x") || 6), t.getAttribute("text-anchor") === "end" ? "start" : t.getAttribute("text-anchor") === "start" ? "end" : "middle"]];
+              var ok = cand.some(function (cc) {
+                if (cc) { t.setAttribute("x", cc[0]); t.setAttribute("text-anchor", cc[1]); }
+                var bb = t.getBBox(), w = n.rot ? Math.max(bb.width, bb.height) : bb.width, h = n.rot ? Math.max(bb.width, bb.height) * 0.5 : bb.height;
+                var bx = n.rot ? { x: s0[0] - w / 2, y: s0[1] - h / 2, w: w, h: h } : { x: s0[0] + bb.x - 2, y: s0[1] + bb.y - 1, w: bb.width + 4, h: bb.height + 2 };
+                if (bx.x < 2 || bx.x + bx.w > Wm - 2 || bx.y < 2 || bx.y + bx.h > Hm - 2) return false;
+                if (boxes.some(function (o) { return bx.x < o.x + o.w && bx.x + bx.w > o.x && bx.y < o.y + o.h && bx.y + bx.h > o.y; })) return false;
+                boxes.push(bx); return true;
+              });
+              t.style.display = ok ? "" : "none";
+              if (!ok && !n.always) n.g.style.display = "none";   // no orphan dots: a place without room for its name is left out
+            });
+          }
+          function trPoint(d) {   // metres along the transect → page units
+            var T = D.transect, C = D.tcum, i = 1;
+            while (i < T.length - 1 && d > C[i]) i++;
+            var f = Math.max(0, Math.min(1, (d - C[i - 1]) / Math.max(1e-9, C[i] - C[i - 1])));
+            return [T[i - 1][0] + (T[i][0] - T[i - 1][0]) * f, T[i - 1][1] + (T[i][1] - T[i - 1][1]) * f];
+          }
+          function apply() {
+            wg.setAttribute("transform", "translate(" + (Wm / 2 - c.cx * c.k) + " " + (Hm / 2 - c.cy * c.k) + ") scale(" + c.k + ")");
+            place(); scaleBar(sbar, c.k * 10);
+            sl.view = function () { return [c.cx - Wm / 2 / c.k, c.cy - Hm / 2 / c.k, c.cx + Wm / 2 / c.k, c.cy + Hm / 2 / c.k, Wm]; }; sl.refresh();
+            if (trD != null) { var s = scr(trPoint(trD)); trm.setAttribute("cx", s[0].toFixed(1)); trm.setAttribute("cy", s[1].toFixed(1)); }
+          }
+          function zoom(f, sx, sy) { var w = wld(sx, sy), k = Math.max(kmin(), Math.min(KMAXK, c.k * f)); c = clamp({ cx: w[0] - (sx - Wm / 2) / k, cy: w[1] - (sy - Hm / 2) / k, k: k }); apply(); }
+          zc.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; var i = Array.prototype.indexOf.call(zc.children, b); if (i === 0) zoom(1.6, Wm / 2, Hm / 2); else if (i === 1) zoom(1 / 1.6, Wm / 2, Hm / 2); else { c = fitHome(); apply(); } });
+          sv.addEventListener("wheel", function (e) { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); var r = sv.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * 0.0022), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+          sv.addEventListener("dblclick", function (e) { var r = sv.getBoundingClientRect(); zoom(e.shiftKey ? 0.5 : 2, e.clientX - r.left, e.clientY - r.top); });
+          var mp = {}, ml = null;
+          sv.addEventListener("pointerdown", function (e) { mp[e.pointerId] = { x: e.clientX, y: e.clientY, t: e.pointerType }; if (e.pointerType === "mouse") sv.setPointerCapture(e.pointerId); ml = null; });
+          sv.addEventListener("pointermove", function (e) {
+            var p = mp[e.pointerId], r = sv.getBoundingClientRect();
+            if (!p) {   // hover: near the transect line → the same point on the profile
+              var w = wld(e.clientX - r.left, e.clientY - r.top), T = D.transect, C = D.tcum, best = null;
+              T.slice(1).map(function (q, i) { return [T[i], q, C[i], C[i + 1]]; }).forEach(function (L) {
+                var ax = L[0][0], ay = L[0][1], bx = L[1][0] - ax, by = L[1][1] - ay, u = Math.max(0, Math.min(1, ((w[0] - ax) * bx + (w[1] - ay) * by) / (bx * bx + by * by)));
+                var q = [ax + bx * u, ay + by * u], dpx = Math.hypot((q[0] - w[0]) * c.k, (q[1] - w[1]) * c.k);
+                if (!best || dpx < best.dpx) best = { dpx: dpx, d: L[2] + (L[3] - L[2]) * u };
+              });
+              if (best && best.dpx < 14 && sysShowsTransect()) kmk.setTr(best.d, true); else if (kmk.trFrom === "map") kmk.setTr(null);
+              return;
+            }
+            var ids = Object.keys(mp);
+            if (ids.length === 2) {
+              var a = mp[ids[0]], b = mp[ids[1]], pa = ids[0] == e.pointerId ? { x: e.clientX, y: e.clientY } : a, pb = ids[1] == e.pointerId ? { x: e.clientX, y: e.clientY } : b, d = Math.hypot(pa.x - pb.x, pa.y - pb.y);
+              if (ml) zoom(d / ml, (pa.x + pb.x) / 2 - r.left, (pa.y + pb.y) / 2 - r.top); ml = d;
+            } else if (ids.length === 1 && (p.t === "mouse" || Math.abs(e.clientX - p.x) > Math.abs(e.clientY - p.y))) {
+              c = clamp({ cx: c.cx - (e.clientX - p.x) / c.k, cy: c.cy - (e.clientY - p.y) / c.k, k: c.k }); apply();
+            }
+            p.x = e.clientX; p.y = e.clientY;
+          });
+          function mu(e) { delete mp[e.pointerId]; ml = null; }
+          sv.addEventListener("pointerup", mu); sv.addEventListener("pointercancel", mu);
+          sv.addEventListener("pointerleave", function () { if (kmk.trFrom === "map") kmk.setTr(null); });
+          function sysShowsTransect() { return KSYS[kmk.sys].show.indexOf("transect") >= 0; }
+          // ---- one system at a time: which layers show, which stand out, what the legend says
+          var legEl = document.getElementById("kmkleg");
+          kmk.setSys = function (key, pin) {
+            if (!KSYS[key]) key = "all";
+            var Sy = KSYS[key], show = Sy.show.split(" "), em = Sy.em ? Sy.em.split(" ") : [];
+            kmk.sys = key; if (pin) kmk.pin = key;
+            sv.setAttribute("data-sys", key);
+            Object.keys(groups).forEach(function (k) {
+              groups[k].style.display = show.indexOf(k) >= 0 ? "" : "none";
+              groups[k].classList.toggle("kdim", key !== "all" && em.length > 0 && em.indexOf(k) < 0 && k !== "poly" && k !== "transect");
+            });
+            if (legEl) legEl.innerHTML = Sy.leg.split(" ").map(function (k) { return "<li>" + kmkSwatch(k) + "<span>" + KLEG[k][2] + "</span></li>"; }).join("");
+            document.querySelectorAll(".kchip").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-ks") === kmk.pin ? "true" : "false"); });
+            document.querySelectorAll(".kcard, .kh").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-ks") === key && key !== "all"); });
+            if (!sysShowsTransect()) kmk.setTr(null);
+            place();
+          };
+          // ---- the transect profile, linked both ways with the line on the map
+          var pv = document.getElementById("kmkprof"), cur = null, curT = null;
+          kmk.setTr = function (d, fromMap) {
+            trD = d; kmk.trFrom = d == null ? null : fromMap ? "map" : "profile";
+            if (d == null) { trm.style.display = "none"; if (cur) { cur.style.display = "none"; curT.textContent = ""; } return; }
+            var s = scr(trPoint(d)); trm.setAttribute("cx", s[0].toFixed(1)); trm.setAttribute("cy", s[1].toFixed(1)); trm.style.display = "";
+            if (cur) cur.update(d);
+          };
+          if (pv) cur = kmkProfile(pv, D, function (d) { kmk.setTr(d, false); }, function () { if (kmk.trFrom === "profile") kmk.setTr(null); });
+          if (cur) curT = cur.label;
+          kmkAlign(D);
+          kmk.cam = function () { return { cx: c.cx, cy: c.cy, k: c.k, W: Wm, H: Hm, F: F, kmin: kmin(), KMAX: KMAXK }; };
+          kmk.zoom = zoom; kmk.home = function () { c = fitHome(); apply(); };
+          function init() { measure(); c = home = fitHome(); kmk.setSys(kmk.pin, true); apply(); }
+          init();
+          if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", function () { place(); });   // Japanese glyph subsets arrive late
+          window.addEventListener("resize", function () { var k0 = home && c.k === home.k && c.cx === home.cx && c.cy === home.cy; measure(); home = fitHome(); if (k0) c = home; c = clamp(c); apply(); });
+        }
+        function kmkProfile(svg, D, onMove, onLeave) {
+          // distance along the transect → x; height ×2 (stated in the caption); bands under the ground line show what it crosses
+          var P = D.profile, S = D.stats, L = S.transect_m, W = 1000, ml = 44, mr = 14, mt = 26, VE = 2, ppm = (W - ml - mr) / L, vpm = ppm * VE, ZT = 100;
+          var base = mt + ZT * vpm, by = base + 6, bh = 9, H = by + bh + 70;
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H.toFixed(0)); svg.innerHTML = "";
+          function X(d) { return ml + d * ppm; } function Y(h) { return base - h * vpm; }
+          var g = el("g", { class: "kpax" }, svg);
+          [0, 25, 50, 75, 100].forEach(function (h) {
+            el("line", { x1: ml, x2: W - mr, y1: Y(h), y2: Y(h), stroke: h ? "rgba(87,85,91,0.14)" : "rgba(87,85,91,0.45)", "stroke-width": 1 }, g);
+            var t = el("text", { x: ml - 6, y: Y(h) + 3.5, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, g); t.textContent = h + " m";
+          });
+          var d = "M" + X(0).toFixed(1) + " " + base.toFixed(1);
+          P.forEach(function (p) { d += "L" + X(p[0]).toFixed(1) + " " + Y(p[1]).toFixed(1); });
+          d += "L" + X(P[P.length - 1][0]).toFixed(1) + " " + base.toFixed(1) + "Z";
+          el("path", { d: d, fill: "#e7dfcf", stroke: "none" }, svg);
+          el("path", { d: d.replace(/^M[^L]+/, "M" + X(0).toFixed(1) + " " + Y(P[0][1]).toFixed(1)).replace(/L[^L]+Z$/, ""), fill: "none", stroke: "#2a2a2c", "stroke-width": 1.4 }, svg);
+          var COL = { mountain: "#9aa58a", precinct: "#d3614e", water: "#2f5f94", building: "#8f887d", street: "#f4efe6", open: "#e3dccd", route42: "#4f4a43" };
+          D.runs.forEach(function (r) { el("rect", { x: X(r[0]).toFixed(1), y: by, width: Math.max(0.8, (r[1] - r[0]) * ppm).toFixed(1), height: bh, fill: COL[r[2]] || "#ccc" }, svg); });
+          el("rect", { x: ml, y: by, width: W - ml - mr, height: bh, fill: "none", stroke: "rgba(87,85,91,0.45)", "stroke-width": 0.6 }, svg);
+          // what the line passes, from data (heights read off the same profile)
+          function at(dist) { var best = P[0]; P.forEach(function (p) { if (Math.abs(p[0] - dist) < Math.abs(best[0] - dist)) best = p; }); return best[1]; }
+          var r42 = D.runs.filter(function (r) { return r[2] === "route42"; })[0], wat = D.runs.filter(function (r) { return r[2] === "water"; });
+          var marks = [[0, "Gotobiki-iwa · " + S.summit_ground_m.toFixed(1) + " m", "start"], [D.tsplit * 0.5, "the stone steps", "middle"],
+            [D.tsplit, "foot of the steps · " + S.entrance_m.toFixed(1) + " m", "start"]];
+          if (wat[1]) marks.push([(wat[1][0] + wat[1][1]) / 2, "Ukishima-gawa · " + S.ukishima_bed.toFixed(1) + " m", "middle"]);
+          if (r42) marks.push([(r42[0] + r42[1]) / 2, "National Route 42", "middle"]);
+          marks.push([L, "city hall · " + S.cityhall_m.toFixed(1) + " m", "end"]);
+          var mg = el("g", { class: "kpmarks" }, svg);
+          marks.forEach(function (m, i) {
+            var x = X(m[0]), h = at(m[0]), row = i % 2, ty = by + bh + 16 + row * 16;
+            if (i === 0) { var t0 = el("text", { x: x + 8, y: Y(h) - 6, "text-anchor": "start", "font-size": 12, fill: "#2a2a2c" }, mg); t0.textContent = m[1]; return; }
+            if (i === 1) { var t1 = el("text", { x: x + 6, y: Y(h) - 8, "text-anchor": "start", "font-size": 11.5, fill: "#9e2a2b", "font-style": "italic" }, mg); t1.textContent = m[1]; return; }
+            el("line", { x1: x, x2: x, y1: Math.min(Y(h) + 2, by), y2: ty - 11, stroke: "rgba(42,42,44,0.45)", "stroke-width": 0.7 }, mg);
+            var t = el("text", { x: x, y: ty, "text-anchor": m[2], "font-size": 11.5, fill: "#2a2a2c" }, mg); t.textContent = m[1];
+          });
+          var lg = el("g", { class: "kplegend" }, svg), lx = ml;
+          [["mountain", "mountain"], ["precinct", "shrine precinct"], ["water", "water"], ["building", "buildings"], ["open", "yards, gaps"], ["street", "streets"], ["route42", "national road"]].forEach(function (k) {
+            el("rect", { x: lx, y: H - 19, width: 12, height: 8, fill: COL[k[0]], stroke: "rgba(87,85,91,0.45)", "stroke-width": 0.5 }, lg);
+            var t = el("text", { x: lx + 16, y: H - 11.5, "font-size": 11, fill: "#57555b" }, lg); t.textContent = k[1]; lx += 22 + t.getComputedTextLength() + 12;
+          });
+          // cursor: a vertical line and the height under it
+          var cg = el("g", { class: "kpcur", style: "display:none" }, svg);
+          el("line", { x1: 0, x2: 0, y1: mt - 8, y2: by + bh, stroke: "#1a1a1a", "stroke-width": 1 }, cg);
+          var dot = el("circle", { r: 4.5, fill: "#fbe7a1", stroke: "#1a1a1a", "stroke-width": 1.6 }, cg);
+          var lab = el("text", { y: mt - 12, "font-size": 11.5, "text-anchor": "middle", fill: "#1a1a1a" }, svg);
+          var hit = el("rect", { x: ml, y: 0, width: W - ml - mr, height: by + bh, fill: "transparent", class: "khit", style: "cursor:crosshair" }, svg);
+          function move(e) { var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W; onMove(Math.max(0, Math.min(L, (x - ml) / ppm))); }
+          hit.addEventListener("pointermove", move); hit.addEventListener("pointerdown", move); hit.addEventListener("pointerleave", onLeave);
+          return {
+            label: lab, style: cg.style,
+            update: function (dd) {
+              var h = at(dd), x = X(dd); cg.style.display = ""; cg.setAttribute("transform", "translate(" + x.toFixed(1) + " 0)"); dot.setAttribute("cy", Y(h).toFixed(1));
+              lab.setAttribute("x", Math.max(ml + 40, Math.min(W - mr - 40, x)).toFixed(1)); lab.textContent = Math.round(dd) + " m along · ground " + h.toFixed(1) + " m";
+            }
+          };
+        }
+        function kmkAlign(D) {
+          // left: share of buildings that turn with the mountain foot, by distance from the slope break; right: the three directions
+          var sv = document.getElementById("kmkdecay");
+          if (sv) {
+            var B = D.disc, W = 520, ml = 40, mt = 16, ph = 150, bw = (W - ml - 10) / B.length, H = mt + ph + 46;
+            sv.setAttribute("viewBox", "0 0 " + W + " " + H); sv.innerHTML = "";
+            function Y(v) { return mt + ph - v / 60 * ph; }
+            [0, 20, 40, 60].forEach(function (v) {
+              el("line", { x1: ml, x2: W - 10, y1: Y(v), y2: Y(v), stroke: v ? "rgba(87,85,91,0.14)" : "rgba(87,85,91,0.5)" }, sv);
+              var t = el("text", { x: ml - 6, y: Y(v) + 3.5, "text-anchor": "end", "font-size": 11, fill: "#57555b" }, sv); t.textContent = v + "%";
+            });
+            B.forEach(function (b, i) {
+              var x = ml + i * bw + bw * 0.18, w = bw * 0.64;
+              el("rect", { x: x, y: Y(b.follow_foot_pct), width: w, height: Y(0) - Y(b.follow_foot_pct), fill: "#c0612b" }, sv);
+              el("line", { x1: x - 4, x2: x + w + 4, y1: Y(b.chance_pct), y2: Y(b.chance_pct), stroke: "#2a2a2c", "stroke-width": 2, "stroke-dasharray": "3 2" }, sv);
+              var v = el("text", { x: x + w / 2, y: Y(b.follow_foot_pct) - 5, "text-anchor": "middle", "font-size": 12, fill: "#2a2a2c" }, sv); v.textContent = Math.round(b.follow_foot_pct) + "%";
+              var l = el("text", { x: x + w / 2, y: mt + ph + 16, "text-anchor": "middle", "font-size": 11, fill: "#57555b" }, sv); l.textContent = b.from + "–" + b.to + " m";
+            });
+            var cap = el("text", { x: ml, y: H - 6, "font-size": 11, fill: "#57555b" }, sv); cap.textContent = "distance from the break of slope · dashed: chance level";
+          }
+          var rs = document.getElementById("kmkrose");
+          if (rs) {
+            var A = D.align, T = D.align_txt, R = 92, cx = 130, cy = 118;
+            rs.setAttribute("viewBox", "0 0 260 262"); rs.innerHTML = "";
+            el("circle", { cx: cx, cy: cy, r: R, fill: "rgba(236,229,215,0.6)", stroke: "rgba(87,85,91,0.35)" }, rs);
+            var n = el("text", { x: cx, y: cy - R - 6, "text-anchor": "middle", "font-size": 12, fill: "#57555b" }, rs); n.textContent = "N";
+            function axis(deg, col, w, dash) {
+              var a = deg * Math.PI / 180, dx = Math.sin(a) * R, dy = -Math.cos(a) * R;
+              el("line", { x1: cx - dx, y1: cy - dy, x2: cx + dx, y2: cy + dy, stroke: col, "stroke-width": w, "stroke-dasharray": dash || "", "stroke-linecap": "round" }, rs);
+            }
+            axis(D.grid_town, "#9a958c", 1.6); axis(D.grid_town + 90, "#9a958c", 1.6);
+            axis(A["building long axes"].mean_grid, "#6f6b66", 3); axis(A["building long axes"].mean_grid + 90, "#6f6b66", 3);
+            axis(A["slope break"].mean_axis, "#9e2a2b", 3, "6 4");
+            axis(A["市田川"].mean_axis, "#2f5f94", 3);
+            var rows = [["#9e2a2b", "slope break " + T.break], ["#2f5f94", "Ichida-gawa " + T.river], ["#6f6b66", "buildings inside: grid at " + T.bld_grid], ["#9a958c", "town grid, 200–800 m out: " + T.town_grid]];
+            rows.forEach(function (r, i) {
+              var y = cy + R + 22 + i * 15;
+              el("line", { x1: 18, x2: 36, y1: y - 4, y2: y - 4, stroke: r[0], "stroke-width": i === 3 ? 1.6 : 3, "stroke-dasharray": i === 0 ? "5 3" : "" }, rs);
+              var t = el("text", { x: 42, y: y, "font-size": 11.5, fill: "#2a2a2c" }, rs); t.textContent = r[1];
+            });
+            rs.setAttribute("viewBox", "0 0 260 " + (cy + R + 22 + rows.length * 15));
+          }
+        }
+        document.addEventListener("click", function (e) {
+          var b = e.target.closest && e.target.closest(".kchip, .kcard, .kh"); if (!b) return;
+          var key = b.getAttribute("data-ks");
+          kmkLoad().then(function (ok) { if (ok) kmk.setSys(key === kmk.pin && !b.classList.contains("kchip") ? "all" : key, true); });
+        });
+        document.addEventListener("mouseover", function (e) { var b = e.target.closest && e.target.closest(".kcard, .kh"); if (b && kmk.ready) kmk.setSys(b.getAttribute("data-ks")); });
+        document.addEventListener("mouseout", function (e) {
+          var b = e.target.closest && e.target.closest(".kcard, .kh"); if (!b || !kmk.ready) return;
+          if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".kcard, .kh") === b) return;
+          kmk.setSys(kmk.pin);
+        });
+        document.addEventListener("keydown", function (e) { var b = e.target.closest && e.target.closest(".kcard, .kh"); if (b && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); b.click(); } });
+
         satSet(satOn);
         /* ================= QA hooks (read-only; used by kansai/qa/check_render.mjs) ================= */
         window.__QA = {
@@ -2367,7 +2847,8 @@
           TMX: TMX, invTM: invTM, tileMatrix: tileMatrix, tileLL: tileLL, TILESETS: TILESETS, satSet: satSet, sat: function () { return satOn; },
           HL: HL, showHL: showHL, clearHL: clearHL, MEDIA: MEDIA, openMedia: function (id) { var m = MEDIA.filter(function (x) { return x.id === id; })[0]; if (m) openMedia(m, document.querySelector('#overlay .pulse[data-media="' + id + '"]')); return !!m; },
           closeMedia: closeMedia, LAYER_LEG: LAYER_LEG, BASE: BASE, pseudo: ["shade"], current: function () { return current; },
-          KPLACES: KPLACES, lightPlace: lightPlace, kmap: kmap, ALIASES: ALIASES, LD: LD, CLAB: CLAB
+          KPLACES: KPLACES, lightPlace: lightPlace, kmap: kmap, ALIASES: ALIASES, LD: LD, CLAB: CLAB,
+          kmkLoad: kmkLoad, kmk: kmk, KSYS: KSYS, KLEG: KLEG
         };
       })();
     </script>
