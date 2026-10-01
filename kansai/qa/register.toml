@@ -1779,6 +1779,13 @@ source = "share of the school ground inside the A31b-25 maximum flood (all of it
 check = { kmk = "stats.school.flood_max_pct", fmt = "and {:.0f}% of the school ground" }
 
 [[claim]]
+id = "kmk-src-ts"
+match = ["the tsunami from Wakayama’s maps of 2026, digitised"]
+status = "verified"
+source = "Wakayama 令和8年公表 地震動予測及び津波浸水想定 (25 March 2026), maximum class, digitised for Shingū in tools/tsunami2026; the Kamikura map and the school statistics use it"
+url = "https://www.pref.wakayama.lg.jp/prefg/011400/bousai/shinsui/r8sinsui.html"
+
+[[claim]]
 id = "kmk-leg-ts"
 exact = ["maximum tsunami (Wakayama, 2026)"]
 status = "verified"
