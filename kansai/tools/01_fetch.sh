@@ -54,11 +54,10 @@ cd ..
 
 # OpenStreetMap (Overpass)
 python3 "$HERE/fetch_osm.py"
+python3 "$HERE/fetch_osm.py" --trails   # path networks for the Kumano Kodō courses rebuilt in 11_routes_kodo.py
 
 # Second-round sources (see 10–16)
 mkdir -p kodo ichida
 UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36"
-# Mie Prefecture 熊野古道伊勢路ナビ — official Iseji route lines (the file is marked All Rights Reserved; see CAVEATS.md)
-curl -sL --max-time 120 -A "$UA" -o kodo/out4utf8h_alpha128.kml "https://www.kodo.pref.mie.lg.jp/navi/assets/kml/out4utf8h_alpha128.kml"
 # MLIT 市田川流域大規模浸水対策計画 (2019) — 図-1.2 市田川流域図 on p. 9 is digitised by 14_ichida_basin.py
 curl -sL --max-time 120 -A "$UA" -o ichida/shiryou.pdf "https://www.kkr.mlit.go.jp/kinan/kasen/ichidagawa/k1cog50000000d9i-att/shiryou.pdf"
