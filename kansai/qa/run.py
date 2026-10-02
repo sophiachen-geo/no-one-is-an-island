@@ -484,6 +484,23 @@ def jpeg_metadata(path):
     return found
 
 
+def jpeg_size(path):
+    """Width and height from a JPEG's frame header (SOF), read with the standard library only."""
+    b = Path(path).read_bytes(); i = 2
+    while i + 9 <= len(b):
+        if b[i] != 0xFF:
+            return None
+        m = b[i + 1]
+        if m == 0xFF:                            # fill byte before a marker
+            i += 1; continue
+        if m in (0x01, 0xD8) or 0xD0 <= m <= 0xD7:
+            i += 2; continue
+        if 0xC0 <= m <= 0xCF and m not in (0xC4, 0xC8, 0xCC):
+            return int.from_bytes(b[i + 7:i + 9], "big"), int.from_bytes(b[i + 5:i + 7], "big")
+        i += 2 + int.from_bytes(b[i + 2:i + 4], "big")
+    return None
+
+
 def mp4_report(path):
     """What an MP4 carries beyond its picture: its tracks' handler types, its metadata keys, its declared size and
     whether it streams (moov before mdat), read from the boxes with the standard library only."""
@@ -578,6 +595,8 @@ def check_fn(gate, rep, pts_ref, mreg):
             meta = jpeg_metadata(f)
             if meta:
                 gate.err("fieldnotes", f"{p[key]} still carries {', '.join(meta)} (location must not be published in the file)"); n_bad += 1
+            if key == "src" and jpeg_size(f) != (p["w"], p["h"]):
+                gate.err("fieldnotes", f"{p['src']} is {jpeg_size(f)} px but the page declares {p['w']}×{p['h']}"); n_bad += 1
         r = M.get(p["src"])
         if not r or not r.get("own") or not r.get("licence") or not r.get("shows"):
             gate.err("fieldnotes", f"{p['src']} is not registered in media.toml as our own photograph (own = true, licence, shows)"); n_bad += 1

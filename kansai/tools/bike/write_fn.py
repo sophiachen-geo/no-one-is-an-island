@@ -16,6 +16,12 @@ def cls(v):
 dots = []
 for x, y, w, b, c in T["dots"]:
     dots += [int(round((x - town_frame[0]) * 100)), int(round((y - town_frame[1]) * 100)), cls(w) * 100 + cls(b) * 10 + cls(c)]
+# every photograph declared at the size of the file the page serves: export_misc.py scales the 1600 px intermediate,
+# publish.py the original, and the two roundings can differ by a pixel
+from PIL import Image
+for p in M["photos"]:
+    with Image.open(os.path.join(sys.argv[1], p["src"])) as im:
+        p["w"], p["h"] = im.size
 out = {"frames": {"town": town_frame, "region": reg_frame}, "bins": BINS,
        "region": {"chains": R["chains"], "nodes": R["nodes"], "options": R["options"], "closures": [c for c in M["closures"] if c["chains"]], "mw": M["mw"], "mw_names": M["mw_names"]},
        "town": {"nets": T["nets"], "dots": dots, "legs": T["legs"], "photos": M["photos"], "water": json.load(open(os.path.join(H, "fn_twater.json")))["water"]}}
