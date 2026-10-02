@@ -31,7 +31,10 @@ python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-che
 ```
 
 Photographs: `../photos/ingest.py <orig> <web>` reads EXIF (time, position, heading, accuracy) into
-`manifest.json`; `../photos/publish.py <photos> <kansai/img/field>` writes the page’s copies without metadata.
+`manifest.json`, and a clip’s QuickTime keys (time, position to 0.0001°, accuracy; no heading);
+`../photos/publish.py <photos> <kansai/img/field>` writes the page’s copies without metadata (a clip as a silent H.264
+MP4 beside its poster), blurring first what `REDACT` lists. Which photographs are shown is set by the captions in
+`export_misc.py` (re-takes and the fence posts with donors’ names are left out).
 
 ## Choices worth knowing
 
@@ -54,7 +57,7 @@ Photographs: `../photos/ingest.py <orig> <web>` reads EXIF (time, position, head
   ones in March 2026 as PDF maps only. Swap the layer when GIS data appears.
 - **Town.** Directness = (access + network + access) ÷ straight line, to 260 fixed destinations 150–800 m away
   (seed 20250928), access ≤ 60 m, at least 8 trips per building. Driving uses GSI width classes of 3 m or more.
-  The ride between stops is the shortest bicycle-legal route; only the stops are measured (EXIF, 3.5–12.6 m).
+  The ride between stops is the shortest bicycle-legal route; only the stops are measured (EXIF, 3.5–32.0 m).
 - **Headings.** The phone records magnetic headings (`GPSImgDirectionRef = M`); they are turned to true north with
   the World Magnetic Model 2025 (`pygeomag`), 7.8° W here.
 - **Third-party lines.** The Tourist Association’s route line and MLIT’s cycling-road KML are not redistributed;

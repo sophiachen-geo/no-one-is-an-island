@@ -1,7 +1,7 @@
 """Kamikura micro-study: comparing gazes (まなざし). Summarises kansai/field/gazes.csv for the page.
 
-The table codes every image of Kamikura that six publishers put on their pages (the promotional gaze), the two in
-Shingū's 2013 master plan (municipal), the Kubo studio's 1913 album (historical) and our own photographs at the foot
+The table codes every image of Kamikura that six publishers put on their pages (the promotional gaze), the four in
+Shingū's 2012 master plan (municipal), the Kubo studio's 1913 album (historical) and our own photographs at the foot
 (researcher) by the frame of Gou & Shibata (2017): where the camera stands, whether the town is in the frame as a view, the
 breadth of view, and up to two of their landscape categories (one added: Channel). See kansai/field/README.md.
 
@@ -53,6 +53,7 @@ def summary(kansai, kmk=None):
             "festival": sum(r["festival"] == "yes" for r in photos),
             "breadth": {b: sum(r["breadth"] == b for r in photos) for b in ("intraocular", "ocular", "extraocular")},
             "cats": dict(cats.most_common()),
+            "by_pos": {p: dict(Counter(r["category_1"] for r in photos if r["position"] == p).most_common()) for p in POSITIONS},
         })
     # our photographs: distance from the measured foot (fieldnotes.js holds their EXIF positions in page units)
     fs = open(f"{kansai}/data/fieldnotes.js", encoding="utf-8").read()

@@ -35,8 +35,9 @@ import tm  # noqa: E402
 
 STATUSES = {"verified", "corrected", "derived", "method", "approximate", "author"}
 NUM_RE = re.compile(r"\d(?:[\d,.]*\d)?")
-WORD_RE = re.compile(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fifteen|twenty|"
-                     r"thirty|forty|fifty|hundred|thousand|million|first|second|third|fourth|fifth|dozen|half)\b", re.I)
+WORD_RE = re.compile(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|"
+                     r"seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|"
+                     r"million|first|second|third|fourth|fifth|dozen|half)\b", re.I)
 
 
 class Gate:
@@ -412,8 +413,19 @@ def check_gaze(gate, inventory):
         gate.err("gaze", f"“{t}” in the gaze figure does not follow from kamikura.js (gaze)")
     for t in sorted(want - set(got)):
         gate.err("gaze", f"the gaze figure lacks “{t}”")
-    if not bad and want <= set(got):
-        gate.ok("gaze", f"{len(want)} labels of the gaze figure recomputed from kamikura.js (gaze ← kansai/field/gazes.csv)")
+    # the summary is the table's: every row whole, and kamikura.js in step with kansai/field/gazes.csv
+    import csv
+    rows = list(csv.reader((KANSAI / "field" / "gazes.csv").open(encoding="utf-8")))
+    torn = [f"{r[0] if r else '?'} ({len(r)} fields)" for r in rows[1:] if len(r) != len(rows[0])]
+    if torn:
+        gate.err("gaze", f"kansai/field/gazes.csv rows without the header's {len(rows[0])} fields (an unquoted comma?): {', '.join(torn)}")
+    sys.path.insert(0, str(KANSAI / "tools" / "kamikura"))
+    import gazes
+    stale = json.loads(json.dumps(gazes.summary(str(KANSAI), kmk_data()), ensure_ascii=False)) != G
+    if stale:
+        gate.err("gaze", "kamikura.js (gaze) is out of step with kansai/field/gazes.csv — run tools/kamikura/gazes.py")
+    if not bad and want <= set(got) and not torn and not stale:
+        gate.ok("gaze", f"{len(want)} labels of the gaze figure recomputed from kamikura.js (gaze), and kamikura.js from the {len(rows) - 1} rows of kansai/field/gazes.csv")
 
 
 def fn_table_rows(pair):
@@ -470,6 +482,44 @@ def jpeg_metadata(path):
             found.append("IPTC")
         i += 2 + n
     return found
+
+
+def mp4_report(path):
+    """What an MP4 carries beyond its picture: its tracks' handler types, its metadata keys, its declared size and
+    whether it streams (moov before mdat), read from the boxes with the standard library only."""
+    b = Path(path).read_bytes()
+    out = {"handlers": [], "keys": [], "size": None, "times": [], "faststart": False, "strings": []}
+    def walk(i, end, path):
+        while i + 8 <= end:
+            n, t = int.from_bytes(b[i:i + 4], "big"), b[i + 4:i + 8].decode("latin-1"); h = 8
+            if n == 1:
+                n, h = int.from_bytes(b[i + 8:i + 16], "big"), 16
+            elif n == 0:
+                n = end - i
+            if n < h:
+                return
+            s, e, q = i + h, i + n, path + "/" + t
+            if q == "/moov" and "mdat" not in [x.rsplit("/", 1)[-1] for x in seen]:
+                out["faststart"] = True
+            seen.append(q)
+            if t == "tkhd":
+                out["size"] = (int.from_bytes(b[e - 8:e - 4], "big") / 65536, int.from_bytes(b[e - 4:e], "big") / 65536)
+            if t in ("mvhd", "tkhd", "mdhd"):            # creation and modification times of the movie, track and media
+                out["times"] += [int.from_bytes(b[s + 4:s + 8], "big"), int.from_bytes(b[s + 8:s + 12], "big")] if b[s] == 0 else \
+                                [int.from_bytes(b[s + 4:s + 12], "big"), int.from_bytes(b[s + 12:s + 20], "big")]
+            elif t == "hdlr" and path.endswith("/mdia"):
+                out["handlers"].append(b[s + 8:s + 12].decode("latin-1"))
+            elif path.endswith("/ilst") or t in ("keys", "loci", "\xa9xyz"):
+                out["keys"].append(t)
+            if t in ("moov", "trak", "mdia", "minf", "stbl", "udta", "edts", "dinf", "ilst"):
+                walk(s, e, q)
+            elif t == "meta":                    # ISO meta carries version and flags first; QuickTime's starts with hdlr
+                walk(s + (0 if b[s + 4:s + 8] == b"hdlr" else 4), e, q)
+            i = e
+    seen = []
+    walk(0, len(b), "")
+    out["strings"] = [k.decode("latin-1") for k in (b"ISO6709", b"com.apple", b"iPhone", b"location") if k in b]
+    return out
 
 
 def check_rk_cells(gate, inventory):
@@ -539,6 +589,24 @@ def check_fn(gate, rep, pts_ref, mreg):
             gate.err("fieldnotes", f"photograph {p['id']}: time {p.get('time')} does not match its file {p['src']}"); n_bad += 1
         if p.get("brg") is not None and not (0 <= p["brg"] < 360):
             gate.err("fieldnotes", f"photograph {p['id']}: bearing {p['brg']} outside 0–359°"); n_bad += 1
+        # a video: beside its poster, picture only (no sound), nothing about where or with what it was taken
+        if p.get("video"):
+            v = KANSAI / p["video"]
+            if p["video"] != p["src"][:-4] + ".mp4" or not v.exists():
+                gate.err("fieldnotes", f"video {p['id']}: {p['video']} missing or not beside its poster {p['src']}"); n_bad += 1; continue
+            r4 = mp4_report(v); bad = []
+            if r4["handlers"] != ["vide"]: bad.append(f"tracks {r4['handlers']}")
+            if [k for k in r4["keys"] if k != "\xa9too"]: bad.append(f"metadata {r4['keys']}")
+            if r4["strings"]: bad.append(f"text {r4['strings']}")
+            if any(r4["times"]): bad.append("a creation time")
+            if r4["size"] != (p["w"], p["h"]): bad.append(f"{r4['size']} where the page says {p['w']}×{p['h']}")
+            if not r4["faststart"]: bad.append("its index after the picture (no fast start)")
+            if not p.get("dur") or p["dur"] <= 0: bad.append("no duration")
+            if bad:
+                gate.err("fieldnotes", f"video {p['id']} ({p['video']}): {'; '.join(bad)}"); n_bad += 1
+            rv = M.get(p["video"])
+            if not rv or not rv.get("own") or not rv.get("licence") or not rv.get("shows"):
+                gate.err("fieldnotes", f"{p['video']} is not registered in media.toml as our own video (own = true, licence, shows)"); n_bad += 1
     # town labels on their references
     P = pts_ref.get("points", {})
     for lab in T.get("labels", []):
@@ -550,7 +618,8 @@ def check_fn(gate, rep, pts_ref, mreg):
         if d > ref.get("tol_m", 60):
             gate.err("fieldnotes", f"{lab['key']} is drawn {d:.0f} m from its reference (tolerance {ref.get('tol_m', 60)} m)"); n_bad += 1
     if not n_bad:
-        gate.ok("fieldnotes", f"route tables of {len(D['region']['options'])} pairs and their profiles follow the data; {len(T['photos'])} photographs registered, without metadata, in the town; {len(T.get('labels', []))} town labels on their references")
+        nv = sum(1 for p in T["photos"] if p.get("video"))
+        gate.ok("fieldnotes", f"route tables of {len(D['region']['options'])} pairs and their profiles follow the data; {len(T['photos']) - nv} photographs and {nv} videos registered, without metadata, in the town; {len(T.get('labels', []))} town labels on their references")
 
 
 def fn_origin():
