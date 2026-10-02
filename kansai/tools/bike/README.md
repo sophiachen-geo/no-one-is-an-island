@@ -26,7 +26,8 @@ python3 $T/export_fn.py        # region: chains, nodes, route families per pair 
 python3 $T/export_misc.py      # photographs (true-north headings, captions) and motorways → fn_misc.json
 python3 $T/closures.py         # rain-closure sections of Wakayama and Mie on the network and the chains
 python3 $T/export_town.py      # runs town.py (three networks, detours, the ride coded every 20 m) → fn_town.json
-python3 $T/write_fn.py /path/to/no-one-is-an-island/kansai   # → data/fieldnotes.js, with every number the text quotes
+python3 $T/write_fn.py /path/to/no-one-is-an-island/kansai   # → data/fieldnotes.js, with every number the text quotes;
+                               #   each photograph at the size of its published file (img/field/, from publish.py)
 python3 /path/to/no-one-is-an-island/kansai/qa/run.py          # the gate re-checks them ("fn" claims, check_fn)
 ```
 

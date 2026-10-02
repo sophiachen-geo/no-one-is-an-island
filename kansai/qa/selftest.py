@@ -130,6 +130,8 @@ def main():
         p = next(p for p in D["town"]["photos"] if p.get("video", "").endswith("/20250928_120406.mp4"))
         p.update(src=str(vdir / "20250928_120406.jpg"), video=str(vdir / "20250928_120406.mp4"))
     results.append(fn_case("a video that still carries a place tag is caught", "fieldnotes", planted_video, msg="metadata ['©xyz']"))
+    results.append(fn_case("a photograph declared at the wrong size is caught", "fieldnotes",
+                           lambda D: D["town"]["photos"][0].update(w=D["town"]["photos"][0]["w"] + 1), msg="but the page declares"))
     results.append(fn_case("a route table out of step with its data is caught", "fieldnotes",
                            lambda D: D["region"]["options"]["hongu-hayatama"]["list"][0].update(up=D["region"]["options"]["hongu-hayatama"]["list"][0]["up"] + 5)))
     # the risk analysis: a table cell and a sentence that drift from kansai/data/risk.js
