@@ -26,7 +26,25 @@ CAP = {
  "IMG_5167.JPG": "The lane along the channel, the mountain on the right.",
  "IMG_5168.JPG": "Crabs at the waterline of the channel wall.",
  "IMG_5173.JPG": "Across the channel from the shrine’s lower precinct: the grounds of the 出雲大社新宮教会.",
+ "IMG_5122.JPG": "阿須賀神社: a stone torii before a small vermilion shrine, a lantern and a stone hokora beside the path.",
+ "IMG_5123.JPG": "熊野速玉大社: the gravel court before the halls.",
+ "IMG_5130.JPG": "The オガタマノキ in full, its roots over the gravel.",
+ "IMG_5133.JPG": "The halls behind the green banner that names the shrine, 熊野速玉大社.",
+ "IMG_5135.JPG": "Before the halls: a great sacred rope (注連縄) and a large votive board (絵馬) of two white snakes; 2025 is a year of the snake.",
+ "IMG_5138.JPG": "A stone with Emperor Go-Toba’s poem 「岩にむす苔ふみならすみ熊野の山のかひある行末もがな」 in the hand of Princess Chichibu; the plaque beside it is dated April 1980.",
+ "IMG_5142.JPG": "The Nagi’s trunk, bound with a sacred rope inside its stone fence.",
+ "IMG_5148.JPG": "The lower torii of 神倉神社 at the foot of the steps, an offering box before it.",
+ "IMG_5152.JPG": "猿田彦神社 and 神倉三宝荒神社 at the foot of the steps, against the bare rock of the mountain.",
+ "IMG_5155.JPG": "神倉堀端都市下水路 between its walls, looking south-south-west: the lane, its railing and the houses on the left, the trees of the mountain on the right.",
+ "IMG_5156.JPG": "Youth Library えんがわ, reached by its own bridge over the channel (the address plate blurred).",
+ "IMG_5160.JPG": "妙心寺: its hall beyond a moss garden and ivy-covered trees.",
+ "IMG_5165.MOV": "A glimpse from the railing over the channel (video, without sound).",
+ "IMG_5166.JPG": "A blackboard by the lane: こども食堂, a children’s cafeteria, on Sunday 28 September — games from 11, beef curry from 11:30.",
+ "IMG_5169.MOV": "The channel wall at the waterline, where the crabs are (video, without sound).",
+ "IMG_5177.JPG": "At Shingū Station: bird panels on the wall of the passage, and riders pushing their bicycles up its ramp (faces blurred).",
 }
+# not shown: IMG_5170 and IMG_5171 (donors' names on the fence posts); IMG_5153, IMG_5164 and IMG_5172, each a re-take,
+# seconds apart, of the view in the frame shown beside it (IMG_5155, IMG_5163, IMG_5173)
 man = [x for x in json.load(open(os.path.join(H, "..", "photos", "manifest.json"))) if not x.get("track")]
 # the phone records the compass heading against magnetic north (GPSImgDirectionRef = M): turn it to true north with
 # the declination of the World Magnetic Model 2025 at the photograph's place and time (−7.7°, i.e. 7.7° west, here)
@@ -49,6 +67,7 @@ for x in sorted(man, key=lambda x: x["time"]):
     photos.append({"id": x["file"][4:8], "src": f"img/field/{t}.jpg", "thumb": f"img/field/{t}_t.jpg", "w": w2, "h": h2,
                    "x": round(px, 3), "y": round(py, 3), "brg": true_bearing(x),
                    "acc": round(x["hpe_m"], 1) if x["hpe_m"] else None, "time": x["time"][11:16], "cap": CAP[x["file"]]})
+    if x.get("video"): photos[-1].update(video=f"img/field/{t}.mp4", dur=x["duration_s"])
 # ---- motorways closed to bicycles ----
 roads = json.load(open(os.path.join(H, "roads.json")))
 mw = []

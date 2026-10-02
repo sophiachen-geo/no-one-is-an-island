@@ -41,13 +41,14 @@ def main():
     base_html = PAGE.read_text(encoding="utf-8")
     base_rep = json.loads(report.read_text(encoding="utf-8"))
 
-    def case(name, expect, html=None, rep=None, cav=None):
+    def case(name, expect, html=None, rep=None, cav=None, msg=None):
         d = Path(tempfile.mkdtemp())
         (d / "index.html").write_text(html or base_html, encoding="utf-8")
         (d / "render.json").write_text(json.dumps(rep or base_rep, ensure_ascii=False), encoding="utf-8")
         (d / "CAVEATS.md").write_text(cav if cav is not None else CAVEATS.read_text(encoding="utf-8"), encoding="utf-8")
         code, cats, errs = gate(d / "index.html", d / "render.json", d / "CAVEATS.md")
-        ok = (code == 0 and not cats) if expect is None else (code != 0 and any(c.startswith(expect) for c in cats))
+        ok = (code == 0 and not cats) if expect is None else \
+             (code != 0 and any(e[0].startswith(expect) and (msg is None or msg in e[1]) for e in errs))   # msg: that very error
         print(f"  {'✓' if ok else '✗'} {name:48s} → {'passes' if code == 0 else 'fails: ' + ', '.join(sorted(cats))}")
         if not ok:
             for e in errs[:5]:
@@ -110,17 +111,25 @@ def main():
     os.environ["KANSAI_DATA"] = str(d)
     results.append(case("a missing ground layer is caught", "kamikura"))
     # field notes: a statistic that drifts from the text, a photograph shown at the wrong time, a route table out of step
-    def fn_case(name, expect, edit):
+    def fn_case(name, expect, edit, msg=None):
         d = data_copy(); shutil.copy(HERE.parent / "data" / "buildings.js", d / "buildings.js")
         raw = (d / "fieldnotes.js").read_text(encoding="utf-8").strip(); D = json.loads(raw[raw.index("=") + 1:].rstrip(";")); edit(D)
         (d / "fieldnotes.js").write_text("window.__FN=" + json.dumps(D, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
         os.environ["KANSAI_DATA"] = str(d)
-        return case(name, expect)
+        return case(name, expect, msg=msg)
     results.append(fn_case("field-notes data that drifts from the text is caught", "derived", lambda D: D["stats"]["ride"].update(leg2_channel_m=360)))
     results.append(fn_case("a field photograph shown at the wrong time is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(time="10:38")))
     exif = Path(tempfile.mkdtemp()) / "20250928_103732.jpg"     # a JPEG whose header still holds an EXIF block
     exif.write_bytes(b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00MM\x00\x2a\x00\x00\x00\x08\xff\xd9")
-    results.append(fn_case("a photograph that still carries EXIF is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(src=str(exif))))
+    results.append(fn_case("a photograph that still carries EXIF is caught", "fieldnotes", lambda D: D["town"]["photos"][0].update(src=str(exif)),
+                           msg="still carries EXIF"))
+    vdir = Path(tempfile.mkdtemp()); F = HERE.parent / "img" / "field"     # a video whose encoder tag became a place tag
+    shutil.copy(F / "20250928_120406.jpg", vdir / "20250928_120406.jpg")
+    (vdir / "20250928_120406.mp4").write_bytes((F / "20250928_120406.mp4").read_bytes().replace(b"\xa9too", b"\xa9xyz"))
+    def planted_video(D):
+        p = next(p for p in D["town"]["photos"] if p.get("video", "").endswith("/20250928_120406.mp4"))
+        p.update(src=str(vdir / "20250928_120406.jpg"), video=str(vdir / "20250928_120406.mp4"))
+    results.append(fn_case("a video that still carries a place tag is caught", "fieldnotes", planted_video, msg="metadata ['©xyz']"))
     results.append(fn_case("a route table out of step with its data is caught", "fieldnotes",
                            lambda D: D["region"]["options"]["hongu-hayatama"]["list"][0].update(up=D["region"]["options"]["hongu-hayatama"]["list"][0]["up"] + 5)))
     # the risk analysis: a table cell and a sentence that drift from kansai/data/risk.js

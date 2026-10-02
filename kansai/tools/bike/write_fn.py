@@ -22,6 +22,8 @@ out = {"frames": {"town": town_frame, "region": reg_frame}, "bins": BINS,
 # ---- every number the text quotes, recomputed here (checked by kansai/qa/run.py, "fn" claims) ----
 import statistics as st
 man = [x for x in json.load(open(os.path.join(H, "..", "photos", "manifest.json"))) if not x.get("track") and x.get("lat")]
+pho = [x for x in man if not x.get("video")]        # photographs: EXIF position with its accuracy, and a heading
+vid = [x for x in man if x.get("video")]            # clips: QuickTime position to pos_dp decimals of a degree, no heading
 legs = T["legs"]
 def share(rows, f): return round(100 * sum(1 for r in rows if f(r)) / len(rows))
 L1, L2 = legs[0]["rows"], legs[1]["rows"]
@@ -38,7 +40,8 @@ _K = json.load(open(os.path.join(os.getcwd(), "..", "geo", "kmk", "gsi_water.geo
 _CH = _tf(_tr, unary_union([shape(f["geometry"]) for f in _K["features"]]))
 leg2_channel_m = round(LineString(Tw["legs"][1]["xy"]).intersection(_CH.buffer(25)).length)
 stats = {
-  "ride": {"photos_gps": len(man), "photos_shown": len(M["photos"]), "hpe_min": round(min(x["hpe_m"] for x in man), 1), "hpe_max": round(max(x["hpe_m"] for x in man), 1),
+  "ride": {"photos_gps": len(man), "photos_shown": len(M["photos"]), "videos_gps": len(vid),
+           "hpe_min": round(min(x["hpe_m"] for x in pho), 1), "hpe_max": round(max(x["hpe_m"] for x in pho), 1),
            "t_first": min(x["time"] for x in man)[11:16], "t_last": max(x["time"] for x in man)[11:16],
            "leg1_km": round(legs[0]["len"] / 1000, 1), "leg2_km": round(legs[1]["len"] / 1000, 1), "leg1_m": legs[0]["len"], "leg2_m": legs[1]["len"],
            "leg1_wide_pct": share(L1, lambda r: r[1] in ("5.5m-13m未満", "13m-19.5m未満", "19.5m以上")), "leg1_shops_pct": share(L1, lambda r: r[4] > 0),
@@ -55,8 +58,15 @@ stats = {
 # the compass correction applied to the photographs (export_misc.py): World Magnetic Model 2025 at each photograph
 from pygeomag import GeoMag
 _W = GeoMag(coefficients_file="wmm/WMM_2025.COF")
-_dec = [_W.calculate(glat=x["lat"], glon=x["lon"], alt=0, time=2025 + (270.5 / 365)).d for x in man]   # 28 Sep 2025 = day 271
+_dec = [_W.calculate(glat=x["lat"], glon=x["lon"], alt=0, time=2025 + (270.5 / 365)).d for x in pho]   # 28 Sep 2025 = day 271
 stats["ride"]["decl_w"] = round(-sum(_dec) / len(_dec), 1)
+# a clip's position: one step of its last decimal, in metres north–south and east–west at its place
+from pyproj import Geod
+_G = Geod(ellps="WGS84")
+if vid:
+    dp = min(x["pos_dp"] for x in vid); st = 10 ** -dp; lat = sum(x["lat"] for x in vid) / len(vid); lon = sum(x["lon"] for x in vid) / len(vid)
+    stats["ride"]["video_deg"] = st
+    stats["ride"]["video_cell_m"] = [round(_G.inv(lon, lat, lon, lat + st)[2]), round(_G.inv(lon, lat, lon + st, lat)[2])]
 # rain: per route between Hongū and Hayatama, the lowest threshold among the sections it follows for 200 m or more
 def rain_of(O):
     on = {c for c, o in O["seq"]}; mm = None

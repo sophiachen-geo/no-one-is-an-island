@@ -3788,63 +3788,97 @@ why = "idioms and the name of a model, not counts"
 [[claim]]
 id = "fn-ride-circuit"
 match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "SHINGŪ’S THREE SHRINES BY BICYCLE", "Field notes · Shingū’s three shrines by bicycle",
-         "three stops, 25 photographs", "field visit, 28 September 2025", "the first stop"]
+         "field visit, 28 September 2025", "the first stop"]
 status = "verified"
 source = "新宮市観光協会, 体験コース「世界遺産･新宮三社詣で まちなかサイクリング」 (itinerary 6): 阿須賀神社, 熊野速玉大社, 神倉神社; the date from our photographs' EXIF (DateTimeOriginal 2025:09:28, OffsetTimeOriginal +09:00); the photographs fall in three groups (town.py, within 150 m), the first at Asuka at 10:37"
 url = "https://www.shinguu.jp/itineraries/detail/6"
 
 [[claim]]
 id = "fn-photos-gps"
-match = ["Twenty-five of our phone photographs carry a position"]
+match = ["Forty-three of our phone photographs and short videos carry a position"]
 status = "derived"
-source = "kansai/tools/photos/ingest.py: photographs with EXIF GPS position and image direction (22 of them shown; the others repeat a view)"
-check = { fn = "stats.ride.photos_gps", expect = 25, tol = 0 }
+source = "kansai/tools/photos/ingest.py: 41 photographs with EXIF GPS position and image direction and 2 videos with the QuickTime location (38 shown: IMG_5170 and IMG_5171 show donors' names; IMG_5153, IMG_5164 and IMG_5172 re-take, seconds apart, the view of IMG_5155, IMG_5163 and IMG_5173)"
+check = { fn = "stats.ride.photos_gps", expect = 43, tol = 0 }
 
 [[claim]]
 id = "fn-photos-gps-box"
-match = ["three stops, 25 photographs with position and heading"]
+match = ["three stops and the station, 43 photographs and videos with position"]
 status = "derived"
 source = "as fn-photos-gps"
-check = { fn = "stats.ride.photos_gps", fmt = "{} photographs with position" }
+check = { fn = "stats.ride.photos_gps", fmt = "{} photographs and videos with position" }
 
 [[claim]]
 id = "fn-hpe-min"
-match = ["good to 3.5–12.6 m, and a compass heading"]
+match = ["The photographs’ positions are good to 3.5–32.0 m and come with a compass heading"]
 status = "derived"
-source = "EXIF GPSHPositioningError of the 25 photographs (the phone's own horizontal accuracy estimate)"
+source = "EXIF GPSHPositioningError of the 41 photographs (the phone's own horizontal accuracy estimate); write_fn.py"
 check = { fn = "stats.ride.hpe_min", fmt = "good to {}–" }
 
 [[claim]]
 id = "fn-hpe-max"
-match = ["good to 3.5–12.6 m, and a compass heading"]
+match = ["The photographs’ positions are good to 3.5–32.0 m and come with a compass heading"]
 status = "derived"
 source = "as fn-hpe-min"
-check = { fn = "stats.ride.hpe_max", fmt = "–{} m, and a compass" }
+check = { fn = "stats.ride.hpe_max", fmt = "–{} m and come with" }
+
+[[claim]]
+id = "fn-videos-n"
+match = ["the two videos’ are stored to 0.0001°", "Ours: the field-notes photographs at the foot (the two videos are not coded)"]
+status = "derived"
+source = "kansai/tools/photos/ingest.py: IMG_5165.MOV and IMG_5169.MOV, the clips with a QuickTime location"
+check = { fn = "stats.ride.videos_gps", expect = 2, tol = 0 }
+
+[[claim]]
+id = "fn-video-deg"
+match = ["the two videos’ are stored to 0.0001°, a cell of about 11 × 9 m, with no heading"]
+status = "derived"
+source = "com.apple.quicktime.location.ISO6709 of both clips: +33.7254+135.9846+013.257/ and +33.7247+135.9843+009.466/, four decimals of a degree (ingest.py pos_dp); no heading key"
+check = { fn = "stats.ride.video_deg", fmt = "stored to {}°" }
+
+[[claim]]
+id = "fn-video-cell-ns"
+match = ["the two videos’ are stored to 0.0001°, a cell of about 11 × 9 m, with no heading"]
+status = "derived"
+source = "0.0001° of latitude and of longitude at the clips' place on the WGS84 ellipsoid (pyproj Geod, write_fn.py): 11.1 m north–south, 9.3 m east–west"
+check = { fn = "stats.ride.video_cell_m.0", fmt = "about {} ×" }
+
+[[claim]]
+id = "fn-video-cell-ew"
+match = ["the two videos’ are stored to 0.0001°, a cell of about 11 × 9 m, with no heading"]
+status = "derived"
+source = "as fn-video-cell-ns"
+check = { fn = "stats.ride.video_cell_m.1", fmt = "× {} m" }
 
 [[claim]]
 id = "fn-t-first"
-match = ["from 10:37 at Asuka", "10:37 → 12:12"]
+match = ["from 10:37 at Asuka", "10:37 → 12:54"]
 status = "derived"
 source = "EXIF DateTimeOriginal (JST, +09:00) of the first photograph"
 check = { fn = "stats.ride.t_first", fmt = "from {} at Asuka" }
 
 [[claim]]
 id = "fn-t-first-box"
-match = ["10:37 → 12:12"]
+match = ["10:37 → 12:54"]
 status = "derived"
 source = "as fn-t-first"
 check = { fn = "stats.ride.t_first", fmt = "{} →" }
 
 [[claim]]
 id = "fn-t-last"
-match = ["to 12:12 at the foot of Kamikura", "10:37 → 12:12"]
+match = ["and a last one at 12:54 at Shingū Station", "10:37 → 12:54"]
 status = "derived"
-source = "EXIF DateTimeOriginal of the last photograph"
-check = { fn = "stats.ride.t_last", fmt = "to {} at the foot" }
+source = "EXIF DateTimeOriginal of the last photograph (IMG_5177, 19 m from the OSM node of 新宮駅, 4355134041)"
+check = { fn = "stats.ride.t_last", fmt = "at {} at Shingū Station" }
+
+[[claim]]
+id = "fn-t-foot"
+match = ["to 12:12 at the foot of Kamikura"]
+status = "verified"
+source = "EXIF DateTimeOriginal of IMG_5173 (12:12:51), the last photograph shown at the foot of Kamikura (kansai/data/fieldnotes.js, town.photos)"
 
 [[claim]]
 id = "fn-t-last-box"
-match = ["10:37 → 12:12"]
+match = ["10:37 → 12:54"]
 status = "derived"
 source = "as fn-t-last"
 check = { fn = "stats.ride.t_last", fmt = "→ {}" }
@@ -4377,10 +4411,11 @@ check = { fn = "stats.dem.max_abs", fmt = "worst {} m" }
 [[claim]]
 id = "fn-photo-times"
 match = ["Open photograph 10:37", "Open photograph 10:59", "Open photograph 11:00", "Open photograph 11:06", "Open photograph 11:09", "Open photograph 11:18",
-         "Open photograph 11:19", "Open photograph 11:56", "Open photograph 11:59", "Open photograph 12:02", "Open photograph 12:06", "Open photograph 12:07",
-         "Open photograph 12:12"]
+         "Open photograph 11:19", "Open photograph 11:52", "Open photograph 11:56", "Open photograph 11:57", "Open photograph 11:58", "Open photograph 11:59",
+         "Open photograph 12:01", "Open photograph 12:02", "Open photograph 12:06", "Open photograph 12:07", "Open photograph 12:12", "Open photograph 12:54",
+         "Open video 12:04", "Open video 12:08"]
 status = "verified"
-source = "EXIF DateTimeOriginal (JST) of each photograph; the file names (img/field/YYYYMMDD_HHMMSS.jpg) carry the same time and check_fn compares them"
+source = "EXIF DateTimeOriginal (JST) of each photograph and com.apple.quicktime.creationdate of each video; the file names (img/field/YYYYMMDD_HHMMSS.jpg) carry the same time and check_fn compares them"
 
 [[claim]]
 id = "fn-photo-ogatama"
@@ -4428,7 +4463,7 @@ url = "https://www.city.shingu.lg.jp/info/565"
 
 [[claim]]
 id = "fn-sources"
-match = ["the authors’ phone photographs of 28 September 2025", "shops and sacred ground as of 1 October 2026", "CC BY 4.0; downloaded 1 October 2026",
+match = ["the authors’ phone photographs and two short videos of 28 September 2025", "shops and sacred ground as of 1 October 2026", "CC BY 4.0; downloaded 1 October 2026",
          "and A33 (2025)", "its 2024 release", "令和8年公表 地震動予測及び津波浸水想定 — Wakayama, 25 March 2026", "Mie, March 2026",
          "Field notes · the three shrines by bicycle", "the three-shrine cycling course", "the town’s three networks"]
 status = "verified"
@@ -4567,10 +4602,10 @@ check = { kmk = "gaze.rows.2.n", expect = 1, tol = 0 }
 
 [[claim]]
 id = "gz-sample-ours"
-match = ["and the ten we took at the foot on 28 September 2025", "All ten of our photographs"]
+match = ["and the sixteen photographs we took at the foot on 28 September 2025", "All sixteen of our photographs"]
 status = "derived"
-source = "kansai/field/gazes.csv: our photographs at the foot (EXIF dates 28 September 2025; kansai/data/fieldnotes.js)"
-check = { kmk = "gaze.rows.3.n", expect = 10, tol = 0 }
+source = "kansai/field/gazes.csv: our photographs at the foot, O01–O16 (EXIF dates 28 September 2025; kansai/data/fieldnotes.js); the re-takes not shown on the page and the two videos are not coded"
+check = { kmk = "gaze.rows.3.n", expect = 16, tol = 0 }
 
 [[claim]]
 id = "gz-frame"
@@ -4647,35 +4682,92 @@ url = "https://dl.ndl.go.jp/pid/906106/1/29"
 
 [[claim]]
 id = "gz-ours-dist"
-match = ["were taken within 53 m of the foot"]
+match = ["were taken within 54 m of the foot"]
 status = "derived"
-source = "the photographs' EXIF positions (kansai/data/fieldnotes.js) against the measured foot (kamikura.js layers.foot): 4–53 m out"
+source = "the photographs' EXIF positions (kansai/data/fieldnotes.js) against the measured foot (kamikura.js layers.foot): 4–54 m out"
 check = { kmk = "gaze.ours_dist_m.1", fmt = "within {} m" }
 
 [[claim]]
 id = "gz-ours-threshold"
-match = ["4 at the threshold and 6 along it"]
+match = ["The 6 at the threshold are each a torii, a hall or a board"]
 status = "derived"
 source = "kansai/field/gazes.csv: our photographs by camera position"
-check = { kmk = "gaze.rows.3.pos.1", fmt = "{} at the threshold" }
+check = { kmk = "gaze.rows.3.pos.1", fmt = "The {} at the threshold" }
+
+[[claim]]
+id = "gz-ours-threshold-sacred"
+match = ["are each a torii, a hall or a board"]
+status = "derived"
+source = "kansai/field/gazes.csv: at the threshold, O10 (the hall of 出雲大社新宮教会), O11 (the lower torii) and O12 (猿田彦神社 and 神倉三宝荒神社) are coded Statue & Symbol first"
+check = { kmk = "gaze.rows.3.by_pos.threshold.Statue & Symbol", expect = 3, tol = 0 }
+
+[[claim]]
+id = "gz-ours-threshold-boards"
+match = ["are each a torii, a hall or a board"]
+status = "derived"
+source = "kansai/field/gazes.csv: at the threshold, O01–O03 (the boards 史跡 熊野三山（権現山）, 天磐盾 and 神倉神社) are coded Facilities; with gz-ours-threshold-sacred, all six"
+check = { kmk = "gaze.rows.3.by_pos.threshold.Facilities", expect = 3, tol = 0 }
 
 [[claim]]
 id = "gz-ours-foot"
-match = ["4 at the threshold and 6 along it"]
+match = ["the 10 along it are of the lane"]
 status = "derived"
 source = "kansai/field/gazes.csv: our photographs by camera position"
-check = { kmk = "gaze.rows.3.pos.2", fmt = "and {} along it" }
+check = { kmk = "gaze.rows.3.pos.2", fmt = "the {} along it" }
+
+[[claim]]
+id = "gz-ours-lane"
+match = ["the channel, a library in an old house, a temple and its board, a gourd vine on a wall, crabs, the blackboard of a children’s cafeteria"]
+status = "verified"
+source = "kansai/field/gazes.csv, the ten at the foot: the channel and its lane (O06, O08, O13), Youth Library えんがわ (O04, O14), 妙心寺 and its board (O15, O05), the gourd vine (O07), the crabs (O09), the こども食堂 blackboard (O16)"
 
 [[claim]]
 id = "gz-ours-channel"
-match = ["4 include the channel"]
+match = ["The channel, the category added to theirs, is our most frequent (5 photographs)"]
 status = "derived"
-source = "kansai/field/gazes.csv: our photographs coded Channel"
-check = { kmk = "gaze.rows.3.cats.Channel", fmt = "{} include the channel" }
+source = "kansai/field/gazes.csv: our photographs coded Channel (first or second category), against 4 each for Facilities, Natural objects and Statue & Symbol"
+check = { kmk = "gaze.rows.3.cats.Channel", fmt = "most frequent ({} photographs)" }
 
 [[claim]]
-id = "gz-ours-boards"
-match = ["4 are interpretive boards"]
+id = "gz-ours-channel-only"
+match = ["and no other gaze shows it along the foot"]
+status = "verified"
+source = "kansai/field/gazes.csv: no promotional, municipal or historical image is coded Channel; the promotional bridges over it (P02, P32) stand at the threshold"
+
+[[claim]]
+id = "gz-ours-mountain"
+match = ["None of ours stands on the mountain or shows the town from above"]
 status = "derived"
-source = "kansai/field/gazes.csv: our photographs coded Facilities (all four are boards)"
-check = { kmk = "gaze.rows.3.cats.Facilities", fmt = "{} are interpretive boards" }
+source = "kansai/field/gazes.csv: none of our photographs at the mountain position"
+check = { kmk = "gaze.rows.3.pos.0", expect = 0, tol = 0 }
+
+[[claim]]
+id = "gz-ours-town"
+match = ["None of ours stands on the mountain or shows the town from above"]
+status = "derived"
+source = "kansai/field/gazes.csv: none of our photographs with the town in the frame"
+check = { kmk = "gaze.rows.3.town", expect = 0, tol = 0 }
+
+[[claim]]
+id = "fn-redactions"
+match = ["two passers-by’s faces and an address plate blurred"]
+status = "verified"
+source = "kansai/tools/photos/publish.py REDACT, applied before any copy is made: IMG_5177 (two passers-by on the station ramp: their faces) and IMG_5156 (the house's address plate); the field kit's ethics, kansai/field/README.md"
+
+[[claim]]
+id = "fn-photo-gotoba"
+match = ["A stone with Emperor Go-Toba’s poem 「岩にむす苔ふみならすみ熊野の山のかひある行末もがな」 in the hand of Princess Chichibu; the plaque beside it is dated April 1980"]
+status = "verified"
+source = "the plaque in our photograph IMG_5138: 「…御製は秩父宮妃殿下の御染筆…昭和五十五年四月 宮司 上野元 謹記」; the poem is Go-Toba's in 新古今和歌集 (also given by omairi.info, 熊野速玉大社 境内散歩, 2024)"
+
+[[claim]]
+id = "fn-photo-snake"
+match = ["a large votive board (絵馬) of two white snakes; 2025 is a year of the snake"]
+status = "verified"
+source = "the board in our photograph IMG_5135 (two white snakes, 「弥栄」); 2025 is 乙巳, a year of the snake in the sexagenary cycle"
+
+[[claim]]
+id = "fn-photo-kodomo"
+match = ["こども食堂, a children’s cafeteria, on Sunday 28 September — games from 11, beef curry from 11:30"]
+status = "verified"
+source = "the blackboard in our photograph IMG_5166: 「こども食堂 9月28日(日) ★ゲーム 11時〜 ★ビーフカレー 11時半〜」"

@@ -53,11 +53,11 @@ Comparisons:
 - facing directions (circular statistics: toward the mountain, along the foot, toward the town);
 - what each gaze omits: categories present in the researcher's systematic record but absent from a given gaze.
 
-## Desk coding so far (1 October 2026)
+## Desk coding so far (2 October 2026)
 
 `gazes.csv` holds the gazes that need no participants, coded by the frame above: 37 images from six publishers'
 pages (34 photographic images and 3 maps or diagrams), 4 from the city's 2012 master plan, 1 plate from the 1913 album and
-our 10 photographs at the foot. Columns: `position` (mountain, threshold, foot, town; `map` for maps and diagrams),
+our 16 photographs at the foot (the two short videos there are not coded, nor the re-takes the page leaves out). Columns: `position` (mountain, threshold, foot, town; `map` for maps and diagrams),
 `town` (the town spread out in the frame as a view; houses seen at street level do not count), `breadth`, `category_1`/`category_2` (Gou & Shibata's, plus Channel),
 `festival`. The page's comparison is built from it (`tools/kamikura/gazes.py`). One coder so far: a second coder on
 the same images, and the visitor and resident gazes, are the next steps.

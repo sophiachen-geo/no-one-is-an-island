@@ -199,16 +199,17 @@ if (hasQA) {
     const cOut = Q.cam(), F = Q.frame, hw = cOut.W / 2 / cOut.k, hh = cOut.H / 2 / cOut.k;
     const outInFrame = cOut.cx - hw >= F[0] - 0.05 && cOut.cx + hw <= F[2] + 0.05 && cOut.cy - hh >= F[1] - 0.05 && cOut.cy + hh <= F[3] + 0.05;
     for (let j = 0; j < 30; j++) btn('in').click();
-    const kMaxHit = Q.cam().k;
+    const kMaxHit = Q.cam().k, sbr = document.querySelector('#scalebar rect'), bar = sbr ? +sbr.getAttribute('width') : null;
     btn('reset').click(); await wait(1500);
     const s = Q.stepCam(), c = Q.cam();
-    return { k0, kIn, kOut: cOut.k, kMin: Q.kMin(), outInFrame, kMaxHit, K_MAX: Q.K_MAX, cam: c, step: s,
+    return { k0, kIn, kOut: cOut.k, kMin: Q.kMin(), outInFrame, kMaxHit, K_MAX: Q.K_MAX, cam: c, step: s, bar, barW: +document.getElementById('scalebar').getAttribute('width'),
       reset: Math.abs(c.k - s.k) < 1e-6 * s.k && Math.abs(c.cx - s.cx) < 1e-3 && Math.abs(c.cy - s.cy) < 1e-3 };
   });
   if (!(z.kIn > z.k0 * 1.5 || z.k0 * 1.6 > z.K_MAX)) err('zoom', `zoom-in did not zoom (k ${z.k0} → ${z.kIn})`);
   if (Math.abs(z.kOut - z.kMin) > 1e-9) err('zoom', `zoom-out does not stop at the frame (k ${z.kOut}, kMin ${z.kMin})`);
   if (!z.outInFrame) err('zoom', 'zoomed-out view leaves the data frame');
   if (Math.abs(z.kMaxHit - z.K_MAX) > 1e-9) err('zoom', `zoom-in does not clamp at K_MAX (${z.kMaxHit})`);
+  if (z.bar == null || z.bar > z.barW || z.bar < 20) err('zoom', `the scale bar at full zoom is ${z.bar} px in a ${z.barW} px box`);
   if (!z.reset) err('zoom', `reset button does not return to the step view (cam ${JSON.stringify(z.cam)} vs step ${JSON.stringify(z.step)})`);
   // wheel (ctrl) and drag go through the real input path
   const box = await page.locator('#map').boundingBox();
@@ -339,7 +340,10 @@ if (hasQA) {
       if (!mk || mk.style.display === 'none' || !cu || cu.style.display === 'none') out.push(['kamikura', 'a point on the profile does not light on the map']);
       K.setTr(null);
       if ((mk && mk.style.display !== 'none') || (cu && cu.style.display !== 'none')) out.push(['kamikura', 'the transect marker does not clear']);
-      const c0 = K.cam(); K.zoom(4, c0.W / 2, c0.H / 2); const c1 = K.cam(); K.zoom(1 / 64, c0.W / 2, c0.H / 2); const c2 = K.cam(); K.home(); const c3 = K.cam();
+      const c0 = K.cam(); K.zoom(4, c0.W / 2, c0.H / 2); const c1 = K.cam();
+      K.zoom(1e4, c0.W / 2, c0.H / 2); const kb = document.querySelector('#kmkmap .msb'), kr = kb && kb.querySelector('rect');
+      if (!kr || +kr.getAttribute('width') > +kb.getAttribute('width') || +kr.getAttribute('width') < 20) out.push(['kamikura', `the scale bar at full zoom is ${kr && kr.getAttribute('width')} px in a ${kb && kb.getAttribute('width')} px box`]);
+      K.zoom(1 / 64, c0.W / 2, c0.H / 2); K.zoom(1 / 64, c0.W / 2, c0.H / 2); K.zoom(1 / 64, c0.W / 2, c0.H / 2); const c2 = K.cam(); K.home(); const c3 = K.cam();
       if (!(c1.k > c0.k)) out.push(['kamikura', 'zoom in does nothing']);
       if (c2.k < c2.kmin - 1e-6 || c2.cx - c2.W / 2 / c2.k < c2.F[0] - 1e-6 || c2.cx + c2.W / 2 / c2.k > c2.F[2] + 1e-6 || c2.cy - c2.H / 2 / c2.k < c2.F[1] - 1e-6 || c2.cy + c2.H / 2 / c2.k > c2.F[3] + 1e-6)
         out.push(['kamikura', 'zooming out shows ground outside the data frame']);
@@ -376,6 +380,17 @@ if (hasQA) {
     const card = document.querySelector('#fnmap .mcard'), img = card && card.querySelector('img');
     if (!card || card.hidden || !img || !/img\/field\//.test(img.getAttribute('src'))) out.errors.push('a photograph does not open in its card');
     F.closePhoto();
+    const vi = F.D.town.photos.findIndex((q) => q.video);
+    if (vi >= 0) {
+      F.openPhoto(vi); await wait(60);
+      const v = card.querySelector('video'), cap = card.querySelector('figcaption');
+      if (!v || !/^img\/field\/\d{8}_\d{6}\.mp4$/.test(v.getAttribute('src') || '') || !v.controls || !v.hasAttribute('playsinline')) out.errors.push('a video does not open in its card with controls');
+      else if (card.scrollHeight > card.clientHeight + 1 || cap.getBoundingClientRect().bottom > card.getBoundingClientRect().bottom + 1) out.errors.push('a video card hides its caption below the fold');
+      F.closePhoto();
+    }
+    const fc = F.cam(); F.zoom(1e4, fc.W / 2, fc.H / 2); await wait(20);
+    const fb = document.querySelector('#fnmap .msb'), fr = fb && fb.querySelector('rect');
+    if (!fr || +fr.getAttribute('width') > +fb.getAttribute('width') || +fr.getAttribute('width') < 20) out.errors.push(`the scale bar at full zoom is ${fr && fr.getAttribute('width')} px in a ${fb && fb.getAttribute('width')} px box`);
     for (const pair of Object.keys(F.D.region.options)) {
       document.querySelector(`#fnopts .fnpair[data-pair="${pair}"]`).click(); await wait(80);
       out.tables[pair] = [...document.querySelectorAll('#fnopts tbody tr')].map((tr) => [...tr.children].map((td) => td.textContent.trim()));
