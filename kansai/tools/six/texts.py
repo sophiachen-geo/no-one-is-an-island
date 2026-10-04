@@ -81,6 +81,9 @@ T2_2B = (part("2B", "object and form", "Material age against morphological age",
          + todo("2B",
                 "Small before-and-after pairs from the field photographs and the aerials: an old parcel with a new house, an old route with a reconstructed street, an old sacred access with new paving, an old water corridor in a modern concrete channel."))
 T2_INTO_STAGE = '        <p class="xref">On the map below: the river city, the railway city and their layers. The channel’s own chronology sits with the water, in <a href="#t1-1c">Theme 1</a>.</p>\n'
+T2_2CD_TODO = todo("2C–2D",
+                   "Recast the steps above as four spatial regimes, river city, railway city, reconstruction city and road city, rather than a sequence of events.",
+                   "A before-and-after plan of the railway: which way the city faced before it, and which axes mattered after it, the riverfront against the station.")
 T2_2E = (part("2E", "rupture", "Disaster and reconstruction", "t2-2e")
          + '        <p class="xref">Here disaster matters only as a rupture in time: what physically changed afterwards. Its mechanisms belong to <a href="#t3">Theme 3</a>, where the fire that followed the last Nankai earthquake is listed among the slower pressures.</p>\n'
          + todo("2E",
@@ -109,6 +112,8 @@ T4_HEAD = head("t4", "Theme 4 · Flows", "Movement and networks", "What makes th
                "So far the city has been read as geometry. Now the same city is read as movement.")
 T4_4A = (part("4A", "the framework", "The three structures and the two lenses", "t4-4a")
          + '        <p class="kmk-p">This page reads urban form in three structures: the ground (下部構造), the lots (中部構造), and the buildings and open spaces on them (上部構造). Read only as structures, the city stands still. Shingū needs two more lenses: flows (流れ), which this theme follows, and representation (まなざし), which <a href="#t6">Theme 6</a> takes up.</p>\n')
+T4_4B_TODO = todo("4B",
+                   "One basin map of successive and overlapping flows with the hazards stripped away: water, timber, pilgrims, goods, river transport, railway, roads, tourism. The prologue’s map of timber and sea lanes and the pilgrim map above are its first layers.")
 T4_4D = (part("4D", "a temple in a network", "Myōshinji as a network node", "t4-4d")
          + lead("Physical size and network importance are not the same thing."))
 T4_4D_TODO = todo("4D",

@@ -184,8 +184,9 @@ ind = lambda b: "        " + b + "\n"
 
 # 1B: the ground — headline, profiles, then the method in a drawer
 stop_h3, p_dem, p_four, f_profiles = g_stop
-# 1F: alignment
-follow = g_follow
+# 1F: alignment — the result stays in view, the design of the test goes in a drawer after it (the plan: “Test robustness”)
+f_h3, p_test, f_effect, p_result, f_offsets = g_follow
+assert "The test therefore uses only the places where the foot bends" in p_test and "only the lanes pass the false-discovery control" in p_result
 # 1E: parcels — registration in a drawer
 lots_h3, p_reg, p_two = g_lots
 p_two = rep1(p_two, "(−1.7 m to +0.9 m across the seven runs)", "(−1.7 m to +0.9 m across the seven runs of the test below)")
@@ -305,14 +306,15 @@ theme1 = sec(T.T1_HEAD
              + T.T1_1D
              + ind(with_code(lots_h3, "1E", "t1-1e")) + T.T1_1E
              + methods("Method · registering the parcel map", p_reg) + ind(p_two) + ind(p_chan_parcels) + T.T1_1E_TODO
-             + ind(with_code(follow[0], "1F", "t1-1f")) + T.T1_1F + "".join(ind(c) for c in follow[1:])
+             + ind(with_code(f_h3, "1F", "t1-1f")) + T.T1_1F + ind(f_effect) + ind(p_result) + ind(f_offsets)
+             + methods("Method · how the test works, and how robust it is", p_test)
              + ind(with_code(tr[0], "1G", "t1-1g")) + "".join(ind(c) for c in tr[1:]) + T.T1_1G_TODO
              + ind(k_dl)
              + "        </div>\n" + T.T1_CONC, "Theme 1: Ground")
 
 theme2 = (sec(T.T2_HEAD + T.T2_2A + T.T2_2B + T.T2_INTO_STAGE, "Theme 2: Time")
           + S_TIME
-          + cont(T.T2_2E + T.part("2F", "ghost morphology", "Nakagami and the vanished town", "t2-2f") + T.T2_2F_LEAD
+          + cont(T.T2_2CD_TODO + T.T2_2E + T.part("2F", "ghost morphology", "Nakagami and the vanished town", "t2-2f") + T.T2_2F_LEAD
                  + ind(nakagami) + T.T2_2F_TODO + T.T2_CONC, "Theme 2: Time, continued"))
 
 foot = kdiv(T.T3_FOOT + ind(k_lead)
@@ -331,7 +333,7 @@ theme3 = (sec(T.T3_HEAD, "Theme 3: Hazard")
 
 theme4 = (sec(T.T4_HEAD + T.T4_4A + HINGE, "Theme 4: Flows")
           + S_FLOW
-          + cont(T.T4_4D + kdiv(ind(p_layers[0]), ' data-kmk="network"') + T.T4_4D_TODO
+          + cont(T.T4_4B_TODO + T.T4_4D + kdiv(ind(p_layers[0]), ' data-kmk="network"') + T.T4_4D_TODO
                  + T.T4_FN + ind(fn_study) + T.T4_4G_TODO, "Theme 4: Flows, continued")
           + S_NET
           + cont(T.T4_CONC, "Theme 4: conclusion"))
