@@ -7,3 +7,7 @@
   - "Apply it" means restructuring the page as it says.
   - It is not deployed: the Pages build copies only `index.html`, `kansai/index.html`, `kansai/data`, `kansai/img` and the
     standalone map folders.
+- The six-theme version of the page lives on the branch `claude/kansai-six-themes`. It is built from main's page by
+  `kansai/tools/six/six.py`, with its new text in `texts.py` (see that folder's README).
+  - Placeholders (`.todo`, with the plan's part code) mark evidence still to add.
+  - A deploy fails while any remain.

@@ -121,7 +121,7 @@ if (!fills.land || fills.land === 'none' || fills.land === fills.sea) err('land-
 async function stepChecks(pg, tag) {
   const n = await pg.evaluate(() => { if (window.__QA) window.__QA.hold(true); return window.__QA ? window.__QA.steps : 0; });
   for (let i = 0; i < n; i++) {
-    await pg.evaluate((i) => document.querySelectorAll('.step')[i].scrollIntoView({ block: 'center' }), i);
+    await pg.evaluate((i) => document.querySelectorAll('.step')[i].scrollIntoView({ block: 'center', behavior: 'instant' }), i);   // the page scrolls smoothly; a check must not wait on it
     await pg.waitForTimeout(60);
     const r = await pg.evaluate((i) => {
       const Q = window.__QA; Q.activate(i);
@@ -188,7 +188,7 @@ if (hasQA) await stepChecks(page, 'desktop');
 
 // 4. zoom controls: in / out / reset, clamps, wheel + drag
 if (hasQA) {
-  await page.evaluate(() => { window.__QA.hold(false); document.querySelectorAll('.step')[0].scrollIntoView({ block: 'center' }); });
+  await page.evaluate(() => { window.__QA.hold(false); document.querySelectorAll('.step')[0].scrollIntoView({ block: 'center', behavior: 'instant' }); });
   await page.waitForTimeout(1600);
   const z = await page.evaluate(async () => {
     const Q = window.__QA; Q.activate(0);
@@ -352,6 +352,8 @@ if (hasQA) {
     // imagery: one switch drives every map; each map has one
     const btns = document.querySelectorAll('.satbtn').length, maps = document.querySelectorAll('#map, .mini svg.m, #ksmap svg.km, #kmkmap svg.kmk-svg, #fnmap svg.fn-svg').length;
     if (btns < maps) out.push(['satellite', `${maps} maps but ${btns} satellite switches`]);
+    // the main map is shared by the stages and requests imagery only where it is on screen: bring it into view first
+    document.getElementById('map').scrollIntoView({ block: 'center', behavior: 'instant' }); await wait(300);
     Q.satSet(true); await wait(50);
     if (!document.body.classList.contains('sat-on') || [...document.querySelectorAll('.satbtn')].some((b) => b.getAttribute('aria-pressed') !== 'true')) out.push(['satellite', 'the switch does not reach every map']);
     if (!document.querySelectorAll('#world .satg image').length) out.push(['satellite', 'imagery tiles are not requested on the main map']);
@@ -472,10 +474,13 @@ const minis = await page.evaluate(() => {
 });
 minis.forEach(([c, v]) => err('mini-frame', `mini-map view leaves the data frame ${JSON.stringify(v)}`, c));
 
+// placeholders for evidence still to come (.todo): kept out of the inventory, reported to run.py
+const todos = await page.evaluate(() => [...document.querySelectorAll('.todo')].map((e) => e.getAttribute('data-plan') || '?'));
 // 7. text inventory: everything a reader can see or hear (prose, charts, map labels, tooltips, legends, aria)
 const inv = await page.evaluate(() => {
   const out = [], Q = window.__QA, add = (src, t) => { if (t && /\S/.test(t)) out.push({ src, text: t.replace(/\s+/g, ' ').trim() }); };
-  const skip = (el) => el.closest('script, style, #scalebar, .msb, .zoomctl, .zc, noscript, title, desc');
+  // .todo: an editorial placeholder for evidence still to come, not a claim; run.py reports it and fails a deploy while any remain
+  const skip = (el) => el.closest('script, style, #scalebar, .msb, .zoomctl, .zc, noscript, title, desc, .todo');
   // one item per leaf block (a paragraph, a stat box, a chart label …), so claims can be matched whole
   const BLOCK = 'p, li, h1, h2, h3, h4, h5, h6, figcaption, .cap, td, th, dt, dd, blockquote, .stats > div, .chain .i, .mini figcaption > span, svg text, button, .viewname, .zhint, .attrib';
   const blocks = [...document.body.querySelectorAll(BLOCK)].filter((e) => !skip(e) && !e.querySelector(BLOCK));
@@ -580,5 +585,5 @@ if (hasQA) await stepChecks(m.page, 'mobile');
 await m.ctx.close();
 await browser.close();
 
-writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints, tiles, links, fn: fnReport }, null, 1));
+writeFileSync(reportPath, JSON.stringify({ errors, warnings, inventory: inv, usedPoints, tiles, links, fn: fnReport, todos }, null, 1));
 console.log(`render QA: ${errors.length} error(s), ${warnings.length} warning(s), ${inv.length} text items`);

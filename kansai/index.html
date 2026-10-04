@@ -713,6 +713,39 @@
         #world .L, .step, #overlay g.og { transition: none; }
         .flow_kitayama path, .flow_kumano path, .sea_osaka path, .sea_edo path { animation: none; }
       }
+
+      /* ---------- six themes (kansai/SHINGU.md): heads, parts, drawers, placeholders ---------- */
+      .theme-head { max-width: 54rem; margin: 3.6rem 0 1.4rem; padding-top: 1.6rem; border-top: 2px solid var(--accent); }
+      .topsec .theme-head { margin-top: 1.4rem; }
+      .theme-head .tkick { font-family: "Cormorant Garamond", serif; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); font-size: 0.92rem; margin: 0 0 0.35rem; }
+      .theme-head h2 { font-family: "Cormorant Garamond", "Noto Serif JP", serif; font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.2; letter-spacing: 0.01em; margin: 0 0 0.45rem; text-transform: none; }
+      .theme-head .tq { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.35rem; color: var(--ink-soft); margin: 0 0 0.5rem; }
+      .theme-head .tseq { font-size: 0.84rem; letter-spacing: 0.03em; color: var(--ink-faint); margin: 0 0 0.6rem; }
+      .tlead { font-family: "Cormorant Garamond", "Noto Serif JP", serif; font-size: 1.3rem; line-height: 1.5; max-width: 48rem; margin: 0.5rem 0 1rem; color: var(--ink); }
+      .tconc { font-family: "Cormorant Garamond", "Noto Serif JP", serif; font-size: 1.38rem; line-height: 1.55; max-width: 50rem; margin: 2.2rem 0 0.6rem; padding: 0.2rem 0 0.2rem 1rem; border-left: 3px solid var(--accent); }
+      .pcode { display: inline-block; font: 600 0.72rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.04em; text-transform: none; color: var(--paper); background: var(--accent); border-radius: 2px; padding: 0 0.32rem; margin-right: 0.35rem; vertical-align: 0.12em; }
+      .part-tag { margin: 1.6rem 0 0.4rem; font-family: "Cormorant Garamond", serif; letter-spacing: 0.12em; color: var(--ink-soft); }
+      .after.theme { padding-bottom: 1rem; }
+      .after.theme-cont { padding-top: 1.4rem; padding-bottom: 1.4rem; }
+      .todo { max-width: 52rem; margin: 0.8rem 0 1.4rem; padding: 0.65rem 0.95rem 0.3rem; border: 1px dashed #b26a26; border-radius: 3px; background: rgba(251,231,161,0.28); font-size: 0.9rem; line-height: 1.6; }
+      .todo .todo-h { margin: 0 0 0.3rem; font-weight: 600; letter-spacing: 0.06em; color: #8a4b12; }
+      .todo p { margin: 0 0 0.45rem; }
+      details.methods { max-width: 52rem; margin: 0.2rem 0 1.4rem; padding: 0.3rem 0 0.3rem 0.9rem; border-left: 2px solid rgba(87,85,91,0.25); }
+      details.methods > summary { cursor: pointer; font-size: 0.9rem; color: var(--ink-soft); letter-spacing: 0.02em; }
+      details.methods[open] > summary { margin-bottom: 0.6rem; }
+      .xref { max-width: 52rem; font-size: 0.92rem; color: var(--ink-soft); }
+      .kx { appearance: none; font: inherit; color: var(--accent); background: none; border: 0; border-bottom: 1px dotted currentColor; padding: 0; cursor: pointer; }
+      .kx:hover, .kx:focus-visible { background: #fbe7a1; outline: none; }
+      .kcards.kcards-one { grid-template-columns: minmax(0, 40rem); }
+      .seqfig { margin: 0.6rem 0 1rem; }
+      .seqfig .cr { display: block; font-size: 0.66rem; color: var(--ink-faint); }
+      .seq { list-style: none; margin: 0; padding: 0 0 0.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr); gap: 0.5rem; overflow-x: auto; }
+      .seq li { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+      .seq img { width: 100%; height: 150px; object-fit: cover; border-radius: 2px; background: var(--paper-2); }
+      .seq span { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.35; }
+      .srcline { max-width: 52rem; font-size: 0.76rem; color: var(--ink-faint); line-height: 1.6; }
+      .tiers.repr { width: 100%; max-width: 46rem; table-layout: fixed; }
+      .tiers.repr th, .tiers.repr td { white-space: normal; overflow-wrap: anywhere; text-align: left; }
     </style>
   </head>
   <body>
@@ -834,41 +867,43 @@
       </div>
     </header>
 
-    <nav class="toc" id="contents" aria-label="Contents">
+        <nav class="toc" id="contents" aria-label="Contents">
       <p class="toc-h">Contents</p>
       <div class="toc-cols">
         <ul class="toc-g">
+          <li><a href="#prologue">Prologue · Why Shingū, why here?</a></li>
           <li><a href="#intro">Shingū at a glance</a></li>
           <li><a href="#kumano-system">The Kumano as one system</a></li>
-          <li><a href="#finding">Finding, strategy, test</a></li>
         </ul>
         <ol class="toc-g toc-ch">
-          <li><a href="#ch1">Convergence created the city</a></li>
-          <li><a href="#ch2">Morphology, sacred landscape and adaptation</a></li>
-          <li><a href="#ch3">Four hazard pathways converge</a></li>
-          <li><a href="#ch4">Resilience through selective concentration</a></li>
-          <li><a href="#ch5">Resilience extends beyond the resident population</a></li>
-          <li><a href="#ch6">The watershed defines the governance scale</a></li>
+          <li><a href="#t1">Ground · what structures space?</a></li>
+          <li><a href="#t2">Time · what survives change?</a></li>
+          <li><a href="#t3">Hazard · how does disturbance produce form?</a></li>
+          <li><a href="#t4">Flows · what makes the city operate?</a></li>
+          <li><a href="#t5">Everyday · how are these systems inhabited?</a></li>
+          <li><a href="#t6">Representation · why have we not seen the city this way?</a></li>
         </ol>
         <ul class="toc-g">
-          <li><a href="#synthesis">Synthesis · one city, several geographies</a></li>
-          <li><a href="#resistance">From accommodation to resistance</a></li>
+          <li><a href="#kamikura">The Kamikura micro-study</a></li>
           <li><a href="#fieldnotes">Field notes · Shingū’s three shrines by bicycle</a></li>
-          <li><a href="#kamikura">Kamikura mountain foot · the refuge inside the hazard</a></li>
           <li><a href="#sources">Sources &amp; method</a></li>
         </ul>
       </div>
     </nav>
 
-    <section class="topsec" id="intro" aria-label="Shingū at a glance and the Kumano river system">
+    <section class="topsec" id="intro" aria-label="Prologue: Shingū at a glance and the Kumano river system">
+      <header class="theme-head" id="prologue">
+        <p class="tkick">Prologue</p>
+        <h2 id="prologue-h">Why Shingū, why here?</h2>
+        <p class="tlead">A shrinking city remains a disproportionately important regional node because of the geography that formed it.</p>
+        <p class="tseq">regional node + shrinking population + mountain, river and sea</p>
+      </header>
 <div class="glance">
         <div class="gtext">
           <h2 class="sec">Shingū at a glance</h2>
           <p>Shingū is a small city carrying a large region. The 2025 census counted 24,331 residents, 10% fewer than in 2020 and barely half the 1960 peak of 45,666; 40.3% are 65 or older, and in fiscal 2025 the city registered 109 births against 486 deaths. Since the 2005 merger with Kumanogawa the municipality covers 255 km², yet 96% of its people live in the former city on 31% of the land. The Kumanogawa valleys, the other 69%, hold 906.</p>
           <p>The economy that built the town has changed form. Kumano timber was rafted down to Shingū until the mid-1960s, and the pulp and paper mill closed in 1995; health and welfare now employ one worker in five, trade another fifth, and farming, forestry and fishing 2.2%. The daytime population is 109% of the resident one because the region comes in to work, shop and be treated: the municipal medical centre (285 beds) serves about 100,000 people in three prefectures. Timber still dominates the port, as wood chips: 81% of its 1.19 million tonnes in 2024.</p>
-          <p>The name, “new shrine”, belongs to Kumano Hayatama Taisha, one of the three Kumano shrines. With Kamikura Shrine, the islet of Mifune-jima and the river itself it has been part of a World Heritage property since 2004. The Mizuno family governed the castle town for the Kishū Tokugawa from 1619 until the end of the Edo period. Shingū produced the poet Satō Haruo, the novelist Nakagami Kenji and the educator Nishimura Isaku. Its doctor Ōishi Seinosuke, executed in the High Treason case of 1911, was declared wrongly convicted by the city council in 2001 and made an honorary citizen in 2018.</p>
-          <p>It is also a hinge between regions: the junction where JR Central’s line from Nagoya (about 3 h 20 min) meets JR West’s from Shin-Ōsaka (about 4 h); a river-border town facing Kihō in Mie; and, by that village’s own account, the reason Kitayama, Japan’s only exclave village, chose Wakayama in 1871: its raftsmen lived off the Shingū timber trade.</p>
-          <p class="gsrc">Sources: census 2020/2025 (Statistics Bureau, e-Stat); Wakayama Prefecture; <a class="doc" href="https://www.city.shingu.lg.jp/Info/10" target="_blank" rel="noopener">Shingū City profile</a>; <a class="doc" href="https://hsp.shingu.wakayama.jp/about/" target="_blank" rel="noopener">Shingū Municipal Medical Center</a>; MLIT port statistics 2024; Agency for Cultural Affairs; <a class="doc" href="https://www.city.shingu.lg.jp/Info/46" target="_blank" rel="noopener">honorary citizens</a>; <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/081300/d00214686.html" target="_blank" rel="noopener">Wakayama on the High Treason case</a>; <a class="doc" href="https://www.vill.kitayama.wakayama.jp/kanko/about/" target="_blank" rel="noopener">Kitayama village</a>.</p>
+          <p class="gsrc">Sources: census 2020/2025 (Statistics Bureau, e-Stat); Wakayama Prefecture; <a class="doc" href="https://www.city.shingu.lg.jp/Info/10" target="_blank" rel="noopener">Shingū City profile</a>; <a class="doc" href="https://hsp.shingu.wakayama.jp/about/" target="_blank" rel="noopener">Shingū Municipal Medical Center</a>; MLIT port statistics 2024.</p>
         </div>
         <aside class="gside" aria-label="Shingū in figures">
           <div class="stats gstats">
@@ -894,8 +929,6 @@
           <div class="gphotos">
             <figure class="fig photo"><img src="img/shingu_view_from_kamikura.jpg" alt="Central Shingū and the Pacific from Kamikura Shrine." width="1280" height="960" loading="lazy" decoding="async"><figcaption>Central Shingū and the Pacific from Kamikura Shrine.<span class="cr">Photo: 663highland, CC BY 2.5 · <a href="https://commons.wikimedia.org/wiki/File:Kamikura-jinja08s1680.jpg" target="_blank" rel="noopener">source</a></span></figcaption></figure>
             <figure class="fig photo"><img src="img/shingu_aerial_2019.jpg" alt="The castle hill, the lowland and the river mouth from the air (GSI, 2019)." width="1262" height="1280" loading="lazy" decoding="async"><figcaption>The castle hill, the lowland and the river mouth from the air (GSI, 2019).<span class="cr">Photo: 国土地理院 (GSI), GSI content terms (CC BY 4.0-compatible) · <a href="https://commons.wikimedia.org/wiki/File:Shingu_city_center_area_Aerial_photograph.2019.jpg" target="_blank" rel="noopener">source</a></span></figcaption></figure>
-            <figure class="fig photo"><img src="img/sato_haruo_museum.jpg" alt="Satō Haruo Memorial Museum, in the Hayatama precinct." width="1280" height="720" loading="lazy" decoding="async"><figcaption>Satō Haruo Memorial Museum, in the Hayatama precinct.<span class="cr">Photo: Bioika0201, CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Sato_Haruo_Memorial_Museum07.jpg" target="_blank" rel="noopener">source</a></span></figcaption></figure>
-            <figure class="fig photo"><img src="img/nishimura_house.jpg" alt="The house Nishimura Isaku designed for himself, now his memorial museum." width="1280" height="851" loading="lazy" decoding="async"><figcaption>The house Nishimura Isaku designed for himself, now his memorial museum.<span class="cr">Photo: Asturio Cantabrio, CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Former_Nishimura_House_2021-10_ac_(1).jpg" target="_blank" rel="noopener">source</a></span></figcaption></figure>
           </div>
         </aside>
       </div>
@@ -916,28 +949,6 @@
       </div>
     </section>
 
-    <section class="board" id="finding" aria-label="Finding, strategy, test">
-      <div>
-        <h3>FINDING</h3>
-        <p>Shingū’s location plan concentrates the town where the water goes: 58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami. Evacuation is meant to close that gap and does so only under conditions. In central Shingū the margin hangs on the 2026 model, which keeps road and rail embankments standing and brings the water late; with water by 15 minutes, 2,040 residents of the zone fall short at Wakayama’s rule of leaving at 5 minutes and walking at 0.5 m/s. In the part of Kihō the animation covers, 75% fall short at the same rule.</p>
-      </div>
-      <div>
-        <h3>STRATEGY</h3>
-        <p class="formula">Concentrate + connect + accommodate + evacuate + coordinate</p>
-        <div class="picto-row">
-          <figure><svg><use href="#pg-concentrate"/></svg><figcaption>Concentrate<small>a compact hierarchy of centres</small></figcaption></figure>
-          <figure><svg><use href="#pg-connect"/></svg><figcaption>Connect<small>mountain communities stay linked</small></figcaption></figure>
-          <figure><svg><use href="#pg-accommodate"/></svg><figcaption>Accommodate<small>buildings live with inundation</small></figcaption></figure>
-          <figure><svg><use href="#pg-evacuate"/></svg><figcaption>Evacuate<small>elevation as life-safety</small></figcaption></figure>
-          <figure><svg><use href="#pg-coordinate"/></svg><figcaption>Coordinate<small>the whole watershed</small></figcaption></figure>
-        </div>
-        <p>Urban functions are gathered into a compact hierarchy of centres; mountain communities remain connected through transport and local service nodes; development is progressively steered away from severe hazard; buildings and infrastructure accommodate recurring inundation; evacuation converts nearby elevation into life-safety infrastructure; river governance expands to the scale of the entire Kumano watershed.</p>
-      </div>
-      <div class="lesson">
-        <h3>TEST</h3>
-        <p>Each strategy is held to what it has to deliver: time to leave before the water arrives, roads that stay open to the dry hub, a channel that carries the flood of record. By those tests the plan sorts risk by type more than it reduces it: water in the centre, slope at the hub, time at the edges.</p>
-      </div>
-    </section>
     <p class="scroll-hint">↓ scroll — the map follows the text; zoom it any time (＋ − or Ctrl/⌘ + wheel, drag to pan)</p>
 
     <main class="stage" id="stage">
@@ -968,14 +979,172 @@
       </div>
 
       <div class="steps" id="steps">
-        <!-- ============ 1 ============ -->
-        <div class="chapter" id="ch1"><p class="cn">1</p><h2>Convergence created the city</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate</div></div>
+        <div class="chapter" id="ch-p"><p class="cn">P</p><h2>Mountain, river, sea</h2><div class="tags">the convergence that formed the city</div></div>
 
         <article class="step" data-view="hinterland" data-name="Hinterland · river and sea" data-on="basin-faint river_main river_trib flow_kitayama flow_kumano sea_osaka sea_edo pref" data-overlay="base-region towns-flow flows-labels" data-legend="flows sealane pref">
           <div class="card">
             <p>Shingū’s regional centrality is a direct expression of physical geography. The lower Kumano drains a mountainous hinterland, while the Pacific opens the city toward maritime Japan. Goods, people, religious authority and political power accumulated where these networks converged: timber, charcoal and other goods moved downstream from the Kii Mountains, then outward through Ikeda port at the river mouth toward Edo and other markets. The town is still called <span lang="ja">熊野の都</span>, the metropolis of Kumano, in the city’s <a class="doc" href="https://www.city.shingu.lg.jp/Info/402" target="_blank" rel="noopener">Urban Planning Master Plan (<span lang="ja">都市計画マスタープラン</span>)</a>.</p>
           </div>
         </article>
+
+        <article class="step" data-view="region" data-name="Kii Mountains · relief and forest" data-on="shade forest park park_sp river_main river_trib pref" data-overlay="base-region peaks" data-legend="shade forest park parksp peak river" data-ranges>
+          <div class="card">
+            <p>Shingū’s physical form also records how the town has lived with an unstable river and unstable slopes.</p>
+            <figure class="fig">
+              <div class="stats"><div><b>86%</b><span>of the land on this sheet is forest</span></div><div><b>1,915 m</b><span>Hakkyō, the highest summit on the sheet</span></div><div><b>253 m</b><span>Gongen-yama, the hill behind Shingū</span></div></div>
+              <div class="cap">Map: GSI hill shading; forest from MLIT’s land-use mesh (L03-b, 2021); natural-park zones from MLIT A10 (2015), which covers national, quasi-national and prefectural parks without naming them, darker where specially protected; summits and heights from OpenStreetMap. Range names follow the line of their summits.</div>
+            </figure>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <section class="after theme" aria-label="Theme 1: Ground">
+      <header class="theme-head" id="t1">
+        <p class="tkick">Theme 1 · Ground</p>
+        <h2 id="t1-h">Landform, water and the physical structure of the city</h2>
+        <p class="tq">What structures space?</p>
+        <p class="tseq">terrain → water → bridges → parcels → section</p>
+      </header>
+        <div class="kmk" id="kamikura-study">
+        <h3 class="trio-head" id="kamikura"><b><span class="pcode">1A</span> the micro-study</b>Kamikura–Myōshinji: one physical system</h3>
+        <p class="tlead">This is not “a shrine neighbourhood.” It is one physical system: mountain edge + drainage + parcels + houses + institutions.</p>
+        <p class="intro">One small piece of ground holds every system in this essay at once. At the foot of Kamikura-yama the sacred mountain and its stone steps, the city’s drainage channel at the head of the Ichida-gawa system, a row of temples and houses, a school compound and the town grid touch within a few hundred metres. Theme 1 reads that ground plot by plot, on GSI’s 1 m laser elevation model, layer by layer: the ground (下部構造), the lots (中部構造), the buildings and open spaces on them (上部構造) and what flows through (流れ).</p>
+        <div class="kmk-top">
+          <div class="kmk-text">
+            <p><b>Drawn by rules, not as a box.</b> <span class="kh" data-ks="bichikei" tabindex="0">West</span>: 25 m upslope of the break of slope, so the forest edge, the slope and the steep ground behind the plots are inside. <span class="kh" data-ks="kokyo" tabindex="0">East</span>: the street that bounds the compound of 神倉小学校 (Kamikura Elementary School). <span class="kh" data-ks="yashiki" tabindex="0">North</span>: the lane that closes the first full block above the school and the temple row. <span class="kh" data-ks="keidai" tabindex="0">South</span>: the street just south of the shrine entrance, so the entrance, the bridge and the foot of the steps are inside and the climb to Gotobiki-iwa is not.</p>
+            <div class="stats kstats">
+              <div><b>5.23 ha</b><span>study area, 286 m north–south × 234 m east–west</span></div>
+              <div><b>127</b><span>buildings; 28% of the ground is built over</span></div>
+              <div><b>3.4–40.2 m</b><span>ground height inside; the plain lies at 6.6 m</span></div>
+              <div><b>287 m</b><span>of 神倉堀端都市下水路 inside the line: about 3.5 m of visible channel, 4–5 m from wall to wall</span></div>
+            </div>
+            <p>Pick a system below, or hover its name: the map redraws the same ground for it. Under the map, switch the ground itself.</p>
+          </div>
+          <figure class="kmk-fig">
+            <div class="kmf" id="kmkmap"></div>
+            <div class="kbase" role="group" aria-label="Ground drawn under the map"><span>Ground</span><button type="button" class="kbase-b" data-kb="relief" aria-pressed="true">relief</button><button type="button" class="kbase-b" data-kb="elev" aria-pressed="false">height</button><button type="button" class="kbase-b" data-kb="slope" aria-pressed="false">slope</button><button type="button" class="kbase-b" data-kb="lrm" aria-pressed="false">local relief</button><button type="button" class="kbase-b" data-kb="curv" aria-pressed="false">curvature</button></div>
+            <div class="kramp" id="kmkramp" hidden></div>
+            <ul class="klegend" id="kmkleg"></ul>
+            <figcaption>Ground: GSI DEM1A, bare ground from airborne laser, one pixel per metre. Buildings, channel banks and road edges: GSI 最適化ベクトルタイル. Parcels: 「登記所備付地図データ 新宮市」（法務省）, registered and redrawn here (approximate). Streets, paths and precincts: © OpenStreetMap contributors (the school’s OSM name, 千穂小学校, predates the 2012 merger). Hazard and plan areas: MLIT 国土数値情報 A33 (2025), A31a (2025), A55 (FY2024); tsunami: Wakayama’s 2026 maximum, digitised from its maps. Zoom with the buttons, ctrl-scroll or a double-click.</figcaption>
+          </figure>
+        </div>
+        <div class="ksyschips" role="group" aria-label="Spatial systems, by layer">
+          <button type="button" class="kchip" data-ks="all" aria-pressed="true">All systems</button>
+          <span class="kgrp"><b>下部構造</b> ground</span>
+          <button type="button" class="kchip" data-ks="bichikei" aria-pressed="false">微地形 micro-relief</button>
+          <span class="kgrp"><b>中部構造</b> lots</span>
+          <button type="button" class="kchip" data-ks="yashiki" aria-pressed="false">町割・屋敷割 plots</button>
+          <button type="button" class="kchip" data-ks="keidai" aria-pressed="false">境内 precincts</button>
+          <span class="kgrp"><b>上部構造</b> buildings and open space</span>
+          <button type="button" class="kchip" data-ks="seikatsu" aria-pressed="false">生活 everyday life</button>
+          <button type="button" class="kchip" data-ks="kokyo" aria-pressed="false">現代公共空間 public space</button>
+          <span class="kgrp"><b>流れ</b> flows</span>
+          <button type="button" class="kchip" data-ks="suikei" aria-pressed="false">水系 water</button>
+          <button type="button" class="kchip" data-ks="michi" aria-pressed="false">道 paths</button>
+          <button type="button" class="kchip" data-ks="saigai" aria-pressed="false">災害 hazard</button>
+          <button type="button" class="kchip" data-ks="shinko" aria-pressed="false">信仰 sacred</button>
+        </div>
+        <div class="kcards">
+          <article class="kcard" data-ks="bichikei" tabindex="0"><h4><span>下部構造 · micro-relief</span>微地形</h4><p>The mountain does not grade into the town; it stops: 40° above the foot, 1° below it. Across the 25 m strip inside the west edge the ground rises 22.6 m (median; at most 33.8 m), then the plain stays near 6.6 m. In the town the bare-earth model finds no step of 1 m or more outside the buildings and the channel; every such step lies on the mountain face above the foot.</p></article>
+          <article class="kcard" data-ks="yashiki" tabindex="0"><h4><span>中部構造 · plots</span>町割・屋敷割</h4><p>The Ministry of Justice parcel map here is a digitised cadastral drawing in arbitrary coordinates (任意座標系); fitted to GSI’s road edges, its road parcels sit a median 1.2 m from them. On the median its numbered parcels stop at the foot of the mountain; row by row the edge wanders (the middle half of the rows from 10 m upslope to 12 m out). Buildings are coloured by the alignment test below.</p></article>
+          <article class="kcard" data-ks="keidai" tabindex="0"><h4><span>中部構造 · precincts</span>境内</h4><p>The sacred properties sit between the slope and the channel: the shrine’s lower precinct at the entrance (1,217 m² inside the line); north of it 妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the Kumano shrines; and the Zen temple 宗応寺 further north. Across the channel, on the town side, lie the grounds of the 出雲大社新宮教会 (734 m²), a separate body.</p></article>
+          <article class="kcard" data-ks="seikatsu" tabindex="0"><h4><span>上部構造 · everyday life</span>生活</h4><p>Houses on small plots fill the blocks between precincts, school and streets: 126 of the 127 footprints are mapped as ordinary buildings (普通建物); the one robust building (堅ろう) is the school’s.</p></article>
+          <article class="kcard" data-ks="kokyo" tabindex="0"><h4><span>上部構造 · public space</span>現代公共空間</h4><p>The school compound is the one large open ground: 1.20 ha inside the line, nearly a quarter of it, along the east bank of the channel. Its building is the refuge for earthquake and tsunami (third floor, 14.3 m); its gym, a core shelter, is the refuge for floods and sediment disasters. Across the channel two private projects turn old plots into public space: Youth Library えんがわ (2013), a library in an old house, and おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it.</p></article>
+          <article class="kcard" data-ks="suikei" tabindex="0"><h4><span>流れ · water</span>水系</h4><p>神倉堀端都市下水路, the Kamikura Horibata Urban Drainage Channel: a municipal drainage channel in the upper Ichida-gawa system, crossing the area as an open, stone-faced channel cut up to 3.2 m below the plain. It comes in from the north on the town grid, cuts diagonally past the school and reaches the mountain only at the shrine entrance, where the stream from Kamikura-yama joins it after falling from 63.5 m to 4.7 m in 170 m. The headwater watercourse is also documented as Kamikura-gawa.</p></article>
+          <article class="kcard" data-ks="michi" tabindex="0"><h4><span>流れ · paths</span>道</h4><p>The streets keep to the town grid. The pedestrian routes do not: the 538 steps of the steep 男坂 (Otoko-zaka) and the gentler 女坂 (Onna-zaka) climb from the entrance, and the bridge over the channel is the threshold between town and mountain.</p></article>
+          <article class="kcard" data-ks="shinko" tabindex="0"><h4><span>流れ · sacred</span>信仰</h4><p>Gotobiki-iwa, where, by tradition, the Kumano gods first came down, lies outside the area, 330 m up the line. Inside it lies the threshold: the shrine’s lower precinct, the 下馬 stone, the 天磐盾 stele and the 猿田彦神社・神倉三宝荒神社 at the foot, and the last 20 m of the steps the torches run down every 6 February. Arrows at the edge point to 熊野速玉大社 (0.9 km), 阿須賀神社 (1.3 km) and the mouth of the Kumano (2.8 km).</p></article>
+        </div>
+        <h3 class="trio-head" id="t1-1b"><b><span class="pcode">1B</span> 下部構造 · ground</b>Where does Kamikura-yama stop?</h3>
+        <p class="tlead">Kamikura-yama does not gradually dissolve into town. It terminates in a measurable topographic threshold: 40° above the foot, 1° below it.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkfoot" role="img" aria-label="Four cross-profiles through the mountain foot with the four definitions of the foot"></svg></div><figcaption>Four cross-profiles in the study area, north to south: bare ground every metre from 40 m upslope to 60 m out, heights ×2. Under each profile, one row per definition (A–D) marks where it puts the foot; the black line is their median. Switch the ground under the map to read the same edge as height, slope, local relief (the ground against its 20 m surroundings: walls, terraces and the channel trench stand out) or profile curvature (concave at the foot, convex at shoulders and wall tops; smoothed over about 5 m, so narrower features are not read).</figcaption></figure>
+        <details class="methods"><summary>Method · how the foot is found, and how far the elevation model can be trusted</summary>
+          <p class="kmk-p"><b>The 1 m model holds here.</b> Every cell of the study area comes from GSI’s 1 m laser model (DEM1A); in the whole 1.3 × 0.9 km frame only 535 cells fall back to the 5 m model. It agrees with the GSI survey marks within 800 m of the study area: two of three levelling benchmarks to within 0.01 m and 0.14 m (the third reads 0.79 m low), the two triangulation points to within 0.08 m and 0.51 m. On open, flat ground the 5 m model agrees with it (median difference 0.9 cm, spread 3.5 cm), but it reads the channel as 0.93 m deep where the 1 m model reads 2.68 m: at 5 m the ditch that organises the foot all but disappears. The caveat is the buildings: 28% of the study area lies under a GSI outline, where bare ground is interpolated.</p>
+          <p class="kmk-p"><b>Four ways to find the foot.</b> On 310 cross-profiles, one every 2 m along 618 m of the front, the foot is located four ways: as the edge of the mountain mask (A), the first point 1 m above the profile’s own plain (B), the most concave point (C) and the knee of a two-segment line fitted to the profile (D). A and B both rest on a threshold 1 m above a plain, and they agree most closely (a median 1.5 m apart). Their median is the foot on the map; their spread is the band around it. The four agree within 5 m on 46.5% of the profiles; their median spread is 5.8 m, but on a tenth of the profiles it exceeds 31 m, and each lies a median 0.9–2.4 m from their common line. Where they agree, the answer is a line: above it the ground rises at a median 40°, below it at 1°. The face stays steep almost to the foot: on 46% of the profiles the steepest metre of the last six climbs at 45° or more (on 66% ten metres higher up), and then the ground flattens.</p>
+        </details>
+        <h3 class="trio-head" id="t1-1c"><b><span class="pcode">1C</span> 流れ · flows</b>One flow, several names</h3>
+        <p class="tlead">Water is channelled through the exact zone where mountain and urban plain meet.</p>
+        <p class="kmk-p">The channel through the study area is <b>神倉堀端都市下水路</b>, the <b>Kamikura Horibata Urban Drainage Channel</b>: a municipal drainage channel in the upper Ichida-gawa system. The headwater watercourse is also documented as Kamikura-gawa (神倉川). Shingū’s master plan lists it among the city’s urban drainage channels (都市下水路), apart from its entry for the river Ichida-gawa (河川). The names belong to different systems — hydrology, river administration, urban drainage — and overlap; none of them marks a legal point where one becomes the next.</p>
+        <ol class="kflow">
+          <li><b>千穂ヶ峰</b><span>Chihogamine, the source</span></li>
+          <li><b>神倉川</b><span>Kamikura-gawa: the headwater name in a 1997 prefectural assembly record, the city’s disaster plan (市田川神倉川右支渓) and MLIT’s purification transfer of 2000, which feeds it 0.3 m³/s of Kumano water</span></li>
+          <li><b>神倉堀端都市下水路</b><span>Kamikura Horibata Urban Drainage Channel: municipal storm drainage; 59.7 ha catchment, 779 m planned, 450 m improved (2012)</span></li>
+          <li><b>市田川</b><span>Ichida-gawa: a Class A river since 1970; MLIT describes it as rising on 千穂ヶ峰 and running 4.8 km to the Kumano (basin 5.36 km²)</span></li>
+          <li><b>熊野川</b><span>the Kumano</span></li>
+        </ol>
+        <p class="kmk-p"><b>Width.</b> Municipal design width: 1.5–2.0 m (the plan’s 管径巾員). GIS-measured visible channel: about 3.5 m. GIS-measured wall-to-wall corridor: about 4–5 m. The municipal figure and the GIS measurements refer to different definitions of channel width; no engineering cross-section has yet been located.</p>
+        <ol class="kchron">
+          <li><b>FY1959</b> Shingū starts building urban drainage channels for storm water.</li>
+          <li><b>1970–1975</b> The Ichida-gawa becomes a Class A river (1970); its lowest 2 km pass to direct national control (1972); the prefecture designates further land as river area along it and the Ukishima-gawa (1975, under River Act art. 6(1)(iii); the maps are not published online).</li>
+          <li><b>FY1999</b> MLIT’s national sewerage project archive records landscape works on 神倉堀端都市下水路 completed in FY1999 (平成11), including 740 m² of stone facing, scenic safety railings and 124 m of planting, listed under two model programmes (水循環・再生下水道モデル事業 and 水環境保全共同事業).</li>
+          <li><b>2012</b> The master plan counts 450 of its 779 planned metres as improved.</li>
+          <li><b>2025–2026</b> The FY2025 budget carries ¥4.53 million for the channel’s repair (神倉堀端下水路改修事業); stone-facing repair in 千穂 (30 m² of wall facing, a landscaping licence required) is tendered in August and again in September 2025, the works due by February 2026.</li>
+        </ol>
+        <h3 class="trio-head" id="t1-1d"><b><span class="pcode">1D</span> 流れ · crossings</b>Bridge census: where access crosses the water</h3>
+        <p class="tlead">What happens when a shared hydraulic corridor cuts across everyday access?</p>
+        <aside class="todo" data-plan="1D">
+          <p class="todo-h">To add · 1D</p>
+          <p>Show the channel continuously and mark every crossing of 神倉堀端都市下水路, classified by function: private dwelling access, shared or residential access, pedestrian access, institutional access, road crossing. Photograph representative types.</p>
+          <p>Start from <code>kansai/field/bridges.csv</code> (the crossings OpenStreetMap maps) and add the footbridges to private houses on site, as the field kit describes (<code>kansai/field/README.md</code>). Theme 1 owns the census and its geometry; Theme 5 returns to it with photographs only.</p>
+        </aside>
+        <h3 class="trio-head" id="t1-1e"><b><span class="pcode">1E</span> 中部構造 · lots</b>The parcel map on the ground</h3>
+        <p class="tlead">Property structure records a spatial order that is not identical to either terrain or present-day drainage infrastructure.</p>
+        <details class="methods"><summary>Method · registering the parcel map</summary>
+          <p class="kmk-p">The Ministry of Justice map for 千穂 and 神倉 (登記所備付地図データ, sheet 「新宮・千穂一丁目・神倉一丁目他」) is a digitised cadastral drawing in arbitrary coordinates (任意座標系). Its roads (道) and waterways (水) are unnumbered strips of their own; every other parcel carries a lot number (地番), whoever owns it. The strips make it possible to place the drawing: the school parcel (715-3) matched to the school’s outline gives a first position; the road parcels fitted to GSI’s 1:2,500 road edges give the final one. To fit, the drawing has to be enlarged by 13–16% and turned 14° (31% more area than drawn); its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m). Records descended from the Meiji land-tax surveys, in which residents measured their own land and drew the village maps, are said to run short (縄伸び): in the cadastral surveys certified from FY1970 to FY2011, MLIT finds surveyed areas 26% larger than registered ones on average, roads and waterways excluded. That compares registers, not drawings, but it points the same way. If the shortfall varied across the sheet, one affine fit could not absorb it. A thin-plate spline can bend the drawing to the road edges unevenly; its stiffness is chosen by fitting on two of the area’s three north–south thirds and testing on the third. The stiffest setting tried wins, practically the affine fit: on a third left out, the road parcels lie a median 1.3–2.1 m from the road edges with the spline, 1.3–1.9 m with the affine fit and 1.5–1.7 m with a uniform enlargement, against 1.2–1.3 m on the ground each was fitted to. An uneven stretch cannot be told from noise in these road edges, so none is applied; the spline and the uniform enlargement serve as the two other registrations in the runs below. Positions stay approximate; directions are what the test below uses.</p>
+        </details>
+        <p class="kmk-p">Two results do not depend on those details. <b>On the median, the numbered parcels end at the foot</b>: their western edge lies a median 0.3 m from it (−1.7 m to +0.9 m across the seven runs of the test below), though row by row it wanders, the middle half of the rows between 10 m upslope and 12 m out. And <b>the map’s waterway parcels keep a course of their own</b>, a median 35.5 m out from the foot (the middle half of the rows 21–46 m): numbered parcels fill the strip between the mountain and that line, a single parcel deep on half the rows. 宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next numbered parcel 7.5 m away, so the test counts that parcel as temple property; 妙心寺’s lies inside the school parcel, 0.8 m from its edge, among small parcels, so its plot cannot be identified at this accuracy and is left out.</p>
+        <p class="kmk-p"><b>The channel and the parcel map disagree.</b> Where the map covers it (from 64 m north of the study area to 34 m before the channel leaves it), today’s channel takes three courses. In the north (135 m) it runs in the map’s strips of road and waterway (59–71%; none of it inside a numbered parcel). Then for 79 m it cuts diagonally through numbered parcels (90–95%), 60–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others. In the south (about 100 m) it runs along the edge of the school parcel, at most 3–5 m inside it, and within 3 m of the map’s waterway for 40–73% of its length. The ranges span the three registrations. The drainage channel follows the grid, cuts through the parcels, then returns towards the drawn waterway along the foot.</p>
+        <aside class="todo" data-plan="1E">
+          <p class="todo-h">To add · 1E</p>
+          <p>Parcel size, depth, frontage and orientation as an analytical figure, and for each parcel whether it runs perpendicular or parallel to the slope, fronts the water, bridges it or is bisected by later infrastructure.</p>
+        </aside>
+        <h3 class="trio-head" id="t1-1f"><b><span class="pcode">1F</span> 下部構造 · ground</b>What follows the foot? Measured, not assumed</h3>
+        <p class="tlead">Are these apparent alignments statistically distinguishable from nearby urban fabric?</p>
+        <p class="kmk-p">The foot runs N 1° E along the 618 m measured and N 7° E over the 0.9 km of the frame; the town grid runs N 5° E: at the scale of the town, foot, grid and compass coincide, so the grid’s orientation alone cannot say whether the mountain or the compass drew it. The test therefore uses only the places where the foot bends 10° or more off the grid: 64% of the measured front, in 12 bends 14–80 m long. There, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square. Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. The effect is the share that follows the foot minus the share expected by chance, in percentage points; its 95% interval comes from resampling the front in 50 m blocks, which keeps neighbouring pieces together. The nine classes measured form one family, each in the band next to the foot, none left out for its result, and q controls the false discovery rate across them (Benjamini–Hochberg). The whole test is rerun with each single foot definition and with two other registrations of the parcel map; those runs show how far an effect moves with these choices and are not counted as votes.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkscore" role="img" aria-label="Which features follow the mountain foot within 25 m: the effect against chance with its 95% interval, the six other runs and the q-values of each class"></svg></div><figcaption>Within 25 m of the foot (steep steps: the 15 m above it), the effect: the share of the counted length that follows the foot (buildings weighted by footprint area) minus the share expected by chance (the same features with the foot’s directions slid along it by 50 m or more), in percentage points. Bar: its 95% interval, from resampling the front in 50 m blocks. Ticks: the same effect in the six other runs (each single foot definition, A–D; the similarity and the thin-plate-spline registration of the parcel map). q: the false discovery rate over the nine classes (Benjamini–Hochberg), with chance from slides of at least 50 m and, as a check, 100 m; orange where q &lt; 0.05. Rows run from the smallest q with 50 m.</figcaption></figure>
+        <p class="kmk-p"><b>Within 25 m, only the lanes pass the false-discovery control.</b> They follow the foot 25 points more often than chance (95% interval +1 to +57; q = 0.034); across the other runs their effect ranges from +6, with the hinge definition of the foot (D), to +25. The channel’s centre line (+34 points, −16 to +64; q = 0.069), the buildings (+31, +3 to +51; q = 0.052) and the back boundaries of the plots (+43, +9 to +59; q = 0.094; 8 of the 9 lines that can be tested follow) lean the same way without passing it; the channel’s banks lean less (+20, −17 to +44; q = 0.179). Chance drawn from slides of at least 100 m instead of 50 m changes this: the back boundaries (q = 0.021) and the buildings (q = 0.042) then pass too, the channel still not (q = 0.064). Which of them hold depends on how far along the front the foot’s bends are taken to echo. Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude. Frontages, temple, shrine and church grounds, the drawn waterway and the steep steps on the foot face show no effect that holds with either slide (q 0.321 or more): their intervals straddle zero or, for the frontages, lie below it. <b>Beyond 25 m, nothing holds</b> but two frontages in one place, 50–100 m out from the foot just north of the study area, and only with the 100 m slide (q = 0.046 over all 29 class-and-band tests); with the 50 m slide, none of the 20 tests beyond 25 m comes below q = 0.24. A dozen short bends carry the whole test, so the intervals are wide. The terrain draws the edge of the town and, within 25 m of it, bends the lanes; the channel, the buildings and the plots lean with it, but a front this short cannot settle them.</p>
+        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkoff" role="img" aria-label="Distance from the mountain foot to the edge of the numbered parcels, the nearest lane, the cadastral waterway and the channel"></svg></div><figcaption>Row by row, every 2 m along the front: distance from the foot to the western edge of the numbered parcels in the parcel map, to the nearest lane, to the waterway parcels of the parcel map and to today’s channel, each over the rows where it is found (the lanes on 305 rows, the waterway parcels on 139). Dot: median; bar: the middle half of the rows.</figcaption></figure>
+        <h3 class="trio-head" id="t1-1g"><b><span class="pcode">1G</span> 流れ · flows</b>Transect: Gotobiki-iwa → the steps → the channel → houses → national road → city hall</h3>
+        <p class="kmk-p">One line runs through the area: from the summit shrine at Gotobiki-iwa (ground at 88.3 m on the 1 m model; the rock itself is about 11 m high) down the path and the 538 steps to the bridge at their foot (6.6 m), then due east across the town to the city hall (8.5 m), 1,132 m in all. The first 331 m are mountain. Outside the channels, the town part lies between 3.7 m and 8.6 m; it dips to 2.1 m in the Ukishima-gawa channel and rises again towards the city hall.</p>
+        <figure class="kmk-prof"><p class="vscroll-hint">Scroll the profile sideways →</p><div class="vscroll"><svg id="kmkprof" role="img" aria-label="Ground profile along the transect, from Gotobiki-iwa to the city hall"></svg></div><figcaption>Bare ground on GSI DEM1A, sampled every 2 m along the path, the steps and the line to the city hall; heights ×2. Under the line: what it crosses. Hover the profile or the dashed line on the map and the same point lights in both.</figcaption></figure>
+        <aside class="todo" data-plan="1G">
+          <p class="todo-h">To add · 1G</p>
+          <p>Make the transect one of the largest visuals on the page and annotate, at this stage only, relief, slope, runoff, the channel, the parcel and building fabric and the school. Themes 3 and 5 reuse the same section and add risk, then meaning.</p>
+        </aside>
+        <p class="kmk-dl">For GIS: <a href="data/kamikura_study.geojson" download>GeoJSON</a> · <a href="data/kamikura_study.kml" download>KML</a>: the study area, its four edges with their rules, the break of slope, the mountain foot and the transect, in WGS84. <a href="data/kamikura_cadastre.geojson" download>Parcel map (GeoJSON)</a>: the registered cadastral drawing, approximate, without parcel numbers. Rebuilt by kansai/tools/kamikura.</p>
+        </div>
+        <p class="tconc">The ground does not merely underlie Shingū. It establishes spatial constraints to which water, streets, parcels and buildings respond differently.</p>
+    </section>
+
+    <section class="after theme" aria-label="Theme 2: Time">
+      <header class="theme-head" id="t2">
+        <p class="tkick">Theme 2 · Time</p>
+        <h2 id="t2-h">Persistence, transformation and morphological time</h2>
+        <p class="tq">What survives change?</p>
+        <p class="tseq">aerials → inherited alignments → railway → reconstruction → ghost morphology</p>
+        <p class="tlead">Which of the structures of Theme 1 persist when individual objects disappear? Here history becomes change detection.</p>
+      </header>
+        <h3 class="trio-head" id="t2-2a"><b><span class="pcode">2A</span> change detection</b>The historical aerial series</h3>
+        <aside class="todo" data-plan="2A">
+          <p class="todo-h">To add · 2A</p>
+          <p>Historical aerial photographs of the same extent, crop and orientation: early, post-war reconstruction, later twentieth century, present. Track buildings, roads, the forest edge, the channel, the large institutional plots and, where possible, the parcels.</p>
+          <p>Annotate what survives: a house disappears and its parcel persists; a road widens and keeps its alignment; a building changes and the sacred threshold persists; the forest edge moves; the channel becomes engineered. GSI’s 地図・空中写真閲覧サービス is the place to start.</p>
+        </aside>
+        <h3 class="trio-head" id="t2-2b"><b><span class="pcode">2B</span> object and form</b>Material age against morphological age</h3>
+        <p class="tlead">Object age is not morphology age.</p>
+        <aside class="todo" data-plan="2B">
+          <p class="todo-h">To add · 2B</p>
+          <p>Small before-and-after pairs from the field photographs and the aerials: an old parcel with a new house, an old route with a reconstructed street, an old sacred access with new paving, an old water corridor in a modern concrete channel.</p>
+        </aside>
+        <p class="xref">On the map below: the river city, the railway city and their layers. The channel’s own chronology sits with the water, in <a href="#t1-1c">Theme 1</a>.</p>
+    </section>
+
+    <div class="stage" id="stage-time">
+      <div class="mapcol"></div>
+
+      <div class="steps" id="steps-time">
+        <div class="chapter" id="ch-2c"><p class="cn">2C</p><h2>The deeper city</h2><div class="tags">river → railway → reconstruction → road</div></div>
 
         <article class="step" data-view="oldtown" data-name="Old town · the natural levee" data-on="micro_low micro_high water river_main rail" data-overlay="site-shimo" data-legend="micro site">
           <div class="card">
@@ -1004,6 +1173,8 @@
           </div>
         </article>
 
+        <div class="chapter" id="ch-2d"><p class="cn">2D</p><h2>Railway reorientation</h2><div class="tags">from the riverfront to the station</div></div>
+
         <article class="step" data-view="core" data-name="Rail, road, port" data-on="rail road_local nr42 expressway water river_main micro_high" data-overlay="rail-port" data-legend="rail">
           <div class="card">
             <p>Rail subsequently redirected urban movement. The Shingū Railway opened in 1913, a broad station approach reoriented the centre, and parts of the former castle moat were incorporated into the expanding twentieth-century city. The river-centred commercial morphology acquired a railway-centred layer; later road, medical and port development added further nodes. Shingū Port today remains Kinan’s only foreign-trade port, serving hinterlands extending into Mie and Nara while functioning simultaneously as a maritime gateway for Kumano tourism and cruise traffic.</p>
@@ -1018,33 +1189,40 @@
           </div>
         </article>
 
-        <!-- ============ 2 ============ -->
-        <div class="chapter" id="ch2"><p class="cn">2</p><h2>Morphology, sacred landscape and adaptation</h2><div class="tags"><svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
+      </div>
+    </div>
+    <section class="after theme-cont" aria-label="Theme 2: Time, continued">
+        <h3 class="trio-head" id="t2-2e"><b><span class="pcode">2E</span> rupture</b>Disaster and reconstruction</h3>
+        <p class="xref">Here disaster matters only as a rupture in time: what physically changed afterwards. Its mechanisms belong to <a href="#t3">Theme 3</a>, where the fire that followed the last Nankai earthquake is listed among the slower pressures.</p>
+        <aside class="todo" data-plan="2E">
+          <p class="todo-h">To add · 2E</p>
+          <p>Demolished fabric, reconstruction blocks, changed road widths and building materials, parcels that persisted or were amalgamated, after the fire and after the floods.</p>
+        </aside>
+        <h3 class="trio-head" id="t2-2f"><b><span class="pcode">2F</span> ghost morphology</b>Nakagami and the vanished town</h3>
+        <p class="tlead">Can an urban form remain culturally legible after it has physically vanished?</p>
+        <p class="closing">Exposure also has a social geography this page does not map. Nakagami Kenji set much of his fiction in the <span lang="ja">路地</span>, a fictional space modelled on the buraku district of Shingū where he was born. The Tokyo High Court held in 2023 that information showing where such districts lie infringes the private lives of the people connected to them, a ruling final since 2024, so the page leaves it unlocated.</p>
+        <aside class="todo" data-plan="2F">
+          <p class="todo-h">To add · 2F</p>
+          <p>Former lanes, lost neighbourhood structures, demolished buildings, literary memory, historic photography and present-day absence, in text only: the page does not locate the district, and Theme 6 returns to Nakagami as representation.</p>
+        </aside>
+        <p class="tconc">Shingū contains several cities at once. Material replacement is often faster than the replacement of routes, boundaries, orientations and remembered spatial relations.</p>
+    </section>
 
-        <article class="step" data-view="region" data-name="Kii Mountains · relief and forest" data-on="shade forest park park_sp river_main river_trib pref" data-overlay="base-region peaks" data-legend="shade forest park parksp peak river" data-ranges>
-          <div class="card">
-            <p>Shingū’s physical form also records how the town has lived with an unstable river and unstable slopes.</p>
-            <figure class="fig">
-              <div class="stats"><div><b>86%</b><span>of the land on this sheet is forest</span></div><div><b>1,915 m</b><span>Hakkyō, the highest summit on the sheet</span></div><div><b>253 m</b><span>Gongen-yama, the hill behind Shingū</span></div></div>
-              <div class="cap">Map: GSI hill shading; forest from MLIT’s land-use mesh (L03-b, 2021); natural-park zones from MLIT A10 (2015), which covers national, quasi-national and prefectural parks without naming them, darker where specially protected; summits and heights from OpenStreetMap. Range names follow the line of their summits.</div>
-            </figure>
-          </div>
-        </article>
+    <section class="after theme" aria-label="Theme 3: Hazard">
+      <header class="theme-head" id="t3">
+        <p class="tkick">Theme 3 · Hazard</p>
+        <h2 id="t3-h">Hazard as a producer of urban form</h2>
+        <p class="tq">How does disturbance produce form?</p>
+        <p class="tseq">Kawaraya → four hazards → infrastructure → evacuation → compact planning</p>
+        <p class="tlead">The contradiction, before the evidence: the location plan concentrates a shrinking town where the water goes, and leaves evacuation to close the gap (<a href="#t3-3j">3J</a>).</p>
+      </header>
+    </section>
 
-        <article class="step" data-view="region" data-name="Sacred geography · Kumano Kodō" data-on="kodo kodo_iseji kodo_routed river_route river_main pref" data-overlay="base-region shrines towns-kodo kodo-names" data-legend="kodo kodorouted riverroute">
-          <div class="card">
-            <p>Kumano Hayatama Taisha, Kamikura Shrine, the river and the surrounding mountains belong to a sacred geography in which rock, water, forest and movement carry religious meaning. Pilgrimage connected these elements across the wider Kumano landscape; the river itself functioned historically as part of the approach toward Hayatama and today survives as a rare river pilgrimage route within the World Heritage landscape. Shingū’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> continues to treat the Kumano River descent as a major cultural asset.</p>
-          </div>
-        </article>
+    <div class="stage" id="stage-hazard">
+      <div class="mapcol"></div>
 
-        <article class="step" data-view="river" data-name="One river, six functions" data-on="river_route river_main nr168 flood ls_roads kodo kodo_iseji water" data-overlay="river-functions" data-legend="riverroute nr flood lsroads">
-          <div class="card">
-            <p>Physical geography therefore performs several functions at once:</p>
-            <figure class="fig"><div class="plus"><span class="i hl" data-hl="f-watershed" tabindex="0">watershed</span><span class="p">+</span><span class="i hl" data-hl="f-transport" tabindex="0">transport corridor</span><span class="p">+</span><span class="i hl" data-hl="f-sacred" tabindex="0">sacred landscape</span><span class="p">+</span><span class="i hl" data-hl="f-heritage" tabindex="0">heritage asset</span><span class="p">+</span><span class="i hl" data-hl="f-tourism" tabindex="0">tourism resource</span><span class="p">+</span><span class="i hl" data-hl="f-hazard" tabindex="0">hazard system</span></div>
-              <div class="cap">Map: between Hongū and the mouth the same valley carries the river pilgrimage route (40.6 km), National Route 168, the river boats, the modelled L2 flood and road stretches inside landslide zones.</div></figure>
-            <p>That multiplicity gives Shingū’s vernacular flood architecture particular significance.</p>
-          </div>
-        </article>
+      <div class="steps" id="steps-hazard">
+        <div class="chapter" id="ch-3a"><p class="cn">3A</p><h2>Kawaramachi and agariya</h2><div class="tags"><svg class="pg"><use href="#pg-accommodate"/></svg> architecture absorbs the flood</div></div>
 
         <article class="step" data-view="oldtown" data-name="Kawaramachi · on the riverbed" data-on="flood water river_main micro_high" data-overlay="oldtown-sites" data-legend="flood site">
           <div class="card">
@@ -1073,6 +1251,8 @@
           </div>
         </article>
 
+        <div class="chapter" id="ch-3b"><p class="cn">3B</p><h2>What followed: works</h2><div class="tags"><svg class="pg"><use href="#pg-accommodate"/></svg> resistance gathers the residual risk</div></div>
+
         <article class="step" data-view="mouth" data-name="Accommodation to resistance" data-on="flood flood_ichida tsunami water river_main pref" data-overlay="interventions-mouth" data-legend="flood tsunami ringlevee pump refuge">
           <div class="card">
             <p>Modern interventions change the logic rather than enlarge it. Kawaraya and agariya were accommodation: households carried the risk with little fixed capital, and what could move was moved. Ring levees, sluices and pumps are resistance: public capital fixed to a design level, with the residual risk gathered behind it.</p>
@@ -1092,8 +1272,7 @@
           </div>
         </article>
 
-        <!-- ============ 3 ============ -->
-        <div class="chapter" id="ch3"><p class="cn">3</p><h2>Four hazard pathways converge</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
+        <div class="chapter" id="ch-3c"><p class="cn">3C</p><h2>Four hazard pathways</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-accommodate"/></svg> accommodate</div></div>
 
         <article class="step" data-view="pathways" data-name="Four directions of risk" data-on="flood flood_l1 flood_ichida ichida_basin tsunami ts26_freq ls_red ls_yellow water river_main pref" data-overlay="pathways" data-legend="flood floodl1 floodichida tsunami tsfreq red yellow bts bfl bboth bdry" data-bld>
           <div class="card">
@@ -1110,32 +1289,10 @@
               </table>
               <p class="hl-note">Hover or tap a row to light up that system on the map; click to zoom out to all of it (⟲ returns).</p>
             </figure>
-            <p>Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō.</p>
-            <figure class="fig">
-              <table class="tiers">
-                <thead><tr><th scope="col">Residents, 2020</th><th scope="col">Shingū</th><th scope="col" class="p">65+</th><th scope="col">Kihō</th><th scope="col" class="p">65+</th></tr></thead>
-                <tbody>
-                  <tr class="tot"><th scope="row">all residents</th><td data-rk="tiers.Shingu.total.people">27,161</td><td class="p" data-rk="tiers.Shingu.total.pct65" data-rkf="{:.0f}%">37%</td><td data-rk="tiers.Kiho.total.people">10,307</td><td class="p" data-rk="tiers.Kiho.total.pct65" data-rkf="{:.0f}%">38%</td></tr>
-                  <tr><th scope="row">tsunami, frequent class</th><td data-rk="tiers.Shingu.ts_l1.people">116</td><td class="p" data-rk="tiers.Shingu.ts_l1.pct65" data-rkf="{:.0f}%">38%</td><td class="na" colspan="2">no map</td></tr>
-                  <tr><th scope="row">tsunami, maximum class</th><td data-rk="tiers.Shingu.ts_max.people">5,853</td><td class="p" data-rk="tiers.Shingu.ts_max.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.ts_max.people">1,810</td><td class="p" data-rk="tiers.Kiho.ts_max.pct65" data-rkf="{:.0f}%">34%</td></tr>
-                  <tr class="tsub"><th scope="row">3 m or deeper</th><td data-rk="tiers.Shingu.ts_max_3m.people">230</td><td class="p" data-rk="tiers.Shingu.ts_max_3m.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.ts_max_3m.people">41</td><td class="p" data-rk="tiers.Kiho.ts_max_3m.pct65" data-rkf="{:.0f}%">39%</td></tr>
-                  <tr><th scope="row">river flood, planned scale</th><td data-rk="tiers.Shingu.fl_l1.people">7,133</td><td class="p" data-rk="tiers.Shingu.fl_l1.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.fl_l1.people">1,945</td><td class="p" data-rk="tiers.Kiho.fl_l1.pct65" data-rkf="{:.0f}%">40%</td></tr>
-                  <tr class="tsub"><th scope="row">0.5 m or deeper</th><td data-rk="tiers.Shingu.fl_l1_05.people">3,058</td><td class="p" data-rk="tiers.Shingu.fl_l1_05.pct65" data-rkf="{:.0f}%">42%</td><td data-rk="tiers.Kiho.fl_l1_05.people">1,055</td><td class="p" data-rk="tiers.Kiho.fl_l1_05.pct65" data-rkf="{:.0f}%">45%</td></tr>
-                  <tr><th scope="row">river flood, maximum</th><td data-rk="tiers.Shingu.fl_l2.people">12,497</td><td class="p" data-rk="tiers.Shingu.fl_l2.pct65" data-rkf="{:.0f}%">40%</td><td data-rk="tiers.Kiho.fl_l2.people">3,488</td><td class="p" data-rk="tiers.Kiho.fl_l2.pct65" data-rkf="{:.0f}%">39%</td></tr>
-                  <tr class="tsub"><th scope="row">3 m or deeper</th><td data-rk="tiers.Shingu.fl_l2_3m.people">460</td><td class="p" data-rk="tiers.Shingu.fl_l2_3m.pct65" data-rkf="{:.0f}%">45%</td><td data-rk="tiers.Kiho.fl_l2_3m.people">533</td><td class="p" data-rk="tiers.Kiho.fl_l2_3m.pct65" data-rkf="{:.0f}%">50%</td></tr>
-                  <tr class="tsub"><th scope="row">standing 3 days or more</th><td data-rk="tiers.Shingu.fl_l2_3d.people">398</td><td class="p" data-rk="tiers.Shingu.fl_l2_3d.pct65" data-rkf="{:.0f}%">46%</td><td data-rk="tiers.Kiho.fl_l2_3d.people">9</td><td class="p" data-rk="tiers.Kiho.fl_l2_3d.pct65" data-rkf="{:.0f}%">67%</td></tr>
-                  <tr><th scope="row">where floods can sweep houses away</th><td data-rk="tiers.Shingu.collapse.people">831</td><td class="p" data-rk="tiers.Shingu.collapse.pct65" data-rkf="{:.0f}%">46%</td><td data-rk="tiers.Kiho.collapse.people">914</td><td class="p" data-rk="tiers.Kiho.collapse.pct65" data-rkf="{:.0f}%">51%</td></tr>
-                  <tr><th scope="row">landslide red zone</th><td data-rk="tiers.Shingu.ls_red.people">277</td><td class="p" data-rk="tiers.Shingu.ls_red.pct65" data-rkf="{:.0f}%">42%</td><td data-rk="tiers.Kiho.ls_red.people">429</td><td class="p" data-rk="tiers.Kiho.ls_red.pct65" data-rkf="{:.0f}%">43%</td></tr>
-                  <tr><th scope="row">landslide yellow zone only</th><td data-rk="tiers.Shingu.ls_yel.people">4,376</td><td class="p" data-rk="tiers.Shingu.ls_yel.pct65" data-rkf="{:.0f}%">35%</td><td data-rk="tiers.Kiho.ls_yel.people">2,001</td><td class="p" data-rk="tiers.Kiho.ls_yel.pct65" data-rkf="{:.0f}%">42%</td></tr>
-                  <tr class="tot"><th scope="row">maximum tsunami or flood</th><td data-rk="tiers.Shingu.u_l2.people">14,070</td><td class="p" data-rk="tiers.Shingu.u_l2.pct65" data-rkf="{:.0f}%">40%</td><td data-rk="tiers.Kiho.u_l2.people">3,913</td><td class="p" data-rk="tiers.Kiho.u_l2.pct65" data-rkf="{:.0f}%">39%</td></tr>
-                  <tr class="tot"><th scope="row">… or any landslide zone</th><td data-rk="tiers.Shingu.u_all.people">16,965</td><td class="p" data-rk="tiers.Shingu.u_all.pct65" data-rkf="{:.0f}%">39%</td><td data-rk="tiers.Kiho.u_all.people">5,523</td><td class="p" data-rk="tiers.Kiho.u_all.pct65" data-rkf="{:.0f}%">39%</td></tr>
-                </tbody>
-              </table>
-              <div class="cap">Residents: 2020 census by 250 m cell and small area (all ages, 65+), fitted to the footprints of homes (GSI building outlines, non-residential sites left out); 2020 is the latest census with tables this fine, and the 2025 count found 10% fewer people in Shingū. Tsunami: Wakayama’s 2026 maps for Shingū (frequent class: Tōkai–Tōnankai–Nankai; maximum class: Nankai Trough) and Mie’s 2026 map for Kihō (maximum class only), digitised from the published PDFs. River flood: MLIT A31b-25 meshes of every national and prefectural river with a map (planned scale, maximum, duration, zones where floods can sweep houses away). Landslide zones: MLIT A33-25. Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both.</div>
-            </figure>
-            <p>Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest.</p>
           </div>
         </article>
+
+        <div class="chapter" id="ch-3d"><p class="cn">3D</p><h2>The basin flood</h2><div class="tags">the record that became the design flood</div></div>
 
         <article class="step" data-view="basin" data-name="Kumano River · risk generated at regional scale" data-on="basin river_main river_trib pref" data-overlay="base-region dams" data-legend="basin dam">
           <div class="card">
@@ -1151,6 +1308,27 @@
             <p>Its geography exceeded every individual administrative sector.</p>
           </div>
         </article>
+
+        <article class="step" data-view="basin" data-name="Climate change · anticipatory hydrology" data-on="basin river_main river_trib pref" data-overlay="base-region" data-legend="basin river">
+          <div class="card">
+            <p>Climate change enlarges the flood this basin logic has to carry.</p>
+            <p>In 2021, the Shingū and Gokase river systems became Japan’s first <a class="doc" href="https://www.mlit.go.jp/river/basic_info/jigyo_keikaku/gaiyou/seibi/shingu_index.html" target="_blank" rel="noopener">basic river-policy revisions (<span lang="ja">河川整備基本方針</span>)</a> explicitly incorporating projected climate-driven increases in rainfall together with the emerging basin-wide flood-management framework. <a class="doc" href="https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html" target="_blank" rel="noopener">MLIT described the change</a> as a shift from planning based on historical rainfall toward planning that incorporates future climatic intensification.</p>
+            <figure class="fig chart">
+              <svg viewBox="0 0 400 176" role="img" aria-label="Design floods at Ōga: 19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision, of which 23,000 in the channel; 22,000 for the 2022 river plan's 30 years; the 2011 flood peaked at about 24,000">
+                <text x="0" y="12" class="s">design floods at Ōga, m³/s</text>
+                <text x="0" y="38">2008 policy</text><rect x="104" y="27" width="187" height="14" rx="2" fill="#4781c7" fill-opacity=".5"/><text x="396" y="38" text-anchor="end">19,000</text>
+                <text x="0" y="66">2021 policy</text><rect x="104" y="55" width="236" height="14" rx="2" fill="#2f5f94"/><text x="396" y="66" text-anchor="end">24,000</text>
+                <text x="0" y="94">… in the channel</text><rect x="104" y="83" width="226" height="14" rx="2" fill="#2f5f94" fill-opacity=".7"/><text x="396" y="94" text-anchor="end">23,000</text>
+                <text x="0" y="122">2022 plan</text><rect x="104" y="111" width="216" height="14" rx="2" fill="#4781c7" fill-opacity=".8"/><text x="396" y="122" text-anchor="end">22,000</text>
+                <path d="M340 20 V132" stroke="#8a2b5f" stroke-width="1.4" stroke-dasharray="3 2"/><text x="340" y="146" text-anchor="end" class="s">2011 flood ≈ 24,000 (record) ↑</text>
+                <text x="0" y="168" class="s">1/100 rainfall × 1.1 for a +2 °C climate (MLIT, Oct 2021)</text>
+              </svg>
+              <figcaption>The revised design flood (<span lang="ja">基本高水</span>) equals what 2011 already delivered. The channel is to carry 23,000 of it (<span lang="ja">計画高水流量</span>) and the basin’s dams 1,000; those dams were all built for power, so their share rests on releasing water before a storm, under an agreement of 2020. The 2022 river plan (<span lang="ja">河川整備計画</span>) aims lower: channel works to carry 22,000 within 30 years, 2,000 below 2011, with the dams lowering a 2011-sized flood as far as they can.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <div class="chapter" id="ch-3e"><p class="cn">3E</p><h2>The city’s own water</h2><div class="tags">drainage, sluice, pumps</div></div>
 
         <article class="step" data-view="ichida" data-name="Ichida-gawa · risk generated inside the city" data-on="ichida_basin flood_ichida ichida_line water river_main micro_high rail" data-overlay="ichida" data-legend="ichidabasin floodichida pump">
           <div class="card">
@@ -1192,6 +1370,8 @@
           </div>
         </article>
 
+        <div class="chapter" id="ch-3f"><p class="cn">3F</p><h2>Minutes to high ground</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate</div></div>
+
         <article class="step" data-view="core" data-name="Nankai Trough · minutes to high ground" data-on="ts26_shallow ts26_mid ts26_deep water river_main micro_high rail" data-overlay="" data-legend="ts26 mg rksite rkbld rkin" data-risk="margins">
           <div class="card">
             <h4><svg class="pg"><use href="#pg-from-sea"/></svg> Nankai Trough: the minutes that remain</h4>
@@ -1222,6 +1402,61 @@
           </div>
         </article>
 
+        <div class="chapter" id="ch-3g"><p class="cn">3G</p><h2>Exposure, tier by tier</h2><div class="tags">the full table, collapsed</div></div>
+
+        <article class="step" data-view="pathways" data-name="Residents by hazard tier" data-on="flood flood_l1 flood_ichida ichida_basin tsunami ts26_freq ls_red ls_yellow water river_main pref" data-overlay="" data-legend="flood floodl1 floodichida tsunami tsfreq red yellow bts bfl bboth bdry" data-bld>
+          <div class="card">
+            <p>Read by frequency, the pathways separate what structures are built to hold from what only evacuation can answer. The frequent-class tsunami, the class sea walls are designed against, reaches 116 residents of Shingū; the maximum class reaches 5,853, and 1,810 more across the river in Kihō.</p>
+            <figure class="fig chart">
+              <svg viewBox="0 0 400 240" role="img" aria-label="Residents of Shingū in each hazard tier, and the share aged 65 and over in Shingū and Kihō">
+                <text x="0" y="12" class="s">residents of Shingū, by hazard tier</text>
+                <text x="0" y="32">all residents</text><rect x="170" y="22" width="190.0" height="12" fill="#57555b" fill-opacity=".25"/><text x="364.0" y="32" data-rk="tiers.Shingu.total.people">27,161</text>
+                <text x="0" y="52">tsunami, frequent class</text><rect x="170" y="42" width="1.5" height="12" fill="#4a0f2f" fill-opacity="1"/><text x="175.5" y="52" data-rk="tiers.Shingu.ts_l1.people">116</text>
+                <text x="0" y="72">tsunami, maximum class</text><rect x="170" y="62" width="40.9" height="12" fill="#8a2b5f" fill-opacity=".75"/><text x="214.9" y="72" data-rk="tiers.Shingu.ts_max.people">5,853</text>
+                <text x="0" y="92">river flood, planned scale</text><rect x="170" y="82" width="49.9" height="12" fill="#2f5f94" fill-opacity=".8"/><text x="223.9" y="92" data-rk="tiers.Shingu.fl_l1.people">7,133</text>
+                <text x="0" y="112">river flood, maximum</text><rect x="170" y="102" width="87.4" height="12" fill="#4781c7" fill-opacity=".75"/><text x="261.4" y="112" data-rk="tiers.Shingu.fl_l2.people">12,497</text>
+                <text x="0" y="132">any hazard zone</text><rect x="170" y="122" width="118.7" height="12" fill="#57555b" fill-opacity=".75"/><text x="292.7" y="132" data-rk="tiers.Shingu.u_all.people">16,965</text>
+                <text x="0" y="156" class="s">share aged 65 and over</text>
+                <rect x="0" y="163" width="10" height="8" fill="#57555b" fill-opacity=".35"/><text x="14" y="171" class="s">all residents</text><rect x="100" y="163" width="10" height="8" fill="#1f4f86"/><text x="114" y="171" class="s">where floods can sweep houses away</text>
+                <text x="0" y="197">Shingū</text>
+                <rect x="170" y="182" width="70.7" height="10" fill="#57555b" fill-opacity=".35"/><text x="244.7" y="191" data-rk="tiers.Shingu.total.pct65" data-rkf="{:.0f}%">37%</text>
+                <rect x="170" y="194" width="87.4" height="10" fill="#1f4f86" fill-opacity="1"/><text x="261.4" y="203" data-rk="tiers.Shingu.collapse.pct65" data-rkf="{:.0f}%">46%</text>
+                <text x="0" y="225">Kihō</text>
+                <rect x="170" y="210" width="71.2" height="10" fill="#57555b" fill-opacity=".35"/><text x="245.2" y="219" data-rk="tiers.Kiho.total.pct65" data-rkf="{:.0f}%">38%</text>
+                <rect x="170" y="222" width="97.5" height="10" fill="#1f4f86" fill-opacity="1"/><text x="271.5" y="231" data-rk="tiers.Kiho.collapse.pct65" data-rkf="{:.0f}%">51%</text>
+              </svg>
+              <figcaption>Census residents fitted to the homes they live in; bars to scale. The full table adds Kihō’s tiers, the depths and durations and the landslide zones.</figcaption>
+            </figure>
+            <p>Residents aged 65 and over are 37% of Shingū and 38% of Kihō, but 46% and 51% of those living where a flood can sweep houses away: the riverbank districts are the oldest.</p>
+            <details class="methods"><summary>The full exposure table · every tier, Shingū and Kihō</summary>
+              <figure class="fig">
+              <table class="tiers">
+                <thead><tr><th scope="col">Residents, 2020</th><th scope="col">Shingū</th><th scope="col" class="p">65+</th><th scope="col">Kihō</th><th scope="col" class="p">65+</th></tr></thead>
+                <tbody>
+                  <tr class="tot"><th scope="row">all residents</th><td data-rk="tiers.Shingu.total.people">27,161</td><td class="p" data-rk="tiers.Shingu.total.pct65" data-rkf="{:.0f}%">37%</td><td data-rk="tiers.Kiho.total.people">10,307</td><td class="p" data-rk="tiers.Kiho.total.pct65" data-rkf="{:.0f}%">38%</td></tr>
+                  <tr><th scope="row">tsunami, frequent class</th><td data-rk="tiers.Shingu.ts_l1.people">116</td><td class="p" data-rk="tiers.Shingu.ts_l1.pct65" data-rkf="{:.0f}%">38%</td><td class="na" colspan="2">no map</td></tr>
+                  <tr><th scope="row">tsunami, maximum class</th><td data-rk="tiers.Shingu.ts_max.people">5,853</td><td class="p" data-rk="tiers.Shingu.ts_max.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.ts_max.people">1,810</td><td class="p" data-rk="tiers.Kiho.ts_max.pct65" data-rkf="{:.0f}%">34%</td></tr>
+                  <tr class="tsub"><th scope="row">3 m or deeper</th><td data-rk="tiers.Shingu.ts_max_3m.people">230</td><td class="p" data-rk="tiers.Shingu.ts_max_3m.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.ts_max_3m.people">41</td><td class="p" data-rk="tiers.Kiho.ts_max_3m.pct65" data-rkf="{:.0f}%">39%</td></tr>
+                  <tr><th scope="row">river flood, planned scale</th><td data-rk="tiers.Shingu.fl_l1.people">7,133</td><td class="p" data-rk="tiers.Shingu.fl_l1.pct65" data-rkf="{:.0f}%">41%</td><td data-rk="tiers.Kiho.fl_l1.people">1,945</td><td class="p" data-rk="tiers.Kiho.fl_l1.pct65" data-rkf="{:.0f}%">40%</td></tr>
+                  <tr class="tsub"><th scope="row">0.5 m or deeper</th><td data-rk="tiers.Shingu.fl_l1_05.people">3,058</td><td class="p" data-rk="tiers.Shingu.fl_l1_05.pct65" data-rkf="{:.0f}%">42%</td><td data-rk="tiers.Kiho.fl_l1_05.people">1,055</td><td class="p" data-rk="tiers.Kiho.fl_l1_05.pct65" data-rkf="{:.0f}%">45%</td></tr>
+                  <tr><th scope="row">river flood, maximum</th><td data-rk="tiers.Shingu.fl_l2.people">12,497</td><td class="p" data-rk="tiers.Shingu.fl_l2.pct65" data-rkf="{:.0f}%">40%</td><td data-rk="tiers.Kiho.fl_l2.people">3,488</td><td class="p" data-rk="tiers.Kiho.fl_l2.pct65" data-rkf="{:.0f}%">39%</td></tr>
+                  <tr class="tsub"><th scope="row">3 m or deeper</th><td data-rk="tiers.Shingu.fl_l2_3m.people">460</td><td class="p" data-rk="tiers.Shingu.fl_l2_3m.pct65" data-rkf="{:.0f}%">45%</td><td data-rk="tiers.Kiho.fl_l2_3m.people">533</td><td class="p" data-rk="tiers.Kiho.fl_l2_3m.pct65" data-rkf="{:.0f}%">50%</td></tr>
+                  <tr class="tsub"><th scope="row">standing 3 days or more</th><td data-rk="tiers.Shingu.fl_l2_3d.people">398</td><td class="p" data-rk="tiers.Shingu.fl_l2_3d.pct65" data-rkf="{:.0f}%">46%</td><td data-rk="tiers.Kiho.fl_l2_3d.people">9</td><td class="p" data-rk="tiers.Kiho.fl_l2_3d.pct65" data-rkf="{:.0f}%">67%</td></tr>
+                  <tr><th scope="row">where floods can sweep houses away</th><td data-rk="tiers.Shingu.collapse.people">831</td><td class="p" data-rk="tiers.Shingu.collapse.pct65" data-rkf="{:.0f}%">46%</td><td data-rk="tiers.Kiho.collapse.people">914</td><td class="p" data-rk="tiers.Kiho.collapse.pct65" data-rkf="{:.0f}%">51%</td></tr>
+                  <tr><th scope="row">landslide red zone</th><td data-rk="tiers.Shingu.ls_red.people">277</td><td class="p" data-rk="tiers.Shingu.ls_red.pct65" data-rkf="{:.0f}%">42%</td><td data-rk="tiers.Kiho.ls_red.people">429</td><td class="p" data-rk="tiers.Kiho.ls_red.pct65" data-rkf="{:.0f}%">43%</td></tr>
+                  <tr><th scope="row">landslide yellow zone only</th><td data-rk="tiers.Shingu.ls_yel.people">4,376</td><td class="p" data-rk="tiers.Shingu.ls_yel.pct65" data-rkf="{:.0f}%">35%</td><td data-rk="tiers.Kiho.ls_yel.people">2,001</td><td class="p" data-rk="tiers.Kiho.ls_yel.pct65" data-rkf="{:.0f}%">42%</td></tr>
+                  <tr class="tot"><th scope="row">maximum tsunami or flood</th><td data-rk="tiers.Shingu.u_l2.people">14,070</td><td class="p" data-rk="tiers.Shingu.u_l2.pct65" data-rkf="{:.0f}%">40%</td><td data-rk="tiers.Kiho.u_l2.people">3,913</td><td class="p" data-rk="tiers.Kiho.u_l2.pct65" data-rkf="{:.0f}%">39%</td></tr>
+                  <tr class="tot"><th scope="row">… or any landslide zone</th><td data-rk="tiers.Shingu.u_all.people">16,965</td><td class="p" data-rk="tiers.Shingu.u_all.pct65" data-rkf="{:.0f}%">39%</td><td data-rk="tiers.Kiho.u_all.people">5,523</td><td class="p" data-rk="tiers.Kiho.u_all.pct65" data-rkf="{:.0f}%">39%</td></tr>
+                </tbody>
+              </table>
+              <div class="cap">Residents: 2020 census by 250 m cell and small area (all ages, 65+), fitted to the footprints of homes (GSI building outlines, non-residential sites left out); 2020 is the latest census with tables this fine, and the 2025 count found 10% fewer people in Shingū. Tsunami: Wakayama’s 2026 maps for Shingū (frequent class: Tōkai–Tōnankai–Nankai; maximum class: Nankai Trough) and Mie’s 2026 map for Kihō (maximum class only), digitised from the published PDFs. River flood: MLIT A31b-25 meshes of every national and prefectural river with a map (planned scale, maximum, duration, zones where floods can sweep houses away). Landslide zones: MLIT A33-25. Map: the 17,785 building footprints of Shingū’s coastal lowland (GSI, 2026), 4,743 of them inside the 2026 maximum tsunami and 9,495 inside the maximum river flood; 62% stand in one or both.</div>
+            </figure>
+            </details>
+          </div>
+        </article>
+
+        <div class="chapter" id="ch-3h"><p class="cn">3H</p><h2>From the slopes</h2><div class="tags">sediment and isolation</div></div>
+
         <article class="step" data-view="city" data-name="From the slopes · isolation" data-on="ls_red ls_yellow ls_roads nr168 road_local river_main shingu" data-overlay="slopes-2011" data-legend="red yellow lsroads">
           <div class="card">
             <h4><svg class="pg"><use href="#pg-from-slopes"/></svg> From the slopes: the hinterland cuts itself off</h4>
@@ -1236,6 +1471,8 @@
             <p>The pattern is old. In 1889, 1,080 slopes collapsed in the upper basin and 37 dammed lakes formed; at the mouth, the whole of Shingū town went under muddy floodwater.</p>
           </div>
         </article>
+
+        <div class="chapter" id="ch-3i"><p class="cn">3I</p><h2>Coupled hazards</h2><div class="tags">the pathways meet</div></div>
 
         <article class="step" data-view="pathways" data-name="Beyond the four pathways" data-on="flood tsunami water river_main micro_high rail" data-overlay="other-hazards" data-legend="flood tsunami">
           <div class="card">
@@ -1282,20 +1519,7 @@
           </div>
         </article>
 
-        <!-- ============ 4 ============ -->
-        <div class="chapter" id="ch4"><p class="cn">4</p><h2>Resilience through selective concentration</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
-
-        <article class="step" data-view="connect" data-name="Mountain corridors · exposure" data-on="ls_roads nr168 nr42 road_local river_main shingu" data-overlay="hubs valley-sites" data-legend="lsroads hubs">
-          <div class="card">
-            <p>Demographic contraction adds another layer to the hazard problem. Shingū’s regional services must remain viable for an increasingly dispersed and ageing population, including mountain communities where transport corridors themselves are vulnerable to rainfall and slope failure.</p>
-            <figure class="fig">
-              <div class="stats"><div><b>20%</b><span>of Route 168 in Shingū (6.2 of 31 km) crosses designated landslide zones</span></div><div><b>10%</b><span>of the other main local roads (9.8 of 102 km)</span></div></div>
-              <div class="cap">Red on the map: road stretches inside sediment-disaster warning zones (MLIT A33, Aug 2025), within the municipality.</div>
-            </figure>
-            <p>The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%.</p>
-            <figure class="fig"><div class="cap">Projection: IPSS, 2023 municipal projections; each building keeps its 2020 residents, scaled by its town’s projected change for those under and over 75. Walking at the Cabinet Office’s 2025 speeds: 0.70 m/s on gentle ground and 0.44 m/s on slopes of 5% or more, 0.53 and 0.33 m/s for those 75 and over (the pace of walking with someone who needs help); leaving at 5 minutes.</div></figure>
-          </div>
-        </article>
+        <div class="chapter" id="ch-3j"><p class="cn">3J</p><h2>Where a shrinking city can concentrate</h2><div class="tags"><svg class="pg"><use href="#pg-concentrate"/></svg> concentrate</div></div>
 
         <article class="step" data-view="lop" data-edge="hitari" data-name="Shingū City · the polycentric hierarchy" data-on="shingu riz uf road_local nr42 nr168 expressway rail water river_main pref" data-overlay="city-base hubs links" data-legend="urbanmun riz uf hubs links">
           <div class="card">
@@ -1305,18 +1529,6 @@
               <li class="hl" data-hl="hub-koyo" tabindex="0"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="8.5" fill="#f4efe6" stroke="#0f6158" stroke-width="2"/><circle cx="13" cy="13" r="3.4" fill="#0f6158"/></svg><div><b>Kōyō</b> <span lang="ja">光洋</span><br />a regional node incorporating major medical and service functions;</div></li>
               <li class="hl" data-hl="hub-living" tabindex="0"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="6.5" fill="#f4efe6" stroke="#0f6158" stroke-width="2"/></svg><div><b>Kumano-gawa</b> <span lang="ja">熊野川町</span> and <b>Takata</b> <span lang="ja">高田</span><br />living hubs whose role centres on everyday accessibility and the continuity of smaller mountain communities.</div></li>
             </ul>
-          </div>
-        </article>
-
-        <article class="step" data-view="connect" data-name="Concentration + connection" data-on="ls_roads nr168 nr42 road_local river_main shingu riz uf" data-overlay="hubs links valley-sites" data-legend="lsroads spof mczone hubs fmed fadmin fsafety fschool fcare roadtag" data-fac="med admin safety school care" data-roads data-risk="isolation">
-          <div class="card">
-            <p>The planning logic combines concentration with connection. Higher-order services gain the density to remain viable, while roads keep the periphery attached. The road network shows where that bargain fails.</p>
-            <figure class="fig">
-              <div class="stats"><div><b>56</b><span>main-road links that are the only way out for 10 or more residents</span></div><div><b>98%</b><span>of Kihō’s residents outside the flood’s 0.5 m line lose every road to an emergency hospital in the maximum flood</span></div><div><b>26 min</b><span>more to the medical centre from Kumanogawa with Route 168 cut as in 2011</span></div></div>
-              <div class="cap">Network: OpenStreetMap drivable roads, 1 October 2026; a road closes where any point on it lies in the hazard (flood 0.5 m, tsunami 0.3 m, or a landslide red zone), bridges and tunnels excepted. Emergency hospitals: the three in reach that <span lang="ja">国土数値情報</span> P04 lists (Shingū, Mihama, Nachikatsuura). Map: services from <span lang="ja">国土数値情報</span> (hospitals and clinics P04, 2020; town offices P05, 2022; schools P29, 2023; care homes with residents P14, 2023; fire and police P17/P18, 2012, the police station at its 2017 site), numbered roads, road stretches inside landslide zones (red), the eight links with the most residents behind them (red dots) and the debris-flow warning zone around the medical centre.</div>
-            </figure>
-            <p>In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one.</p>
-            <p>Most services sit on the coastal lowland. Kumanogawa keeps a branch office, clinics, a fire post, a police box and two schools; Takata a branch office and two schools.</p>
           </div>
         </article>
 
@@ -1366,115 +1578,64 @@
           </div>
         </article>
 
-        <!-- ============ 5 ============ -->
-        <div class="chapter" id="ch5"><p class="cn">5</p><h2>Resilience extends beyond the resident population</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> evacuate · <svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
-
-        <article class="step" data-view="region" data-name="The visitor’s Kumano" data-on="kodo kodo_iseji kodo_routed river_route river_main pref rail" data-overlay="base-region shrines gateways kodo-names" data-legend="kodo kodorouted riverroute rail">
-          <div class="card">
-            <p>Shingū’s regional role also produces a mobile population of pilgrims, visitors and cruise passengers whose relationship to the landscape differs sharply from that of residents.</p>
-            <p>Kumano tourism draws on the same river, mountains and sacred topography that structure hazard. The city’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> treats the World Heritage river pilgrimage, Kumano Kodō, urban heritage and mountain landscapes as interconnected resources; Shingū Port extends that network outward as a cruise and maritime gateway.</p>
-                      <figure class="fig">
-              <div class="stats"><div><b>1.29 M</b><span>visitors to Shingū in 2025</span></div><div><b>187,788</b><span>overnight guests, +28% on 2019</span></div><div><b>22,040</b><span>foreign guest-nights, +76% on 2019</span></div><div><b>82</b><span>cruise calls at Shingū Port, 2010–2019</span></div></div>
-              <div class="cap">Wakayama Prefecture tourism surveys (<a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R7houkokusho.pdf" target="_blank" rel="noopener">2025</a>, <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R01_doutaityousa.pdf" target="_blank" rel="noopener">2019</a>) and its <a class="doc" href="https://www.pref.wakayama.lg.jp/bcms/prefg/082400/cruise/port_call_results.html" target="_blank" rel="noopener">cruise-call record</a>. The river-boat descent, revived in 2005, carried 4,127 passengers in FY2016, 1,306 of them from abroad (city tourism plan).</div>
-            </figure>
-</div>
-        </article>
-
-        <article class="step" data-view="core" data-name="Where visitors stand" data-on="ts26_shallow ts26_mid ts26_deep water river_main rail micro_high" data-overlay="visitors refuges" data-legend="ts26 refuge">
-          <div class="card">
-            <p>This creates a second resilience requirement: people with limited local spatial knowledge must be able to understand risk quickly.</p>
-            <p>A resident may recognize the nearest high ground, remember previous inundation or understand which road disappears during heavy rain. A newly arrived pilgrim operates from a different knowledge base. Hazard communication therefore becomes part of destination management.</p>
-            <p>A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation.</p>
-          </div>
-        </article>
-
-        <article class="step" data-view="core" data-name="Legibility in five languages" data-on="ts26_shallow ts26_mid ts26_deep water river_main rail micro_high" data-overlay="visitors refuges" data-legend="ts26 refuge">
-          <div class="card">
-            <p>Shingū’s web hazard map integrates flood depth, tsunami inundation, landslide zones, shelters and evacuation timing and is available in Japanese, English, Chinese, Korean and Tagalog.</p>
-            <figure class="fig"><div class="chips"><a lang="ja" href="https://shingu.nigedoki-map.com/" target="_blank" rel="noopener">日本語</a><a href="https://shingu.nigedoki-map.com/en" target="_blank" rel="noopener">English</a><a lang="zh" href="https://shingu.nigedoki-map.com/zh" target="_blank" rel="noopener">中文 (简体)</a><a lang="ko" href="https://shingu.nigedoki-map.com/ko" target="_blank" rel="noopener">한국어</a><a href="https://shingu.nigedoki-map.com/tl" target="_blank" rel="noopener">Tagalog</a></div>
-              <div class="cap"><a href="https://shingu.nigedoki-map.com/" target="_blank" rel="noopener">shingu.nigedoki-map.com</a> (<a href="https://www.city.shingu.lg.jp/info/1132" target="_blank" rel="noopener">city page</a>) — includes a “when to leave” (<span lang="ja">逃げどき</span>) check. For floods and landslides it asks for the building type and floor and answers stay, leave or check; for tsunami it compares the walk to a chosen refuge with the arrival time and gives the latest moment to set off.</div></figure>
-            <p>Tourism and disaster preparedness consequently meet through spatial legibility: the landscape must remain culturally rich while also becoming intelligible under emergency conditions.</p>
-          </div>
-        </article>
-
-        <article class="step" data-view="heritage" data-name="Heritage as memory of river and terrain" data-on="flood micro_low micro_high water river_main" data-overlay="heritage" data-legend="flood site">
-          <div class="card">
-            <p>The same principle applies to heritage itself. Shingū’s cultural assets carry the memory of earlier relationships with river and terrain. Kawaramachi records accommodation to flood; the medieval port records the economic geography of the river; the sacred sites preserve a cosmology rooted in mountains, rocks and water. Contemporary resilience therefore concerns the continuity of meaning and practice alongside physical safety.</p>
-            <p>Five places show the principle at work:</p>
-            <ul class="ex">
-              <li><span class="hl" data-hl="h-mifune" tabindex="0"><b>Mifune Matsuri</b> <span lang="ja">御船祭</span></span> (16 October): the deity’s boat is escorted up the Kumano to the islet of Mifune-jima, and nine small boats race around it. The rite needs a navigable river; the festival is a way of keeping the river part of the town’s life.</li>
-              <li><span class="hl" data-hl="h-oto" tabindex="0"><b>Oto Matsuri</b> <span lang="ja">御燈祭</span></span> (6 February): torch-bearers run down the 538 stone steps of Kamikura Shrine, whose object of worship is the rock Gotobiki-iwa. With the Hayatama festival it has been a national Important Intangible Folk Cultural Property since 2016.</li>
-              <li><span class="hl" data-hl="h-shimo" tabindex="0"><b>Shimohonmachi under Tankaku Hall</b></span>: the medieval port was found in 2015 because a cultural hall was planned there. The hall moved onto the already-disturbed part of the plot, storage pits were kept in place beneath it, and the grounds became a National Historic Site in 2022. The same building is a designated tsunami evacuation site: memory and refuge on one plot.</li>
-              <li><span class="hl" data-hl="h-mizunote" tabindex="0"><b>Mizunote</b> <span lang="ja">水ノ手</span></span>: excavation below the castle found about 20 charcoal storehouses and a landing. The domain’s income was stacked on the riverbank.</li>
-              <li><span class="hl" data-hl="h-kawara" tabindex="0"><b>Kawaramachi</b> <span lang="ja">川原町</span></span>: the riverbed town was gone by 1950; a rebuilt Kawaraya alley beside Hayatama keeps its demountable form legible to visitors.</li>
-            </ul>
-            <p class="hl-note">Hover a name to find it on the map; pulsing points open photographs.</p>
-          </div>
-        </article>
-
-        <!-- ============ 6 ============ -->
-        <div class="chapter" id="ch6"><p class="cn">6</p><h2>The watershed defines the governance scale</h2><div class="tags"><svg class="pg"><use href="#pg-coordinate"/></svg> coordinate</div></div>
-
-        <article class="step" data-view="basin" data-name="The downstream fragment" data-on="basin basin_nara basin_wakayama basin_mie shingu river_main river_trib pref" data-overlay="base-region basin-labels" data-legend="basin urbanmun pref">
-          <div class="card">
-            <p>Shingū’s most consequential planning lesson emerges when administrative geography is compared with hazard geography.</p>
-            <p>The city governs only the downstream fragment of the system producing its largest floods. Hydrologically, the operative region is:</p>
-            <figure class="fig"><div class="chain v"><span class="i hl" data-hl="ds-mountains" tabindex="0">Kii Mountains across Nara, Mie and Wakayama</span><span class="a">↓</span><span class="i hl" data-hl="ds-tribs" tabindex="0">tributaries, forests, dams and sediment systems</span><span class="a">↓</span><span class="i hl" data-hl="ds-river" tabindex="0">Kumano/Shingū River</span><span class="a">↓</span><span class="i hl" data-hl="ds-shingu" tabindex="0">Shingū</span><span class="a">↓</span><span class="i hl" data-hl="ds-mouth" tabindex="0">river mouth and coast</span></div>
-              <div class="cap">Basin 2,365 km² (official 2,360): 63% Nara, 22% Wakayama, 16% Mie. Shingū City holds 10% of it.</div></figure>
-          </div>
-        </article>
-
-        <article class="step" data-view="basin" data-name="流域治水 · basin-wide flood management" data-on="basin river_main river_trib pref" data-overlay="base-region dams interventions-basin" data-legend="basin dam">
-          <div class="card">
-            <p>Flood governance therefore expands outward through <span lang="ja">流域治水</span>, basin-wide flood management. The contemporary framework combines national river authorities, prefectures, municipalities, dam operators, electricity companies, forest management, sabō, land-use policy and local preparedness. The 2022 <a class="doc" href="https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/index.html" target="_blank" rel="noopener">river improvement plan (<span lang="ja">新宮川水系河川整備計画</span>)</a>, building on the 2021 <a class="doc" href="https://www.mlit.go.jp/river/kasen/ryuiki_pro/index.html" target="_blank" rel="noopener">basin-wide flood-management project (<span lang="ja">新宮川水系流域治水プロジェクト</span>)</a>, explicitly combines channel works with land-use regulation, adaptations in residential form and enhancement of basin storage functions.</p>
-          </div>
-        </article>
-
-        <article class="step" data-view="basin" data-name="Interventions along one system" data-on="basin river_main river_trib pref" data-overlay="dams interventions-basin" data-legend="basin dam">
-          <div class="card">
-            <p>Its interventions operate at different points in the same system:</p>
-            <figure class="fig"><div class="chain v"><span class="i hl" data-hl="iv-forest" tabindex="0">forest and slope management</span><span class="a">↓</span><span class="i hl" data-hl="iv-sabo" tabindex="0">sabō and sediment control</span><span class="a">↓</span><span class="i hl" data-hl="iv-dams" tabindex="0">dam coordination and pre-release</span><span class="a">↓</span><span class="i hl" data-hl="iv-river" tabindex="0">river excavation and levees</span><span class="a">↓</span><span class="i hl" data-hl="iv-ring" tabindex="0">ring-levee settlement protection</span><span class="a">↓</span><span class="i hl" data-hl="iv-pumps" tabindex="0">urban drainage and pumping</span><span class="a">↓</span><span class="i hl" data-hl="iv-landuse" tabindex="0">land-use steering</span><span class="a">↓</span><span class="i hl" data-hl="iv-evac" tabindex="0">evacuation</span></div>
-              <div class="cap">The valley section further down places each intervention on the river’s real long profile.</div></figure>
-          </div>
-        </article>
-
-        <article class="step" data-view="basin" data-name="Climate change · anticipatory hydrology" data-on="basin river_main river_trib pref" data-overlay="base-region" data-legend="basin river">
-          <div class="card">
-            <p>Climate change enlarges the flood this basin logic has to carry.</p>
-            <p>In 2021, the Shingū and Gokase river systems became Japan’s first <a class="doc" href="https://www.mlit.go.jp/river/basic_info/jigyo_keikaku/gaiyou/seibi/shingu_index.html" target="_blank" rel="noopener">basic river-policy revisions (<span lang="ja">河川整備基本方針</span>)</a> explicitly incorporating projected climate-driven increases in rainfall together with the emerging basin-wide flood-management framework. <a class="doc" href="https://www.mlit.go.jp/report/press/mizukokudo03_hh_001095.html" target="_blank" rel="noopener">MLIT described the change</a> as a shift from planning based on historical rainfall toward planning that incorporates future climatic intensification.</p>
-            <figure class="fig chart">
-              <svg viewBox="0 0 400 176" role="img" aria-label="Design floods at Ōga: 19,000 cubic metres per second in the 2008 policy, 24,000 after the 2021 revision, of which 23,000 in the channel; 22,000 for the 2022 river plan's 30 years; the 2011 flood peaked at about 24,000">
-                <text x="0" y="12" class="s">design floods at Ōga, m³/s</text>
-                <text x="0" y="38">2008 policy</text><rect x="104" y="27" width="187" height="14" rx="2" fill="#4781c7" fill-opacity=".5"/><text x="396" y="38" text-anchor="end">19,000</text>
-                <text x="0" y="66">2021 policy</text><rect x="104" y="55" width="236" height="14" rx="2" fill="#2f5f94"/><text x="396" y="66" text-anchor="end">24,000</text>
-                <text x="0" y="94">… in the channel</text><rect x="104" y="83" width="226" height="14" rx="2" fill="#2f5f94" fill-opacity=".7"/><text x="396" y="94" text-anchor="end">23,000</text>
-                <text x="0" y="122">2022 plan</text><rect x="104" y="111" width="216" height="14" rx="2" fill="#4781c7" fill-opacity=".8"/><text x="396" y="122" text-anchor="end">22,000</text>
-                <path d="M340 20 V132" stroke="#8a2b5f" stroke-width="1.4" stroke-dasharray="3 2"/><text x="340" y="146" text-anchor="end" class="s">2011 flood ≈ 24,000 (record) ↑</text>
-                <text x="0" y="168" class="s">1/100 rainfall × 1.1 for a +2 °C climate (MLIT, Oct 2021)</text>
-              </svg>
-              <figcaption>The revised design flood (<span lang="ja">基本高水</span>) equals what 2011 already delivered. The channel is to carry 23,000 of it (<span lang="ja">計画高水流量</span>) and the basin’s dams 1,000; those dams were all built for power, so their share rests on releasing water before a storm, under an agreement of 2020. The 2022 river plan (<span lang="ja">河川整備計画</span>) aims lower: channel works to carry 22,000 within 30 years, 2,000 below 2011, with the dams lowering a 2011-sized flood as far as they can.</figcaption>
-            </figure>
-          </div>
-        </article>
-
-        <article class="step" data-view="basin" data-name="Decisions upstream, decades ahead" data-on="basin basin_nara basin_mie basin_wakayama river_main river_trib pref" data-overlay="base-region basin-labels" data-legend="basin pref">
-          <div class="card">
-            <p>Shingū therefore sits at the intersection of two major transitions:</p>
-            <figure class="fig"><div class="chain v"><span class="i">from local flood defence to watershed governance</span><span class="a">and</span><span class="i">from historical hydrology to anticipatory climate hydrology</span></div></figure>
-            <p>The city’s resilience increasingly depends upon decisions made far upstream, decades ahead and across multiple institutions.</p>
-          </div>
-        </article>
       </div>
-    </main>
+    </div>
+    <section class="after theme-cont" aria-label="Theme 3: the plan against the water">
+        <aside class="todo" data-plan="3I">
+          <p class="todo-h">To add · 3I</p>
+          <p>Redraw the coupling matrix as a network: earthquake and levee condition, river and urban drainage, sediment and channel capacity, slope failure and road access, tsunami and drainage recovery, dams and sediment. Keep the matrix beneath it as the evidence.</p>
+        </aside>
+        <h3 class="trio-head" id="t3-3j"><b><span class="pcode">3J</span> the plan against the water</b>Finding, strategy, test</h3>
+    </section>
 
-    <section class="after" id="after">
-      <h2 id="synthesis">Synthesis · one city, several geographies</h2>
-      <p class="intro">Shingū becomes most legible when its overlapping spatial systems are placed side by side. Each map below is drawn at its own scale — zoom any of them.</p>
-      <div class="facets" id="facets"></div>
-      <p class="closing">Laid side by side, these logics do not nest: the compact centre sits inside the flood and tsunami maps, and the hub kept dry depends on roads through slope hazard.</p>
+    <section class="board" id="finding" aria-label="Finding, strategy, test">
+      <div>
+        <h3>FINDING</h3>
+        <p>Shingū’s location plan concentrates the town where the water goes: 58% of the residents of its residential-inducement zone and 89% of those in its central urban-function zone live inside the maximum river flood or the 2026 maximum tsunami. Evacuation is meant to close that gap and does so only under conditions. In central Shingū the margin hangs on the 2026 model, which keeps road and rail embankments standing and brings the water late; with water by 15 minutes, 2,040 residents of the zone fall short at Wakayama’s rule of leaving at 5 minutes and walking at 0.5 m/s. In the part of Kihō the animation covers, 75% fall short at the same rule.</p>
+      </div>
+      <div>
+        <h3>STRATEGY</h3>
+        <p class="formula">Concentrate + connect + accommodate + evacuate + coordinate</p>
+        <div class="picto-row">
+          <figure><svg><use href="#pg-concentrate"/></svg><figcaption>Concentrate<small>a compact hierarchy of centres</small></figcaption></figure>
+          <figure><svg><use href="#pg-connect"/></svg><figcaption>Connect<small>mountain communities stay linked</small></figcaption></figure>
+          <figure><svg><use href="#pg-accommodate"/></svg><figcaption>Accommodate<small>buildings live with inundation</small></figcaption></figure>
+          <figure><svg><use href="#pg-evacuate"/></svg><figcaption>Evacuate<small>elevation as life-safety</small></figcaption></figure>
+          <figure><svg><use href="#pg-coordinate"/></svg><figcaption>Coordinate<small>the whole watershed</small></figcaption></figure>
+        </div>
+        <p>Urban functions are gathered into a compact hierarchy of centres; mountain communities remain connected through transport and local service nodes; development is progressively steered away from severe hazard; buildings and infrastructure accommodate recurring inundation; evacuation converts nearby elevation into life-safety infrastructure; river governance expands to the scale of the entire Kumano watershed.</p>
+      </div>
+      <div class="lesson">
+        <h3>TEST</h3>
+        <p>Each strategy is held to what it has to deliver: time to leave before the water arrives, roads that stay open to the dry hub, a channel that carries the flood of record. By those tests the plan sorts risk by type more than it reduces it: water in the centre, slope at the hub, time at the edges.</p>
+      </div>
+    </section>
 
-      <h2 id="resistance">From accommodation to resistance</h2>
-      <ul class="continuity">
+    <section class="after theme-cont" aria-label="Theme 3: Hazard, continued">
+        <p class="part-tag"><span class="pcode">3K</span> Youth Library えんがわ · おいしいパーク</p>
+        <p class="xref">At the foot of Kamikura, a library in an old house and a field opened as a park show adaptation of another kind: reuse and incremental change rather than defence against hazard. Their home is <a href="#t5-5e">Theme 5</a>.</p>
+        <div class="kmk" data-kmk="hazard">
+        <h3 class="trio-head" id="t3-foot"><b><span class="pcode">3L</span> at the foot of the high ground</b>The refuge inside the hazard</h3>
+        <p class="intro kmk-lead"><b>The refuge stands in the hazards it serves.</b> The gym of 神倉小学校 (Kamikura Elementary School) is a core shelter of Shingū and its designated refuge here for floods and sediment disasters. All of its 1,022&nbsp;m² footprint lies in the warning zone for debris flows from the 神倉川右支渓 and in the Kumano’s maximum assumed flood, 0.5–3 m deep; the city’s own list rates it one star of three for floods and below one star for sediment disasters, advising a safer site where possible. The school building, the three-star refuge for earthquake and tsunami, has 57% of its footprint in the same debris-flow zone and all of it in the same flood; the 2026 maximum tsunami stops 0.7&nbsp;km from the school ground. The chapters above argue that evacuation needs people near high ground; at the foot of the high ground, the mountain brings a hazard of its own.</p>
+        <div class="stats kstats">
+          <div><b>83% · 15%</b><span>in a sediment-disaster warning zone · in a special warning zone</span></div>
+          <div><b>85%</b><span>inside the maximum assumed river flood; none inside the tsunami inundation</span></div>
+        </div>
+        <div class="kcards kcards-one">
+          <article class="kcard" data-ks="saigai" tabindex="0"><h4><span>流れ · hazard</span>災害</h4><p>83.3% of the area lies in a sediment-disaster warning zone, 15.2% in a special one. Two hazards overlap: slope failure on the 千穂ヶ峰 and 神倉 slopes (35.1%) and debris flow from the gullies above the shrine entrance (神倉川右支渓, 59.3%), a zone that fans out east across 69% of the school ground and the whole of its gym. 84.7% is inside the maximum assumed river flood, and 98% of the school ground. The residential-inducement area of the Location Optimization Plan covers 32.9% and stops short of the slope.</p></article>
+        </div>
+        <p class="xref"><button type="button" class="kh kx" data-ks="saigai">Show the hazards on the Kamikura map</button>, the ground of <a href="#t1">Theme 1</a> read now as risk.</p>
+        <aside class="todo" data-plan="3L">
+          <p class="todo-h">To add · 3L</p>
+          <p>The mountain-to-city transect of Theme 1, second appearance: add runoff and debris movement down the section, evacuation up it, the refuge, and the flood and tsunami extents where they reach.</p>
+        </aside>
+        </div>
+        <h3 class="trio-head" id="synthesis"><b>centre · hub · edge</b>Synthesis · one city, several geographies</h3>
+        <p class="intro">Shingū becomes most legible when its overlapping spatial systems are placed side by side. Each map below is drawn at its own scale — zoom any of them.</p>
+        <div class="facets" id="facets"></div>
+        <p class="closing">Laid side by side, these logics do not nest: the compact centre sits inside the flood and tsunami maps, and the hub kept dry depends on roads through slope hazard.</p>
+        <h3 class="trio-head" id="resistance"><b>who carries the risk</b>From the household to everyone behind the works</h3>
+        <ul class="continuity">
         <li><svg><use href="#pg-kawaraya"/></svg><span>Kawaraya were taken apart before a flood.</span></li>
         <li><svg><use href="#pg-agariya"/></svg><span>Agariya gave people and goods a house on higher ground.</span></li>
         <li><svg><use href="#pg-move-water"/></svg><span>Levees and pumps hold the water out to a design level.</span></li>
@@ -1482,16 +1643,66 @@
         <li><svg><use href="#pg-move-development"/></svg><span>Location planning steers where the town grows.</span></li>
         <li><svg><use href="#pg-move-decision"/></svg><span>Watershed governance moves decisions upstream.</span></li>
       </ul>
-      <p class="closing">Kawaraya and agariya left the risk with the household and kept the capital small. Levees and pumps fix public capital to a design level and gather the residual risk behind it; the last three manage that residual risk by moving people, development and decisions. What changed is who carries the risk: once the household that took its house apart, now everyone behind levees and a channel planned, for the next 30 years, to carry 2,000 m³/s less than the flood of 2011.</p>
-      <p class="closing">Exposure also has a social geography this page does not map. Nakagami Kenji set much of his fiction in the <span lang="ja">路地</span>, a fictional space modelled on the buraku district of Shingū where he was born. The Tokyo High Court held in 2023 that information showing where such districts lie infringes the private lives of the people connected to them, a ruling final since 2024, so the page leaves it unlocated.</p>
+        <p class="closing">Kawaraya and agariya left the risk with the household and kept the capital small. Levees and pumps fix public capital to a design level and gather the residual risk behind it; the last three manage that residual risk by moving people, development and decisions. What changed is who carries the risk: once the household that took its house apart, now everyone behind levees and a channel planned, for the next 30 years, to carry 2,000 m³/s less than the flood of 2011.</p>
+        <h3 class="trio-head"><b>Hazard Planning</b>Hub-and-Network System, Compact City, Land Use Steering</h3>
+        <div class="trio" id="trio-plan"></div>
+        <h3 class="trio-head"><b>Water from three of the four directions</b>from the mountains, falling directly on the city, from the sea; the slopes are the fourth</h3>
+        <div class="trio" id="trio-water"></div>
+        <p class="tconc">Hazard is not something occasionally superimposed on Shingū. It repeatedly changes its architecture, infrastructure, settlement choices, movement systems and reconstruction.</p>
+    </section>
 
-      <h3 class="trio-head"><b>Hazard Planning</b>Hub-and-Network System, Compact City, Land Use Steering</h3>
-      <div class="trio" id="trio-plan"></div>
-      <h3 class="trio-head"><b>Water from three of the four directions</b>from the mountains, falling directly on the city, from the sea; the slopes are the fourth</h3>
-      <div class="trio" id="trio-water"></div>
+    <section class="after theme" aria-label="Theme 4: Flows">
+      <header class="theme-head" id="t4">
+        <p class="tkick">Theme 4 · Flows</p>
+        <h2 id="t4-h">Movement and networks</h2>
+        <p class="tq">What makes the city operate?</p>
+        <p class="tseq">pilgrimage → river and road → a temple’s network → bicycle → network vulnerability → visitors → the watershed</p>
+        <p class="tlead">So far the city has been read as geometry. Now the same city is read as movement.</p>
+      </header>
+        <h3 class="trio-head" id="t4-4a"><b><span class="pcode">4A</span> the framework</b>The three structures and the two lenses</h3>
+        <p class="kmk-p">This page reads urban form in three structures: the ground (下部構造), the lots (中部構造), and the buildings and open spaces on them (上部構造). Read only as structures, the city stands still. Shingū needs two more lenses: flows (流れ), which this theme follows, and representation (まなざし), which <a href="#t6">Theme 6</a> takes up.</p>
+        <p class="kmk-p">Shingū is a hinge between regions: the junction where JR Central’s line from Nagoya (about 3 h 20 min) meets JR West’s from Shin-Ōsaka (about 4 h); a river-border town facing Kihō in Mie; and, by that village’s own account, the reason Kitayama, Japan’s only exclave village, chose Wakayama in 1871: its raftsmen lived off the Shingū timber trade.</p>
+        <p class="srcline">Sources: <a class="doc" href="https://www.city.shingu.lg.jp/Info/10" target="_blank" rel="noopener">Shingū City profile</a>; <a class="doc" href="https://www.vill.kitayama.wakayama.jp/kanko/about/" target="_blank" rel="noopener">Kitayama village</a>.</p>
+    </section>
 
-      <h2 id="fieldnotes">Field notes · Shingū’s three shrines by bicycle</h2>
-      <div class="kmk fn" id="fn-study">
+    <div class="stage" id="stage-flows">
+      <div class="mapcol"></div>
+
+      <div class="steps" id="steps-flows">
+        <div class="chapter" id="ch-4b"><p class="cn">4B</p><h2>Basin and historical flows</h2><div class="tags">pilgrims, the river and the shrines</div></div>
+
+        <article class="step" data-view="region" data-name="Sacred geography · Kumano Kodō" data-on="kodo kodo_iseji kodo_routed river_route river_main pref" data-overlay="base-region shrines towns-kodo kodo-names" data-legend="kodo kodorouted riverroute">
+          <div class="card">
+            <p>Kumano Hayatama Taisha, Kamikura Shrine, the river and the surrounding mountains belong to a sacred geography in which rock, water, forest and movement carry religious meaning. Pilgrimage connected these elements across the wider Kumano landscape; the river itself functioned historically as part of the approach toward Hayatama and today survives as a rare river pilgrimage route within the World Heritage landscape. Shingū’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> continues to treat the Kumano River descent as a major cultural asset.</p>
+          </div>
+        </article>
+
+        <div class="chapter" id="ch-4c"><p class="cn">4C</p><h2>The Hongū–Shingū corridor</h2><div class="tags">a single valley, many flows</div></div>
+
+        <article class="step" data-view="river" data-name="One river, six functions" data-on="river_route river_main nr168 flood ls_roads kodo kodo_iseji water" data-overlay="river-functions" data-legend="riverroute nr flood lsroads">
+          <div class="card">
+            <p>Physical geography therefore performs several functions at once:</p>
+            <figure class="fig"><div class="plus"><span class="i hl" data-hl="f-watershed" tabindex="0">watershed</span><span class="p">+</span><span class="i hl" data-hl="f-transport" tabindex="0">transport corridor</span><span class="p">+</span><span class="i hl" data-hl="f-sacred" tabindex="0">sacred landscape</span><span class="p">+</span><span class="i hl" data-hl="f-heritage" tabindex="0">heritage asset</span><span class="p">+</span><span class="i hl" data-hl="f-tourism" tabindex="0">tourism resource</span><span class="p">+</span><span class="i hl" data-hl="f-hazard" tabindex="0">hazard system</span></div>
+              <div class="cap">Map: between Hongū and the mouth the same valley carries the river pilgrimage route (40.6 km), National Route 168, the river boats, the modelled L2 flood and road stretches inside landslide zones.</div></figure>
+            <p>That multiplicity gives Shingū’s vernacular flood architecture particular significance.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+    <section class="after theme-cont" aria-label="Theme 4: Flows, continued">
+        <h3 class="trio-head" id="t4-4d"><b><span class="pcode">4D</span> a temple in a network</b>Myōshinji as a network node</h3>
+        <p class="tlead">Physical size and network importance are not the same thing.</p>
+        <div class="kmk" data-kmk="network">
+        <p class="kmk-p"><b>Layers, not a single origin.</b> In the Middle Ages the mountain was run by shrine monks (神倉聖) and four hongan temples (本願), the fund-raisers for its upkeep. One of them, 妙心寺, a nunnery at the foot, administered Kamikura-yama under the Shingū hongan; in 1531 its nun 妙順尼 was granted the hongan title after a restoration funded by collections in the provinces. A copy of the Nachi pilgrimage mandala, the kind the Kumano bikuni are said to have carried and explained, is known as 妙心寺旧本 (now kept at Hayatama). The decrees separating kami from Buddhas (1868) and abolishing Shugendō (1872) cut through this: the Kumano shrines became Shinto only, and the hongan temples nearly all closed; 妙心寺 survives beside the shrine office. Later layers were added at the foot: the 天磐盾 stele of 1990, for the 2,650th year of the imperial era; 猿田彦神社・神倉三宝荒神社, built in 1983 and rebuilt in 2024, shrines to Sarutahiko, who guided Ninigi’s descent and is a god of crossroads in the Nihon Shoki, and to Sanbō Kōjin, guardian of the Three Treasures, worshipped in Shugendō and kept in homes as the god of the hearth; until the Meiji period a Sarutahiko shrine, known as Tengu-sama, stood on the mountain. The donation that rebuilt them in 2024 also paid for renewing or repairing 満山社, 火神社 and 中ノ地蔵堂, for the 20th anniversary of the World Heritage listing.</p>
+        </div>
+        <aside class="todo" data-plan="4D">
+          <p class="todo-h">To add · 4D</p>
+          <p>Map the reach the paragraph above describes: Myōshinji’s small footprint against the provinces its collections came from, its religious affiliation, and the movement of money, people, material and ritual that tied the foot of Kamikura to the Kumano shrines and beyond.</p>
+        </aside>
+        <h3 class="trio-head" id="fieldnotes"><b><span class="pcode">4E</span> 4E–4G · the moving body</b>Field notes · Shingū’s three shrines by bicycle</h3>
+        <p class="tlead">The morphology of Shingū changes depending on the moving body used to measure it.</p>
+        <div class="kmk fn" id="fn-study">
         <p class="intro">On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as <a href="https://www.shinguu.jp/itineraries/detail/6" target="_blank" rel="noopener">「世界遺産･新宮三社詣で まちなかサイクリング」</a>: 阿須賀神社, 熊野速玉大社 and 神倉神社. Forty-three of our phone photographs and short videos carry a position, from 10:37 at Asuka to 12:12 at the foot of Kamikura, and a last one at 12:54 at Shingū Station. The photographs’ positions are good to 3.5–32.0 m and come with a compass heading; the two videos’ are stored to 0.0001°, a cell of about 11 × 9 m, with no heading. They fix where we stopped. Between the stops the ride drawn here is inferred: the shortest route a bicycle may legally take.</p>
         <div class="kmk-top">
           <div class="kmk-text">
@@ -1534,98 +1745,171 @@
           <figcaption>Heights from GSI DEM5A on the road bed: at every 20 m the flattest ground within 15 m of the mapped line, since a road is a bench cut into the slope; tunnels and bridges are interpolated between their ends. Checked against the 44 GSI benchmarks, triangulation points and spot heights within 15 m of the routes: median error 0.25 m (25 levelling benchmarks: 0.15 m), worst 13.8 m on the partly unpaved road over 高瀬峠. Blue bands: sections closed in heavy rain, labelled with their continuous-rain threshold (Mie closes also at 40 mm in an hour); heights ×10. Hover the profile to find the point on the map.</figcaption>
         </figure>
       </div>
+        <aside class="todo" data-plan="4G">
+          <p class="todo-h">To add · 4G</p>
+          <p>Photograph route sequences: an ordinary lane, the channel, a house edge, the temple threshold, the steps, the mountain, narrated as continuous movement rather than as landmarks. The first sequence is in <a href="#t5">Theme 5</a>.</p>
+        </aside>
+    </section>
 
-      <h2 id="kamikura">Kamikura mountain foot · the refuge inside the hazard</h2>
-      <div class="kmk" id="kamikura-study">
-        <p class="intro kmk-lead"><b>The refuge stands in the hazards it serves.</b> The gym of 神倉小学校 (Kamikura Elementary School) is a core shelter of Shingū and its designated refuge here for floods and sediment disasters. All of its 1,022&nbsp;m² footprint lies in the warning zone for debris flows from the 神倉川右支渓 and in the Kumano’s maximum assumed flood, 0.5–3 m deep; the city’s own list rates it one star of three for floods and below one star for sediment disasters, advising a safer site where possible. The school building, the three-star refuge for earthquake and tsunami, has 57% of its footprint in the same debris-flow zone and all of it in the same flood; the 2026 maximum tsunami stops 0.7&nbsp;km from the school ground. The main chapters argue that evacuation needs people near high ground; at the foot of the high ground, the mountain brings a hazard of its own.</p>
-        <p class="intro">One small piece of ground holds every system in this essay at once. At the foot of Kamikura-yama the sacred mountain and its stone steps, the city’s drainage channel at the head of the Ichida-gawa system, a row of temples and houses, a school compound and the town grid touch within a few hundred metres. This last chapter reads that ground plot by plot, on GSI’s 1 m laser elevation model, layer by layer: the ground (下部構造), the lots (中部構造), the buildings and open spaces on them (上部構造) and what flows through (流れ).</p>
-        <div class="kmk-top">
-          <div class="kmk-text">
-            <p><b>Drawn by rules, not as a box.</b> <span class="kh" data-ks="bichikei" tabindex="0">West</span>: 25 m upslope of the break of slope, so the forest edge, the slope and the steep ground behind the plots are inside. <span class="kh" data-ks="kokyo" tabindex="0">East</span>: the street that bounds the compound of 神倉小学校 (Kamikura Elementary School). <span class="kh" data-ks="yashiki" tabindex="0">North</span>: the lane that closes the first full block above the school and the temple row. <span class="kh" data-ks="keidai" tabindex="0">South</span>: the street just south of the shrine entrance, so the entrance, the bridge and the foot of the steps are inside and the climb to Gotobiki-iwa is not.</p>
-            <div class="stats kstats">
-              <div><b>5.23 ha</b><span>study area, 286 m north–south × 234 m east–west</span></div>
-              <div><b>127</b><span>buildings; 28% of the ground is built over</span></div>
-              <div><b>3.4–40.2 m</b><span>ground height inside; the plain lies at 6.6 m</span></div>
-              <div><b>287 m</b><span>of 神倉堀端都市下水路 inside the line: about 3.5 m of visible channel, 4–5 m from wall to wall</span></div>
-              <div><b>83% · 15%</b><span>in a sediment-disaster warning zone · in a special warning zone</span></div>
-              <div><b>85%</b><span>inside the maximum assumed river flood; none inside the tsunami inundation</span></div>
-            </div>
-            <p>Pick a system below, or hover its name: the map redraws the same ground for it. Under the map, switch the ground itself.</p>
+    <div class="stage" id="stage-network">
+      <div class="mapcol"></div>
+
+      <div class="steps" id="steps-network">
+        <div class="chapter" id="ch-4h"><p class="cn">4H</p><h2>When the network breaks</h2><div class="tags"><svg class="pg"><use href="#pg-connect"/></svg> connect</div></div>
+
+        <article class="step" data-view="connect" data-name="Mountain corridors · exposure" data-on="ls_roads nr168 nr42 road_local river_main shingu" data-overlay="hubs valley-sites" data-legend="lsroads hubs">
+          <div class="card">
+            <p>Demographic contraction adds another layer to the hazard problem. Shingū’s regional services must remain viable for an increasingly dispersed and ageing population, including mountain communities where transport corridors themselves are vulnerable to rainfall and slope failure.</p>
+            <figure class="fig">
+              <div class="stats"><div><b>20%</b><span>of Route 168 in Shingū (6.2 of 31 km) crosses designated landslide zones</span></div><div><b>10%</b><span>of the other main local roads (9.8 of 102 km)</span></div></div>
+              <div class="cap">Red on the map: road stretches inside sediment-disaster warning zones (MLIT A33, Aug 2025), within the municipality.</div>
+            </figure>
+            <p>The projection sharpens the age profile more than it relieves the numbers. IPSS expects Shingū to fall from 27,171 residents in 2020 to 15,423 by 2050 and Kihō from 10,321 to 5,713, while residents aged 75 and over fall by 9% and 4%. In the part of Kihō’s tsunami zone the animation covers, their share rises from 17% to 30%, and the share of residents who cannot reach a refuge in time from 60% to 62%.</p>
+            <figure class="fig"><div class="cap">Projection: IPSS, 2023 municipal projections; each building keeps its 2020 residents, scaled by its town’s projected change for those under and over 75. Walking at the Cabinet Office’s 2025 speeds: 0.70 m/s on gentle ground and 0.44 m/s on slopes of 5% or more, 0.53 and 0.33 m/s for those 75 and over (the pace of walking with someone who needs help); leaving at 5 minutes.</div></figure>
           </div>
-          <figure class="kmk-fig">
-            <div class="kmf" id="kmkmap"></div>
-            <div class="kbase" role="group" aria-label="Ground drawn under the map"><span>Ground</span><button type="button" class="kbase-b" data-kb="relief" aria-pressed="true">relief</button><button type="button" class="kbase-b" data-kb="elev" aria-pressed="false">height</button><button type="button" class="kbase-b" data-kb="slope" aria-pressed="false">slope</button><button type="button" class="kbase-b" data-kb="lrm" aria-pressed="false">local relief</button><button type="button" class="kbase-b" data-kb="curv" aria-pressed="false">curvature</button></div>
-            <div class="kramp" id="kmkramp" hidden></div>
-            <ul class="klegend" id="kmkleg"></ul>
-            <figcaption>Ground: GSI DEM1A, bare ground from airborne laser, one pixel per metre. Buildings, channel banks and road edges: GSI 最適化ベクトルタイル. Parcels: 「登記所備付地図データ 新宮市」（法務省）, registered and redrawn here (approximate). Streets, paths and precincts: © OpenStreetMap contributors (the school’s OSM name, 千穂小学校, predates the 2012 merger). Hazard and plan areas: MLIT 国土数値情報 A33 (2025), A31a (2025), A55 (FY2024); tsunami: Wakayama’s 2026 maximum, digitised from its maps. Zoom with the buttons, ctrl-scroll or a double-click.</figcaption>
-          </figure>
-        </div>
-        <div class="ksyschips" role="group" aria-label="Spatial systems, by layer">
-          <button type="button" class="kchip" data-ks="all" aria-pressed="true">All systems</button>
-          <span class="kgrp"><b>下部構造</b> ground</span>
-          <button type="button" class="kchip" data-ks="bichikei" aria-pressed="false">微地形 micro-relief</button>
-          <span class="kgrp"><b>中部構造</b> lots</span>
-          <button type="button" class="kchip" data-ks="yashiki" aria-pressed="false">町割・屋敷割 plots</button>
-          <button type="button" class="kchip" data-ks="keidai" aria-pressed="false">境内 precincts</button>
-          <span class="kgrp"><b>上部構造</b> buildings and open space</span>
-          <button type="button" class="kchip" data-ks="seikatsu" aria-pressed="false">生活 everyday life</button>
-          <button type="button" class="kchip" data-ks="kokyo" aria-pressed="false">現代公共空間 public space</button>
-          <span class="kgrp"><b>流れ</b> flows</span>
-          <button type="button" class="kchip" data-ks="suikei" aria-pressed="false">水系 water</button>
-          <button type="button" class="kchip" data-ks="michi" aria-pressed="false">道 paths</button>
-          <button type="button" class="kchip" data-ks="saigai" aria-pressed="false">災害 hazard</button>
-          <button type="button" class="kchip" data-ks="shinko" aria-pressed="false">信仰 sacred</button>
-        </div>
-        <div class="kcards">
-          <article class="kcard" data-ks="bichikei" tabindex="0"><h4><span>下部構造 · micro-relief</span>微地形</h4><p>The mountain does not grade into the town; it stops: 40° above the foot, 1° below it. Across the 25 m strip inside the west edge the ground rises 22.6 m (median; at most 33.8 m), then the plain stays near 6.6 m. In the town the bare-earth model finds no step of 1 m or more outside the buildings and the channel; every such step lies on the mountain face above the foot.</p></article>
-          <article class="kcard" data-ks="yashiki" tabindex="0"><h4><span>中部構造 · plots</span>町割・屋敷割</h4><p>The Ministry of Justice parcel map here is a digitised cadastral drawing in arbitrary coordinates (任意座標系); fitted to GSI’s road edges, its road parcels sit a median 1.2 m from them. On the median its numbered parcels stop at the foot of the mountain; row by row the edge wanders (the middle half of the rows from 10 m upslope to 12 m out). Buildings are coloured by the alignment test below.</p></article>
-          <article class="kcard" data-ks="keidai" tabindex="0"><h4><span>中部構造 · precincts</span>境内</h4><p>The sacred properties sit between the slope and the channel: the shrine’s lower precinct at the entrance (1,217 m² inside the line); north of it 妙心寺, one of the hongan temples that administered Kamikura-yama, thought to have led the Kumano bikuni, the nuns who raised funds for the Kumano shrines; and the Zen temple 宗応寺 further north. Across the channel, on the town side, lie the grounds of the 出雲大社新宮教会 (734 m²), a separate body.</p></article>
-          <article class="kcard" data-ks="seikatsu" tabindex="0"><h4><span>上部構造 · everyday life</span>生活</h4><p>Houses on small plots fill the blocks between precincts, school and streets: 126 of the 127 footprints are mapped as ordinary buildings (普通建物); the one robust building (堅ろう) is the school’s.</p></article>
-          <article class="kcard" data-ks="kokyo" tabindex="0"><h4><span>上部構造 · public space</span>現代公共空間</h4><p>The school compound is the one large open ground: 1.20 ha inside the line, nearly a quarter of it, along the east bank of the channel. Its building is the refuge for earthquake and tsunami (third floor, 14.3 m); its gym, a core shelter, is the refuge for floods and sediment disasters. Across the channel two private projects turn old plots into public space: Youth Library えんがわ (2013), a library in an old house, and おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it.</p></article>
-          <article class="kcard" data-ks="suikei" tabindex="0"><h4><span>流れ · water</span>水系</h4><p>神倉堀端都市下水路, the Kamikura Horibata Urban Drainage Channel: a municipal drainage channel in the upper Ichida-gawa system, crossing the area as an open, stone-faced channel cut up to 3.2 m below the plain. It comes in from the north on the town grid, cuts diagonally past the school and reaches the mountain only at the shrine entrance, where the stream from Kamikura-yama joins it after falling from 63.5 m to 4.7 m in 170 m. The headwater watercourse is also documented as Kamikura-gawa.</p></article>
-          <article class="kcard" data-ks="michi" tabindex="0"><h4><span>流れ · paths</span>道</h4><p>The streets keep to the town grid. The pedestrian routes do not: the 538 steps of the steep 男坂 (Otoko-zaka) and the gentler 女坂 (Onna-zaka) climb from the entrance, and the bridge over the channel is the threshold between town and mountain.</p></article>
-          <article class="kcard" data-ks="saigai" tabindex="0"><h4><span>流れ · hazard</span>災害</h4><p>83.3% of the area lies in a sediment-disaster warning zone, 15.2% in a special one. Two hazards overlap: slope failure on the 千穂ヶ峰 and 神倉 slopes (35.1%) and debris flow from the gullies above the shrine entrance (神倉川右支渓, 59.3%), a zone that fans out east across 69% of the school ground and the whole of its gym. 84.7% is inside the maximum assumed river flood, and 98% of the school ground. The residential-inducement area of the Location Optimization Plan covers 32.9% and stops short of the slope.</p></article>
-          <article class="kcard" data-ks="shinko" tabindex="0"><h4><span>流れ · sacred</span>信仰</h4><p>Gotobiki-iwa, where, by tradition, the Kumano gods first came down, lies outside the area, 330 m up the line. Inside it lies the threshold: the shrine’s lower precinct, the 下馬 stone, the 天磐盾 stele and the 猿田彦神社・神倉三宝荒神社 at the foot, and the last 20 m of the steps the torches run down every 6 February. Arrows at the edge point to 熊野速玉大社 (0.9 km), 阿須賀神社 (1.3 km) and the mouth of the Kumano (2.8 km).</p></article>
-        </div>
+        </article>
 
-        <h3 class="trio-head"><b>下部構造 · ground</b>Where does Kamikura-yama stop?</h3>
-        <p class="kmk-p"><b>The 1 m model holds here.</b> Every cell of the study area comes from GSI’s 1 m laser model (DEM1A); in the whole 1.3 × 0.9 km frame only 535 cells fall back to the 5 m model. It agrees with the GSI survey marks within 800 m of the study area: two of three levelling benchmarks to within 0.01 m and 0.14 m (the third reads 0.79 m low), the two triangulation points to within 0.08 m and 0.51 m. On open, flat ground the 5 m model agrees with it (median difference 0.9 cm, spread 3.5 cm), but it reads the channel as 0.93 m deep where the 1 m model reads 2.68 m: at 5 m the ditch that organises the foot all but disappears. The caveat is the buildings: 28% of the study area lies under a GSI outline, where bare ground is interpolated.</p>
-        <p class="kmk-p"><b>Four ways to find the foot.</b> On 310 cross-profiles, one every 2 m along 618 m of the front, the foot is located four ways: as the edge of the mountain mask (A), the first point 1 m above the profile’s own plain (B), the most concave point (C) and the knee of a two-segment line fitted to the profile (D). A and B both rest on a threshold 1 m above a plain, and they agree most closely (a median 1.5 m apart). Their median is the foot on the map; their spread is the band around it. The four agree within 5 m on 46.5% of the profiles; their median spread is 5.8 m, but on a tenth of the profiles it exceeds 31 m, and each lies a median 0.9–2.4 m from their common line. Where they agree, the answer is a line: above it the ground rises at a median 40°, below it at 1°. The face stays steep almost to the foot: on 46% of the profiles the steepest metre of the last six climbs at 45° or more (on 66% ten metres higher up), and then the ground flattens.</p>
-        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkfoot" role="img" aria-label="Four cross-profiles through the mountain foot with the four definitions of the foot"></svg></div><figcaption>Four cross-profiles in the study area, north to south: bare ground every metre from 40 m upslope to 60 m out, heights ×2. Under each profile, one row per definition (A–D) marks where it puts the foot; the black line is their median. Switch the ground under the map to read the same edge as height, slope, local relief (the ground against its 20 m surroundings: walls, terraces and the channel trench stand out) or profile curvature (concave at the foot, convex at shoulders and wall tops; smoothed over about 5 m, so narrower features are not read).</figcaption></figure>
+        <article class="step" data-view="connect" data-name="Concentration + connection" data-on="ls_roads nr168 nr42 road_local river_main shingu riz uf" data-overlay="hubs links valley-sites" data-legend="lsroads spof mczone hubs fmed fadmin fsafety fschool fcare roadtag" data-fac="med admin safety school care" data-roads data-risk="isolation">
+          <div class="card">
+            <p>The planning logic combines concentration with connection. Higher-order services gain the density to remain viable, while roads keep the periphery attached. The road network shows where that bargain fails.</p>
+            <figure class="fig">
+              <div class="stats"><div><b>56</b><span>main-road links that are the only way out for 10 or more residents</span></div><div><b>98%</b><span>of Kihō’s residents outside the flood’s 0.5 m line lose every road to an emergency hospital in the maximum flood</span></div><div><b>26 min</b><span>more to the medical centre from Kumanogawa with Route 168 cut as in 2011</span></div></div>
+              <div class="cap">Network: OpenStreetMap drivable roads, 1 October 2026; a road closes where any point on it lies in the hazard (flood 0.5 m, tsunami 0.3 m, or a landslide red zone), bridges and tunnels excepted. Emergency hospitals: the three in reach that <span lang="ja">国土数値情報</span> P04 lists (Shingū, Mihama, Nachikatsuura). Map: services from <span lang="ja">国土数値情報</span> (hospitals and clinics P04, 2020; town offices P05, 2022; schools P29, 2023; care homes with residents P14, 2023; fire and police P17/P18, 2012, the police station at its 2017 site), numbered roads, road stretches inside landslide zones (red), the eight links with the most residents behind them (red dots) and the debris-flow warning zone around the medical centre.</div>
+            </figure>
+            <p>In Shingū the same flood cuts off 23% of such residents. Add the 2026 maximum tsunami and the red zones of a Nankai earthquake, and 4,083 residents of Shingū and 7,134 of Kihō, none of them reached at home, lose every road to the three emergency hospitals. Closing only the stretch of Route 168 that reopened last in 2011, Miyai to the city, lengthens Kumanogawa-chō’s drive to the medical centre from 36 to 63 minutes and leaves 134 of its 1,117 residents with no road at all. The Kōyō medical centre, the hub the plan keeps dry, stands inside a debris-flow warning zone, and no road reaches it without crossing one.</p>
+            <p>Most services sit on the coastal lowland. Kumanogawa keeps a branch office, clinics, a fire post, a police box and two schools; Takata a branch office and two schools.</p>
+          </div>
+        </article>
 
-        <h3 class="trio-head"><b>下部構造 · ground</b>What follows the foot? Measured, not assumed</h3>
-        <p class="kmk-p">The foot runs N 1° E along the 618 m measured and N 7° E over the 0.9 km of the frame; the town grid runs N 5° E: at the scale of the town, foot, grid and compass coincide, so the grid’s orientation alone cannot say whether the mountain or the compass drew it. The test therefore uses only the places where the foot bends 10° or more off the grid: 64% of the measured front, in 12 bends 14–80 m long. There, each piece of a feature (at most 10 m long) counts for whichever of the two it is closer to, parallel or square. Chance comes from sliding the foot’s directions along the foot by 50 m or more, so that its bends meet features they did not shape; shuffling single pieces instead would treat neighbouring pieces as independent and make chance too easy to beat. The effect is the share that follows the foot minus the share expected by chance, in percentage points; its 95% interval comes from resampling the front in 50 m blocks, which keeps neighbouring pieces together. The nine classes measured form one family, each in the band next to the foot, none left out for its result, and q controls the false discovery rate across them (Benjamini–Hochberg). The whole test is rerun with each single foot definition and with two other registrations of the parcel map; those runs show how far an effect moves with these choices and are not counted as votes.</p>
-        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkscore" role="img" aria-label="Which features follow the mountain foot within 25 m: the effect against chance with its 95% interval, the six other runs and the q-values of each class"></svg></div><figcaption>Within 25 m of the foot (steep steps: the 15 m above it), the effect: the share of the counted length that follows the foot (buildings weighted by footprint area) minus the share expected by chance (the same features with the foot’s directions slid along it by 50 m or more), in percentage points. Bar: its 95% interval, from resampling the front in 50 m blocks. Ticks: the same effect in the six other runs (each single foot definition, A–D; the similarity and the thin-plate-spline registration of the parcel map). q: the false discovery rate over the nine classes (Benjamini–Hochberg), with chance from slides of at least 50 m and, as a check, 100 m; orange where q &lt; 0.05. Rows run from the smallest q with 50 m.</figcaption></figure>
-        <p class="kmk-p"><b>Within 25 m, only the lanes pass the false-discovery control.</b> They follow the foot 25 points more often than chance (95% interval +1 to +57; q = 0.034); across the other runs their effect ranges from +6, with the hinge definition of the foot (D), to +25. The channel’s centre line (+34 points, −16 to +64; q = 0.069), the buildings (+31, +3 to +51; q = 0.052) and the back boundaries of the plots (+43, +9 to +59; q = 0.094; 8 of the 9 lines that can be tested follow) lean the same way without passing it; the channel’s banks lean less (+20, −17 to +44; q = 0.179). Chance drawn from slides of at least 100 m instead of 50 m changes this: the back boundaries (q = 0.021) and the buildings (q = 0.042) then pass too, the channel still not (q = 0.064). Which of them hold depends on how far along the front the foot’s bends are taken to echo. Where the channel runs along the foot, around the shrine entrance and south of it (250 m, 94 m of them inside the study area), its east–west wiggles track the foot’s (correlation 0.82) at about half their amplitude. Frontages, temple, shrine and church grounds, the drawn waterway and the steep steps on the foot face show no effect that holds with either slide (q 0.321 or more): their intervals straddle zero or, for the frontages, lie below it. <b>Beyond 25 m, nothing holds</b> but two frontages in one place, 50–100 m out from the foot just north of the study area, and only with the 100 m slide (q = 0.046 over all 29 class-and-band tests); with the 50 m slide, none of the 20 tests beyond 25 m comes below q = 0.24. A dozen short bends carry the whole test, so the intervals are wide. The terrain draws the edge of the town and, within 25 m of it, bends the lanes; the channel, the buildings and the plots lean with it, but a front this short cannot settle them.</p>
-        <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkoff" role="img" aria-label="Distance from the mountain foot to the edge of the numbered parcels, the nearest lane, the cadastral waterway and the channel"></svg></div><figcaption>Row by row, every 2 m along the front: distance from the foot to the western edge of the numbered parcels in the parcel map, to the nearest lane, to the waterway parcels of the parcel map and to today’s channel, each over the rows where it is found (the lanes on 305 rows, the waterway parcels on 139). Dot: median; bar: the middle half of the rows.</figcaption></figure>
+        <div class="chapter" id="ch-4i"><p class="cn">4I</p><h2>Visitors and outsiders</h2><div class="tags"><svg class="pg"><use href="#pg-evacuate"/></svg> temporary populations</div></div>
 
-        <h3 class="trio-head"><b>中部構造 · lots</b>The parcel map on the ground</h3>
-        <p class="kmk-p">The Ministry of Justice map for 千穂 and 神倉 (登記所備付地図データ, sheet 「新宮・千穂一丁目・神倉一丁目他」) is a digitised cadastral drawing in arbitrary coordinates (任意座標系). Its roads (道) and waterways (水) are unnumbered strips of their own; every other parcel carries a lot number (地番), whoever owns it. The strips make it possible to place the drawing: the school parcel (715-3) matched to the school’s outline gives a first position; the road parcels fitted to GSI’s 1:2,500 road edges give the final one. To fit, the drawing has to be enlarged by 13–16% and turned 14° (31% more area than drawn); its road parcels then lie a median 1.2 m from the road edges (58% within 1.5 m). Records descended from the Meiji land-tax surveys, in which residents measured their own land and drew the village maps, are said to run short (縄伸び): in the cadastral surveys certified from FY1970 to FY2011, MLIT finds surveyed areas 26% larger than registered ones on average, roads and waterways excluded. That compares registers, not drawings, but it points the same way. If the shortfall varied across the sheet, one affine fit could not absorb it. A thin-plate spline can bend the drawing to the road edges unevenly; its stiffness is chosen by fitting on two of the area’s three north–south thirds and testing on the third. The stiffest setting tried wins, practically the affine fit: on a third left out, the road parcels lie a median 1.3–2.1 m from the road edges with the spline, 1.3–1.9 m with the affine fit and 1.5–1.7 m with a uniform enlargement, against 1.2–1.3 m on the ground each was fitted to. An uneven stretch cannot be told from noise in these road edges, so none is applied; the spline and the uniform enlargement serve as the two other registrations in the runs above. Positions stay approximate; directions are what the test above uses.</p>
-        <p class="kmk-p">Two results do not depend on those details. <b>On the median, the numbered parcels end at the foot</b>: their western edge lies a median 0.3 m from it (−1.7 m to +0.9 m across the seven runs), though row by row it wanders, the middle half of the rows between 10 m upslope and 12 m out. And <b>the map’s waterway parcels keep a course of their own</b>, a median 35.5 m out from the foot (the middle half of the rows 21–46 m): numbered parcels fill the strip between the mountain and that line, a single parcel deep on half the rows. 宗応寺’s address point falls 4.0 m inside parcel 708-1, with the next numbered parcel 7.5 m away, so the test counts that parcel as temple property; 妙心寺’s lies inside the school parcel, 0.8 m from its edge, among small parcels, so its plot cannot be identified at this accuracy and is left out.</p>
+        <article class="step" data-view="region" data-name="The visitor’s Kumano" data-on="kodo kodo_iseji kodo_routed river_route river_main pref rail" data-overlay="base-region shrines gateways kodo-names" data-legend="kodo kodorouted riverroute rail">
+          <div class="card">
+            <p>Shingū’s regional role also produces a mobile population of pilgrims, visitors and cruise passengers whose relationship to the landscape differs sharply from that of residents.</p>
+            <p>Kumano tourism draws on the same river, mountains and sacred topography that structure hazard. The city’s <a class="doc" href="https://www.city.shingu.lg.jp/info/904" target="_blank" rel="noopener">tourism strategy (<span lang="ja">新宮市観光振興計画</span>)</a> treats the World Heritage river pilgrimage, Kumano Kodō, urban heritage and mountain landscapes as interconnected resources; Shingū Port extends that network outward as a cruise and maritime gateway.</p>
+                      <figure class="fig">
+              <div class="stats"><div><b>1.29 M</b><span>visitors to Shingū in 2025</span></div><div><b>187,788</b><span>overnight guests, +28% on 2019</span></div><div><b>22,040</b><span>foreign guest-nights, +76% on 2019</span></div><div><b>82</b><span>cruise calls at Shingū Port, 2010–2019</span></div></div>
+              <div class="cap">Wakayama Prefecture tourism surveys (<a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R7houkokusho.pdf" target="_blank" rel="noopener">2025</a>, <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/062400/doutai2_d/fil/R01_doutaityousa.pdf" target="_blank" rel="noopener">2019</a>) and its <a class="doc" href="https://www.pref.wakayama.lg.jp/bcms/prefg/082400/cruise/port_call_results.html" target="_blank" rel="noopener">cruise-call record</a>. The river-boat descent, revived in 2005, carried 4,127 passengers in FY2016, 1,306 of them from abroad (city tourism plan).</div>
+            </figure>
+</div>
+        </article>
 
-        <h3 class="trio-head"><b>流れ · flows</b>One flow, several names</h3>
-        <p class="kmk-p">The channel through the study area is <b>神倉堀端都市下水路</b>, the <b>Kamikura Horibata Urban Drainage Channel</b>: a municipal drainage channel in the upper Ichida-gawa system. The headwater watercourse is also documented as Kamikura-gawa (神倉川). Shingū’s master plan lists it among the city’s urban drainage channels (都市下水路), apart from its entry for the river Ichida-gawa (河川). The names belong to different systems — hydrology, river administration, urban drainage — and overlap; none of them marks a legal point where one becomes the next.</p>
-        <ol class="kflow">
-          <li><b>千穂ヶ峰</b><span>Chihogamine, the source</span></li>
-          <li><b>神倉川</b><span>Kamikura-gawa: the headwater name in a 1997 prefectural assembly record, the city’s disaster plan (市田川神倉川右支渓) and MLIT’s purification transfer of 2000, which feeds it 0.3 m³/s of Kumano water</span></li>
-          <li><b>神倉堀端都市下水路</b><span>Kamikura Horibata Urban Drainage Channel: municipal storm drainage; 59.7 ha catchment, 779 m planned, 450 m improved (2012)</span></li>
-          <li><b>市田川</b><span>Ichida-gawa: a Class A river since 1970; MLIT describes it as rising on 千穂ヶ峰 and running 4.8 km to the Kumano (basin 5.36 km²)</span></li>
-          <li><b>熊野川</b><span>the Kumano</span></li>
-        </ol>
-        <p class="kmk-p"><b>Width.</b> Municipal design width: 1.5–2.0 m (the plan’s 管径巾員). GIS-measured visible channel: about 3.5 m. GIS-measured wall-to-wall corridor: about 4–5 m. The municipal figure and the GIS measurements refer to different definitions of channel width; no engineering cross-section has yet been located.</p>
-        <ol class="kchron">
-          <li><b>FY1959</b> Shingū starts building urban drainage channels for storm water.</li>
-          <li><b>1970–1975</b> The Ichida-gawa becomes a Class A river (1970); its lowest 2 km pass to direct national control (1972); the prefecture designates further land as river area along it and the Ukishima-gawa (1975, under River Act art. 6(1)(iii); the maps are not published online).</li>
-          <li><b>FY1999</b> MLIT’s national sewerage project archive records landscape works on 神倉堀端都市下水路 completed in FY1999 (平成11), including 740 m² of stone facing, scenic safety railings and 124 m of planting, listed under two model programmes (水循環・再生下水道モデル事業 and 水環境保全共同事業).</li>
-          <li><b>2012</b> The master plan counts 450 of its 779 planned metres as improved.</li>
-          <li><b>2025–2026</b> The FY2025 budget carries ¥4.53 million for the channel’s repair (神倉堀端下水路改修事業); stone-facing repair in 千穂 (30 m² of wall facing, a landscaping licence required) is tendered in August and again in September 2025, the works due by February 2026.</li>
-        </ol>
-        <p class="kmk-p"><b>The channel and the parcel map disagree.</b> Where the map covers it (from 64 m north of the study area to 34 m before the channel leaves it), today’s channel takes three courses. In the north (135 m) it runs in the map’s strips of road and waterway (59–71%; none of it inside a numbered parcel). Then for 79 m it cuts diagonally through numbered parcels (90–95%), 60–70% of it more than 3 m inside them, beyond the registration’s error: half through the school’s parcel, up to 11–13 m from its edge, the rest through two others. In the south (about 100 m) it runs along the edge of the school parcel, at most 3–5 m inside it, and within 3 m of the map’s waterway for 40–73% of its length. The ranges span the three registrations. The drainage channel follows the grid, cuts through the parcels, then returns towards the drawn waterway along the foot.</p>
+        <article class="step" data-view="core" data-name="Where visitors stand" data-on="ts26_shallow ts26_mid ts26_deep water river_main rail micro_high" data-overlay="visitors refuges" data-legend="ts26 refuge">
+          <div class="card">
+            <p>This creates a second resilience requirement: people with limited local spatial knowledge must be able to understand risk quickly.</p>
+            <p>A resident may recognize the nearest high ground, remember previous inundation or understand which road disappears during heavy rain. A newly arrived pilgrim operates from a different knowledge base. Hazard communication therefore becomes part of destination management.</p>
+            <p>A rail traveller steps out at the edge of the 2026 maximum inundation: in the model, water under 0.3 m reaches Shingū Station after 47 minutes, and the nearest refuge or high ground lies 9.5 minutes away at Wakayama’s walking rule. Hayatama Taisha and the city hall stand outside the inundation.</p>
+          </div>
+        </article>
 
-        <h3 class="trio-head"><b>流れ · flows</b>Transect: Gotobiki-iwa → the steps → the channel → houses → national road → city hall</h3>
-        <p class="kmk-p">One line runs through the area: from the summit shrine at Gotobiki-iwa (ground at 88.3 m on the 1 m model; the rock itself is about 11 m high) down the path and the 538 steps to the bridge at their foot (6.6 m), then due east across the town to the city hall (8.5 m), 1,132 m in all. The first 331 m are mountain. Outside the channels, the town part lies between 3.7 m and 8.6 m; it dips to 2.1 m in the Ukishima-gawa channel and rises again towards the city hall.</p>
-        <figure class="kmk-prof"><p class="vscroll-hint">Scroll the profile sideways →</p><div class="vscroll"><svg id="kmkprof" role="img" aria-label="Ground profile along the transect, from Gotobiki-iwa to the city hall"></svg></div><figcaption>Bare ground on GSI DEM1A, sampled every 2 m along the path, the steps and the line to the city hall; heights ×2. Under the line: what it crosses. Hover the profile or the dashed line on the map and the same point lights in both.</figcaption></figure>
-        <h3 class="trio-head"><b>流れ · sacred</b>Where the landscape itself became sacred</h3>
+        <article class="step" data-view="core" data-name="Legibility in five languages" data-on="ts26_shallow ts26_mid ts26_deep water river_main rail micro_high" data-overlay="visitors refuges" data-legend="ts26 refuge">
+          <div class="card">
+            <p>Shingū’s web hazard map integrates flood depth, tsunami inundation, landslide zones, shelters and evacuation timing and is available in Japanese, English, Chinese, Korean and Tagalog.</p>
+            <figure class="fig"><div class="chips"><a lang="ja" href="https://shingu.nigedoki-map.com/" target="_blank" rel="noopener">日本語</a><a href="https://shingu.nigedoki-map.com/en" target="_blank" rel="noopener">English</a><a lang="zh" href="https://shingu.nigedoki-map.com/zh" target="_blank" rel="noopener">中文 (简体)</a><a lang="ko" href="https://shingu.nigedoki-map.com/ko" target="_blank" rel="noopener">한국어</a><a href="https://shingu.nigedoki-map.com/tl" target="_blank" rel="noopener">Tagalog</a></div>
+              <div class="cap"><a href="https://shingu.nigedoki-map.com/" target="_blank" rel="noopener">shingu.nigedoki-map.com</a> (<a href="https://www.city.shingu.lg.jp/info/1132" target="_blank" rel="noopener">city page</a>) — includes a “when to leave” (<span lang="ja">逃げどき</span>) check. For floods and landslides it asks for the building type and floor and answers stay, leave or check; for tsunami it compares the walk to a chosen refuge with the arrival time and gives the latest moment to set off.</div></figure>
+            <p>Tourism and disaster preparedness consequently meet through spatial legibility: the landscape must remain culturally rich while also becoming intelligible under emergency conditions.</p>
+          </div>
+        </article>
+
+        <div class="chapter" id="ch-4w"><p class="cn">4</p><h2>The watershed scale</h2><div class="tags"><svg class="pg"><use href="#pg-coordinate"/></svg> coordinate · the final scale-out</div></div>
+
+        <article class="step" data-view="basin" data-name="The downstream fragment" data-on="basin basin_nara basin_wakayama basin_mie shingu river_main river_trib pref" data-overlay="base-region basin-labels" data-legend="basin urbanmun pref">
+          <div class="card">
+            <p>Shingū’s most consequential planning lesson emerges when administrative geography is compared with hazard geography.</p>
+            <p>The city governs only the downstream fragment of the system producing its largest floods. Hydrologically, the operative region is:</p>
+            <figure class="fig"><div class="chain v"><span class="i hl" data-hl="ds-mountains" tabindex="0">Kii Mountains across Nara, Mie and Wakayama</span><span class="a">↓</span><span class="i hl" data-hl="ds-tribs" tabindex="0">tributaries, forests, dams and sediment systems</span><span class="a">↓</span><span class="i hl" data-hl="ds-river" tabindex="0">Kumano/Shingū River</span><span class="a">↓</span><span class="i hl" data-hl="ds-shingu" tabindex="0">Shingū</span><span class="a">↓</span><span class="i hl" data-hl="ds-mouth" tabindex="0">river mouth and coast</span></div>
+              <div class="cap">Basin 2,365 km² (official 2,360): 63% Nara, 22% Wakayama, 16% Mie. Shingū City holds 10% of it.</div></figure>
+          </div>
+        </article>
+
+        <article class="step" data-view="basin" data-name="流域治水 · basin-wide flood management" data-on="basin river_main river_trib pref" data-overlay="base-region dams interventions-basin" data-legend="basin dam">
+          <div class="card">
+            <p>Flood governance therefore expands outward through <span lang="ja">流域治水</span>, basin-wide flood management. The contemporary framework combines national river authorities, prefectures, municipalities, dam operators, electricity companies, forest management, sabō, land-use policy and local preparedness. The 2022 <a class="doc" href="https://www.kkr.mlit.go.jp/kinan/kasen/kasenseibikeikaku/index.html" target="_blank" rel="noopener">river improvement plan (<span lang="ja">新宮川水系河川整備計画</span>)</a>, building on the 2021 <a class="doc" href="https://www.mlit.go.jp/river/kasen/ryuiki_pro/index.html" target="_blank" rel="noopener">basin-wide flood-management project (<span lang="ja">新宮川水系流域治水プロジェクト</span>)</a>, explicitly combines channel works with land-use regulation, adaptations in residential form and enhancement of basin storage functions.</p>
+          </div>
+        </article>
+
+        <article class="step" data-view="basin" data-name="Interventions along one system" data-on="basin river_main river_trib pref" data-overlay="dams interventions-basin" data-legend="basin dam">
+          <div class="card">
+            <p>Its interventions operate at different points in the same system:</p>
+            <figure class="fig"><div class="chain v"><span class="i hl" data-hl="iv-forest" tabindex="0">forest and slope management</span><span class="a">↓</span><span class="i hl" data-hl="iv-sabo" tabindex="0">sabō and sediment control</span><span class="a">↓</span><span class="i hl" data-hl="iv-dams" tabindex="0">dam coordination and pre-release</span><span class="a">↓</span><span class="i hl" data-hl="iv-river" tabindex="0">river excavation and levees</span><span class="a">↓</span><span class="i hl" data-hl="iv-ring" tabindex="0">ring-levee settlement protection</span><span class="a">↓</span><span class="i hl" data-hl="iv-pumps" tabindex="0">urban drainage and pumping</span><span class="a">↓</span><span class="i hl" data-hl="iv-landuse" tabindex="0">land-use steering</span><span class="a">↓</span><span class="i hl" data-hl="iv-evac" tabindex="0">evacuation</span></div>
+              <div class="cap">The <a href="#kumano-system">valley section in the prologue</a> places each intervention on the river’s real long profile.</div></figure>
+          </div>
+        </article>
+
+        <article class="step" data-view="basin" data-name="Decisions upstream, decades ahead" data-on="basin basin_nara basin_mie basin_wakayama river_main river_trib pref" data-overlay="base-region basin-labels" data-legend="basin pref">
+          <div class="card">
+            <p>Shingū therefore sits at the intersection of two major transitions:</p>
+            <figure class="fig"><div class="chain v"><span class="i">from local flood defence to watershed governance</span><span class="a">and</span><span class="i">from historical hydrology to anticipatory climate hydrology</span></div></figure>
+            <p>The city’s resilience increasingly depends upon decisions made far upstream, decades ahead and across multiple institutions.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+    <section class="after theme-cont" aria-label="Theme 4: conclusion">
+        <p class="tconc">Shingū is not simply a collection of fixed sites. It is a junction through which water, people, goods, information and risk continually move.</p>
+    </section>
+
+    <section class="after theme" aria-label="Theme 5: Everyday">
+      <header class="theme-head" id="t5">
+        <p class="tkick">Theme 5 · Everyday</p>
+        <h2 id="t5-h">Sacred landscape, everyday life and contemporary continuity</h2>
+        <p class="tq">How are these systems actually inhabited?</p>
+        <p class="tseq">houses → temple → bridges → parcels → library and park → school → sacred and ordinary</p>
+        <p class="tlead">After the modelling, back to the street.</p>
+      </header>
+        <h3 class="trio-head" id="t5-5a"><b><span class="pcode">5A</span> ordinary → sacred</b>Up the lane to the threshold</h3>
+        <p class="tlead">The sacred landscape emerges gradually, from the ordinary.</p>
+        <figure class="fig seqfig">
+          <ol class="seq">
+            <li><img src="img/field/20250928_120620.jpg" alt="A blackboard by the lane: こども食堂, a children’s cafeteria." width="960" height="1280" loading="lazy" decoding="async"><span>houses and a blackboard</span></li>
+            <li><img src="img/field/20250928_120624.jpg" alt="The lane along the channel, the mountain on the right." width="1280" height="960" loading="lazy" decoding="async"><span>the lane</span></li>
+            <li><img src="img/field/20250928_120233.jpg" alt="神倉堀端都市下水路, the drainage channel at the foot of Kamikura-yama." width="1280" height="960" loading="lazy" decoding="async"><span>the channel</span></li>
+            <li><img src="img/field/20250928_120247.jpg" alt="A gourd vine trained over a garden wall beside the channel." width="1280" height="960" loading="lazy" decoding="async"><span>a garden wall</span></li>
+            <li><img src="img/field/20250928_115917.jpg" alt="Youth Library えんがわ, reached by its own bridge over the channel." width="1280" height="960" loading="lazy" decoding="async"><span>a bridge to a library</span></li>
+            <li><img src="img/field/20250928_115930.jpg" alt="Youth Library えんがわ, a library in an old house." width="1280" height="960" loading="lazy" decoding="async"><span>the library</span></li>
+            <li><img src="img/field/20250928_120149.jpg" alt="妙心寺: its hall beyond a moss garden." width="1155" height="1280" loading="lazy" decoding="async"><span>the temple</span></li>
+            <li><img src="img/field/20250928_121251.jpg" alt="Across the channel from the shrine’s lower precinct: the grounds of the 出雲大社新宮教会." width="1280" height="960" loading="lazy" decoding="async"><span>a Shinto church across the channel</span></li>
+            <li><img src="img/field/20250928_115208.jpg" alt="The lower torii of 神倉神社 at the foot of the steps." width="960" height="1280" loading="lazy" decoding="async"><span>the lower torii and the steps</span></li>
+            <li><img src="img/field/20250928_115712.jpg" alt="猿田彦神社 and 神倉三宝荒神社 against the bare rock of the mountain." width="1280" height="960" loading="lazy" decoding="async"><span>shrines on the rock</span></li>
+          </ol>
+          <figcaption>At the foot of Kamikura, from the lane to the threshold: the ordinary before the sacred.<span class="cr">Photos: the authors, field visit, 28 September 2025 · © the authors, all rights reserved</span></figcaption>
+        </figure>
+        <aside class="todo" data-plan="5A">
+          <p class="todo-h">To add · 5A</p>
+          <p>The sequence still lacks the school, a bicycle and Gotobiki-iwa itself; add them when the next walk photographs the whole foot.</p>
+        </aside>
+        <h3 class="trio-head" id="t5-5b"><b><span class="pcode">5B</span> a temple as a neighbour</b>Myōshinji, second appearance</h3>
+        <p class="xref"><a href="#t4-4d">Theme 4</a> placed 妙心寺 in its network; here it is a neighbour: a hall behind a moss garden, its board by the lane. <button type="button" class="kh kx" data-ks="keidai">Show the precincts on the Kamikura map</button>.</p>
+        <aside class="todo" data-plan="5B">
+          <p class="todo-h">To add · 5B</p>
+          <p>Its actual footprint, the houses beside it, its relation to the street and its local access, mapped at the scale of the plot.</p>
+        </aside>
+        <h3 class="trio-head" id="t5-5c"><b><span class="pcode">5C</span> a threshold to home</b>Bridges, second appearance</h3>
+        <p class="tlead">A piece of municipal drainage infrastructure is also somebody’s threshold to home.</p>
+        <aside class="todo" data-plan="5C">
+          <p class="todo-h">To add · 5C</p>
+          <p>Three or four photographs from the census of <a href="#t1-1d">Theme 1</a>: a front door across the channel, a garden access, a shared bridge, an institutional bridge. No statistics here.</p>
+        </aside>
+        <h3 class="trio-head" id="t5-5d"><b><span class="pcode">5D</span> interlocking ground</b>Parcels, second appearance</h3>
+        <p class="tlead">Sacred, public and domestic territories physically interlock rather than form separate districts.</p>
+        <p class="xref"><button type="button" class="kh kx" data-ks="yashiki">Show the plots on the Kamikura map</button>: the shrine’s lower precinct, the temple row, the school compound and the houses share a single grid.</p>
+        <h3 class="trio-head" id="t5-5e"><b><span class="pcode">5E</span> 5E–5F · reuse</b>Youth Library えんがわ and おいしいパーク</h3>
+        <p class="tlead">Continuity does not require freezing the old building in its old function.</p>
+        <p class="kmk-p">Across the channel two private projects turn old plots into public space: Youth Library えんがわ (2013), a library in an old house, and おいしいパーク (2020–2022), a vegetable field opened as a park and reading place for it.</p>
+        <aside class="todo" data-plan="5E–5F">
+          <p class="todo-h">To add · 5E–5F</p>
+          <p>Who uses the library and the park, the threshold between inside and outside, what stood on the park’s ground before, and how both sit against the lane, the channel and the mountain, mapped at their own small scale.</p>
+        </aside>
+        <h3 class="trio-head" id="t5-5g"><b><span class="pcode">5G</span> the school, every day</b>Kamikura Elementary School</h3>
+        <p class="tlead">The places used during extraordinary moments are often maintained through completely ordinary daily use.</p>
+        <p class="xref"><a href="#t3-foot">Theme 3</a> read the school and its gym as refuges inside the hazard. Here it is children, education and a neighbourhood centre: the same site at another time.</p>
+        <aside class="todo" data-plan="5G">
+          <p class="todo-h">To add · 5G</p>
+          <p>The school day at the foot: the compound, its gate to the lane, its users, photographed and described.</p>
+        </aside>
+        <div class="kmk" data-kmk="sacred">
+        <h3 class="trio-head" id="t5-5h"><b><span class="pcode">5H</span> 流れ · sacred</b>Where the landscape itself became sacred</h3>
         <p class="kmk-p"><b>Where the gods first came down.</b> Kumano Hayatama Taisha places the first descent of the Kumano gods on Gotobiki-iwa, the boulder on Kamikura-yama (<i>gotobiki</i> is the local word for a toad). From there, in the shrine’s account, they moved to 石淵 across the river (now 貴祢谷) and, in the 58th year of Emperor Keikō, to the present site, which was therefore called 新宮, the “new shrine”, with Kamikura as its 元宮, the original seat. The city gives this origin of the name only as one that “is also said” (ともいわれています). The cliff under the rock is identified with the 天磐盾 that Jimmu climbs at 熊野神邑 in the Nihon Shoki; the shrine on it enshrines 高倉下命 and 天照大御神 and belongs to Hayatama as a subsidiary shrine (摂社).</p>
         <p class="kmk-p"><b>Gongen-yama: gods in the form of Buddhas.</b> Kamikura-yama is the southern peak of 権現山, a name the city glosses as “the mountain where Hayatama’s god appears provisionally” (権に現れる). In Hayatama’s words, the worship of the Kumano Gongen spread as that of “gods appearing provisionally in the form of Buddhas” (神が仮に仏の姿をかりて現れる), and by around the 10th century the Kumano gods were worshipped as the twelve Kumano Gongen (熊野十二社（所）大権現). UNESCO’s statement of the property’s value reads its sites, routes and forests as a cultural landscape of the fusion of Shinto, “rooted in the ancient tradition of nature worship”, and Buddhism, with Shugendō, “influenced by the former two faiths”, as a third element; the nomination lists Gotobiki-iwa first among the most typical natural objects where gods were held to descend. The rock carries the layers itself. Fragments of a late-Yayoi bronze bell found around it have been a prefectural property since 2012; repairs to the stone walls when the shrine was rebuilt in 1956 turned up about 300 Buddhist objects from three spots around the rock, late Heian to Muromachi: mirrors, sutra containers, a gilt-bronze Kannon, sutra stones written one character each. Since the Heian period, Shugendō practitioners training on the mountain had built sutra mounds around it.</p>
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkclimb" role="img" aria-label="The climb from Gotobiki-iwa to the 下馬 stone, true to scale, the ground coloured by slope, with the shrines and steles along it"></svg></div><figcaption>The climb from Gotobiki-iwa down the path and the steps to the 下馬 stone (OSM ways 121369321 and 121366071) on GSI DEM1A, heights true to scale, the ground line coloured by its slope over each 2 m. Numbered: the 2024 programme of the Oto Matsuri (新宮市観光協会). Under it, every stele, board and shrine OpenStreetMap maps within 12 m of the line. Dates: Wakayama Prefecture (下馬 stone), Kumano Shimbun, 9 May 2024 (the shrines), the board beside the stele (1990), 日本歴史地名大系 and the prefecture’s register (the finds). Hover the figure to find the same point on the map.</figcaption></figure>
@@ -1634,19 +1918,115 @@
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmksec" role="img" aria-label="A measured section from Gotobiki-iwa through Kumano Hayatama Taisha to the Kumano River, with the gods’ seats, the fire and the water"></svg></div><figcaption>One measured section, 1.6 km: from Gotobiki-iwa down the path and the steps, through the streets to Kumano Hayatama Taisha (the shortest walk on OpenStreetMap’s streets, 1.0 km) and on to the nearest bank of the Kumano (GSI DEM1A inside the map’s frame, DEM5A beyond; no ground is measured over water; heights ×10). The river to its mouth, 3.0 km along its centre line (MLIT 国土数値情報 via OpenStreetMap), is a break. Under it, three things that move from the mountain towards the river, dotted where they leave the line.</figcaption></figure>
         <p class="kmk-p"><b>Mountain, town, river, sea.</b> Measured on one line, the order falls from mountain to river: the ground at the rock at 88 m, the bridge at the foot of the steps at 6.6 m, Hayatama on higher ground, about 12 m (on the 5 m model), the river, near sea level, 294 m beyond it, 3.0 km above its mouth. The gods’ path, in the shrine’s account, leaves the line: from the rock across the river to 石淵, then back to Hayatama’s riverside site. The water runs down it by another way: the stream from Kamikura-yama joins 神倉堀端都市下水路 at the shrine entrance, and 市田川 carries it east through the town into the Kumano’s estuary, 0.4 km from the mouth. The city reads Hayatama’s own god, 熊野速玉大神, as the force of water made divine (水の勢いを神格化したものと考えられています). The river is itself part of the inscribed pilgrimage route: pilgrims on the Nakahechi mostly came down from Hongū by boat to Hayatama, then went from 阿須賀神社 to 浜王子 and over 高野坂 to Nachi; the city lists the Kumano and 御船島, where Hayatama’s god goes upriver by boat every 16 October, as World Heritage under the Nakahechi.</p>
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmktown" role="img" aria-label="Shingū from Mifune-jima to the river mouth, with the water, the pilgrims, the Oto Matsuri and the Mifune Matsuri drawn as flows"></svg></div><figcaption>Shingū from 御船島 to the mouth of the Kumano: water areas, 40 m contours, roads and the railway from GSI’s 最適化ベクトルタイル; 市田川, the Kumano’s centre line and the coastline from OpenStreetMap. The pilgrims’ order is Shingū City’s account of the Nakahechi (in the Edo period they went south through the town instead and over 広角 to 高野坂); the times are the 2024 programme (新宮市観光協会), the climbers’ visits Kumano Shimbun (8 February 2026), the Mifune Matsuri the Agency for Cultural Affairs’ description. Lines between places give the order, not the route.</figcaption></figure>
-        <p class="kmk-p"><b>Layers, not a single origin.</b> In the Middle Ages the mountain was run by shrine monks (神倉聖) and four hongan temples (本願), the fund-raisers for its upkeep. One of them, 妙心寺, a nunnery at the foot, administered Kamikura-yama under the Shingū hongan; in 1531 its nun 妙順尼 was granted the hongan title after a restoration funded by collections in the provinces. A copy of the Nachi pilgrimage mandala, the kind the Kumano bikuni are said to have carried and explained, is known as 妙心寺旧本 (now kept at Hayatama). The decrees separating kami from Buddhas (1868) and abolishing Shugendō (1872) cut through this: the Kumano shrines became Shinto only, and the hongan temples nearly all closed; 妙心寺 survives beside the shrine office. Later layers were added at the foot: the 天磐盾 stele of 1990, for the 2,650th year of the imperial era; 猿田彦神社・神倉三宝荒神社, built in 1983 and rebuilt in 2024, shrines to Sarutahiko, who guided Ninigi’s descent and is a god of crossroads in the Nihon Shoki, and to Sanbō Kōjin, guardian of the Three Treasures, worshipped in Shugendō and kept in homes as the god of the hearth; until the Meiji period a Sarutahiko shrine, known as Tengu-sama, stood on the mountain. The donation that rebuilt them in 2024 also paid for renewing or repairing 満山社, 火神社 and 中ノ地蔵堂, for the 20th anniversary of the World Heritage listing.</p>
+        </div>
+    </section>
+
+    <div class="stage" id="stage-everyday">
+      <div class="mapcol"></div>
+
+      <div class="steps" id="steps-everyday">
+        <div class="chapter" id="ch-5i"><p class="cn">5I</p><h2>Heritage as continuity</h2><div class="tags">practice, memory and social use</div></div>
+
+        <article class="step" data-view="heritage" data-name="Heritage as memory of river and terrain" data-on="flood micro_low micro_high water river_main" data-overlay="heritage" data-legend="flood site">
+          <div class="card">
+            <p>The same principle applies to heritage itself. Shingū’s cultural assets carry the memory of earlier relationships with river and terrain. Kawaramachi records accommodation to flood; the medieval port records the economic geography of the river; the sacred sites preserve a cosmology rooted in mountains, rocks and water. Contemporary resilience therefore concerns the continuity of meaning and practice alongside physical safety.</p>
+            <p>Five places show the principle at work:</p>
+            <ul class="ex">
+              <li><span class="hl" data-hl="h-mifune" tabindex="0"><b>Mifune Matsuri</b> <span lang="ja">御船祭</span></span> (16 October): the deity’s boat is escorted up the Kumano to the islet of Mifune-jima, and nine small boats race around it. The rite needs a navigable river; the festival is a way of keeping the river part of the town’s life.</li>
+              <li><span class="hl" data-hl="h-oto" tabindex="0"><b>Oto Matsuri</b> <span lang="ja">御燈祭</span></span> (6 February): torch-bearers run down the 538 stone steps of Kamikura Shrine, whose object of worship is the rock Gotobiki-iwa. With the Hayatama festival it has been a national Important Intangible Folk Cultural Property since 2016.</li>
+              <li><span class="hl" data-hl="h-shimo" tabindex="0"><b>Shimohonmachi under Tankaku Hall</b></span>: the medieval port was found in 2015 because a cultural hall was planned there. The hall moved onto the already-disturbed part of the plot, storage pits were kept in place beneath it, and the grounds became a National Historic Site in 2022. The same building is a designated tsunami evacuation site: memory and refuge on one plot.</li>
+              <li><span class="hl" data-hl="h-mizunote" tabindex="0"><b>Mizunote</b> <span lang="ja">水ノ手</span></span>: excavation below the castle found about 20 charcoal storehouses and a landing. The domain’s income was stacked on the riverbank.</li>
+              <li><span class="hl" data-hl="h-kawara" tabindex="0"><b>Kawaramachi</b> <span lang="ja">川原町</span></span>: the riverbed town was gone by 1950; a rebuilt Kawaraya alley beside Hayatama keeps its demountable form legible to visitors.</li>
+            </ul>
+            <p class="hl-note">Hover a name to find it on the map; pulsing points open photographs.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+    <section class="after theme-cont" aria-label="Theme 5: Everyday, continued">
+        <div class="kmk" data-kmk="living">
         <p class="kmk-p"><b>A living landscape is a remade one.</b> UNESCO’s statement records rites of Shinto, Buddhism and Shugendō “still underway even now”. Here they are also made and unmade. 神州院, a temple in the town, held an Ōmine fire rite with fire-walking at Kamikura on the day after the festival from the end of the Shōwa era; the 32nd, in 2019, was the last there. At Nachi, Seiganto-ji, whose head priest revived Kumano Shugendō in 1988, rebuilt in 2023, on a new site, the Gyōjadō (行者堂) of Kumano Shugendō demolished in the early Meiji years, about 150 years before, and closed it for three days of Shugendō practice (19–21 June 2026). Read along the climb, the sequence is spatial as well as temporal: the oldest finds came from around the rock; the 下馬 stone of 1672 and the stele of 1990 stand at the foot, where the town meets the mountain.</p>
-        <h3 class="trio-head"><b>まなざし · gaze</b>Who looks at the foot</h3>
-        <p class="kmk-p"><b>Four gazes, one frame.</b> Gou &amp; Shibata (2017) gave cameras to walkers on the last 6.9 km of the Nakahechi and sorted what they photographed into 14 categories: ordinary things, a stone path or a village, carried the walk as much as the shrines (<a class="doc" href="https://doi.org/10.1016/j.jort.2017.01.006" target="_blank" rel="noopener">article</a>; the method in full in Gou’s <a class="doc" href="https://doi.org/10.14989/doctor.k20542" target="_blank" rel="noopener">thesis</a>, chapter 6). The same frame is turned here on who pictures Kamikura, and from where: every image on the pages where six publishers that bring visitors present it (the prefecture’s and the city’s tourism sites, the Kumano Tourism Bureau, the Nanki Kumano Geopark, Hayatama Taisha’s own page and the prefecture’s road division: 34 images, maps set aside), the four in the city’s 2012 master plan, the one plate of the Kubo studio’s 1913 album, and the sixteen photographs we took at the foot on 28 September 2025. Each is placed by where the camera stands and given up to two of their categories, with one added: the channel.</p>
+        </div>
+        <p class="tconc">What appears on a hazard map as infrastructure and on a heritage map as sacred space is, on the ground, also someone’s route to school, front door, garden, library or meeting place.</p>
+    </section>
+
+    <section class="after theme" aria-label="Theme 6: Representation">
+      <header class="theme-head" id="t6">
+        <p class="tkick">Theme 6 · Representation</p>
+        <h2 id="t6-h">Visibility and the Kumano gaze</h2>
+        <p class="tq">Why have we not usually seen the city this way?</p>
+        <p class="tseq">GIS and drawings → photography → literature → tourist map → the Kumano gaze</p>
+        <p class="tlead">Not new geography: a re-reading of what the page has already shown.</p>
+      </header>
+        <h3 class="trio-head" id="t6-6a"><b><span class="pcode">6A</span> the fifth layer</b>A single place, many Shingūs</h3>
+        <p class="tlead">Are these maps describing the same place? Technically yes; epistemically, not really. Each selects a different Shingū.</p>
+        <aside class="todo" data-plan="6A">
+          <p class="todo-h">To add · 6A</p>
+          <p>The same ground at the foot of Kamikura shown several ways side by side: the elevation model, the cadastral map, the hazard map, a tourist map, a photograph.</p>
+        </aside>
+        <h3 class="trio-head" id="t6-6b"><b><span class="pcode">6B</span> what a drawing can hold</b>Plan, section, route, network</h3>
+        <figure class="fig">
+          <table class="tiers repr">
+            <thead><tr><th scope="col">Representation</th><th scope="col">Makes visible</th><th scope="col">Tends to hide</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Plan</th><td>adjacency</td><td>verticality</td></tr>
+              <tr><th scope="row">Section</th><td>vertical relation</td><td>network reach</td></tr>
+              <tr><th scope="row">Route</th><td>sequence</td><td>simultaneous spatial context</td></tr>
+              <tr><th scope="row">Network</th><td>connectivity</td><td>material experience</td></tr>
+              <tr><th scope="row">Hazard GIS</th><td>exposure</td><td>cultural meaning</td></tr>
+              <tr><th scope="row">Cadastral map</th><td>property order</td><td>lived movement</td></tr>
+              <tr><th scope="row">Photograph</th><td>experience and materiality</td><td>invisible systems</td></tr>
+            </tbody>
+          </table>
+          <div class="cap">Every drawing on this page belongs to a kind in this table; none of them is sufficient by itself.</div>
+        </figure>
+        <div class="kmk" data-kmk="gaze">
+        <h3 class="trio-head" id="t6-6c"><b><span class="pcode">6C</span> まなざし · gaze</b>Who looks at the foot</h3>
         <figure class="kmk-wide"><p class="vscroll-hint">Scroll the figure sideways →</p><div class="vscroll"><svg id="kmkgaze" role="img" aria-label="Where the camera stands in four gazes on Kamikura: on the mountain, at the threshold, along the foot or in the town"></svg></div><figcaption>Where the camera stands, gaze by gaze; circle area ∝ number of images. Promotional: the images on the pages that present Kamikura at <a class="doc" href="https://www.wakayama-kanko.or.jp/spots/detail_479.html" target="_blank" rel="noopener"><span lang="ja">和歌山県公式観光サイト</span></a>, <a class="doc" href="https://www.shinguu.jp/spots/detail/A0002" target="_blank" rel="noopener"><span lang="ja">新宮市観光協会</span></a>, the <a class="doc" href="https://www.tb-kumano.jp/en/places/shingu/" target="_blank" rel="noopener">Kumano Tourism Bureau</a>, the Nanki Kumano Geopark (<a class="doc" href="https://nankikumanogeo.jp/view_point/view_point-5364/" target="_blank" rel="noopener">Japanese</a> and <a class="doc" href="https://nankikumanogeo.jp/eng/geosite/kamikurasan-no-gotobikiiwa/" target="_blank" rel="noopener">English</a> pages), <a class="doc" href="https://kumanohayatama.jp/?page_id=18" target="_blank" rel="noopener"><span lang="ja">熊野速玉大社</span></a> and the prefecture’s <a class="doc" href="https://www.pref.wakayama.lg.jp/prefg/081300/d00214824.html" target="_blank" rel="noopener">road division</a>, seen on 1 October 2026; a photograph shown twice on one page, or again as a phone crop, is counted once. Municipal: <a class="doc" href="https://www.city.shingu.lg.jp/div/tosiken-1/pdf/keikaku/toshimas.pdf" target="_blank" rel="noopener"><span lang="ja">新宮市都市計画マスタープラン</span> (Shingū City Planning Master Plan, December 2012)</a>, pp. 30, 36, 37 and 67 (the photograph of p. 36 again on p. 54, counted once). Historical: plate 58 of <span lang="ja">『熊野百景写真帖』</span> (below). Ours: the field-notes photographs at the foot (the two videos are not coded). Every image and its codes: <a class="doc" href="https://github.com/sophiachen-geo/no-one-is-an-island/blob/main/kansai/field/gazes.csv" target="_blank" rel="noopener"><code>kansai/field/gazes.csv</code></a>.</figcaption></figure>
         <p class="kmk-p"><b>The promotional gaze climbs.</b> 25 of the 34 images stand on the mountain: the hall under Gotobiki-iwa, the steps, the torches of the Oto Matsuri (5); 24 show a torii, a hall or another sacred mark. The town appears in 9, always from above, as the view. At the foot the camera stops at the threshold: the lower torii and the vermilion bridge over the channel (5). Past it, two images: the gate of <span lang="ja">妙心寺</span> on the prefecture’s page, and on Hayatama Taisha’s the signs to the visitors’ car parks among the houses. None shows the channel along the foot, or the school whose gym the city names its refuge from floods and sediment disasters.</p>
         <p class="kmk-p"><b>The plan adds the backdrop; the album keeps the summit apart.</b> The city’s master plan pictures Kamikura four times: from the town, rising over the roofs at its foot beside the sentence that the mountains can be seen from the town (p. 36; the same photograph again on p. 54, where the text conserves the mountains as the backdrop of the town, <span lang="ja">市街地の背景となる山々の景観</span>); from the summit terrace, the town in cherry blossom (p. 30); the torches of the Oto Matsuri (p. 37); and the hall under the rock (p. 67). The channel appears once, as <span lang="ja">神倉堀端都市下水路</span> in a table of drains (p. 23). The Kubo studio’s album of a hundred Kumano views (1913) gives Kamikura one plate, <span lang="ja">神倉山上</span>, on top of Kamikura-yama: trees and rock against the sky, no building in the frame. On the studio and its views: <a class="doc" href="https://www.jstage.jst.go.jp/article/jjhg/59/1/59_7/_article/-char/ja/" target="_blank" rel="noopener">Shimazu (2007)</a>.</p>
+        <p class="kmk-p"><b>Ours stood at the foot, and turned along it.</b> All sixteen of our photographs were taken within 54 m of the foot. The 6 at the threshold are each a torii, a hall or a board; the 10 along it are of the lane: the channel, a library in an old house, a temple and its board, a gourd vine on a wall, crabs, the blackboard of a children’s cafeteria. The channel, the category added to Gou &amp; Shibata’s, is our most frequent (5 photographs), and no other gaze shows it along the foot. None of ours stands on the mountain or shows the town from above.</p>
+        <details class="methods"><summary>Method · how the gazes are coded, and what the coding cannot say</summary>
+          <p class="kmk-p"><b>Four gazes, one frame.</b> Gou &amp; Shibata (2017) gave cameras to walkers on the last 6.9 km of the Nakahechi and sorted what they photographed into 14 categories: ordinary things, a stone path or a village, carried the walk as much as the shrines (<a class="doc" href="https://doi.org/10.1016/j.jort.2017.01.006" target="_blank" rel="noopener">article</a>; the method in full in Gou’s <a class="doc" href="https://doi.org/10.14989/doctor.k20542" target="_blank" rel="noopener">thesis</a>, chapter 6). The same frame is turned here on who pictures Kamikura, and from where: every image on the pages where six publishers that bring visitors present it (the prefecture’s and the city’s tourism sites, the Kumano Tourism Bureau, the Nanki Kumano Geopark, Hayatama Taisha’s own page and the prefecture’s road division: 34 images, maps set aside), the four in the city’s 2012 master plan, the one plate of the Kubo studio’s 1913 album, and the sixteen photographs we took at the foot on 28 September 2025. Each is placed by where the camera stands and given up to two of their categories, with one added: the channel.</p>
+          <p class="kmk-p"><b>What this cannot say.</b> One coder and no second opinion; the publishers’ pages change; our photographs were taken on a ride to the three shrines, not as a census of the foot. The two gazes at the heart of Gou &amp; Shibata’s method, the visitor’s and the resident’s, need people with cameras: the procedure is in the <a class="doc" href="https://github.com/sophiachen-geo/no-one-is-an-island/tree/main/kansai/field" target="_blank" rel="noopener">field kit</a>.</p>
+        </details>
+        <p class="part-tag"><span class="pcode">6D</span> Kubo Photo Studio · 『熊野百景写真帖』</p>
         <figure class="fig photo kmk-plate"><img src="img/kamikura_1913_plate58.jpg" alt="Plate 58 of the 1913 album: tall trees and rock on top of Kamikura-yama against a pale sky, in an oval frame" width="627" height="448" loading="lazy" decoding="async"><figcaption><span lang="ja">神倉山上</span>, on top of Kamikura-yama: plate 58 of <span lang="ja">『熊野百景写真帖』</span> (1913).<span class="cr">Photo: 久保写真館 (Kubo photo studio, Shingū), Public domain (NDL: Public Domain Mark) · <a href="https://dl.ndl.go.jp/pid/906106/1/29" target="_blank" rel="noopener">source</a></span></figcaption></figure>
-        <p class="kmk-p"><b>Ours stood at the foot, and turned along it.</b> All sixteen of our photographs were taken within 54 m of the foot. The 6 at the threshold are each a torii, a hall or a board; the 10 along it are of the lane: the channel, a library in an old house, a temple and its board, a gourd vine on a wall, crabs, the blackboard of a children’s cafeteria. The channel, the category added to theirs, is our most frequent (5 photographs), and no other gaze shows it along the foot. None of ours stands on the mountain or shows the town from above.</p>
-        <p class="kmk-p"><b>What this cannot say.</b> One coder and no second opinion; the publishers’ pages change; our photographs were taken on a ride to the three shrines, not as a census of the foot. The two gazes at the heart of Gou &amp; Shibata’s method, the visitor’s and the resident’s, need people with cameras: the procedure is in the <a class="doc" href="https://github.com/sophiachen-geo/no-one-is-an-island/tree/main/kansai/field" target="_blank" rel="noopener">field kit</a>.</p>
-        <p class="kmk-dl">For GIS: <a href="data/kamikura_study.geojson" download>GeoJSON</a> · <a href="data/kamikura_study.kml" download>KML</a>: the study area, its four edges with their rules, the break of slope, the mountain foot and the transect, in WGS84. <a href="data/kamikura_cadastre.geojson" download>Parcel map (GeoJSON)</a>: the registered cadastral drawing, approximate, without parcel numbers. Rebuilt by kansai/tools/kamikura.</p>
-      </div>
+        <aside class="todo" data-plan="6D">
+          <p class="todo-h">To add · 6D</p>
+          <p>How did these plates help produce Kumano as a coherent visual region? The motifs that recur across the album (mountains, shrines, pilgrimage, water, picturesque views) against today’s tourism imagery.</p>
+        </aside>
+        </div>
+        <h3 class="trio-head" id="t6-6e"><b><span class="pcode">6E</span> literature</b>Nakagami, second appearance</h3>
+        <p class="tlead">How representation keeps a vanished landscape perceptible.</p>
+        <p class="xref"><a href="#t2-2f">Theme 2</a> read Nakagami Kenji’s 路地 as ghost morphology. Literature does something an elevation model cannot.</p>
+        <aside class="todo" data-plan="6E">
+          <p class="todo-h">To add · 6E</p>
+          <p>Text only, as in Theme 2: what the novels keep perceptible, without locating the district.</p>
+        </aside>
+        <h3 class="trio-head" id="t6-6f"><b><span class="pcode">6F</span> mapping as evidence</b>The tourist map</h3>
+        <aside class="todo" data-plan="6F">
+          <p class="todo-h">To add · 6F</p>
+          <p>Read the tourist maps literally: what is labelled, omitted, connected or isolated; what becomes a destination and what disappears between destinations. If the drainage corridor, the school and the ordinary neighbourhood vanish while the shrine and the mountain dominate, say so. Link the maps; do not reproduce them.</p>
+        </aside>
+        <h3 class="trio-head" id="t6-6g"><b><span class="pcode">6G</span> the culmination</b>The therapeutic Kumano gaze</h3>
+        <p class="kmk-p">Forest, sacred, ancient, healing, pilgrimage, purification; and concrete drains, schools, maintenance, roads, pumps, housing, ageing infrastructure, industry, hazard management.</p>
+        <p class="tlead">Both are real, but one has become much more representationally dominant. This page restores the other.</p>
+        <aside class="todo" data-plan="6G">
+          <p class="todo-h">To add · 6G</p>
+          <p>The argument in full, built from the evidence of Themes 1–5 and the coded gazes above.</p>
+        </aside>
+        <h3 class="trio-head" id="t6-6h"><b><span class="pcode">6H</span> constructions</b>Then, now, promoted, measured</h3>
+        <aside class="todo" data-plan="6H">
+          <p class="todo-h">To add · 6H</p>
+          <p>A controlled comparison of the same landscape: the 1913 plate, a promotional image (linked, not reproduced), our photograph and the map.</p>
+        </aside>
+        <p class="closing">GIS showed one system. The cadastral map showed another. The elevation model showed another. Historical aerials show persistence. Network analysis showed movement. Field cycling showed lived permeability. Photographs showed what official imagery overlooks.</p>
+        <p class="tconc">Shingū changes depending on whether it is viewed as terrain, heritage, hazard, infrastructure, network or home. None is sufficient by itself.</p>
+    </section>
 
+    <section class="after theme-cont" id="after" aria-label="Sources and method">
       <details class="srcbox" id="sources">
       <summary>Sources &amp; method <small>plans, data, method and known imperfections · click to open</small></summary>
       <div class="sources">
@@ -2591,6 +2971,8 @@
         function activate(i, instant) {
           if (i === current) return; current = i;
           var s = steps[i]; steps.forEach(function (x, j) { x.classList.toggle("is-active", j === i); });
+          var stg = s.closest(".stage"), mcol = stg && stg.querySelector(".mapcol"), mwrap = document.getElementById("mapwrap");
+          if (mcol && mwrap && mwrap.parentNode !== mcol) { mcol.appendChild(mwrap); measure(); }   // the themes share one map
           var view = s.getAttribute("data-view"), on = {};
           expand(words(s.getAttribute("data-on"))).forEach(function (n) { on[n] = 1; }); BASE.forEach(function (n) { on[n] = 1; });
           if (!CITY_VIEWS[view]) on.muni = 0;
@@ -2967,7 +3349,7 @@
           if (sec && host) {
             if ("IntersectionObserver" in window) {
               var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); } }, { rootMargin: "900px 0px" });
-              io.observe(sec);
+              io.observe(sec); document.querySelectorAll("[data-kmk]").forEach(function (e) { io.observe(e); });
             } else load();
           }
           return load;
@@ -3589,6 +3971,10 @@
           var b = e.target.closest && e.target.closest(".kchip, .kcard, .kh"); if (!b) return;
           var key = b.getAttribute("data-ks");
           kmkLoad().then(function (ok) { if (ok) kmk.setSys(key === kmk.pin && !b.classList.contains("kchip") ? "all" : key, true); });
+        });
+        document.addEventListener("click", function (e) {
+          var b = e.target.closest && e.target.closest(".kx"), m = document.getElementById("kmkmap"); if (!b || !m) return;
+          m.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
         });
         document.addEventListener("click", function (e) {
           var b = e.target.closest && e.target.closest(".kbase-b"); if (!b) return;

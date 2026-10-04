@@ -21,6 +21,14 @@
 
 # ================================================================ identifiers — numbers that are names
 [[identifier]]
+pattern = '\b(?:Theme|THEME|Themes) [1-6]\b|\b[1-6][A-L]\b'
+why = "the six themes and their parts (kansai/SHINGU.md): names, not counts"
+
+[[identifier]]
+pattern = 'one physical system|second appearance|showed one system|but one has become much more representationally dominant'
+why = "phrases of the six-theme structure, not counts"
+
+[[identifier]]
 pattern = '\bNR\d+\b|National Route 168|Route 168'
 why = "road numbers"
 
@@ -63,11 +71,12 @@ why = "titles and idioms, not counts"
 # ================================================================ counts the page enumerates itself
 [[claim]]
 id = "count-structure"
-match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS CONVERGE", "Four hazard pathways converge", "Four directions of risk",
+match = ["Core · seven layers of function", "One river, six functions", "FOUR HAZARD PATHWAYS", "Four directions of risk",
          "Together, the two forms", "intersection of two major transitions", "WATER FROM THREE OF THE FOUR DIRECTIONS", "the slopes are the fourth",
          "This creates a second resilience requirement", "the last three manage that residual risk", "The four directions are not independent",
          "a hazard from one direction weakens the defences against another", "Two patterns follow",
-         "Beyond the four pathways", "Shingū sits where one river system meets the sea", "memory and refuge on one plot", "pick one in either and it lights up in both"]
+         "Beyond the four pathways", "Shingū sits where one river system meets the sea", "memory and refuge on one plot", "pick one in either and it lights up in both",
+         "Kawaraya → four hazards →"]
 status = "verified"
 source = "counts of the items the page itself lists (7 functions, 6 river functions, 4 pathways, 2 forms, 2 transitions; water comes from 3 of the 4 directions; visitors are the second population after residents; the last 3 of the 6 forms in the summary list; 2 patterns read off the matrix)"
 
@@ -1394,23 +1403,6 @@ match = ["81% of its 1.19 million tonnes in 2024", "81% of port tonnage is wood 
 status = "verified"
 source = "MLIT 港湾統計 令和6年: 新宮 1,193,377 t; wood chips 965,801 t (80.9%)"
 url = "https://www.mlit.go.jp/k-toukei/R6kowan-datebase.html"
-
-[[claim]]
-id = "intro-heritage-history"
-title = "Hayatama (one of three Kumano shrines), World Heritage 2004, Mizuno from 1619"
-match = ["one of the three Kumano shrines", "it has been part of a World Heritage property since 2004",
-         "The Mizuno family governed the castle town for the Kishū Tokugawa from 1619 until the end of the Edo period"]
-status = "verified"
-source = "Agency for Cultural Affairs: 紀伊山地の霊場と参詣道 「記載年月 平成16年(2004年)7月」, component 熊野速玉大社 with 御船島 and 神倉神社; 新宮城跡附水野家墓所: 「元和５年（１６１９）…以後、水野氏は、幕末まで１０代にわたり新宮領主」"
-url = "https://online.bunka.go.jp/special_content/component/75"
-
-[[claim]]
-id = "intro-oishi"
-title = "Ōishi Seinosuke: executed 1911, honour restored 2001, honorary citizen 2018"
-match = ["executed in the High Treason case of 1911, was declared wrongly convicted by the city council in 2001 and made an honorary citizen in 2018"]
-status = "verified"
-source = "Wakayama Prefecture: 「明治44年（1911年）…大石誠之助、成石平四郎が死刑…新宮市議会は90年後の2001年9月「6人は冤罪であっただけでなく…」として名誉回復を宣言」; Kyodo 2018-01-24: honorary citizenship"
-url = "https://www.pref.wakayama.lg.jp/prefg/081300/d00214686.html"
 
 [[claim]]
 id = "intro-rail-kitayama"
@@ -2905,14 +2897,14 @@ check = { kmk = "ground.offsets.cadastre_west.p75_m", expect = 12, tol = 0.5 }
 
 [[claim]]
 id = "kmk-off-west-range-lo"
-match = ["(−1.7 m to +0.9 m across the seven runs)"]
+match = ["(−1.7 m to +0.9 m across the seven runs of the test below)"]
 status = "derived"
 source = "the same median in the seven runs: 0.3 (consensus), −1.0 (similarity registration), 0.7 (spline registration), −0.6 (A), −0.1 (B), 0.9 (C), −1.7 m (D)"
 check = { kmk = "ground.cad_west_range.0", expect = -1.7, tol = 0.05 }
 
 [[claim]]
 id = "kmk-off-west-range-hi"
-match = ["(−1.7 m to +0.9 m across the seven runs)"]
+match = ["(−1.7 m to +0.9 m across the seven runs of the test below)"]
 status = "derived"
 source = "the largest of the seven"
 check = { kmk = "ground.cad_west_range.1", expect = 0.9, tol = 0.05 }
@@ -3013,7 +3005,7 @@ url = "https://www.chiseki.go.jp/about/images/naze_A4.pdf"
 id = "kmk-tps-method"
 match = ["If the shortfall varied across the sheet, one affine fit could not absorb it.",
          "A thin-plate spline can bend the drawing to the road edges unevenly; its stiffness is chosen by fitting on two of the area’s three north–south thirds and testing on the third.",
-         "An uneven stretch cannot be told from noise in these road edges, so none is applied; the spline and the uniform enlargement serve as the two other registrations in the runs above."]
+         "An uneven stretch cannot be told from noise in these road edges, so none is applied; the spline and the uniform enlargement serve as the two other registrations in the runs below."]
 status = "method"
 source = "07_parcels.py step 3: thin-plate spline (scipy RBFInterpolator, degree 1) on 414 pairs (road-parcel outline points every 5 m → nearest GSI road edge within 6 m, after the affine fit); each north–south third left out in turn, the similarity and affine fits refitted on the other two"
 
@@ -3787,7 +3779,7 @@ why = "idioms and the name of a model, not counts"
 
 [[claim]]
 id = "fn-ride-circuit"
-match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "SHINGŪ’S THREE SHRINES BY BICYCLE", "Field notes · Shingū’s three shrines by bicycle",
+match = ["On 28 September 2025 we cycled the circuit the Shingū City Tourist Association publishes as", "Field notes · Shingū’s three shrines by bicycle",
          "field visit, 28 September 2025", "the first stop"]
 status = "verified"
 source = "新宮市観光協会, 体験コース「世界遺産･新宮三社詣で まちなかサイクリング」 (itinerary 6): 阿須賀神社, 熊野速玉大社, 神倉神社; the date from our photographs' EXIF (DateTimeOriginal 2025:09:28, OffsetTimeOriginal +09:00); the photographs fall in three groups (town.py, within 150 m), the first at Asuka at 10:37"
@@ -4723,7 +4715,7 @@ source = "kansai/field/gazes.csv, the ten at the foot: the channel and its lane 
 
 [[claim]]
 id = "gz-ours-channel"
-match = ["The channel, the category added to theirs, is our most frequent (5 photographs)"]
+match = ["The channel, the category added to Gou & Shibata’s, is our most frequent (5 photographs)"]
 status = "derived"
 source = "kansai/field/gazes.csv: our photographs coded Channel (first or second category), against 4 each for Facilities, Natural objects and Statue & Symbol"
 check = { kmk = "gaze.rows.3.cats.Channel", fmt = "most frequent ({} photographs)" }
@@ -4771,3 +4763,23 @@ id = "fn-photo-kodomo"
 match = ["こども食堂, a children’s cafeteria, on Sunday 28 September — games from 11, beef curry from 11:30"]
 status = "verified"
 source = "the blackboard in our photograph IMG_5166: 「こども食堂 9月28日(日) ★ゲーム 11時〜 ★ビーフカレー 11時半〜」"
+
+# ================================================================ six themes (kansai/SHINGU.md): new text
+[[claim]]
+id = "th-4a-framework"
+match = ["The three structures and the two lenses", "This page reads urban form in three structures", "Shingū needs two more lenses", "THE FIFTH LAYER"]
+status = "method"
+source = "the page's own framework (kansai/SHINGU.md, 4A): the ground 下部構造, the lots 中部構造, the buildings and open spaces 上部構造 (the layers of the Kamikura study in Theme 1), plus flows 流れ (Theme 4) and representation まなざし (Theme 6)"
+
+[[claim]]
+id = "th-3g-age"
+match = ["share aged 65 and over"]
+status = "verified"
+source = "2020 census (令和2年国勢調査) age group 65歳以上, as in the exposure table; the chart's values are bound to kansai/data/risk.js (stats.tiers.*.pct65)"
+
+[[claim]]
+id = "hayatama-sanzan"
+match = ["one of the three Kumano shrines"]
+status = "verified"
+source = "Agency for Cultural Affairs, 紀伊山地の霊場と参詣道: the component 熊野三山 is 熊野本宮大社, 熊野速玉大社 and 熊野那智大社; page of the component 熊野速玉大社"
+url = "https://online.bunka.go.jp/special_content/component/75"

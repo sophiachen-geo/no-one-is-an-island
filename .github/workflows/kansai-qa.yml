@@ -49,6 +49,9 @@ jobs:
       # data + claims + points + the render report above; exits non-zero on any error
       - name: QA/QC gate
         run: python3 kansai/qa/run.py --report qa-render.json --json qa-report.json
+        env:
+          # placeholders (.todo) are allowed on a working branch, never in a publish
+          QA_DEPLOY: ${{ inputs.deploy }}
 
       # plants known faults (unsourced number, drifted claim, stale statistic, moved point, …) and
       # fails unless the gate catches every one of them

@@ -173,24 +173,6 @@ processing = "downloaded 1920px rendition; resized locally to 1577x1600 (1600px 
 upstream = "国土地理院 地図・空中写真閲覧サービス, photos CKK20194-C2/C3/C4-45…56 (36-frame mosaic made by the Commons uploader)"
 
 [[media]]
-file = "img/sato_haruo_museum.jpg"
-source = "https://commons.wikimedia.org/wiki/File:Sato_Haruo_Memorial_Museum07.jpg"
-author = "Bioika0201"
-licence = "CC BY-SA 4.0"
-licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
-shows = "Satō Haruo Memorial Museum (佐藤春夫記念館) in the Kumano Hayatama Taisha precinct: entrance gate and signboard."
-processing = "downloaded 1920px rendition; resized locally to 1600x900 (1600px long side), JPEG q82; re-encoded for the web at 1280×720, JPEG q78"
-
-[[media]]
-file = "img/nishimura_house.jpg"
-source = "https://commons.wikimedia.org/wiki/File:Former_Nishimura_House_2021-10_ac_(1).jpg"
-author = "Asturio Cantabrio"
-licence = "CC BY-SA 4.0"
-licence_url = "https://creativecommons.org/licenses/by-sa/4.0"
-shows = "Former Nishimura House (旧西村家住宅, Nishimura Isaku Memorial Museum), Isaku's own 1914 design, Important Cultural Property, October 2021."
-processing = "downloaded 1920px rendition; resized locally to 1600x1064 (1600px long side), JPEG q82; re-encoded for the web at 1280×851, JPEG q78"
-
-[[media]]
 file = "img/mizuya_analogue.jpg"
 source = "https://commons.wikimedia.org/wiki/File:Mizuya_02.jpg"
 author = "アセルス"

@@ -20,7 +20,7 @@ What it guarantees
 What it cannot do: judge whether a cited source is itself right. That is what the status field and
 CAVEATS.md are for — anything not verified against a source is listed there.
 """
-import argparse, json, math, re, shutil, subprocess, sys, tempfile
+import argparse, json, math, os, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 try:
@@ -943,6 +943,14 @@ def main():
         gate.err("render/" + e["check"], e["msg"], e.get("where", ""))
     for w in rep["warnings"]:
         gate.warn("render/" + w["check"], w["msg"], w.get("where", ""))
+    # placeholders (.todo) mark evidence the page still needs: fine on a working branch, never on the live site
+    todos = rep.get("todos") or []
+    if todos:
+        msg = f"{len(todos)} placeholder(s) for evidence still to add: {', '.join(todos)}"
+        if os.environ.get("QA_DEPLOY", "").lower() in ("1", "true", "yes"):
+            gate.err("todo", msg + " — fill or remove them before publishing")
+        else:
+            gate.warn("todo", msg)
     if not rep["errors"]:
         gate.ok("render", "no JS errors; refs, land fill, cameras, labels, charts, zoom, mini-maps and mobile layout pass")
 

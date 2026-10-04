@@ -7,7 +7,7 @@ A gate that silently stopped checking would look exactly like a gate that passes
 copies the page (and the render report) into a temp dir, injects one fault, runs the gate and asserts
 that it fails with the expected error category — and that the untouched baseline passes.
 """
-import json, re, shutil, subprocess, sys, tempfile
+import json, os, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -15,10 +15,13 @@ PAGE = HERE.parent / "index.html"
 CAVEATS = HERE.parent / "CAVEATS.md"
 
 
-def gate(page, report, caveats):
+def gate(page, report, caveats, deploy=False):
     out = Path(tempfile.mkdtemp()) / "result.json"
+    env = {k: v for k, v in os.environ.items() if k != "QA_DEPLOY"}      # a deploy run only where a case asks for one
+    if deploy:
+        env["QA_DEPLOY"] = "true"
     r = subprocess.run([sys.executable, str(HERE / "run.py"), "--page", str(page), "--report", str(report),
-                        "--caveats", str(caveats), "--json", str(out)], capture_output=True, text=True)
+                        "--caveats", str(caveats), "--json", str(out)], capture_output=True, text=True, env=env)
     res = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {"errors": [["crash", r.stderr[-400:], ""]]}
     return r.returncode, {e[0] for e in res["errors"]}, res["errors"]
 
@@ -41,12 +44,12 @@ def main():
     base_html = PAGE.read_text(encoding="utf-8")
     base_rep = json.loads(report.read_text(encoding="utf-8"))
 
-    def case(name, expect, html=None, rep=None, cav=None, msg=None):
+    def case(name, expect, html=None, rep=None, cav=None, msg=None, deploy=False):
         d = Path(tempfile.mkdtemp())
         (d / "index.html").write_text(html or base_html, encoding="utf-8")
         (d / "render.json").write_text(json.dumps(rep or base_rep, ensure_ascii=False), encoding="utf-8")
         (d / "CAVEATS.md").write_text(cav if cav is not None else CAVEATS.read_text(encoding="utf-8"), encoding="utf-8")
-        code, cats, errs = gate(d / "index.html", d / "render.json", d / "CAVEATS.md")
+        code, cats, errs = gate(d / "index.html", d / "render.json", d / "CAVEATS.md", deploy)
         ok = (code == 0 and not cats) if expect is None else \
              (code != 0 and any(e[0].startswith(expect) and (msg is None or msg in e[1]) for e in errs))   # msg: that very error
         print(f"  {'✓' if ok else '✗'} {name:48s} → {'passes' if code == 0 else 'fails: ' + ', '.join(sorted(cats))}")
@@ -74,6 +77,10 @@ def main():
     rep = json.loads(json.dumps(base_rep)); rep["errors"].append({"check": "label-overlap", "msg": "A ⟷ B", "where": "desktop step 3"})
     results.append(case("a render failure blocks the gate", "render/", rep=rep))
     results.append(case("a hand-edited CAVEATS.md is caught", "caveats", cav=CAVEATS.read_text(encoding="utf-8") + "\n- sneaky edit\n"))
+    # placeholders (.todo): allowed while the page is worked on, never in a publish
+    rep = json.loads(json.dumps(base_rep)); rep["todos"] = ["1D"]
+    results.append(case("a placeholder only warns on a working branch", None, rep=rep))
+    results.append(case("a placeholder blocks a deploy run", "todo", rep=rep, deploy=True))
     # links: every external link registered; a plan always named in Japanese and English
     rep = json.loads(json.dumps(base_rep)); rep["links"].append({"href": "https://example.com/plan.pdf", "text": "a plan", "block": "a plan"})
     results.append(case("an unregistered link is caught", "links", rep=rep))
@@ -91,7 +98,6 @@ def main():
     ddir = data_copy(); raw = (HERE.parent / "data" / "buildings.js").read_text(encoding="utf-8").strip()
     B = json.loads(raw[raw.index("=") + 1:].rstrip(";")); B["counts"]["total"] -= 1
     (ddir / "buildings.js").write_text("window.__BLD=" + json.dumps(B, separators=(",", ":")) + ";", encoding="utf-8")
-    import os
     os.environ["KANSAI_DATA"] = str(ddir)
     results.append(case("building data that no longer matches is caught", "derived"))
     # Kamikura micro-study: a statistic that drifts from the text, and a label moved 50 m off its sourced place
