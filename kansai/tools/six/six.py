@@ -86,9 +86,6 @@ steps["Residents by hazard tier"] = (g_tag + '\n          <div class="card">\n  
                                      + '            <details class="methods"><summary>The full exposure table · every tier, Shingū and Kihō</summary>\n              '
                                      + f_tiers.group(0).strip() + "\n            </details>\n          </div>\n        </article>")
 
-# references that the new order turns around
-steps["Interventions along one system"] = rep1(steps["Interventions along one system"], "The valley section further down places each intervention",
-                                              'The <a href="#kumano-system">valley section in the prologue</a> places each intervention')
 
 
 def st(*names):
