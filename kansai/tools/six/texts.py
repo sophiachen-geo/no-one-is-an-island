@@ -174,7 +174,7 @@ T6_6B = (part("6B", "what a drawing can hold", "Plan, section, route, network", 
         </figure>
 ''')
 T6_6D = '        <p class="part-tag"><span class="pcode">6D</span> Kubo Photo Studio · 『熊野百景写真帖』</p>\n'
-T6_6D_TODO = todo("6D", "How did these plates help produce Kumano as a coherent visual region? The motifs that recur across the album (mountains, shrines, pilgrimage, water, picturesque views) against today’s tourism imagery.")
+T6_6D_TODO = todo("6D", "How did these plates help produce Kumano as a coherent visual region? Its Shingū pages are above; still to code: the motifs that recur across the whole album (mountains, shrines, pilgrimage, water, picturesque views), plate by plate, against today’s tourism imagery.")
 T6_6E = (part("6E", "literature", "Nakagami, second appearance", "t6-6e")
          + lead("How representation keeps a vanished landscape perceptible.")
          + '        <p class="xref"><a href="#t2-2f">Theme 2</a> read Nakagami Kenji’s 路地 as ghost morphology. Literature does something an elevation model cannot.</p>\n'

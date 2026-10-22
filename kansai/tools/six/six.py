@@ -198,12 +198,14 @@ tr = g_tr
 # 5H / 4D / 5I: sacred
 sac = g_sacred
 p_layers = [c for c in sac if "Layers, not a single origin" in c]; p_living = [c for c in sac if "A living landscape is a remade one" in c]
-assert len(p_layers) == 1 and len(p_living) == 1
-sac = [c for c in sac if c not in (p_layers[0], p_living[0])]
-# 6C / 6D: the finding first, the coding method after it in a drawer (the plan); the album's plate opens 6D
-g_h3, g_method, g_fig, g_promo, g_plan, g_plate, g_ours, g_limits = g_gaze
+f_board = [c for c in sac if "kmk-board" in c]   # Hayatama's mandala board travels with “Layers” to 4D
+assert len(p_layers) == 1 and len(p_living) == 1 and len(f_board) == 1
+sac = [c for c in sac if c not in (p_layers[0], p_living[0], f_board[0])]
+# 6C / 6D: the finding first, the coding method after it in a drawer (the plan); the album's plate and its Shingū pages open 6D
+g_h3, g_method, g_fig, g_promo, g_plan, g_plate, g_album, g_sheet, g_ours, g_limits = g_gaze
 assert ("Four gazes, one frame" in g_method and "The promotional gaze climbs" in g_promo and "The plan adds the backdrop" in g_plan
-        and "kmk-plate" in g_plate and "Ours stood at the foot" in g_ours and "What this cannot say" in g_limits)
+        and "kmk-plate" in g_plate and "The album’s Shingū" in g_album and "kubo-sheet" in g_sheet
+        and "Ours stood at the foot" in g_ours and "What this cannot say" in g_limits)
 g_ours = rep1(g_ours, "The channel, the category added to theirs,", "The channel, the category added to Gou &amp; Shibata’s,")
 
 # ------------------------------------------------------------------ the photo sequence of Theme 5 (our photographs, all registered)
@@ -330,7 +332,7 @@ theme3 = (sec(T.T3_HEAD, "Theme 3: Hazard")
 
 theme4 = (sec(T.T4_HEAD + T.T4_4A + HINGE, "Theme 4: Flows")
           + S_FLOW
-          + cont(T.T4_4B_TODO + T.T4_4D + kdiv(ind(p_layers[0]), ' data-kmk="network"') + T.T4_4D_TODO
+          + cont(T.T4_4B_TODO + T.T4_4D + kdiv(ind(p_layers[0]) + ind(f_board[0]), ' data-kmk="network"') + T.T4_4D_TODO
                  + T.T4_FN + ind(fn_study) + T.T4_4G_TODO, "Theme 4: Flows, continued")
           + S_NET
           + cont(T.T4_CONC, "Theme 4: conclusion"))
@@ -343,7 +345,7 @@ theme5 = (sec(T.T5_HEAD + T.T5_5A + SEQ_FIG + T.T5_5A_TODO + T.T5_5B + T.T5_5C +
 
 gz = (ind(with_code(g_h3, "6C", "t6-6c")) + ind(g_fig) + ind(g_promo) + ind(g_plan) + ind(g_ours)
       + methods("Method · how the gazes are coded, and what the coding cannot say", g_method, g_limits)
-      + T.T6_6D + ind(g_plate) + T.T6_6D_TODO)
+      + T.T6_6D + ind(g_plate) + ind(g_album) + ind(g_sheet) + T.T6_6D_TODO)
 theme6 = sec(T.T6_HEAD + T.T6_6A + T.T6_6B + kdiv(gz, ' data-kmk="gaze"')
              + T.T6_6E + T.T6_6F + T.T6_6G + T.T6_6H + T.T6_CLOSE, "Theme 6: Representation")
 

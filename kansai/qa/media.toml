@@ -604,3 +604,93 @@ licence = "Public domain (NDL: Public Domain Mark)"
 licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
 shows = "Plate 58, 神倉山上 (on top of Kamikura-yama), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106): trees and rock against the sky."
 processing = "NDL IIIF image of frame 29 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000029/full/full/0/default.jpg); the oval plate cut out at 627×448 with the page outside the oval set to white, greyscale, JPEG q82"
+
+[[media]]
+file = "img/kubo1913_page56.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/28"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plate 56, 新宮町全景 (the whole town of Shingū), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), its printed title included."
+processing = "NDL IIIF image of frame 28 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000028/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (391, 489, 1742, 1092)), greyscale, 900×402, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page57.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/29"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plate 57, 熊野速玉神社 (Kumano Hayatama), two photographs: the approach to the gate and the halls, of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), printed titles included."
+processing = "NDL IIIF image of frame 29 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000029/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (1919, 269, 3319, 1288)), greyscale, 900×655, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page58.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/29"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plates 58, 神倉山上 (on top of Kamikura-yama), and 59, 新宮城址の月 (the moon over the castle ruin), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), printed titles included."
+processing = "NDL IIIF image of frame 29 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000029/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (378, 268, 1765, 1294)), greyscale, 900×666, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page60.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/30"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plates 60, the tomb of Xu Fu (the first character of the printed title is not legible in the scan), and 61, 新宮王子濱 (the beach at Ōji), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), printed titles included."
+processing = "NDL IIIF image of frame 30 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000030/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (1925, 271, 3302, 1280)), greyscale, 900×659, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page62.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/30"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plates 62, 新宮貯木塲 (the timber yard of Shingū), and 63, 熊野川口 (the mouth of the Kumano, with sailing boats), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), printed titles included."
+processing = "NDL IIIF image of frame 30 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000030/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (378, 270, 1768, 1294)), greyscale, 900×663, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page64.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/31"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plate 64, 熊野川の秋色 (the Kumano in autumn), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), its printed title included."
+processing = "NDL IIIF image of frame 31 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000031/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (1921, 248, 3284, 1281)), greyscale, 900×682, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_page65.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/31"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Album page with plate 65, 御船島 (Mifune-jima), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106), its printed title included."
+processing = "NDL IIIF image of frame 31 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000031/full/full/0/default.jpg); the page's plates and printed titles cut out with a 45 px margin (box (388, 265, 1749, 1304)), greyscale, 900×687, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_plate56.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/28"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Plate 56, 新宮町全景 (the whole town of Shingū), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106): the roofs of the town from a height."
+processing = "NDL IIIF image of frame 28 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000028/full/full/0/default.jpg); the photograph cut out on its printed border lines (box (436, 541, 1695, 992)), greyscale, 1000×358, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_plate62.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/30"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Plate 62, 新宮貯木塲 (the timber yard of Shingū), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106): logs in the yard, sheds and a chimney, mountains behind."
+processing = "NDL IIIF image of frame 30 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000030/full/full/0/default.jpg); the photograph cut inside its printed border lines and below the corner that plate 63 covers on the page (box (606, 790, 1714, 1179)), so a band of sky and the chimney’s top are left out; greyscale, 1000×351, JPEG q80 (kansai/tools/plates/kubo1913.py)"
+
+[[media]]
+file = "img/kubo1913_plate82.jpg"
+source = "https://dl.ndl.go.jp/pid/906106/1/37"
+author = "久保写真館 (Kubo photo studio, Shingū)"
+licence = "Public domain (NDL: Public Domain Mark)"
+licence_url = "https://creativecommons.org/publicdomain/mark/1.0/"
+shows = "Plate 82, 鵜殿貯木塲 (the timber yard of Udono, across the river mouth in Mie), of 『熊野百景写真帖』 (Kubo photo studio, 1913; NDL call number 特101-283, info:ndljp/pid/906106): logs on the water behind an embankment."
+processing = "NDL IIIF image of frame 37 (3756×1494, https://dl.ndl.go.jp/api/iiif/906106/R0000037/full/full/0/default.jpg); the oval cut out on an ellipse fitted to its printed border (centre 1396.3, 554.2; semi-axes 345.9 × 230.1 px incl. the border line; tilt -4.27°), the page outside it white; greyscale, 720×520, JPEG q80 (kansai/tools/plates/kubo1913.py)"

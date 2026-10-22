@@ -86,6 +86,11 @@ def main():
     results.append(case("an unregistered link is caught", "links", rep=rep))
     rep = json.loads(json.dumps(base_rep)); rep["links"].append({"href": "https://www.city.shingu.lg.jp/Info/773", "text": "the plan", "block": "see the plan"})
     results.append(case("a plan named only in English is caught", "links", rep=rep))
+    # pictures: one declared at a size its file does not have
+    results.append(case("a picture declared at the wrong size is caught", "media",
+                        html=base_html.replace('kubo1913_plate56.jpg" alt="Plate 56 of the 1913 album, 新宮町全景: the roofs of Shingū from a height, a wooded ridge beyond" width="1000" height="358"',
+                                               'kubo1913_plate56.jpg" alt="Plate 56 of the 1913 album, 新宮町全景: the roofs of Shingū from a height, a wooded ridge beyond" width="1000" height="360"'),
+                        msg="but the file is 1000×358"))
     # imagery: a tile placed half a unit (50 m) off
     rep = json.loads(json.dumps(base_rep)); rep["tiles"][0]["m"][4] += 0.5
     results.append(case("a misplaced imagery tile is caught", "tiles", rep=rep))
