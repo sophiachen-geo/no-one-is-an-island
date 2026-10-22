@@ -570,11 +570,14 @@ status = "derived"
 source = "kansai/tools/risk (kansai/data/risk.js)"
 check = { rk = "tiers.Kiho.collapse.pct65", fmt = "and {:.0f}% of those living" }
 
+[[identifier]]
+pattern = '^first minutes$|^Play the first hour$'
+why = "the tsunami clock's controls (the key's early end, the play button): words, not counts; the button reads “Pause” while it plays"
+
 [[claim]]
 id = "tclock-method"
 title = "The tsunami clock: each cell of the 2026 animation by the minute it is first drawn wet"
 match = ["Arrival map: each 9.4 m cell of the animation coloured by the minute the water first stays on it (drawn wet for 30 s); ground drawn wet from its first frame, and water after the first hour, are left out."]
-exact = ["first minutes", "Play the first hour"]
 status = "method"
 source = "kansai/tools/tclock/build.py → kansai/data/tclock.js, on the animation decoded by kansai/tools/tsunami2026 (vid_decode.py; 16_shinguu_nk_2D_k.mp4, 1 frame = 10 s): a cell is wet from the first of three wet frames running; its panel pixel is 9.41 × 9.37 m by the registration affine (vid_register.py, vid_shift.py)"
 

@@ -2352,7 +2352,7 @@
 
         /* ================= the tsunami clock: the minute Wakayama's 2026 animation first draws each place wet ================= */
         // data/tclock.js (kansai/tools/tclock): one band per minute; drawn under the buildings, over the hazard fills
-        var tc = null, tcG = null, tcLoading = false, tcBox = null, tcT = 60, tcTimer = null, tcMode = false, tcAuto = false;
+        var tc = null, tcG = null, tcLoading = false, tcBox = null, tcT = 60, tcTimer = null, tcMode = false, tcAuto = false, tcWait = null;
         var TCR = [[61, 12, 39], [138, 43, 95], [214, 133, 182], [244, 214, 230]];   // early → late
         function tcCol(m) {
           var x = Math.max(0, Math.min(1, (m - 1) / 59)) * (TCR.length - 1), i = Math.min(TCR.length - 2, Math.floor(x)), f = x - i;
@@ -2394,12 +2394,12 @@
         }
         function tcShow(box) {   // from activate(): the active step's clock, or null
           if (box === tcBox) return;
-          tcStop(); tcAuto = false; tcBox = box;
+          tcStop(); clearTimeout(tcWait); tcAuto = false; tcBox = box;
           if (!box) { if (tcG) tcG.style.display = "none"; world.removeAttribute("data-tclock"); return; }
-          tcLoad();
+          tcLoad(); tcDraw();
           var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          if (!box.hasAttribute("data-seen") && !qaHold && !calm) { box.setAttribute("data-seen", ""); tcT = 0; tcPlay(); }   // once, on arrival
-          else tcDraw();
+          if (!box.hasAttribute("data-seen") && !qaHold && !calm)   // once, when the reader stays: scrolling past does not use it up
+            tcWait = setTimeout(function () { if (tcBox !== box || qaHold) return; box.setAttribute("data-seen", ""); tcT = 0; tcPlay(); }, 900);
         }
         document.querySelectorAll(".tclock").forEach(function (box) {
           box.querySelectorAll(".tc-tg button").forEach(function (b) {
