@@ -842,6 +842,14 @@ def check_media(gate, reg, media):
                 gate.err("media", "the caption does not credit the registered author and licence", src)
             if r.get("source") and r["source"] not in fig:
                 gate.err("media", "the caption does not link the registered source", src)
+    # every picture in the page's own markup declares its file's size, so nothing is stretched and the text does not jump
+    for tag in re.findall(r"<img\b[^>]*>", HTML_CACHE.get("html", "")):
+        src, w, h = (re.search(rf'\b{k}="([^"]+)"', tag) for k in ("src", "width", "height"))
+        if not src or not src.group(1).startswith("img/") or not (KANSAI / src.group(1)).exists():
+            continue
+        size = jpeg_size(KANSAI / src.group(1))
+        if size and (not (w and h) or (int(w.group(1)), int(h.group(1))) != size):
+            gate.err("media", f"declares {w.group(1) if w else '?'}×{h.group(1) if h else '?'} px but the file is {size[0]}×{size[1]}", src.group(1))
     files = {p.relative_to(KANSAI).as_posix() for p in (KANSAI / "img").glob("*") if p.is_file()} if (KANSAI / "img").exists() else set()
     used = {im.get("src") for it in media for im in it.get("images", [])} | set(re.findall(r'<img[^>]+src="(img/[^"]+)"', HTML_CACHE.get("html", "")))
     for f in sorted(files - used):

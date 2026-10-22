@@ -27,6 +27,9 @@ for m in set(re.findall(r'"(@[0-9.]+,[0-9.]+)"', html_src)):
     X, Y = TF(lo, la); at[m] = [round((X - X0) / 100, 2), round((Y1 - Y) / 100, 2)]
 g["at"] = at
 g["profile"] = prof
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from orient_routes import orient   # the Kodō toward the shrines, the river route downstream: the page's moving dashes follow
+print("routes oriented, sub-paths reversed:", orient(g))
 blob = json.dumps(g, ensure_ascii=False, separators=(",", ":"))
 html = open(HTML, encoding="utf-8").read()
 html2, n = re.subn(r"/\*GEO:BEGIN\*/.*?/\*GEO:END\*/", lambda m: "/*GEO:BEGIN*/" + blob + "/*GEO:END*/", html, flags=re.S)

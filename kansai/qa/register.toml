@@ -570,6 +570,17 @@ status = "derived"
 source = "kansai/tools/risk (kansai/data/risk.js)"
 check = { rk = "tiers.Kiho.collapse.pct65", fmt = "and {:.0f}% of those living" }
 
+[[identifier]]
+pattern = '^first minutes$|^Play the first hour$'
+why = "the tsunami clock's controls (the key's early end, the play button): words, not counts; the button reads “Pause” while it plays"
+
+[[claim]]
+id = "tclock-method"
+title = "The tsunami clock: each cell of the 2026 animation by the minute it is first drawn wet"
+match = ["Arrival map: each 9.4 m cell of the animation coloured by the minute the water first stays on it (drawn wet for 30 s); ground drawn wet from its first frame, and water after the first hour, are left out."]
+status = "method"
+source = "kansai/tools/tclock/build.py → kansai/data/tclock.js, on the animation decoded by kansai/tools/tsunami2026 (vid_decode.py; 16_shinguu_nk_2D_k.mp4, 1 frame = 10 s): a cell is wet from the first of three wet frames running; its panel pixel is 9.41 × 9.37 m by the registration affine (vid_register.py, vid_shift.py)"
+
 [[claim]]
 id = "ev-arrival-kiho"
 match = ["The Pacific introduces another temporal regime entirely. Wakayama’s 2026 maximum-class scenario (地震動予測及び津波浸水想定（令和8年公表）) gives Shingū a reference maximum tsunami height of 13 m and approximately five minutes until a 1 m tsunami height at the modelled reference point. Its animation shows how unevenly that time reaches the town: water touches the median inhabited building in Kihō after 10 minutes, in central Shingū after 33."]
@@ -1621,7 +1632,8 @@ id = "photo-dates"
 title = "Dates of the photographs"
 match = ["Kawaramachi in 1934", "photographed on 26 May 1936", "with the JR Kisei Line bridge behind (2017)", "(identified from the view, 2017)",
          "at the shrine entrance (2019)", "Oto Matsuri, 6 February 2016", "Mifune Matsuri, 16 October 2014", "that the boats circle (2018)",
-         "on the river route between Hongū and Hayatama (2020)", "the National Historic Site, October 2021", "from the air (GSI, 2019)", "the principle is the same: a second, higher room"]
+         "on the river route between Hongū and Hayatama (2020)", "the National Historic Site, October 2021", "from the air (GSI, 2019)", "the principle is the same: a second, higher room",
+         "and from Kamikura Shrine in 2005"]
 status = "verified"
 source = "dates from each file page on Wikimedia Commons and GSI (kansai/qa/media.toml)"
 url = "https://commons.wikimedia.org/"
@@ -4679,6 +4691,17 @@ match = ["The Kubo studio’s album of a hundred Kumano views (1913)", "plate 58
 status = "verified"
 source = "NDL Digital Collections info:ndljp/pid/906106 (久保写真館, 大正2): 100 numbered plates, no. 58 神倉山 on frame 29, captioned 神倉山上; Access Restrictions PDM. 島津俊之 (2007) 明治・大正期における「熊野百景」と風景の生産 — 新宮・久保写真館の実践, 人文地理 59(1): 7–26"
 url = "https://dl.ndl.go.jp/pid/906106/1/29"
+
+[[claim]]
+id = "kubo-shingu-plates"
+title = "The 1913 album's Shingū plates (56–65), its timber yards (62, 82) and the town from above (56)"
+match = ["Kamikura is one of ten consecutive plates, 56 to 65, on Shingū and its river", "Three of the ten show the river at work",
+         "Plates 56–65 of 『熊野百景写真帖』 (1913) on the album’s own pages",
+         "the yards of Shingū (新宮貯木塲, plate 62) and of Udono across the mouth (鵜殿貯木塲, plate 82), in the Kubo studio’s 『熊野百景写真帖』 (1913)",
+         "The town from above in the album of 1913, the year the railway opened (新宮町全景, plate 56 of"]
+status = "verified"
+source = "NDL Digital Collections info:ndljp/pid/906106 (久保写真館, 大正2 = 1913), the titles printed under the plates: 56 新宮町全景 (frame 28), 57 熊野速玉神社 (two photographs, frame 29), 58 神倉山上 and 59 新宮城址の月 (frame 29), 60 秦徐福墓 and 61 新宮王子濱 (frame 30), 62 新宮貯木塲 and 63 熊野川口 (frame 30), 64 熊野川の秋色 and 65 御船島 (frame 31), 82 鵜殿貯木塲 (frame 37). Logs fill 62; sails are on the water in 63 and 64. The railway reached Shingū on 1 March 1913 (claim railway-1913)"
+url = "https://dl.ndl.go.jp/pid/906106"
 
 [[claim]]
 id = "gz-ours-dist"

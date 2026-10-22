@@ -475,7 +475,7 @@ minis.forEach(([c, v]) => err('mini-frame', `mini-map view leaves the data frame
 // 7. text inventory: everything a reader can see or hear (prose, charts, map labels, tooltips, legends, aria)
 const inv = await page.evaluate(() => {
   const out = [], Q = window.__QA, add = (src, t) => { if (t && /\S/.test(t)) out.push({ src, text: t.replace(/\s+/g, ' ').trim() }); };
-  const skip = (el) => el.closest('script, style, #scalebar, .msb, .zoomctl, .zc, noscript, title, desc');
+  const skip = (el) => el.closest('script, style, #scalebar, .msb, .zoomctl, .zc, .tc-now, noscript, title, desc');   // .tc-now: the tsunami clock's live minute
   // one item per leaf block (a paragraph, a stat box, a chart label …), so claims can be matched whole
   const BLOCK = 'p, li, h1, h2, h3, h4, h5, h6, figcaption, .cap, td, th, dt, dd, blockquote, .stats > div, .chain .i, .mini figcaption > span, svg text, button, .viewname, .zhint, .attrib';
   const blocks = [...document.body.querySelectorAll(BLOCK)].filter((e) => !skip(e) && !e.querySelector(BLOCK));
