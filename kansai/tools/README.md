@@ -32,10 +32,13 @@ python3 $T/fetch_facilities.py  # OSM numbered roads in Shingū City → fac/ (s
 # morph/: see tools/morph/README.md — forest (L03-b), park zones (A10), OSM summits, GSI building footprints
 python3 $T/17_round3.py         # per-level contours + height labels, forest/parks/peaks, building exposure
                                 #   (→ buildings_page.json, copy to ../data/buildings.js), services (P04, P05, P14, P17, P18, P29), road labels
-python3 $T/09_inject.py         # write geo.json + profile.json into ../index.html
+python3 $T/09_inject.py         # write geo.json + profile.json into ../index.html; orient_routes.py turns the Kodō toward
+                                #   the shrines and the river route downstream, the way the page's dashes move
 # kamikura/: the last chapter's micro-study (1 m relief, study area, transect, alignment test) — see kamikura/README.md
 # bike/: field notes · the three shrines by bicycle (routes, road-bed heights, closures, the town's networks) — see bike/README.md
 # risk/: residents per building, exposure by tier, evacuation margins, the plan's zones, roads under hazard, 2050 → ../data/risk.js — see risk/README.md
+# tclock/build.py: the tsunami clock, the 2026 animation's first wetting in one-minute bands → ../data/tclock.js (inputs from tsunami2026/)
+# plates/kubo1913.py: the 1913 album's Shingū plates and pages from NDL's IIIF scans → ../img/kubo1913_*.jpg
 python3 ../qa/run.py            # the QA/QC gate — must pass before anything is published
 ```
 
